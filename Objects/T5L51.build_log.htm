@@ -1,0 +1,56 @@
+<html>
+<body>
+<pre>
+<h1>킮ision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: μVision V5.20.0.39
+Copyright (C) 2016 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 123 123, 123, LIC=GM82M-XSW9P-USMYZ-JLBGS-DUAXX-KB4U7
+ 
+Tool Versions:
+Toolchain:       PK51 Prof. Developers Kit  Version: 9.56.0.0
+Toolchain Path:  C:\Keil_v5\C51\BIN
+C Compiler:      C51.exe V9.56.0.0
+Assembler:       A51.exe V8.2.5.0
+Linker/Locator:  BL51.exe V6.22
+Library Manager: LIB51.exe V4.30.1.0
+Hex Converter:   OH51.exe V2.7.0.0
+CPU DLL:         S8051.DLL V3.106.0.0
+Dialog DLL:      DCore51.DLL V2.81.5.0
+Target DLL:      DWIN\BIN\ag8051.dll V1.00
+Dialog DLL:      TCore51.DLL V2.66.3.0
+ 
+<h2>Project:</h2>
+C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG\T5L51.uvproj
+Project File Date:  08/19/2025
+
+<h2>Output:</h2>
+Build target 'Target 1'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_NEED_UPGRADE
+    MODULE:  .\Objects\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_NEED_UPGRADE
+    MODULE:  .\Objects\main.obj (MAIN)
+    ADDRESS: 68A5H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READ_DGUS
+    MODULE:  .\Objects\history.obj (HISTORY)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READ_DGUS
+    MODULE:  .\Objects\history.obj (HISTORY)
+    ADDRESS: 5AE7H
+Program Size: data=29.0 xdata=17482 code=32561
+creating hex file from ".\Objects\T5L51"...
+User command #1: 1.bat
+C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG>CD Objects 
+C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG\Objects>srec_cat.exe -Disable_Sequence_Warning T5L51.hex -Intel -o T5L51.bin -Binary  
+C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG\Objects>copy T5L51.bin E:\DWIN_SET  
+        1개 파일이 복사되었습니다.
+C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG\Objects>echo.
+".\Objects\T5L51" - 0 Error(s), 4 Warning(s).
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>

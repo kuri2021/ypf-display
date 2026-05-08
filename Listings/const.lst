@@ -1,0 +1,26 @@
+C51 COMPILER V9.57.0.0   CONST                                                             05/23/2023 14:46:29 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE CONST
+OBJECT MODULE PLACED IN .\Objects\const.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE source\const.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\source;.
+                    -\lib) DEBUG OBJECTEXTEND PRINT(.\Listings\const.lst) TABS(2) OBJECT(.\Objects\const.obj)
+
+line level    source
+
+   1          #include "const.h"
+   2          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,177 @@
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/17/2026 15:36:14 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DEBUG
+OBJECT MODULE PLACED IN .\Objects\debug.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE driver\debug.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\source;.
+                    -\lib) DEBUG OBJECTEXTEND PRINT(.\Listings\debug.lst) TABS(2) OBJECT(.\Objects\debug.obj)
+
+line level    source
+
+   1          #include "debug.h"
+   2          #include "uart.h"
+   3          #define USEUART UART4
+   4          
+   5          #define USE_LOG 1
+   6          #define TAG "DEBUG"
+   7          #if (USE_LOG && DEBUG)
+              #define LOG mylog
+              #else
+  10          #define LOG /\
+  11          /LOG
+  12          #endif
+  13          
+  14          // #define UART485
+  15          #ifdef UART485
+              sbit TR5 = P0 ^ 1;
+              #endif
+  18          void initDebugUart(void)
+  19          {
+  20   1      #if USEUART == UART2
+                  u16 tmp;
+                  tmp = 1024 - FOSC / 64 / 115200;
+                  MUX_SEL |= 0X40;
+                  SetPinOut(0, 4);
+                  SetPinIn(0, 5);
+                  P0 |= 0x30;
+                  ADCON = 0x80;
+                  SCON0 = 0x50;
+                  SREL0H = (u8)(tmp >> 8);
+                  SREL0L = (u8)tmp;
+                  // IEN0 |= 0x10;
+                  ES0 = 0; // 关闭发送中断
+                  SBUF0 = '\r';
+              #elif USEUART == UART3
+                  u16 tmp;
+                  tmp = 1024 - FOSC / 32 / 115200;
+                  MUX_SEL |= 0X20;
+                  SetPinOut(0, 6);
+                  SetPinIn(0, 7);
+                  P0 |= 0xC0;
+              
+                  SCON1 = 0X90;
+                  SREL1H = (u8)(tmp >> 8);
+                  SREL1L = (u8)tmp;
+                  SBUF1 = '\r';
+              #elif (USEUART == UART4)
+  47   1          u16 tmp;
+  48   1          SCON2T = 0X80;
+  49   1          SCON2R = 0X80;
+  50   1          tmp = FOSC / 8 / 115200;
+  51   1          BODE2_DIV_H = (u8)(tmp >> 8);
+  52   1          BODE2_DIV_L = (u8)tmp;
+  53   1          SBUF2_TX = '\r';
+  54   1          IEN1 &= 0xF3;
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/17/2026 15:36:14 PAGE 2   
+
+  55   1      #elif (USEUART == UART5)
+                  UartInit(UART5, 115200);
+                  IEN1 &= (~0x10);
+                  SBUF3_TX = '\r';
+              #endif
+  60   1      }
+  61          #if DEBUG == 1
+              char putchar(char c)
+              {
+              #if USEUART == UART2
+                  while (TI0 == 0)
+                      ;
+                  TI0 = 0;
+                  SBUF0 = c;
+                  return (SBUF0 = c);
+              #elif USEUART == UART3
+                  while ((SCON1 & 0X02) == 0)
+                      ;
+                  SCON1 &= 0XFC;
+                  SCON1 &= 0XFC;
+                  return (SBUF1 = c);
+              #elif (USEUART == UART4)
+                  while ((SCON2T & 0X01) == 0)
+                      ;
+                  SCON2T &= 0XFE;
+                  return (SBUF2_TX = c);
+              #elif (USEUART == UART5)
+                  while ((SCON3T & 0x01) == 0x00)
+                      ;
+                  SCON3T &= 0xFE;
+              #ifdef UART485
+                  TR5 = 1;
+              #endif
+                  return (SBUF3_TX = c);
+              #endif
+              }
+              #else
+  92          #include "STRING.H"
+  93          char logbuff[1024];
+  94          // char logbuff2[2048];
+  95          #endif
+  96          void mylog(const char *fmt, ...)
+  97          {
+  98   1          va_list args;
+  99   1          va_start(args, fmt);
+ 100   1      #if DEBUG == 2
+                  {
+                      char *buff = logbuff;
+                      memset(logbuff, 0, sizeof(logbuff));
+                      vsprintf(buff, fmt, args);
+                      do
+                      {
+                          if (strstr(buff, "message_id"))
+                          {
+                              buff[1023] = '0';
+                          }
+                      } while (0);
+                  }
+              #elif DEBUG == 1
+                  vprintf(fmt, args);
+              #endif
+ 116   1          va_end(args);
+C51 COMPILER V9.56.0.0   DEBUG                                                             04/17/2026 15:36:14 PAGE 3   
+
+ 117   1      }
+ 118          /* void mylogtag(const char *tag, unsigned long line, const char *fmt, ...)
+ 119          {
+ 120              va_list args;
+ 121              va_start(args, fmt);
+ 122          #if DEBUG == 2
+ 123              {
+ 124                  char *buff = logbuff;
+ 125                  memset(logbuff, 0, sizeof(logbuff));
+ 126                  vsprintf(buff, fmt, args);
+ 127                  do
+ 128                  {
+ 129                      if (strstr(buff, "message_id"))
+ 130                      {
+ 131                          buff[1023] = '0';
+ 132                      }
+ 133                  } while (0);
+ 134              }
+ 135          #elif DEBUG == 1
+ 136              // 可以在此处过滤tag
+ 137              printf("[%s][%lu]:", tag, line);
+ 138              vprintf(fmt, args);
+ 139          #endif
+ 140              va_end(args);
+ 141          } */
+ 142          
+ 143          void abort()
+ 144          {
+ 145   1          LOG("---------------------------------Abort ING-------------------------------");
+ 146   1          while (1)
+ 147   1          {
+ 148   2          }
+ 149   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     58    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   1024      46
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

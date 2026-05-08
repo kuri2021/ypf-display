@@ -1,0 +1,98 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              04/17/2026 15:36:14 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE source\main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\source;.\
+                    -lib) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "sys.h"
+   2          #include "timer.h"
+   3          #include "uart.h"
+   4          #include "ui.h"
+   5          #include "rtc.h"
+   6          #include "encoder.h"
+   7          #include "dwin8283.h"
+   8          #include "debug.h"
+   9          #include "hmi.h"
+  10          #include "data_demo.h"
+  11          #define USE_LOG 0
+  12          #define TAG "MAIN"
+  13          #if (USE_LOG && DEBUG)
+              #define LOG mylog
+              #else
+  16          #define LOG /\
+  17          /LOG
+  18          #endif
+  19          
+  20          #define TMR_7 7
+  21          #define CHECK_TIME 5000
+  22          static u16 system_ready = 0;
+  23          
+  24          #define VP_DATA_PUSH          0x8200  // 유지시간 설정
+  25          
+  26          
+  27          
+  28          void main()
+  29          {
+  30   1          u16 state;
+  31   1          u8 page_number = 26;
+  32   1          u8 did_first_page = 0;  
+  33   1          u16 test1 = 10;
+  34   1          u16 test2 = 3567;
+  35   1          T0_Init();
+  36   1          T1_Init();
+  37   1          init_rtc();
+  38   1          SetPinIn(2, 0);
+  39   1          StartTimer(0, 60000);
+  40   1          StartTimer(1, 500);                                                     
+  41   1          Pro8283Init();
+  42   1          DEBUGINIT();
+  43   1          EA = 1;
+  44   1          Page_Change_Handler(page_number); // �ϵ���ʾ����
+  45   1          Picture1213_Init();               // �ϵ�12ҳ��13ҳͼ����ʾ
+  46   1          LOG("start\r\n");
+  47   1          StartTimer(TMR_7, CHECK_TIME);
+  48   1      
+  49   1          write_dgus_vp(VP_DATA_PUSH, (u8*)&test1, 1);
+  50   1       
+  51   1          
+  52   1          while (1)
+  53   1          {
+  54   2              Pro8283Deal();
+C51 COMPILER V9.56.0.0   MAIN                                                              04/17/2026 15:36:14 PAGE 2   
+
+  55   2            if (!system_ready && GetTimeOutFlag(TMR_7)) {
+  56   3              system_ready = 1;
+  57   3               page_number = 0;
+  58   3              Page_Change_Handler(page_number); // �ϵ���ʾ����
+  59   3          }
+  60   2           if (!system_ready) continue;  // 준비될 때까지 아래 실행 안함
+  61   2              SecCnt_TickTask();
+  62   2              write_dgus_vp_check();
+  63   2              state = Encoder_recevie();
+  64   2              encoder_page_change(state);
+  65   2                 if (g_need_upgrade)
+  66   2              {
+  67   3                  g_need_upgrade = 0;
+  68   3         //         EnterCCodeUpgrade();
+  69   3              }
+  70   2          }
+  71   1      
+  72   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    181    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      2       8
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

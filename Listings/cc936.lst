@@ -1,0 +1,76 @@
+C51 COMPILER V9.57.0.0   CC936                                                             12/09/2022 16:04:35 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE CC936
+OBJECT MODULE PLACED IN .\Objects\cc936.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lib\cc936.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\source;.\li
+                    -b) DEBUG OBJECTEXTEND PRINT(.\Listings\cc936.lst) OBJECT(.\Objects\cc936.obj)
+
+line level    source
+
+   1          /*------------------------------------------------------------------------*/
+   2          /* Unicode - OEM code bidirectional converter  (C)ChaN, 2009              */
+   3          /*                                                                        */
+   4          /* CP936 (Simplified Chinese GBK)                                         */
+   5          /*------------------------------------------------------------------------*/
+   6          
+   7          #include "cc936.h"
+   8          #define GBK_TO_UNICODE_LIBID 64
+   9          #define GBK_TO_UNICODE_SIZE 0X15480
+  10          #define UNICODE_TO_GBK_LIBID 96
+  11          #define UNICODE_TO_GBK_SIZE 0X15480
+  12          
+  13          
+  14          
+  15          
+  16          
+  17          // WCHAR ff_convert (   /* Converted code, 0 means conversion error */
+  18          //      WCHAR   chr,    /* Character code to be converted */
+  19          //      UINT    dir             /* 0: Unicode to GBK, 1: GBK to Unicode */
+  20          // )
+  21          // {
+  22          //      const WCHAR *p;
+  23          //      WCHAR c;
+  24          //      int i, n, li, hi;
+  25          
+  26          
+  27          //      if (chr < 0x80) {       /* ASCII */
+  28          //              c = chr;
+  29          //      } else {
+  30          //              if (dir) {              /* OEMCP to unicode */
+  31          //                      p = oem2uni;
+  32          //                      hi = sizeof(oem2uni) / 4 - 1;
+  33          //              } else {                /* Unicode to OEMCP */
+  34          //                      p = uni2oem;
+  35          //                      hi = sizeof(uni2oem) / 4 - 1;
+  36          //              }
+  37          //              li = 0;
+  38          //              for (n = 16; n; n--) {
+  39          //                      i = li + (hi - li) / 2;
+  40          //                      if (chr == p[i * 2]) break;
+  41          //                      if (chr > p[i * 2])
+  42          //                              li = i;
+  43          //                      else
+  44          //                              hi = i;
+  45          //              }
+  46          //              c = n ? p[i * 2 + 1] : 0;
+  47          //      }
+  48          
+  49          //      return c;
+  50          // }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+C51 COMPILER V9.57.0.0   CC936                                                             12/09/2022 16:04:35 PAGE 2   
+
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

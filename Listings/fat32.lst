@@ -1,0 +1,1124 @@
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE FAT32
+OBJECT MODULE PLACED IN .\Objects\fat32.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lib\fat32.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\source;.\li
+                    -b) DEBUG OBJECTEXTEND PRINT(.\Listings\fat32.lst) OBJECT(.\Objects\fat32.obj)
+
+line level    source
+
+   1          #include "fat32.h"
+   2          #include "debug.h"
+   3          #include "uart.h"
+   4          
+   5          /*
+   6          Ö»ÊÊÓÃÓÚUSB2.0 ²¢ÇÒÖ»ÓÐ¶ÁÎÄ¼þ¹¦ÄÜ(Ð´¹¦ÄÜÓÐ°æÈ¨£¬½ûÖ¹×ÔÐÐÌí¼Ó) ÉÈÇø´óÐ¡¹Ì¶¨Îª512Bytes
+   7          
+   8          ¶ÁÎÄ¼þµÄÕû¸ö¹ý³Ì
+   9          ·½Ê½1£¨Ö÷ÒªÓÃÓÚÎ´ÖªµÄÎÄ¼þ¼Ð·ÃÎÊ£©£º
+  10          1¡¢½øÈëµ½¶ÔÓ¦Ä¿Â¼£¬µ÷ÓÃchangeDirectory
+  11          2¡¢µ÷ÓÃËÑË÷ÃüÁî£¬ËÑË÷µ±Ç°ÎÄ¼þ¼ÐµÄÎÄ¼þlistDirectory£¬´«ÈëµÄÊÇ¾ø¶ÔÂ·¾¶»òÕßÏà¶ÔÂ·¾¶¡£
+  12          3¡¢µ÷ÓÃ¶ÁÈ¡ÃüÁî£¬mReadFile£¬¶ÁÈ¡¶ÔÓ¦Êý¾Ý£¬´«ÈëµÄÊÇÏà¶ÔÂ·¾¶£¬±ÈÈç£º"./32.icl£¨×¢£º32.iclÊÇlistDirectoryÉ¨Ãè
+             -³öÀ´µÄÃû³Æ£©"
+  13          
+  14          ·½Ê½2£¨Ö÷ÒªÓÃÓÚÒÑÖªµÄÎÄ¼þ·ÃÎÊ£©£º
+  15          1¡¢Ö±½ÓmReadFile ´«Èë¾ø¶ÔÂ·¾¶±ÈÈç£º"/DWIN_SET/32.icl"£¬
+  16          
+  17          ×¢Òâ£º·Ö¸ô·ûÎª/£¬Ö»ÓÐµ÷ÓÃchangeDirectoryºó²Å»á¸Ä±äÏµÍ³Â·¾¶
+  18          */
+  19          
+  20          #define SECTOR_SIZE 512
+  21          #define BUFFER_LENGTH   512//8192//520
+  22          #define MAX_PATH_LEN 512
+  23          #define MAX_FILE_NAME_LEN 128
+  24          
+  25          typedef struct _SYS_INFO_BLOCK{
+  26            unsigned long StartSector;//¶¨Î»DBRÉÈÇøµÄÎ»ÖÃ
+  27            unsigned long TotalSector;
+  28            
+  29            INT16 BPB_BytesPerSec;//Ã¿¸öÉÈÇøµÄ×Ö½ÚÊý£¬512
+  30            INT8 BPB_SecPerClus;//Ã¿´ØÉÈÇøÊý£¬8
+  31            
+  32            INT8 BPB_NumFATs;//FAT±íµÄÊýÄ¿£¬2
+  33            INT16 BPB_RootEntCnt;
+  34            unsigned long BPB_TotSec16;
+  35           // INT8 BPB_Media;
+  36            INT16 BPB_FATSz16;
+  37            INT16 BPB_SecPerTrk;
+  38            INT16 BPB_NumHeads;
+  39            unsigned long BPB_HiddSec;
+  40            unsigned long BPB_TotSec32;//ÎÄ¼þÏµÍ³´óÐ¡ÉÈÇøÊý
+  41            //INT8 BS_DrvNum;
+  42           // INT8 BS_BootSig;
+  43            //INT8 BS_VolID[4];
+  44            //INT8 BS_VolLab[11];
+  45            //INT8 BS_FilSysType[8];
+  46             ///////////////////////////////
+  47            unsigned long FatStartSector;//µÚÒ»¸öFAT±íËùÔÚÉÈÇø
+  48            unsigned long RootStartSector;
+  49            unsigned long FirstDataSector;//µÚÒ»¸öÄ¿Â¼ËùÔÚÉÈÇø
+  50          /////////////////////FAT32///////////////////////////////
+  51            INT32 BPB_FATSz32;//Ã¿¸öFAT±íµÄ´óÐ¡ÉÈÇøÊý
+  52            unsigned long RootStartCluster;//¸ùÄ¿Â¼´ØºÅ£¬2
+  53            unsigned long TotCluster;
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 2   
+
+  54            unsigned long LastFreeCluster;
+  55            unsigned char FAT;    
+  56          } SYS_INFO_BLOCK;
+  57          
+  58          
+  59          typedef struct _MPATH
+  60          {
+  61                  u8 name[MAX_PATH_LEN];//µ±Ç°ÎÄ¼þ¼ÐµÄ¾ø¶ÔÂ·¾¶¡£/DWIN_SET
+  62                  u32 startFatNum;//ÎÄ¼þ¼ÐµÄÆðÊ¼´Ø
+  63                  u32 nowFatNum;//ÕýÔÚ¶ÁÈ¡µ±Ç°ÎÄ¼þ¼ÐµÄÄÄ¸ö´Ø
+  64                  u8 nowSectorNum;//´ØµÄÄÄ¸ö¿é
+  65                  u16 nowSectorPtr;//¿éµÄÄÄ¸öµØÖ·
+  66                  u8 sectorData[SECTOR_SIZE];//µ±Ç°¿éµÄÄÚÈÝ
+  67          }MPATH,*pMPATH;
+  68          
+  69          typedef struct _MFILE
+  70          {
+  71                  u8 name[MAX_FILE_NAME_LEN];
+  72                  u32 startFatNum;//µ±Ç°ÎÄ¼þ¼ÐµÄ¾ø¶ÔÂ·¾¶¡£/DWIN_SET
+  73                  u32 nowFatNum;//ÕýÔÚ¶ÁÈ¡µ±Ç°ÎÄ¼þ¼ÐµÄÄÄ¸ö´Ø
+  74                  u8 nowSectorNum;//´ØµÄÄÄ¸ö¿é
+  75                  u32 size;//ÎÄ¼þµÄ´óÐ¡
+  76                  u8 sectorData[SECTOR_SIZE];//µ±Ç°¿éµÄÄÚÈÝ
+  77          }MFILE,*pMFILE;
+  78          
+  79          u8 fileSysFlag;
+  80          SYS_INFO_BLOCK xdata DeviceInfo;
+  81          MPATH sysPath,listPath,readPath;
+  82          MFILE sysFile;
+  83          
+  84          unsigned long ThisFatSecNum32(unsigned long clusterNum)
+  85          {
+  86   1         unsigned long temp;
+  87   1         temp=clusterNum/(DeviceInfo.BPB_BytesPerSec/4);
+  88   1         temp=temp+DeviceInfo.FatStartSector;
+  89   1         return temp;
+  90   1      }
+  91          
+  92          unsigned long ThisFatEntOffset32(unsigned long clusterNum)
+  93          {
+  94   1              return (clusterNum%(DeviceInfo.BPB_BytesPerSec/4))*4;
+  95   1      }
+  96          
+  97          static u32 fatSecNumBackup;
+  98          unsigned char xdata FATBUF[SECTOR_SIZE];
+  99          unsigned long GetNextClusterNum32(unsigned long clusterNum)
+ 100          {
+ 101   1              unsigned long FatSecNum,FatEntOffset;
+ 102   1              
+ 103   1              FatSecNum=ThisFatSecNum32(clusterNum);
+ 104   1              FatEntOffset=ThisFatEntOffset32(clusterNum);    
+ 105   1      
+ 106   1              if(fatSecNumBackup != FatSecNum)
+ 107   1              {
+ 108   2                      if(SdReadSector(FatSecNum,FATBUF))
+ 109   2                      {
+ 110   3                              return 0x0FFFFFFF;
+ 111   3                      }
+ 112   2                      else
+ 113   2                      {
+ 114   3                              fatSecNumBackup = FatSecNum;//FATBUFÖÐÎªfatSecNumBackupÉÈÇøµÄ»º´æ¡£Èç¹û·ÃÎÊÆäËûÉÈÇøÔòÖØÐÂ¶ÁÈ¡¡£ÕâÑù¼õÉÙ
+             -¶ÁÈ¡´ÎÊý
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 3   
+
+ 115   3                      }       
+ 116   2              }
+ 117   1              clusterNum=LSwapINT32(FATBUF[FatEntOffset],FATBUF[FatEntOffset+1],FATBUF[FatEntOffset+2],FATBUF[FatEntOff
+             -set+3]);
+ 118   1              return clusterNum;
+ 119   1      }
+ 120          
+ 121          u32 getActualSectorNum(u32 clusterNum, u32 fatNum)
+ 122          {
+ 123   1              u32 fileSector;
+ 124   1      
+ 125   1              fileSector = DeviceInfo.FirstDataSector + (clusterNum - 2)*(DeviceInfo.BPB_SecPerClus) + fatNum;
+ 126   1              return fileSector;
+ 127   1      }
+ 128          
+ 129          //³õÊ¼»¯ÎÄ¼þÏµÍ³
+ 130          u8 InitFileSystem(void)
+ 131          {
+ 132   1              u16 tmp16 = 0;
+ 133   1              u32 tmp32 = 0;
+ 134   1              unsigned int ReservedSectorsNum;//±£ÁôÉÈÇøÊý£¬6350
+ 135   1              unsigned char xdata DBUF[BUFFER_LENGTH];
+ 136   1      
+ 137   1              fileSysFlag = 0;
+ 138   1              if(RESET_OK == SD_Reset())
+ 139   1              {
+ 140   2                      // DEBUGINFO("SD¿¨¸´Î»³É¹¦\n");
+ 141   2                      if(INIT_OK == SD_Init())
+ 142   2                      {
+ 143   3                              // DEBUGINFO("SD¿¨³õÊ¼»¯³É¹¦\n");
+ 144   3                      }
+ 145   2                      else
+ 146   2                      {
+ 147   3                              // DEBUGINFO("SD¿¨³õÊ¼»¯Ê§°Ü\n");
+ 148   3                              return FALSE;
+ 149   3                      }
+ 150   2              }
+ 151   1              else
+ 152   1              {
+ 153   2                      // DEBUGINFO("SD¿¨¸´Î»Ê§°Ü\n");
+ 154   2                      return FALSE;
+ 155   2              }
+ 156   1      
+ 157   1              DeviceInfo.BPB_BytesPerSec=SECTOR_SIZE; //ÔÝ¼ÙÉèÎª512
+ 158   1              
+ 159   1              if(SdReadSector(0,DBUF))
+ 160   1              {       
+ 161   2                      return FALSE;
+ 162   2              }
+ 163   1              if(DBUF[510] != 0x55 || DBUF[511] != 0xaa) return FALSE;
+ 164   1              if(DBUF[0]==0xeb||DBUF[0]==0xe9)
+ 165   1              {       
+ 166   2                      DeviceInfo.StartSector=0;
+ 167   2              }
+ 168   1              else
+ 169   1              {
+ 170   2                      if(DBUF[446] != 0x80 && DBUF[446] != 0)  return FALSE;
+ 171   2                              DeviceInfo.StartSector=LSwapINT32(DBUF[454],DBUF[455],DBUF[456],DBUF[457]);
+ 172   2              }
+ 173   1      
+ 174   1              if(SdReadSector(DeviceInfo.StartSector,DBUF))
+ 175   1                      return FALSE;
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 4   
+
+ 176   1              
+ 177   1              if(DBUF[510] != 0x55 || DBUF[511] != 0xaa) return FALSE;
+ 178   1      
+ 179   1              DeviceInfo.BPB_BytesPerSec=LSwapINT16(DBUF[11],DBUF[12]);
+ 180   1      
+ 181   1              DeviceInfo.BPB_SecPerClus=DBUF[13];
+ 182   1              ReservedSectorsNum=LSwapINT16(DBUF[14],DBUF[15]);
+ 183   1              DeviceInfo.BPB_NumFATs=DBUF[16];
+ 184   1      
+ 185   1              DeviceInfo.BPB_RootEntCnt=LSwapINT16(DBUF[17],DBUF[18]);//´ËÏîÍ¨³£Îª0
+ 186   1              DeviceInfo.BPB_RootEntCnt=(DeviceInfo.BPB_RootEntCnt)*32/DeviceInfo.BPB_BytesPerSec;
+ 187   1              DeviceInfo.BPB_TotSec32=LSwapINT32(DBUF[32],DBUF[33],DBUF[34],DBUF[35]);//ÎÄ¼þÏµÍ³´óÐ¡ÉÈÇøÊý
+ 188   1              DeviceInfo.BPB_FATSz32=LSwapINT32(DBUF[36],DBUF[37],DBUF[38],DBUF[39]);//Ã¿¸öFAT±íµÄ´óÐ¡ÉÈÇøÊý
+ 189   1              DeviceInfo.RootStartCluster=LSwapINT32(DBUF[44],DBUF[45],DBUF[46],DBUF[47]);//¸ùÄ¿Â¼´ØºÅ£¬2
+ 190   1              DeviceInfo.FatStartSector=DeviceInfo.StartSector+ReservedSectorsNum;//µÚÒ»¸öFAT±íËùÔÚÉÈÇø
+ 191   1              DeviceInfo.FirstDataSector=DeviceInfo.FatStartSector+DeviceInfo.BPB_NumFATs*DeviceInfo.BPB_FATSz32;//µÚÒ»
+             -¸öÄ¿Â¼ËùÔÚÉÈÇø
+ 192   1              //DeviceInfo.TotCluster=(DeviceInfo.BPB_TotSec32-DeviceInfo.FirstDataSector+1)/DeviceInfo.BPB_SecPerClus+
+             -1;
+ 193   1              DeviceInfo.TotCluster=(DeviceInfo.BPB_TotSec32-ReservedSectorsNum-DeviceInfo.BPB_NumFATs*DeviceInfo.BPB_F
+             -ATSz32-DeviceInfo.BPB_RootEntCnt)/DeviceInfo.BPB_SecPerClus;
+ 194   1      //      DirStartCluster32=DeviceInfo.RootStartCluster;
+ 195   1              // if(SdReadSector((DeviceInfo.FirstDataSector),DBUF))
+ 196   1              //      return FALSE;
+ 197   1              DeviceInfo.FAT=1;       //FAT16=0,FAT32=1;                      
+ 198   1      
+ 199   1              sysPath.name[0] = '/';
+ 200   1              sysPath.name[1] = 0;//³õÊ¼»¯ºó£¬µ±Ç°ÎÄ¼þ¼ÐÂ·¾¶Îª¸ùÄ¿Â¼
+ 201   1              sysPath.startFatNum = DeviceInfo.RootStartCluster;//¸ùÄ¿Â¼µÄÆðÊ¼´Ø
+ 202   1              sysPath.nowFatNum = sysPath.startFatNum;//¸ùÄ¿Â¼µÄÆðÊ¼´Ø
+ 203   1              sysPath.nowSectorPtr = 0;//¸ùÄ¿Â¼µÄÆðÊ¼´ØµÄµÚ0¸öÉÈÇø
+ 204   1              sysPath.nowSectorNum = 0;//¸ùÄ¿Â¼µÄÆðÊ¼´ØµÄµÚ0¸öÉÈÇøµÄµÚ0¸ö×Ö½Ú
+ 205   1              if(SdReadSector((DeviceInfo.FirstDataSector),sysPath.sectorData))
+ 206   1                      return FALSE;
+ 207   1              fileSysFlag = 1;
+ 208   1              StrCopy((u8*)&listPath,(u8*)&sysPath,sizeof(MPATH));//±¸·ÝlistDirectoryº¯ÊýËùÐèµÄ²ÎÊý
+ 209   1              StrCopy((u8*)&readPath,(u8*)&sysPath,sizeof(MPATH));//±¸·ÝmReadFileº¯ÊýËùÐèµÄ²ÎÊý
+ 210   1              sysFile.name[0] = '\0';
+ 211   1              return TRUE;
+ 212   1      }
+ 213          
+ 214          static u32 listStartFatNum,listSize;//ÎÄ¼þÄÚ²¿µ÷ÓÃ£¬µ±ÊÇÓÃmReadFileº¯ÊýÊÇ£¬Æ¥Åä³É¹¦ºóÔòÊ¹ÓÃ¸ÃÊý¾Ý
+ 215          //0±íÊ¾Ê§°Ü£¬1±íÊ¾ËÑË÷µ½ÎÄ¼þ¼Ð£¬2±íÊ¾ËÑË÷µ½ÎÄ¼þ
+ 216          u8 getOneName(pMPATH dir, u8 *name)
+ 217          {
+ 218   1              u8 nameTmp[1024];//³¤ÎÄ¼þÃû×î¶à31*13¸ö×Ö
+ 219   1              u16 i,j;
+ 220   1              u8 flag,tmp;
+ 221   1              u8 longNameFlag,longNameNum,longNameNumBackup;
+ 222   1              u16 tmpUnicode;
+ 223   1      
+ 224   1              flag = 0;
+ 225   1              longNameFlag = 0;
+ 226   1              if(dir->nowSectorPtr%32)//ÒòÎª32¸ö×Ö½ÚÎªÒ»×é£¬Èç¹û²»ÊÇ32¶ÔÆë£¬ÔòÊý¾ÝÓÐÎÊÌâ,´ÓÍ·¿ªÊ¼ËÑË÷
+ 227   1              {
+ 228   2                      dir->nowSectorPtr = 0;
+ 229   2              }
+ 230   1              if(dir->nowFatNum == 0x0fffffff)//±íÊ¾Ó¦ËÑË÷µ½ÁËµ×²¿
+ 231   1                      return 0;
+ 232   1              while (1)
+ 233   1              {
+ 234   2                      if(dir->sectorData[dir->nowSectorPtr] == 0)//0±íÊ¾ËÑË÷µ½ÁËÎÄ¼þ¼ÐµÄÎ²²¿£¬Ò²¾ÍÃ»ÕÒµ½ÏÂÒ»¸öÎÄ¼þ»òÎÄ¼þ¼Ð
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 5   
+
+ 235   2                              return 0;
+ 236   2                      if(dir->sectorData[dir->nowSectorPtr]!=0xe5 )//0xe5±íÊ¾ÎÄ¼þ±»É¾³ýÁË
+ 237   2                      {
+ 238   3                              if(longNameFlag)//±íÊ¾ÕýÔÚ´¦Àí³¤ÎÄ¼þ
+ 239   3                              {
+ 240   4                                      if(dir->sectorData[dir->nowSectorPtr+0x0b] == 0x0f)
+ 241   4                                      {
+ 242   5                                              if(dir->sectorData[dir->nowSectorPtr] == (longNameNum-1))
+ 243   5                                              {
+ 244   6                                                      longNameNum--;
+ 245   6                                                      if(longNameNum)
+ 246   6                                                      {
+ 247   7                                                              StrCopy(&nameTmp[(longNameNum-1)*26],&dir->sectorData[dir->nowSectorPtr+1],10);
+ 248   7                                                              StrCopy(&nameTmp[(longNameNum-1)*26+10],&dir->sectorData[dir->nowSectorPtr+0x0e],12);
+ 249   7                                                              StrCopy(&nameTmp[(longNameNum-1)*26+22],&dir->sectorData[dir->nowSectorPtr+0x1c],4);
+ 250   7                                                      }
+ 251   6                                                      else
+ 252   6                                                              longNameFlag = 0;
+ 253   6                                              }
+ 254   5                                              else//·ÃÎÊ³ö´í
+ 255   5                                              {
+ 256   6                                                      longNameFlag = 0;
+ 257   6                                              }
+ 258   5                                      }
+ 259   4                                      else
+ 260   4                                      {
+ 261   5                          longNameFlag = 0;
+ 262   5                                              if(1==longNameNum)//ËÑË÷µ½ÁË±¾Ãü
+ 263   5                                              {
+ 264   6                                                      if((dir->sectorData[dir->nowSectorPtr+0x0b]&0x26) == 0x20)//±íÊ¾ÎªÕý³£ÎÄ¼þ£¬ÏµÍ³ÎÄ¼þ²»´¦Àí£¬Òþ²ØÎÄ¼þ
+             -²»´¦Àí
+ 265   6                                                      {
+ 266   7                                                              flag = 3;
+ 267   7                                                      }
+ 268   6                                                      else if((dir->sectorData[dir->nowSectorPtr+0x0b]&0x16) == 0x10)//±íÊ¾ÎªÕý³£ÎÄ¼þ¼Ð£¬ÏµÍ³ÎÄ¼þ¼Ð²»´¦Àí£
+             -¬Òþ²ØÎÄ¼þ¼Ð²»´¦Àí
+ 269   6                                                      {
+ 270   7                                                              flag = 4;
+ 271   7                                                      }
+ 272   6                                                      if(flag)
+ 273   6                                                      {
+ 274   7                                                              listStartFatNum = LSwapINT32(dir->sectorData[26+dir->nowSectorPtr],dir->sectorData[27+dir->nowSecto
+             -rPtr], \
+ 275   7                                                                                              dir->sectorData[20+dir->nowSectorPtr],dir->sectorData[21+dir->nowSectorPtr]);
+ 276   7                                                              listSize = LSwapINT32(dir->sectorData[28+dir->nowSectorPtr],dir->sectorData[29+dir->nowSectorPtr], 
+             -\
+ 277   7                                                                                              dir->sectorData[30+dir->nowSectorPtr],dir->sectorData[31+dir->nowSectorPtr]);
+ 278   7                                                              j = 0;
+ 279   7                                                              for(i=0;i<longNameNumBackup*13;i++)
+ 280   7                                                              {
+ 281   8                                                                      // tmpUnicode = *(u16*)&nameTmp[i*2];
+ 282   8                                                                      tmpUnicode = nameTmp[i*2+1];
+ 283   8                                                                      tmpUnicode <<= 8;
+ 284   8                                                                      tmpUnicode |= nameTmp[i*2];
+ 285   8                                                                      if(tmpUnicode == 0 || tmpUnicode == 0xffff)
+ 286   8                                                                      {
+ 287   9                                                                              break;
+ 288   9                                                                      }
+ 289   8                                                                      else if(tmpUnicode < 0x0080)
+ 290   8                                                                      {
+ 291   9                                                                              name[j] = tmpUnicode;
+ 292   9                                                                              j++;
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 6   
+
+ 293   9                                                                      }
+ 294   8                                                                      else
+ 295   8                                                                      {
+ 296   9                                                                              *(u16*)&name[j] = ffConvert(tmpUnicode,0);
+ 297   9                                                                              // *(u16*)&name[j] = tmpUnicode;
+ 298   9                                                                              j += 2;
+ 299   9                                                                      }
+ 300   8                                                              }
+ 301   7                                                              name[j] = '\0';
+ 302   7                                                      }
+ 303   6                                              }
+ 304   5      //                                      else
+ 305   5      //                                      {
+ 306   5      //                                              longNameFlag = 0;
+ 307   5      //                                      }
+ 308   5                                      }
+ 309   4                              }
+ 310   3                              else
+ 311   3                              {
+ 312   4                                      if((dir->sectorData[dir->nowSectorPtr+0x0b]&0x26) == 0x20)//±íÊ¾ÎªÕý³£ÎÄ¼þ£¬ÏµÍ³ÎÄ¼þ²»´¦Àí£¬Òþ²ØÎÄ¼þ²»
+             -´¦Àí
+ 313   4                                      {
+ 314   5                                              for(i=0;i<11;i++)
+ 315   5                                              {
+ 316   6                                                      nameTmp[i] = dir->sectorData[dir->nowSectorPtr+i];
+ 317   6                                              }
+ 318   5                                              nameTmp[11] = '\0';
+ 319   5                                              listStartFatNum = LSwapINT32(dir->sectorData[26+dir->nowSectorPtr],dir->sectorData[27+dir->nowSectorP
+             -tr], \
+ 320   5                                                                                              dir->sectorData[20+dir->nowSectorPtr],dir->sectorData[21+dir->nowSectorPtr]);
+ 321   5                                              listSize = LSwapINT32(dir->sectorData[28+dir->nowSectorPtr],dir->sectorData[29+dir->nowSectorPtr], \
+ 322   5                                                                                              dir->sectorData[30+dir->nowSectorPtr],dir->sectorData[31+dir->nowSectorPtr]);
+ 323   5                                              tmp = dir->sectorData[dir->nowSectorPtr+0x0c];//×ª»»×Ö·û´óÐ¡Ð´
+ 324   5                                              if(tmp&0x10)//À©Õ¹ÃûµÄ´óÐ¡Ð´,1´ú±íÐ¡Ð´
+ 325   5                                              {
+ 326   6                                                      for ( i = 8; i < 11; i++)
+ 327   6                                                      {
+ 328   7                                                              nameTmp[i] = charUpperOrLower(nameTmp[i],1);
+ 329   7                                                      }
+ 330   6                                              }
+ 331   5                                              else
+ 332   5                                              {
+ 333   6                                                      for ( i = 8; i < 11; i++)
+ 334   6                                                      {
+ 335   7                                                              nameTmp[i] = charUpperOrLower(nameTmp[i],0);
+ 336   7                                                      }
+ 337   6                                              }
+ 338   5                                              if(tmp&0x08)//ÎÄ¼þÃûµÄ´óÐ¡Ð´
+ 339   5                                              {
+ 340   6                                                      for ( i = 0; i < 8; i++)
+ 341   6                                                      {
+ 342   7                                                              nameTmp[i] = charUpperOrLower(nameTmp[i],1);
+ 343   7                                                      }
+ 344   6                                              }
+ 345   5                                              else
+ 346   5                                              {
+ 347   6                                                      for ( i = 0; i < 8; i++)
+ 348   6                                                      {
+ 349   7                                                              nameTmp[i] = charUpperOrLower(nameTmp[i],0);
+ 350   7                                                      }
+ 351   6                                              }
+ 352   5                                              j=0;
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 7   
+
+ 353   5                                              for ( i = 0; i < 8; i++)
+ 354   5                                              {
+ 355   6                                                      if(nameTmp[i] != 0x20)
+ 356   6                                                      {
+ 357   7                                                              name[j] = nameTmp[i];
+ 358   7                                                              j++;
+ 359   7                                                      }
+ 360   6                                              }
+ 361   5                                              name[j] = '.';
+ 362   5                                              j++;
+ 363   5                                              for ( ; i < 11; i++)
+ 364   5                                              {
+ 365   6                                                      if(nameTmp[i] != 0x20)
+ 366   6                                                      {
+ 367   7                                                              name[j] = nameTmp[i];
+ 368   7                                                              j++;
+ 369   7                                                      }
+ 370   6                                              }
+ 371   5                                              name[j] = '\0';
+ 372   5                                              flag = 1;//±íÊ¾ËÑË÷µ½ÁË¶ÌÃûÎÄ¼þ
+ 373   5                                      }
+ 374   4                                      else if((dir->sectorData[dir->nowSectorPtr+0x0b]&0x16) == 0x10)//±íÊ¾ÎªÕý³£ÎÄ¼þ¼Ð£¬ÏµÍ³ÎÄ¼þ¼Ð²»´¦Àí£¬Ò
+             -þ²ØÎÄ¼þ¼Ð²»´¦Àí
+ 375   4                                      {
+ 376   5                                              if(dir->sectorData[dir->nowSectorPtr] != 0x2e)//0x2e±íÊ¾ÎªÏµÍ³ÎÄ¼þ¼Ð£¬²»ÐèÒª·ÃÎÊ¡£
+ 377   5                                              {
+ 378   6                                                      for(i=0;i<8;i++)
+ 379   6                                                      {
+ 380   7                                                              nameTmp[i] = dir->sectorData[dir->nowSectorPtr+i];
+ 381   7                                                      }
+ 382   6                                                      nameTmp[8] = '\0';
+ 383   6                                                      listStartFatNum = LSwapINT32(dir->sectorData[26+dir->nowSectorPtr],dir->sectorData[27+dir->nowSector
+             -Ptr], \
+ 384   6                                                                                              dir->sectorData[20+dir->nowSectorPtr],dir->sectorData[21+dir->nowSectorPtr]);
+ 385   6                                                      listSize = LSwapINT32(dir->sectorData[28+dir->nowSectorPtr],dir->sectorData[29+dir->nowSectorPtr], \
+ 386   6                                                                                              dir->sectorData[30+dir->nowSectorPtr],dir->sectorData[31+dir->nowSectorPtr]);
+ 387   6                                                      tmp = dir->sectorData[dir->nowSectorPtr+0x0c];//×ª»»×Ö·û´óÐ¡Ð´
+ 388   6                                                      if(tmp&0x08)//ÎÄ¼þÃûµÄ´óÐ¡Ð´
+ 389   6                                                      {
+ 390   7                                                              for ( i = 0; i < 8; i++)
+ 391   7                                                              {
+ 392   8                                                                      nameTmp[i] = charUpperOrLower(nameTmp[i],1);
+ 393   8                                                              }
+ 394   7                                                      }
+ 395   6                                                      else
+ 396   6                                                      {
+ 397   7                                                              for ( i = 0; i < 8; i++)
+ 398   7                                                              {
+ 399   8                                                                      nameTmp[i] = charUpperOrLower(nameTmp[i],0);
+ 400   8                                                              }
+ 401   7                                                      }
+ 402   6                                                      j=0;
+ 403   6                                                      for ( i = 0; i < 8; i++)
+ 404   6                                                      {
+ 405   7                                                              if(nameTmp[i] != 0x20)
+ 406   7                                                              {
+ 407   8                                                                      name[j] = nameTmp[i];
+ 408   8                                                                      j++;
+ 409   8                                                              }
+ 410   7                                                      }
+ 411   6                                                      name[j] = '\0';
+ 412   6                                                      flag = 2;//±íÊ¾ËÑË÷µ½ÁË¶ÌÃûÎÄ¼þ¼Ð
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 8   
+
+ 413   6                                              }
+ 414   5                                      }
+ 415   4                                      else if((dir->sectorData[dir->nowSectorPtr+0x0b] == 0x0f))//±íÊ¾Îª³¤ÎÄ¼þÃû»ò³¤ÎÄ¼þ¼ÐÃû
+ 416   4                                      {
+ 417   5                                              if((dir->sectorData[dir->nowSectorPtr]&0x40) == 0x40)//±íÊ¾³¤ÎÄ¼þµÄ¿ªÊ¼
+ 418   5                                              {
+ 419   6                                                      longNameNum = dir->sectorData[dir->nowSectorPtr] & 0x1F;
+ 420   6                                                      if(longNameNum)//±íÊ¾ÓÐÐ§µÄ³¤ÎÄ¼þÃû
+ 421   6                                                      {
+ 422   7                                                              longNameNumBackup = longNameNum;
+ 423   7                                                              longNameFlag = 1;
+ 424   7                                                              StrCopy(&nameTmp[(longNameNum-1)*26],&dir->sectorData[dir->nowSectorPtr+1],10);
+ 425   7                                                              StrCopy(&nameTmp[(longNameNum-1)*26+10],&dir->sectorData[dir->nowSectorPtr+0x0e],12);
+ 426   7                                                              StrCopy(&nameTmp[(longNameNum-1)*26+22],&dir->sectorData[dir->nowSectorPtr+0x1c],4);
+ 427   7                                                      }
+ 428   6                                              }
+ 429   5                                      }
+ 430   4                              }
+ 431   3                      }
+ 432   2      
+ 433   2                      dir->nowSectorPtr += 32;
+ 434   2                      if(dir->nowSectorPtr >= 512)//DeviceInfo.BPB_BytesPerSec
+ 435   2                      {
+ 436   3                              dir->nowSectorPtr = 0;
+ 437   3                              dir->nowSectorNum++;
+ 438   3                              if(dir->nowSectorNum >= DeviceInfo.BPB_SecPerClus)//µ±Ç°´ØËÑË÷ÍêÁË£¬ÐèÒªÕÒÏÂÒ»¸ö´Ø
+ 439   3                              {
+ 440   4                                      dir->nowSectorNum = 0;
+ 441   4                                      dir->nowFatNum = GetNextClusterNum32(dir->nowFatNum);
+ 442   4                                      if(dir->nowFatNum == 0x0fffffff)//±íÊ¾Ã»ÓÐºóÐø´ØÁË
+ 443   4                                      {
+ 444   5                                              if(0==flag)
+ 445   5                                                      return 0;
+ 446   5                                      }       
+ 447   4                              }
+ 448   3                              if(dir->nowFatNum != 0x0fffffff)
+ 449   3                              {
+ 450   4                                      if(SdReadSector((getActualSectorNum(dir->nowFatNum,dir->nowSectorNum)),dir->sectorData))//¼ÓÔØµ±Ç°Â·¾¶
+             -µÄÆðÊ¼ÉÈÇøÊý¾Ý
+ 451   4                                              return 0;
+ 452   4                              }
+ 453   3                      }
+ 454   2                      if (flag)//ËÑË÷µ½Ò»¸öÓÐÐ§ÎÄ¼þ»òÎÄ¼þ¼Ð£¬´¦ÀíºÃÃû³Æºó¼´¿É·µ»Ø¡£ËÑµ½ÎÄ¼þ¼ÐºóÐèÒª½«nowSectorPtrÖ¸ÏòÏÂÒ»¸ö¡£·
+             -ñÔòÏÂ´Î½øÀ´»¹ÊÇËÑµ½µ±Ç°ÎÄ¼þ
+ 455   2                      {
+ 456   3                              break;
+ 457   3                      }
+ 458   2              }
+ 459   1              if(1==flag || 3==flag)
+ 460   1              {
+ 461   2                      return 2;
+ 462   2              }
+ 463   1              else
+ 464   1                      return 1;
+ 465   1      }
+ 466          
+ 467          //ÕÒµ½Â·¾¶ÖÐµÄ/²¢·µ»ØÎ»ÖÃ.FFFF±íÊ¾ËÑË÷Ê§°Ü.FFFE±íÊ¾ËÑË÷µ½ÁËÎÄ¼þµÄÎ²²¿
+ 468          u16 findSeparator(const u8 *path)
+ 469          {
+ 470   1              u16 i;
+ 471   1      
+ 472   1              i = 0;
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 9   
+
+ 473   1              while(1)
+ 474   1              {
+ 475   2                      if(path[i] == '/')
+ 476   2                      {
+ 477   3                              if(path[i+1] != '/')//ËÑË÷µ½ÀàËÆÓÚ /E ÕâÖÖ×éºÏ²ÅËãÓÐÐ§
+ 478   3                              {
+ 479   4                                      return i;
+ 480   4                              }
+ 481   3                      }
+ 482   2                      else if(path[i] == '\0' || path[i] == 0xff)
+ 483   2                      {
+ 484   3                              i |= 0x8000;
+ 485   3                              return i;
+ 486   3                      }
+ 487   2                      i++;
+ 488   2                      if(i >= MAX_PATH_LEN)
+ 489   2                      {
+ 490   3                              return 0xffff;
+ 491   3                      }
+ 492   2              }
+ 493   1      }
+ 494          
+ 495          void getNowPathName(u8 *name)
+ 496          {
+ 497   1              u16 tmp;
+ 498   1              
+ 499   1              if(fileSysFlag)
+ 500   1                      tmp = sizeArray(sysPath.name);
+ 501   1              else    
+ 502   1                      tmp = 0;
+ 503   1              if(tmp)
+ 504   1              {
+ 505   2                      StrCopy(name,sysPath.name,tmp);
+ 506   2              }
+ 507   1              name[tmp] = '\0';
+ 508   1      }
+ 509          
+ 510          //ÅÐ¶ÏÂ·¾¶ÊÇ·ñÒ»ÖÂ 1´ú±íÒ»ÖÂ£¬0´ú±í·¢Éú±ä»¯
+ 511          u8 pathJudge(const u8 *newPath, const u8 *oldPath)
+ 512          {
+ 513   1              u16 len;
+ 514   1              u16 i,j;
+ 515   1              u8 newTemp[MAX_PATH_LEN];
+ 516   1              u8 speparatorFlag,alreadySep;
+ 517   1      
+ 518   1              if(newPath[0] == '.')//Ïà¶ÔÂ·¾¶
+ 519   1              {
+ 520   2                      for(i=1;i<MAX_PATH_LEN;i++)
+ 521   2                      {
+ 522   3                              if(newPath[i] != '\0')//
+ 523   3                              {
+ 524   4                                      if(newPath[i] != '/')//ÀàËÆÓÚ ./DWIN_SETÕâÖÖ
+ 525   4                                              return 0;
+ 526   4                              }
+ 527   3                              else
+ 528   3                                      return 1;//±íÊ¾Ò»ÖÂ£¬Ò²¾ÍÊÇÀàËÆÓÚ ./ ÕâÖÖ×Ö·û
+ 529   3                      }
+ 530   2              }
+ 531   1              else
+ 532   1              {
+ 533   2                      len = sizeArray(newPath);
+ 534   2                      j = 1;
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 10  
+
+ 535   2                      newTemp[0] = '/';
+ 536   2                      speparatorFlag = 1;
+ 537   2                      alreadySep = 0;
+ 538   2                      for(i=0;i<len;i++)
+ 539   2                      {
+ 540   3                              if(speparatorFlag)//ÐèÒªÑ°ÕÒ²»ÊÇ'/'µÄÊý¾Ý
+ 541   3                              {
+ 542   4                                      if(newPath[i] != '/')
+ 543   4                                      {
+ 544   5                                              speparatorFlag = 0;
+ 545   5                                              newTemp[j] = newPath[i];
+ 546   5                                              j++;
+ 547   5                                      }
+ 548   4                              }
+ 549   3                              else
+ 550   3                              {
+ 551   4                                      if(newPath[i] == '/')//Èç¹ûÊÇ/DWIN_SET/ÕâÖÖÂ·¾¶£¬ÐèÒª°Ñ×îºóÒ»¸ö/ÂË³ýµô
+ 552   4                                      {
+ 553   5                                              alreadySep = 1;
+ 554   5                                      }
+ 555   4                                      else
+ 556   4                                      {
+ 557   5                                              if(alreadySep)
+ 558   5                                              {
+ 559   6                                                      alreadySep = 0;
+ 560   6                                                      speparatorFlag = 1;
+ 561   6                                                      newTemp[j] = '/';
+ 562   6                                                      j++;
+ 563   6                                              }
+ 564   5                                              newTemp[j] = newPath[i];
+ 565   5                                              j++;
+ 566   5                                      }
+ 567   4                              }
+ 568   3                      }
+ 569   2              if(j>1)
+ 570   2              {
+ 571   3                  newTemp[j] = '/';
+ 572   3                  j++;
+ 573   3              }
+ 574   2                      newTemp[j] = '\0';
+ 575   2                      if(0==mStrCmp(newTemp,oldPath))
+ 576   2                              return 1;
+ 577   2                      else
+ 578   2                              return 0;
+ 579   2              }
+ 580   1              return 0;
+ 581   1      }
+ 582          //½øÈëÄ¿Â¼
+ 583          //0±íÊ¾½øÈë³É¹¦ 1±íÊ¾½øÈëÊ§°Ü
+ 584          //Ïà¶ÔÂ·¾¶ ./123
+ 585          //¾ø¶ÔÂ·¾¶ /dwin_set/123
+ 586          //×¢£º123ÊÇÒ»¸öÎÄ¼þ¼Ð£¬²»ÊÇÒ»¸öÎÄ¼þ
+ 587          u8 changeDirectory(const u8 *path)
+ 588          {
+ 589   1              u8 pathName[MAX_PATH_LEN];
+ 590   1              u8 searchName[1024];
+ 591   1              u16 pathPos1,pathPos2;
+ 592   1              MPATH pathTmp;
+ 593   1              u16 tmp,len;
+ 594   1              u8 endFlag;
+ 595   1      
+ 596   1              if(0==fileSysFlag)//ÎÄ¼þÏµÍ³³õÊ¼»¯ºó²ÅÄÜ½øÐÐ²Ù×÷
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 11  
+
+ 597   1                      return FAIL;
+ 598   1              if(pathJudge(path,sysPath.name))
+ 599   1              {
+ 600   2                      if(sysPath.nowFatNum == sysPath.startFatNum && sysPath.nowSectorNum ==0 && sysPath.nowSectorPtr ==0)
+ 601   2                              return SUCCESS;
+ 602   2                      sysPath.nowFatNum = sysPath.startFatNum;
+ 603   2                      sysPath.nowSectorNum = 0;
+ 604   2                      sysPath.nowSectorPtr = 0;
+ 605   2                      if(SdReadSector((getActualSectorNum(pathTmp.startFatNum,pathTmp.nowSectorNum)),pathTmp.sectorData))//¼ÓÔ
+             -Ø¸ùÄ¿Â¼µÄÆðÊ¼ÉÈÇøÊý¾Ý
+ 606   2                              return FAIL;
+ 607   2                      return SUCCESS;
+ 608   2              }
+ 609   1              if('.' == path[0])//Ïà¶ÔÂ·¾¶£¬´ÓsysPath¿ªÊ¼ËÑËØ
+ 610   1              {
+ 611   2                      StrCopy((u8*)&pathTmp,(u8*)&sysPath,sizeof(MPATH));//¿½±´µ±Ç°µÄÂ·¾¶ÐÅÏ¢
+ 612   2                      pathTmp.nowFatNum = pathTmp.startFatNum;
+ 613   2                      pathTmp.nowSectorNum = 0;
+ 614   2                      pathTmp.nowSectorPtr = 0;
+ 615   2                      if(SdReadSector((getActualSectorNum(pathTmp.startFatNum,pathTmp.nowSectorNum)),pathTmp.sectorData))//¼ÓÔ
+             -Øµ±Ç°Â·¾¶µÄÆðÊ¼ÉÈÇøÊý¾Ý
+ 616   2                              return FAIL;
+ 617   2              }
+ 618   1              else//¾ø¶ÔÂ·¾¶,´ÓÍ·¿ªÊ¼ËÑË÷
+ 619   1              {
+ 620   2                      pathTmp.name[0] = '/';
+ 621   2                      pathTmp.name[1] = 0;//³õÊ¼»¯ºó£¬µ±Ç°ÎÄ¼þ¼ÐÂ·¾¶Îª¸ùÄ¿Â¼
+ 622   2                      pathTmp.startFatNum = DeviceInfo.RootStartCluster;//¸ùÄ¿Â¼µÄÆðÊ¼´Ø
+ 623   2                      pathTmp.nowFatNum = sysPath.startFatNum;//¸ùÄ¿Â¼µÄÆðÊ¼´Ø
+ 624   2                      pathTmp.nowSectorNum = 0;//¸ùÄ¿Â¼µÄÆðÊ¼´ØµÄµÚ0¸öÉÈÇø
+ 625   2                      pathTmp.nowSectorPtr = 0;//¸ùÄ¿Â¼µÄÆðÊ¼´ØµÄµÚ0¸öÉÈÇøµÄµÚ0¸ö×Ö½Ú
+ 626   2                      if(SdReadSector((DeviceInfo.FirstDataSector),pathTmp.sectorData))//¼ÓÔØ¸ùÄ¿Â¼µÄÆðÊ¼ÉÈÇøÊý¾Ý
+ 627   2                              return FAIL;
+ 628   2              }
+ 629   1              pathPos1 = findSeparator(path);//²éÕÒµÚÒ»¸ö /EÕâÖÖ×Ö·û
+ 630   1              if(pathPos1 == 0xffff)
+ 631   1                      return FAIL;
+ 632   1              if(pathPos1 & 0x8000)//±íÊ¾ËÑË÷µ½ÁËÎ²²¿
+ 633   1                      return FAIL;
+ 634   1              while(1)
+ 635   1              {
+ 636   2                      pathPos2 = findSeparator(&path[pathPos1+1]);//²éÕÒµÚ¶þ¸ö'/'»òÕß\0
+ 637   2                      if(pathPos2 == 0xffff)
+ 638   2                              return FAIL;
+ 639   2              tmp = pathPos2 & 0x7fff;
+ 640   2                      if(pathPos2 & 0x8000)//±íÊ¾ËÑË÷µ½ÁËÎ²²¿
+ 641   2                      {
+ 642   3                              if(tmp)//±íÊ¾Î²²¿ºÍÉÏÒ»¸ö/Ö®¼äÓÐÊý¾Ý,´¦ÀíÍêºó¼´¿ÉÍË³ö
+ 643   3                              {
+ 644   4                                      // StrCopy(pathName,&path[pathPos1+1],tmp);
+ 645   4                                      // pathName[tmp] = '\0';//¼ÓÉÏ½áÊø·û
+ 646   4                                      endFlag = 1;
+ 647   4                              }
+ 648   3                              else
+ 649   3                                      break;
+ 650   3                      }
+ 651   2                      StrCopy(pathName,&path[pathPos1+1],tmp);
+ 652   2                      pathName[tmp] = '\0';//¼ÓÉÏ½áÊø·û
+ 653   2                      pathPos1 += (tmp + 1);
+ 654   2                      while(1)
+ 655   2                      {
+ 656   3                              tmp = getOneName(&pathTmp,searchName);
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 12  
+
+ 657   3                              if(1 == tmp)//±íÊ¾ËÑË÷µ½ÁËÒ»¸öÎÄ¼þ¼Ð
+ 658   3                              {
+ 659   4                                      len = sizeArray(pathName);
+ 660   4                                      if(0==mStrCmp(pathName,searchName))//ËÑË÷µ½ÁËÕâ¸öÎÄ¼þ¼Ð
+ 661   4                                      {
+ 662   5                                              tmp = sizeArray(pathTmp.name);
+ 663   5                                              if(len+tmp+2 > MAX_PATH_LEN)
+ 664   5                                                      return FAIL;
+ 665   5                                              
+ 666   5                                              StrCopy(&pathTmp.name[tmp],pathName,len);//¶à¿½±´Ò»¸ö\0
+ 667   5                                              pathTmp.name[tmp+len] = '/';
+ 668   5                                              pathTmp.name[tmp+len+1] = '\0';
+ 669   5                                              pathTmp.startFatNum = listStartFatNum;
+ 670   5                                              pathTmp.nowFatNum = listStartFatNum;
+ 671   5                                              pathTmp.nowSectorNum = 0;
+ 672   5                                              pathTmp.nowSectorPtr = 0;
+ 673   5                                              if(SdReadSector((getActualSectorNum(pathTmp.startFatNum,pathTmp.nowSectorNum)),pathTmp.sectorData))//
+             -¼ÓÔØ¸ùÄ¿Â¼µÄÆðÊ¼ÉÈÇøÊý¾Ý
+ 674   5                                                      return FAIL;
+ 675   5                                              break;
+ 676   5                                      }
+ 677   4                              }
+ 678   3                              else if(0==tmp)
+ 679   3                              {
+ 680   4                                      return FAIL;
+ 681   4                              }
+ 682   3                      }
+ 683   2                      if(endFlag)//´¦ÀíÍêÁËÐèÒªÍË³ö
+ 684   2                              break;
+ 685   2              }
+ 686   1              StrCopy((u8*)&sysPath,(u8*)&pathTmp,sizeof(MPATH));//¿½±´µ±Ç°µÄÂ·¾¶ÐÅÏ¢
+ 687   1              return SUCCESS;
+ 688   1      }
+ 689          
+ 690          //mode 0±íÊ¾´ÓÍ·¿ªÊ¼ËÑË÷£¬1±íÊ¾´Óµ±Ç°Î»ÖÃ¼ÌÐøËÑË÷
+ 691          //ÓÉÓÚ¿Õ¼äÓÐÏÞ£¬Ã¿´ÎÖ»ËÑÈ¥Ò»¸öÎÄ¼þ»òÎÄ¼þ¼ÐµÄÃû×Ö
+ 692          //µ±Â·¾¶·¢Éú¸Ä±äµÄÊ±ºò´ÓÍ·ËÑË÷¡£
+ 693          //0´ú±íËÑË÷Ê§°Ü£¬2´ú±íËÑË÷µ½ÎÄ¼þ£¬1´ú±íËÑË÷µ½ÎÄ¼þ¼Ð
+ 694          u8 listDirectory(u8 *path, u8* name)
+ 695          {
+ 696   1              u8 flag;
+ 697   1              MPATH pathTmp;
+ 698   1      
+ 699   1              flag = FAIL;
+ 700   1      
+ 701   1              if(pathJudge(path,listPath.name))//±íÊ¾Â·¾¶ÏàÍ¬
+ 702   1              {
+ 703   2                      flag = getOneName(&listPath,name);
+ 704   2              }
+ 705   1              else
+ 706   1              {
+ 707   2                      StrCopy((u8*)&pathTmp,(u8*)&sysPath,sizeof(MPATH));//±£»¤ÏµÍ³Â·¾¶
+ 708   2      
+ 709   2                      if(SUCCESS == changeDirectory(path))//±íÊ¾½øÈëÁË¶ÔÓ¦µÄÎÄ¼þ¼Ð
+ 710   2                      {
+ 711   3                              StrCopy((u8*)&listPath,(u8*)&sysPath,sizeof(MPATH));
+ 712   3                              flag = getOneName(&listPath,name);
+ 713   3                      }
+ 714   2                      StrCopy((u8*)&sysPath,(u8*)&pathTmp,sizeof(MPATH));//»Ö¸´ÏµÍ³Â·¾¶
+ 715   2              }
+ 716   1              return flag;
+ 717   1      }
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 13  
+
+ 718          
+ 719          //¶ÁÈ¡ÎÄ¼þ
+ 720          u8 mReadFile(pREAD_FILE_STU read)
+ 721          // u8 mReadFile(u8* pathAddName, u32 *fstartPos, u32 *flen, u8 *dataBuf)
+ 722          {
+ 723   1      
+ 724   1      
+ 725   1              u8 pathName[MAX_PATH_LEN];
+ 726   1              u8 fileName[MAX_FILE_NAME_LEN];
+ 727   1              u8 fileNameTmp[MAX_FILE_NAME_LEN];
+ 728   1              u16 lenTmp,i,k,tmpSectorPtr;
+ 729   1              MPATH pathTmp;
+ 730   1              u8 flag,tmpSectorNum;
+ 731   1              u32 tmpFatNum,j;
+ 732   1              u32 startPos,len;
+ 733   1              u8 *pathAddName;
+ 734   1              u8 *dataBuf;
+ 735   1      
+ 736   1              startPos = read->fstartPos;
+ 737   1              len = read->flen;
+ 738   1              pathAddName = read->filePath;
+ 739   1              dataBuf = read->dataBuf;
+ 740   1              if(0==len)
+ 741   1                      return FAIL;
+ 742   1              lenTmp = sizeArray(pathAddName);
+ 743   1              k = 0;
+ 744   1              for(i=0;i<lenTmp;i++)
+ 745   1              {
+ 746   2                      if(pathAddName[lenTmp-i-1] == '/')
+ 747   2                              break;
+ 748   2                      else
+ 749   2                              k++;
+ 750   2              }
+ 751   1              if(i==lenTmp)//±íÊ¾Ã»ÓÐ·Ö¸ô·û
+ 752   1                      return FAIL;
+ 753   1              if(k==0)//Ã»ËÑµ½´øÓÐ³ýÁË·Ö¸ô·ûÒÔÍâµÄ×Ö·û
+ 754   1                      return FAIL;
+ 755   1              if(k >= MAX_FILE_NAME_LEN)
+ 756   1                      return FAIL;
+ 757   1              if(lenTmp-k >= MAX_PATH_LEN)
+ 758   1                      return FAIL;
+ 759   1              
+ 760   1              StrCopy(fileName,&pathAddName[lenTmp-k],k);
+ 761   1              fileName[k] = '\0';
+ 762   1              StrCopy(pathName,&pathAddName[0],lenTmp-k);
+ 763   1              pathName[lenTmp-k] = '\0';//·ÖÀë³öÂ·¾¶ºÍÎÄ¼þÃû×Ö
+ 764   1      
+ 765   1              i = 0;
+ 766   1              if(pathJudge(pathName,readPath.name))//±íÊ¾ÏàÍ¬Â·¾¶
+ 767   1              {
+ 768   2                      if(mStrCmp(fileName,sysFile.name))//±íÊ¾ÎÄ¼þ²»ÏàÍ¬£¬ÐèÒªÖØÐÂËÑË÷
+ 769   2                      {
+ 770   3                              i = 1;
+ 771   3                      }
+ 772   2              }
+ 773   1              else
+ 774   1              {
+ 775   2                      i = 1;
+ 776   2                      StrCopy((u8*)&pathTmp,(u8*)&sysPath,sizeof(MPATH));//±£»¤ÏµÍ³Â·¾¶
+ 777   2                      flag = changeDirectory(pathName);
+ 778   2                      StrCopy((u8*)&sysPath,(u8*)&pathTmp,sizeof(MPATH));//»Ö¸´ÏµÍ³Â·¾¶
+ 779   2                      if(SUCCESS == flag)//±íÊ¾½øÈëÁË¶ÔÓ¦µÄÎÄ¼þ¼Ð
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 14  
+
+ 780   2                      {
+ 781   3                              StrCopy((u8*)&readPath,(u8*)&sysPath,sizeof(MPATH));
+ 782   3                      }
+ 783   2                      else
+ 784   2                              return FAIL;
+ 785   2              }
+ 786   1              if(i)//±íÊ¾ÐèÒªÖØÐÂËÑË÷ÎÄ¼þ
+ 787   1              {
+ 788   2                      while (1)
+ 789   2                      {
+ 790   3                              flag = getOneName(&readPath,fileNameTmp);
+ 791   3                              if(2==flag)//ËÑË÷µ½ÁËÒ»¸öÎÄ¼þ
+ 792   3                              {
+ 793   4                                      if(0==mStrCmp(fileNameTmp,fileName))
+ 794   4                                      {
+ 795   5                                              sysFile.startFatNum = listStartFatNum;
+ 796   5                                              sysFile.size = listSize;
+ 797   5                                              read->fileSize = listSize;
+ 798   5                                              sysFile.nowFatNum = sysFile.startFatNum;
+ 799   5                                              sysFile.nowSectorNum = 0;
+ 800   5                                              lenTmp = sizeArray(fileName);
+ 801   5                                              StrCopy(sysFile.name,fileName,lenTmp);
+ 802   5                                              sysFile.name[lenTmp] = '\0';
+ 803   5                                              break;
+ 804   5                                      }
+ 805   4                              }
+ 806   3                              else if(0==flag)//ËÑË÷Ê§°Ü
+ 807   3                              {
+ 808   4                                      return FAIL;
+ 809   4                              }
+ 810   3                      }
+ 811   2              }
+ 812   1              if(startPos > sysFile.size)
+ 813   1                      return FAIL;
+ 814   1              if(startPos+len >= sysFile.size)
+ 815   1              {
+ 816   2                      flag = 1;//±íÊ¾¶Áµ½Î²ÁË
+ 817   2                      len = sysFile.size - startPos;
+ 818   2              }
+ 819   1              else
+ 820   1              {
+ 821   2                      flag = 0;
+ 822   2              }
+ 823   1                      
+ 824   1              read->realReadLen = len;
+ 825   1              tmpFatNum = startPos / (512UL * DeviceInfo.BPB_SecPerClus);//±íÊ¾ÆðÊ¼Î»ÖÃÔÚµÚ¼¸´Ø
+ 826   1              tmpSectorNum = (startPos % (512UL * DeviceInfo.BPB_SecPerClus)) / 512;//´Óµ±Ç°´ØµÄµÚ¼¸¸öFAT¿ªÊ¼
+ 827   1              tmpSectorPtr = (startPos % (512UL * DeviceInfo.BPB_SecPerClus)) % 512;//´Óµ±Ç°FAT¿éµÄÄÄ¸öÎ»ÖÃ¿ªÊ¼
+ 828   1              
+ 829   1      
+ 830   1              sysFile.nowFatNum = sysFile.startFatNum;
+ 831   1              sysFile.nowSectorNum = tmpSectorNum;
+ 832   1              for(j=0;j<tmpFatNum;j++)
+ 833   1                      sysFile.nowFatNum = GetNextClusterNum32(sysFile.nowFatNum);
+ 834   1              lenTmp = sysFile.nowSectorNum;
+ 835   1      
+ 836   1              tmpFatNum = 0;
+ 837   1              while(1)
+ 838   1              {
+ 839   2                      if(SdReadSector((getActualSectorNum(sysFile.nowFatNum,sysFile.nowSectorNum)),sysFile.sectorData))//¼ÓÔØ¸
+             -ùÄ¿Â¼µÄÆðÊ¼ÉÈÇøÊý¾Ý
+ 840   2                              return FAIL;
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 15  
+
+ 841   2      
+ 842   2                      if(len <= (512-tmpSectorPtr))//Ê£Óà³¤¶ÈÐ¡ÓÚ¸Ã¿éÊ£Óà³¤¶È£¬Ôò¶ÁÈ¡Íê³É
+ 843   2                      {
+ 844   3                              StrCopy(&dataBuf[tmpFatNum],&sysFile.sectorData[tmpSectorPtr],len);
+ 845   3                              break;
+ 846   3                      }
+ 847   2                      else
+ 848   2                      {
+ 849   3                              StrCopy(&dataBuf[tmpFatNum],&sysFile.sectorData[tmpSectorPtr],512-tmpSectorPtr);
+ 850   3                              tmpFatNum += (512-tmpSectorPtr);
+ 851   3                              len -= (512-tmpSectorPtr);
+ 852   3                              sysFile.nowSectorNum++;
+ 853   3                              if(sysFile.nowSectorNum >= DeviceInfo.BPB_SecPerClus)
+ 854   3                              {
+ 855   4                                      sysFile.nowSectorNum = 0;
+ 856   4                                      sysFile.nowFatNum = GetNextClusterNum32(sysFile.nowFatNum);
+ 857   4                                      if(sysFile.nowFatNum == 0x0fffffff)//±íÊ¾Ã»ÓÐºóÐø´ØÁË
+ 858   4                                      {
+ 859   5                                              return FAIL;
+ 860   5                                      }       
+ 861   4                              }
+ 862   3                      }
+ 863   2                      tmpSectorPtr = 0;
+ 864   2              }
+ 865   1              if (flag)
+ 866   1                      return 0x80|SUCCESS;
+ 867   1              else
+ 868   1                      return SUCCESS;
+ 869   1      }
+ 870          
+ 871          #if 1
+ 872          code u8 pathTest[]={"/DWIN_SET/Abc/0_DWIN_ASC.HZK"};
+ 873          void test(void)
+ 874          {
+ 875   1              u8 tmp;
+ 876   1              u8 name[1024];
+ 877   1              READ_FILE_STU readTmp;
+ 878   1      
+ 879   1      
+ 880   1      
+ 881   1              tmp = InitFileSystem();
+ 882   1              if(TRUE == tmp)
+ 883   1                      DEBUGINFO("³õÊ¼»¯ÎÄ¼þÏµÍ³³É¹¦\n");
+ 884   1              else
+ 885   1                      DEBUGINFO("³õÊ¼»¯ÎÄ¼þÏµÍ³Ê§°Ü\n");
+ 886   1      
+ 887   1              tmp = changeDirectory("/DWIN_SET/Abc");
+ 888   1              if(SUCCESS == tmp)
+ 889   1                      DEBUGINFO("³É¹¦½øÈëAbc\n");
+ 890   1              else
+ 891   1                      DEBUGINFO("Î´ÕÒµ½Abc\n");
+ 892   1      
+ 893   1              getNowPathName(name);
+ 894   1              DEBUGINFO("path:%s\n",name);
+ 895   1      
+ 896   1              while (listDirectory("/DWIN_SET",name))
+ 897   1              {
+ 898   2                      DEBUGINFO("file:%s\n",name);
+ 899   2              }
+ 900   1      
+ 901   1              getNowPathName(name);
+ 902   1              DEBUGINFO("path:%s\n",name);
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 16  
+
+ 903   1      
+ 904   1              while (listDirectory("/DWIN_SET/Abc",name))
+ 905   1              {
+ 906   2                      DEBUGINFO("file:%s\n",name);
+ 907   2              }
+ 908   1      
+ 909   1              readTmp.dataBuf = name;
+ 910   1              readTmp.filePath = pathTest;
+ 911   1              readTmp.fstartPos = 0;
+ 912   1              readTmp.flen = 1024;
+ 913   1              readTmp.fileSize = 0;
+ 914   1              readTmp.realReadLen = 0;
+ 915   1              DEBUGINFO("¶ÁÈ¡ÎÄ¼þÂ·¾¶%s\n",readTmp.filePath);
+ 916   1              while(1)
+ 917   1              {
+ 918   2                      tmp = mReadFile(&readTmp);
+ 919   2                      if(FAIL == tmp)
+ 920   2                      {
+ 921   3                              DEBUGINFO("¶ÁÈ¡ÎÄ¼þÊ§°Ü\n");
+ 922   3                              break;
+ 923   3                      }
+ 924   2                      else
+ 925   2                      {
+ 926   3                              Uart_Send_Data(UART2,readTmp.realReadLen,name);
+ 927   3                              delay_ms(100);
+ 928   3                              if(tmp&0x80)
+ 929   3                              {
+ 930   4                                      DEBUGINFO("¶ÁÈ¡µ½ÎÄ¼þÎ²²¿,´óÐ¡%ld\n",readTmp.fileSize);
+ 931   4      
+ 932   4                                      break;
+ 933   4                              }
+ 934   3                              
+ 935   3                      }
+ 936   2                      DEBUGINFO("¶ÁÈ¡Êµ¼Ê³¤¶È%ld\n",readTmp.realReadLen);
+ 937   2                      readTmp.fstartPos += readTmp.realReadLen;
+ 938   2              }
+ 939   1              while (1);
+ 940   1      }
+ 941          #endif
+ 942          
+ 943          
+ 944          
+ 945          
+ 946          
+ 947          
+ 948          
+ 949          
+ 950          
+ 951          
+ 952          
+ 953          
+ 954          
+ 955          
+ 956          
+ 957          
+ 958          
+ 959          
+ 960          // unsigned int displayOnePicture(unsigned long cluster)
+ 961          // {
+ 962          //      unsigned long i,j;
+ 963          //      unsigned long fileCluster = 0;//ÎÄ¼þµÄ´ØºÅ
+ 964          //      unsigned long fileSectorsNum;//ÎÄ¼þµÄÉÈÇøºÅ
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 17  
+
+ 965          //      u16 flag = 0;
+ 966          // //   u8 tmp8 = 0;
+ 967          //      u16 tmp16 = 0;
+ 968          //      u32 tmp32 = 0;
+ 969                  
+ 970                  
+ 971          //      fileCluster = cluster;
+ 972          //      j = 0;
+ 973          
+ 974          //      do
+ 975          //      {
+ 976          //              for(i =0;i<DeviceInfo.BPB_SecPerClus;i++)
+ 977          //              {
+ 978          //                      fileSectorsNum = DeviceInfo.FirstDataSector + (fileCluster - 2)*(DeviceInfo.BPB_SecPerClus) + i;                
+ 979          // //                   if(SdReadSector(fileSectorsNum,&FATBUFPIC[(512*i)+(j*512*8)]))
+ 980          // //                           return FALSE;
+ 981          //              }
+ 982          //              j++;
+ 983          //              fileCluster = GetNextClusterNum32(fileCluster); 
+ 984          //      }while((fileCluster != 0x0fffffff)&&(j <6));////Í¼Æ¬×î´ó20k     
+ 985                  
+ 986          //      return 0;
+ 987          // }
+ 988          
+ 989          // //Ñ­»·ÏÔÊ¾Ò»ÂÖÍ¼Æ¬
+ 990          // unsigned int displayPicture(void)
+ 991          // {
+ 992          //      u8 tmp8 = 0;
+ 993          //      u16 tmp16 = 0;  
+ 994          //      u32 i,j;
+ 995          //      u32 fileCluster = 0;//ÎÄ¼þµÄ´ØºÅ
+ 996          //      u32 RootDirSectorsNum;//¸ùÄ¿Â¼µÄÉÈÇøºÅ
+ 997          //      //µÚÒ»²½£¬Ñ°ÕÒ¸ùÄ¿Â¼µÄÎ»ÖÃ
+ 998          //      RootDirSectorsNum = DeviceInfo.FirstDataSector;
+ 999                  
+1000          //      //¸ùÄ¿Â¼ÓÐ8/16/...¸öÉÈÇø
+1001          //      for(i = 0;i<DeviceInfo.BPB_SecPerClus;i++)
+1002          //      {
+1003          //              if(SdReadSector((RootDirSectorsNum + i),DBUF))
+1004          //              {
+1005          //                      return FALSE;
+1006          //              }
+1007          //              //Ã¿¸öÄ¿Â¼Ïî32¸ö×Ö½Ú£¬±éÀúËùÓÐµÄÄ¿Â¼Ïî
+1008          //              for(j = 0;j<16;j++)
+1009          //              {               
+1010          //                      if(0xe5 == DBUF[0 + 32*j])
+1011          //                      {
+1012          //                              continue;
+1013          //                      }
+1014          //                      else
+1015          //                      {
+1016          //                              //Ñ°ÕÒÎÄ¼þµÄÆðÊ¼´ØºÅ
+1017          //                              fileCluster = LSwapINT32(DBUF[26+(32*j)],DBUF[27+(32*j)],DBUF[20+(32*j)],DBUF[21+(32*j)]);              
+1018          //                              if(0 == fileCluster)
+1019          //                              {       
+1020          //                                      return 0;
+1021          //                              }
+1022          //                              else
+1023          //                              {
+1024          //                                      tmp8 = 0;
+1025          //                                      do
+1026          //                                      {
+C51 COMPILER V9.57.0.0   FAT32                                                             12/28/2022 16:43:59 PAGE 18  
+
+1027          //                                              tmp8++;
+1028          //                                              read_dgus_vp(0x15,(u8*)&tmp16,1);
+1029          //                                              delay_ms(1);
+1030          //                                              if(250 == tmp8)
+1031          //                                              {
+1032          //                                                      return 0;
+1033          //                                              }
+1034          //                                      }while(1 == tmp16);
+1035                                                  
+1036          //                                      if(0 == tmp16)
+1037          //                                      {
+1038          //                                              //Õ¹Ê¾Í¼Æ¬
+1039          //                                              displayOnePicture(fileCluster);
+1040          //                                      }                               
+1041          //                              }
+1042          //                      }
+1043          //              }
+1044          //      }
+1045          //      return 0;
+1046          // }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   8968    ----
+   CONSTANT SIZE    =    206    ----
+   XDATA SIZE       =   4344    8635
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

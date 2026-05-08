@@ -1,0 +1,449 @@
+C51 COMPILER V9.56.0.0   CANBUS                                                            04/17/2026 15:36:16 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE CANBUS
+OBJECT MODULE PLACED IN .\Objects\canbus.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lib\canbus.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\source;.\l
+                    -ib) DEBUG OBJECTEXTEND PRINT(.\Listings\canbus.lst) TABS(2) OBJECT(.\Objects\canbus.obj)
+
+line level    source
+
+   1          #include "include.h"
+   2          // 如果使用CAN，那么sys.h  必须增加如下宏定义  #define INTVPACTION
+   3          
+   4          /*CAN总线位时间参数的设定与调整
+   5          1、 确定时间份额
+   6                  时间份额数量为8~25
+   7                  位时间=1/波特率           ( 250K           4us)
+   8                  时间份额=位时间/时间份额数量
+   9                  BRP=时间份额/(2*tclk)=  时间份额/2*FOSC=206*200/2000=40
+  10          2、 设置时间段和采样点
+  11                  时间份额数量=1+T1+T2
+  12                  采样点80%最佳
+  13                  (1+T1)/(1+T1+T2)=0.8
+  14                  就可以确定T1  T2
+  15                  传播时间段和相位缓冲器段1  =T1
+  16                  相位缓冲器段2              =T2
+  17          3、 确定同步跳转宽度和采样次数
+  18                  同步跳转宽度1~4  尽量大
+  19          
+  20          */
+  21          CANBUSUNIT CanData;
+  22          // https://blog.csdn.net/weixin_44536482/article/details/89030152
+  23          // 125K{0x3F,0x40,0x72,0x00},250K{0x1F,0x40,0x72,0x00},500K{0x0F,0x40,0x72,0x00},1M{0x07,0x40,0x72,0x00}
+  24          // 根据T5L应用开发指南3.8对CAN接口进行初始化
+  25          void CanBusInit(u8 *RegCfg)
+  26          {
+  27   1          SetPinOut(0, 2);
+  28   1          SetPinIn(0, 3);
+  29   1          PinOutput(0, 2, 1);
+  30   1          MUX_SEL |= 0x80; // 将CAN接口引出到P0.2,P0.3
+  31   1          ADR_H = 0xFF;
+  32   1          ADR_M = 0x00;
+  33   1          ADR_L = 0x60;
+  34   1          ADR_INC = 1;
+  35   1          RAMMODE = 0x8F; // 写操作
+  36   1          while (!APP_ACK)
+  37   1              ;
+  38   1      #if 0
+                DATA3 = 0x3f;
+                DATA2 = 0x40;
+                DATA1 = 0x72;
+                DATA0 = 0x00;
+              #else
+  44   1          DATA3 = RegCfg[0];
+  45   1          DATA2 = RegCfg[1];
+  46   1          DATA1 = RegCfg[2];
+  47   1          DATA0 = RegCfg[3];
+  48   1      #endif
+  49   1          APP_EN = 1;
+  50   1          while (APP_EN)
+  51   1              ;
+  52   1          DATA3 = 0;
+  53   1          DATA2 = 0;
+  54   1          DATA1 = 0;
+C51 COMPILER V9.56.0.0   CANBUS                                                            04/17/2026 15:36:16 PAGE 2   
+
+  55   1          DATA0 = 0; // 配置验收寄存器ACR
+  56   1          APP_EN = 1;
+  57   1          while (APP_EN)
+  58   1              ;
+  59   1          DATA3 = 0xFF;
+  60   1          DATA2 = 0xFF;
+  61   1          DATA1 = 0xFF;
+  62   1          DATA0 = 0xFF; // 配置AMR
+  63   1          APP_EN = 1;
+  64   1          while (APP_EN)
+  65   1              ;
+  66   1          RAMMODE = 0;
+  67   1          CAN_CR = 0xA0;
+  68   1          while (CAN_CR & 0x20)
+  69   1              ;     // 执行配置FF0060-FF0062动作
+  70   1          ECAN = 1; // 打开CAN中断
+  71   1      }
+  72          
+  73          /**************************************************************
+  74          D3  1  CAN_RX_BUFFER  [7] IDE ，[6]RTR， [3:0]—DLC，帧数据长度。
+  75          0xFF:0068
+  76          D2:D0  3  未定义
+  77          ID  ID，扩展帧时 29bit 有效，标准帧时 11bit 有效。
+  78          D3  1  ID 第一个字节，标准帧与扩展帧。
+  79          D2  1  ID 第二个字节，[7:5]为标准帧的高 3bit，扩展帧第 2 字节。
+  80          D1  1  ID 第三个字节，标准帧无效，扩展帧第 3 字节。
+  81          0xFF:0069
+  82          D0  1  ID 第四个字节，标准帧无效，[7:3]-扩展帧的高 5bit。
+  83          0xFF:006A  D3:D0  4  数据  接收数据，DATA1-DATA4。
+  84          0xFF:006B  D3:D0  4  数据  接收数据，DATA5-DATA8。
+  85          ******************************************************************/
+  86          
+  87          void LoadOneFrame(void)
+  88          {
+  89   1          ADR_H = 0xFF;
+  90   1          ADR_M = 0x00;
+  91   1          ADR_L = 0x64;
+  92   1          ADR_INC = 1;
+  93   1          RAMMODE = 0x8F; // 写操作
+  94   1          while (!APP_ACK)
+  95   1              ;
+  96   1          DATA3 = CanData.BusTXbuf[CanData.CanTxTail].status; // 帧类长度型以及数据
+  97   1          DATA2 = 0;
+  98   1          DATA1 = 0;
+  99   1          DATA0 = 0;
+ 100   1          APP_EN = 1;
+ 101   1          while (APP_EN)
+ 102   1              ; // 写入RTR,IDE,DLC等数据
+ 103   1          DATA3 = (u8)(CanData.BusTXbuf[CanData.CanTxTail].ID >> 24);
+ 104   1          DATA2 = (u8)(CanData.BusTXbuf[CanData.CanTxTail].ID >> 16);
+ 105   1          DATA1 = (u8)(CanData.BusTXbuf[CanData.CanTxTail].ID >> 8);
+ 106   1          DATA0 = (u8)(CanData.BusTXbuf[CanData.CanTxTail].ID);
+ 107   1          APP_EN = 1;
+ 108   1          while (APP_EN)
+ 109   1              ; // 写入ID数据
+ 110   1          DATA3 = CanData.BusTXbuf[CanData.CanTxTail].candata[0];
+ 111   1          DATA2 = CanData.BusTXbuf[CanData.CanTxTail].candata[1];
+ 112   1          DATA1 = CanData.BusTXbuf[CanData.CanTxTail].candata[2];
+ 113   1          DATA0 = CanData.BusTXbuf[CanData.CanTxTail].candata[3];
+ 114   1          APP_EN = 1;
+ 115   1          while (APP_EN)
+ 116   1              ; // 写入发送数据前4字节
+C51 COMPILER V9.56.0.0   CANBUS                                                            04/17/2026 15:36:16 PAGE 3   
+
+ 117   1          DATA3 = CanData.BusTXbuf[CanData.CanTxTail].candata[4];
+ 118   1          DATA2 = CanData.BusTXbuf[CanData.CanTxTail].candata[5];
+ 119   1          DATA1 = CanData.BusTXbuf[CanData.CanTxTail].candata[6];
+ 120   1          DATA0 = CanData.BusTXbuf[CanData.CanTxTail].candata[7];
+ 121   1          APP_EN = 1;
+ 122   1          while (APP_EN)
+ 123   1              ; // 写入发送数据后4字节
+ 124   1          CanData.CanTxTail++;
+ 125   1          RAMMODE = 0;
+ 126   1      }
+ 127          
+ 128          void canLoadTreat(void)
+ 129          {
+ 130   1          // EA = 0;
+ 131   1          ECAN = 0;
+ 132   1          LoadOneFrame();
+ 133   1          // EA = 1;
+ 134   1          ECAN = 1;
+ 135   1          CanData.CanTxFlag = 1;
+ 136   1          StartTimer(7, 100); // 100mS还未发送出去，则清空发送标记
+ 137   1          CAN_CR |= 0x04;     // 启动发送
+ 138   1      }
+ 139          // 对于T5L1和T5L2必须在main函数，while(1)中调用
+ 140          void CanErrorReset(void)
+ 141          {
+ 142   1          // EA=0;
+ 143   1          if (CAN_ET & 0X20)
+ 144   1          {
+ 145   2              CAN_ET &= 0XDF;
+ 146   2              CAN_CR |= 0X40;
+ 147   2              delay_us(1000);
+ 148   2              CAN_CR &= 0XBF;
+ 149   2              // CanData.CanTxFlag = 0;
+ 150   2              // if(CanData.CanTxHead != CanData.CanTxTail)//表示你还有数据未发送完，就发生了复位
+ 151   2              // {
+ 152   2              //  canLoadTreat();
+ 153   2              // }
+ 154   2          }
+ 155   1          // EA=1;
+ 156   1          if (CanData.CanTxFlag != 0)
+ 157   1          {
+ 158   2              if (GetTimeOutFlag(7))
+ 159   2              {
+ 160   3                  CanData.CanTxFlag = 0;
+ 161   3                  if (CanData.CanTxHead != CanData.CanTxTail)
+ 162   3                      canLoadTreat();
+ 163   3              }
+ 164   2          }
+ 165   1      }
+ 166          
+ 167          // status主要用于提供IDE 和 RTR状态，实际发送长度有len自动处理，大于8字节会自动拆分成多包
+ 168          /*主循环调用，将需要发送的数据放在缓存区即可，同时CAN发送会占用定时器7，其余位置则不能在使用*/
+ 169          void CanTx(u32 ID, u8 status, u16 len, const u8 *pData)
+ 170          {
+ 171   1          u8 i, j, k, framnum, framoffset;
+ 172   1          u32 idtmp, statustmp;
+ 173   1      
+ 174   1          if (len > 2048) // 发送长度大于队列长度
+ 175   1              return;
+ 176   1          if (status & 0x80) // 扩展帧
+ 177   1          {
+ 178   2              idtmp = ID << 3;
+C51 COMPILER V9.56.0.0   CANBUS                                                            04/17/2026 15:36:16 PAGE 4   
+
+ 179   2          }
+ 180   1          else
+ 181   1          {
+ 182   2              idtmp = ID << 21;
+ 183   2          }
+ 184   1          // if (CanData.BusTXbuf[CanData.CanTxHead].status & 0x40) // 远程帧不需要发送数据
+ 185   1          if (status & 0x40)
+ 186   1          {
+ 187   2              CanData.BusTXbuf[CanData.CanTxHead].ID = idtmp;
+ 188   2              CanData.BusTXbuf[CanData.CanTxHead].status = status & 0xC0; // 远程帧发送长度强制清零
+ 189   2              CanData.CanTxHead++;
+ 190   2          }
+ 191   1          else
+ 192   1          {
+ 193   2              framnum = len >> 3;
+ 194   2              framoffset = len % 8;
+ 195   2              k = 0;
+ 196   2              statustmp = status & 0xC0;
+ 197   2              for (i = 0; i < framnum; i++)
+ 198   2              {
+ 199   3                  CanData.BusTXbuf[CanData.CanTxHead].ID = idtmp;
+ 200   3                  CanData.BusTXbuf[CanData.CanTxHead].status = statustmp | 0x08;
+ 201   3                  for (j = 0; j < 8; j++)
+ 202   3                  {
+ 203   4                      CanData.BusTXbuf[CanData.CanTxHead].candata[j] = pData[k];
+ 204   4                      k++;
+ 205   4                  }
+ 206   3                  CanData.CanTxHead++;
+ 207   3              }
+ 208   2              if (framoffset)
+ 209   2              {
+ 210   3                  CanData.BusTXbuf[CanData.CanTxHead].ID = idtmp;
+ 211   3                  CanData.BusTXbuf[CanData.CanTxHead].status = statustmp | framoffset;
+ 212   3                  for (j = 0; j < framoffset; j++)
+ 213   3                  {
+ 214   4                      CanData.BusTXbuf[CanData.CanTxHead].candata[j] = pData[k];
+ 215   4                      k++;
+ 216   4                  }
+ 217   3                  for (; j < 8; j++)
+ 218   3                      CanData.BusTXbuf[CanData.CanTxHead].candata[j] = 0;
+ 219   3                  CanData.CanTxHead++;
+ 220   3              }
+ 221   2          }
+ 222   1          if (0 == CanData.CanTxFlag)
+ 223   1          {
+ 224   2              canLoadTreat();
+ 225   2              // EA = 0;
+ 226   2              // LoadOneFrame();
+ 227   2              // EA = 1;
+ 228   2              // CanData.CanTxFlag = 1;
+ 229   2              // StartTimer(7,3000);//3S还未发送出去，则清空发送标记
+ 230   2              // CAN_CR |= 0x04;    //启动发送
+ 231   2          }
+ 232   1      }
+ 233          
+ 234          // void canRxTreat(void)
+ 235          // {
+ 236          //  u8 tmp[20];
+ 237          //  // sendbuf[30];
+ 238          //  // u16 i,j,k,l;
+ 239          //  // u16 wend,shengyscH,shengyscM;
+ 240          //  // u32 zongdiany,zongdl ;
+C51 COMPILER V9.56.0.0   CANBUS                                                            04/17/2026 15:36:16 PAGE 5   
+
+ 241          //  if (CanData.CanRxHead != CanData.CanRxTail)
+ 242          //  {
+ 243          //    if (0x1803D0DF == CanData.BusRXbuf[CanData.CanRxTail].ID)
+ 244          //    {
+ 245          //      tmp[0] = CanData.BusRXbuf[CanData.CanRxTail].candata[0];
+ 246          //      tmp[1] = CanData.BusRXbuf[CanData.CanRxTail].candata[1];
+ 247          //      tmp[2] = CanData.BusRXbuf[CanData.CanRxTail].candata[2];
+ 248          //      tmp[3] = CanData.BusRXbuf[CanData.CanRxTail].candata[3];
+ 249          //      write_dgus_vp(0x2002, tmp, 1);
+ 250          
+ 251          //      write_dgus_vp(0x2003, (u8 *)&tmp[2], 1);
+ 252          //    }
+ 253          //    if (0x1803Dffff == CanData.BusRXbuf[CanData.CanRxTail].ID)
+ 254          //    {
+ 255          //      tmp[0] = CanData.BusRXbuf[CanData.CanRxTail].candata[0];
+ 256          //      tmp[1] = CanData.BusRXbuf[CanData.CanRxTail].candata[1];
+ 257          //      tmp[2] = CanData.BusRXbuf[CanData.CanRxTail].candata[2];
+ 258          //      tmp[3] = CanData.BusRXbuf[CanData.CanRxTail].candata[3];
+ 259          //      write_dgus_vp(0x1002, tmp, 1);
+ 260          
+ 261          //      write_dgus_vp(0x1003, (u8 *)&tmp[2], 1);
+ 262          //    }
+ 263          
+ 264          //    CanData.CanRxTail++;
+ 265          //  }
+ 266          // }
+ 267          
+ 268          void Can_Isr() interrupt 9
+ 269          {
+ 270   1          u8 status;
+ 271   1      
+ 272   1          // EA = 0;
+ 273   1          ECAN = 0;
+ 274   1          if ((CAN_IR & 0x80) == 0x80)
+ 275   1          {
+ 276   2              CAN_IR &= 0x3F; // 清空远程帧标记位
+ 277   2          }
+ 278   1          if ((CAN_IR & 0x40) == 0x40)
+ 279   1          {
+ 280   2              CAN_IR &= 0xBF; // 清空数据帧标记位
+ 281   2              ADR_H = 0xFF;
+ 282   2              ADR_M = 0x00;
+ 283   2              ADR_L = 0x68;
+ 284   2              ADR_INC = 1;
+ 285   2              RAMMODE = 0xAF; // 读操作
+ 286   2              while (!APP_ACK)
+ 287   2                  ;
+ 288   2              APP_EN = 1;
+ 289   2              while (APP_EN)
+ 290   2                  ;
+ 291   2              status = DATA3;
+ 292   2              CanData.BusRXbuf[CanData.CanRxHead].status = status;
+ 293   2              APP_EN = 1;
+ 294   2              while (APP_EN)
+ 295   2                  ;
+ 296   2              CanData.BusRXbuf[CanData.CanRxHead].ID <<= 8;
+ 297   2              CanData.BusRXbuf[CanData.CanRxHead].ID |= DATA3;
+ 298   2              CanData.BusRXbuf[CanData.CanRxHead].ID <<= 8;
+ 299   2              CanData.BusRXbuf[CanData.CanRxHead].ID |= DATA2;
+ 300   2              CanData.BusRXbuf[CanData.CanRxHead].ID <<= 8;
+ 301   2              CanData.BusRXbuf[CanData.CanRxHead].ID |= DATA1;
+ 302   2              CanData.BusRXbuf[CanData.CanRxHead].ID <<= 8;
+C51 COMPILER V9.56.0.0   CANBUS                                                            04/17/2026 15:36:16 PAGE 6   
+
+ 303   2              CanData.BusRXbuf[CanData.CanRxHead].ID |= DATA0;
+ 304   2              CanData.BusRXbuf[CanData.CanRxHead].ID = CanData.BusRXbuf[CanData.CanRxHead].ID >> 3;
+ 305   2              if (0 == (status & 0x80)) // 标准帧ID还需要右移18位
+ 306   2              {
+ 307   3                  CanData.BusRXbuf[CanData.CanRxHead].ID >>= 18;
+ 308   3              }
+ 309   2              if (0 == (status & 0x40)) // 数据帧才需要读取数据
+ 310   2              {
+ 311   3                  APP_EN = 1;
+ 312   3                  while (APP_EN)
+ 313   3                      ;
+ 314   3                  CanData.BusRXbuf[CanData.CanRxHead].candata[0] = DATA3;
+ 315   3                  CanData.BusRXbuf[CanData.CanRxHead].candata[1] = DATA2;
+ 316   3                  CanData.BusRXbuf[CanData.CanRxHead].candata[2] = DATA1;
+ 317   3                  CanData.BusRXbuf[CanData.CanRxHead].candata[3] = DATA0;
+ 318   3                  APP_EN = 1;
+ 319   3                  while (APP_EN)
+ 320   3                      ;
+ 321   3                  CanData.BusRXbuf[CanData.CanRxHead].candata[4] = DATA3;
+ 322   3                  CanData.BusRXbuf[CanData.CanRxHead].candata[5] = DATA2;
+ 323   3                  CanData.BusRXbuf[CanData.CanRxHead].candata[6] = DATA1;
+ 324   3                  CanData.BusRXbuf[CanData.CanRxHead].candata[7] = DATA0;
+ 325   3              }
+ 326   2              RAMMODE = 0;
+ 327   2              CanData.CanRxHead++;
+ 328   2          }
+ 329   1          if ((CAN_IR & 0x20) == 0x20)
+ 330   1          {
+ 331   2              CAN_IR &= ~(0x20); // 清空发送帧标记位
+ 332   2              if (CanData.CanTxTail != CanData.CanTxHead)
+ 333   2              {
+ 334   3                  LoadOneFrame();
+ 335   3                  CAN_CR |= 0x04;      // 启动发送
+ 336   3                  StartTimer(7, 3000); // 3S还未发送出去，则清空发送标记
+ 337   3              }
+ 338   2              else
+ 339   2              {
+ 340   3                  CanData.CanTxFlag = 0; // 清空发送标记位
+ 341   3              }
+ 342   2          }
+ 343   1          if ((CAN_IR & 0x10) == 0x10)
+ 344   1          {
+ 345   2              CAN_IR &= 0xEF; // 清空接收溢出标记位
+ 346   2          }
+ 347   1          if ((CAN_IR & 0x08) == 0x08)
+ 348   1          {
+ 349   2              CAN_IR &= 0xF7; // 清空错误标记位
+ 350   2          }
+ 351   1          if ((CAN_IR & 0x04) == 0x04)
+ 352   1          {
+ 353   2              CAN_IR &= 0xFB; // 清空仲裁失败标记位
+ 354   2              CAN_CR |= 0x04; // 重新启动发送
+ 355   2          }
+ 356   1          CAN_ET = 0;
+ 357   1          // EA = 1;
+ 358   1          ECAN = 1;
+ 359   1      }
+ 360          
+ 361          /*主循环调用，将需要发送的数据放在缓存区即可，同时CAN发送会占用定时器7，其余位置则不能在使用*/
+ 362          // void CANTx(void)
+ 363          // {
+ 364          //  u32 tmp32;
+C51 COMPILER V9.56.0.0   CANBUS                                                            04/17/2026 15:36:16 PAGE 7   
+
+ 365          //  if((0==CanData.CanTxFlag)&&(CanData.CanTxTail != CanData.CanTxFlag))
+ 366          //  {
+ 367          //    EA = 0;
+ 368          //    tmp32=CanData.BusTXbuf[CanData.CanTxTail].ID;
+ 369          //    ADR_H = 0xFF;
+ 370          //    ADR_M = 0x00;
+ 371          //    ADR_L = 0x64;
+ 372          //    ADR_INC = 1;
+ 373          //    RAMMODE = 0x8F;   //写操作
+ 374          //    while(!APP_ACK);
+ 375          //    DATA3 = CanData.BusTXbuf[CanData.CanTxTail].status;     //帧类长度型以及数据
+ 376          //    DATA2 = 0;
+ 377          //    DATA1 = 0;
+ 378          //    DATA0 = 0;
+ 379          //    APP_EN = 1;
+ 380          //    while(APP_EN);    //写入RTR,IDE,DLC等数据
+ 381          //    DATA3 = (u8)(tmp32>>24);
+ 382          //    DATA2 = (u8)(tmp32>>16);
+ 383          //    DATA1 = (u8)(tmp32>>8);
+ 384          //    DATA0 = (u8)(tmp32>>0);
+ 385          //    APP_EN = 1;
+ 386          //    while(APP_EN);    //写入ID数据
+ 387          //    DATA3 = CanData.BusTXbuf[CanData.CanTxTail].candata[0];
+ 388          //    DATA2 = CanData.BusTXbuf[CanData.CanTxTail].candata[1];
+ 389          //    DATA1 = CanData.BusTXbuf[CanData.CanTxTail].candata[2];
+ 390          //    DATA0 = CanData.BusTXbuf[CanData.CanTxTail].candata[3];
+ 391          //    APP_EN = 1;
+ 392          //    while(APP_EN);    //写入发送数据前4字节
+ 393          //    DATA3 = CanData.BusTXbuf[CanData.CanTxTail].candata[4];
+ 394          //    DATA2 = CanData.BusTXbuf[CanData.CanTxTail].candata[5];
+ 395          //    DATA1 = CanData.BusTXbuf[CanData.CanTxTail].candata[6];
+ 396          //    DATA0 = CanData.BusTXbuf[CanData.CanTxTail].candata[7];
+ 397          //    APP_EN = 1;
+ 398          //    while(APP_EN);    //写入发送数据后4字节
+ 399          //    CanData.CanTxTail++;
+ 400          //    CanData.CanTxFlag = 1;
+ 401          //    StartTimer(7,3000);//3S还未发送出去，则清空发送标记
+ 402          //    EA = 1;
+ 403          //    RAMMODE = 0;
+ 404          //    CAN_CR |= 0x04;   //启动发送
+ 405          //  }
+ 406          //  if(CanData.CanTxFlag!=0)
+ 407          //  {
+ 408          //    if(GetTimeOutFlag(7))
+ 409          //    {
+ 410          //      CanData.CanTxFlag = 0;
+ 411          //    }
+ 412          //  }
+ 413          // }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2064    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   6661      27
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

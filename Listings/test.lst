@@ -1,0 +1,171 @@
+C51 COMPILER V9.57.0.0   TEST                                                              07/11/2024 13:32:11 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE TEST
+OBJECT MODULE PLACED IN .\Objects\test.obj
+COMPILER INVOKED BY: D:\Program Files\keil\C51\BIN\C51.EXE source\test.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;
+                    -.\source;.\lib) DEBUG OBJECTEXTEND PRINT(.\Listings\test.lst) OBJECT(.\Objects\test.obj)
+
+line level    source
+
+   1          #include "test.h"
+   2          #include "umath.h"
+   3          
+   4          // JIANQIE_BUFF jianqie1[5] = {0x1000, 11, 130, 35, 130, 60, 50, 90,
+   5          //                                                      0x1200, 11, 130, 35, 130, 60, 50, 150,
+   6          //                                                      0x1400, 11, 130, 35, 130, 60, 50, 219,
+   7          //                                                      0x1600, 11, 130, 35, 130, 60, 50, 291,
+   8          //                                                      0x1800, 11, 130, 35, 130, 60, 50, 355};
+   9          
+  10          u8 text[81];
+  11          u8 lurukuang = 0;
+  12          u8 luruwei = 0;
+  13          u16 number = 0;
+  14          
+  15          // 读取按键0x1000的值
+  16          u8 getTouch(void)
+  17          {
+  18   1              u8 tmp;
+  19   1              ADR_H = 0x00;
+  20   1              ADR_M = 0x08; // 0x1000
+  21   1              ADR_L = 0x00;
+  22   1              ADR_INC = 1;
+  23   1              RAMMODE = 0xAF;
+  24   1              while (!APP_ACK)
+  25   1                      ;
+  26   1              APP_EN = 1;
+  27   1              while (APP_EN)
+  28   1                      ;
+  29   1              // str[0] = DATA3;
+  30   1              tmp = DATA2;
+  31   1              RAMMODE = 0;
+  32   1              return tmp;
+  33   1      }
+  34          // 清除按键0x1000的值
+  35          void clrTouch(void)
+  36          {
+  37   1              ADR_H = 0x00;
+  38   1              ADR_M = 0x08; // 0x1000
+  39   1              ADR_L = 0x00;
+  40   1              ADR_INC = 1;
+  41   1              RAMMODE = 0x8C;
+  42   1              while (!APP_ACK)
+  43   1                      ;
+  44   1              DATA3 = 0;
+  45   1              DATA2 = 0;
+  46   1              APP_EN = 1;
+  47   1              while (APP_EN)
+  48   1                      ;
+  49   1              RAMMODE = 0;
+  50   1      }
+  51          
+  52          // void tuxingjianqie(JIANQIE_BUFF *jianqieicon)
+  53          // {
+  54          //      static u16 databuff[20] = {0x0006, 0x0001, 0, 100, 100, 100, 100, 100, 100, 0xFF00};
+C51 COMPILER V9.57.0.0   TEST                                                              07/11/2024 13:32:11 PAGE 2   
+
+  55          //      databuff[2] = jianqieicon->jianqie_pageid;
+  56          //      databuff[3] = jianqieicon->jianqie_Xs;
+  57          //      databuff[4] = jianqieicon->jianqie_Ys;
+  58          //      databuff[5] = jianqieicon->jianqie_Xe;
+  59          //      databuff[6] = jianqieicon->jianqie_Ye;
+  60          //      databuff[7] = jianqieicon->dangqian_Xs;
+  61          //      databuff[8] = jianqieicon->dangqian_Ys;
+  62          //      write_dgus_vp(jianqieicon->tux_addr, (u8 *)&databuff[0], 10);
+  63          // }
+  64          
+  65          // void set_jingtaiIP()
+  66          // {
+  67          //      data u8 tmp8[2];
+  68          //      static u8 wifiIP[32] = {
+  69          //              192, 168, 137, 62, 255, 255, 255, 0, 192, 168, 137, 1, 0, 0, 0, 0, // wifi静态IP，子网掩码，网关，DNS
+             -地址
+  70          //              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  71          //      if (0x5A == Read_Dgus(0x1000))
+  72          //      {
+  73          //              write_dgus_vp(0x740, (u8 *)&wifiIP[0], 8);
+  74          //              Write_Dgus(0x485, 0x0100);
+  75          //              Write_Dgus(0x498, 0x00B5);
+  76          //              do
+  77          //              {
+  78          //                      read_dgus_vp(0x498, (u8 *)&tmp8[0], 1);
+  79          //              } while (tmp8[1] != 0);
+  80          //              Write_Dgus(0x49B, 0x00B5);
+  81          //              do
+  82          //              {
+  83          //                      read_dgus_vp(0x49B, (u8 *)&tmp8[0], 1);
+  84          //              } while (tmp8[1] != 0);
+  85          //      }
+  86          // }
+  87          
+  88          void jianpan()
+  89          {
+  90   1              u8 touchid;
+  91   1              u8 i;
+  92   1      
+  93   1              touchid = getTouch();
+  94   1              if (touchid == 0)
+  95   1              {
+  96   2              }
+  97   1              else
+  98   1              {
+  99   2                      if ((touchid == 1))
+ 100   2                      {
+ 101   3                              lurukuang = touchid;
+ 102   3                              text[0] = 0xFF;
+ 103   3                              text[1] = 0xFF;
+ 104   3                              luruwei = 0;
+ 105   3                              Write_Dgusii_Vp_byChar(0x2100, (u8 *)&text[0], 2);
+ 106   3                      }
+ 107   2                      for (i = 0; i < 10; i++)
+ 108   2                      {
+ 109   3                              if (touchid == (0x30 + i))
+ 110   3                              {
+ 111   4                                      text[luruwei] = touchid;
+ 112   4                                      text[luruwei + 1] = 0xFF;
+ 113   4                                      text[luruwei + 2] = 0xFF;
+ 114   4                                      Write_Dgusii_Vp_byChar(0x2100, (u8 *)&text[0], luruwei + 3);
+ 115   4                                      if (luruwei < 10)
+C51 COMPILER V9.57.0.0   TEST                                                              07/11/2024 13:32:11 PAGE 3   
+
+ 116   4                                              luruwei++;
+ 117   4                                      else
+ 118   4                                              luruwei = 10;
+ 119   4                                      break;
+ 120   4                              }
+ 121   3                      }
+ 122   2                      if (touchid == 0x10)
+ 123   2                      {
+ 124   3                              if (luruwei > 0)
+ 125   3                                      luruwei--;
+ 126   3                              else
+ 127   3                                      luruwei = 0;
+ 128   3                              text[luruwei] = 0xFF;
+ 129   3                              text[luruwei + 1] = 0xFF;
+ 130   3                              Write_Dgusii_Vp_byChar(0x2100, (u8 *)&text[0], luruwei + 2);
+ 131   3                      }
+ 132   2                      if (touchid == 0x11)
+ 133   2                      {
+ 134   3                              lurukuang = 0;
+ 135   3                              getCharValue((u8 *)&text[0], &number);
+ 136   3                      }
+ 137   2                      clrTouch();
+ 138   2              }
+ 139   1      
+ 140   1              // Write_Dgus(0x1001, lurukuang);
+ 141   1              Write_Dgus(0x1001, number);
+ 142   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    387    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     85       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,435 @@
+C51 COMPILER V9.57.0.0   SD                                                                12/28/2022 16:43:59 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE SD
+OBJECT MODULE PLACED IN .\Objects\sd.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lib\sd.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\source;.\lib) 
+                    -DEBUG OBJECTEXTEND PRINT(.\Listings\sd.lst) OBJECT(.\Objects\sd.obj)
+
+line level    source
+
+   1          #include "sd.h"
+   2          #include "debug.h"
+   3          
+   4          //½öÖ§³ÖSD2.0
+   5          //±äÁ¿¶¨Òå£¬²¢ÇÒÖ»Ö§³Ö¶ÁSD¡£Ð´SDÓÐ°æÈ¨
+   6          //--------------------------------------------------------------
+   7          bit is_init;        //ÔÚ³õÊ¼»¯µÄÊ±ºòÉèÖÃ´Ë±äÁ¿Îª1,Í¬²½Êý¾Ý´«Êä£¨SPI£©»á·ÅÂý
+   8          //---------------------------------------------------------------
+   9          
+  10          unsigned char bdata _dat;
+  11          sbit _dat7=_dat^7;
+  12          sbit _dat6=_dat^6;
+  13          sbit _dat5=_dat^5;
+  14          sbit _dat4=_dat^4;
+  15          sbit _dat3=_dat^3;
+  16          sbit _dat2=_dat^2;
+  17          sbit _dat1=_dat^1;
+  18          sbit _dat0=_dat^0;
+  19          
+  20          void spi_init(void)
+  21          {
+  22   1              SetPinOut(3,0);
+  23   1              SetPinOut(3,1);
+  24   1              SetPinOut(3,2);
+  25   1              SetPinIn(3,3);
+  26   1      }
+  27          
+  28          /******************************************************************
+  29           - ¹¦ÄÜÃèÊö£ºÑÓÊ±º¯Êý
+  30           - Á¥ÊôÄ£¿é£º¹«¿ªº¯ÊýÄ£¿é
+  31           - º¯ÊýÊôÐÔ£ºÍâ²¿£¬ÓÃ»§¿Éµ÷ÓÃ
+  32           - ²ÎÊýËµÃ÷£ºtime:timeÖµ¾ö¶¨ÁËÑÓÊ±µÄÊ±¼ä³¤¶Ì           
+  33           - ·µ»ØËµÃ÷£ºÎÞ
+  34           - ×¢£º.....
+  35           ******************************************************************/
+  36          
+  37          void delay(unsigned int time) 
+  38          {
+  39   1          while(time--);
+  40   1      }
+  41          
+  42          /******************************************************************
+  43           - ¹¦ÄÜÃèÊö£ºIOÄ£ÄâSPI£¬·¢ËÍÒ»¸ö×Ö½Ú
+  44           - Á¥ÊôÄ£¿é£ºSD¿¨Ä£¿é
+  45           - º¯ÊýÊôÐÔ£ºÄÚ²¿
+  46           - ²ÎÊýËµÃ÷£ºxÊÇÒª·¢ËÍµÄ×Ö½Ú
+  47           - ·µ»ØËµÃ÷£ºÎÞ·µ»Ø
+  48           - ×¢£ºÆäÖÐis_initÎª1Ê±£¬Ð´µÄËÙ¶È·ÅÂý£¬³õÊ¼»¯SD¿¨SPIËÙ¶È²»ÄÜÌ«¸ß
+  49           ******************************************************************/
+  50          
+  51          void SD_spi_write(unsigned char x) 
+  52          {
+  53   1           _dat=x;
+  54   1           
+C51 COMPILER V9.57.0.0   SD                                                                12/28/2022 16:43:59 PAGE 2   
+
+  55   1           SD_SI=_dat7;
+  56   1           SD_SCL=0; 
+  57   1           if(is_init) delay(DELAY_TIME); 
+  58   1           else delay(NORMAL_DELAY);
+  59   1           SD_SCL=1;
+  60   1           if(is_init) delay(DELAY_TIME);
+  61   1           else delay(NORMAL_DELAY);
+  62   1      
+  63   1           SD_SI=_dat6;
+  64   1           SD_SCL=0; 
+  65   1           if(is_init) delay(DELAY_TIME); 
+  66   1           else delay(NORMAL_DELAY);
+  67   1           SD_SCL=1;
+  68   1           if(is_init) delay(DELAY_TIME);
+  69   1           else delay(NORMAL_DELAY);
+  70   1      
+  71   1           SD_SI=_dat5;
+  72   1           SD_SCL=0;
+  73   1           if(is_init) delay(DELAY_TIME);
+  74   1           else delay(NORMAL_DELAY);
+  75   1           SD_SCL=1;
+  76   1           if(is_init) delay(DELAY_TIME);
+  77   1           else delay(NORMAL_DELAY);
+  78   1      
+  79   1           SD_SI=_dat4;
+  80   1           SD_SCL=0;
+  81   1           if(is_init) delay(DELAY_TIME); 
+  82   1           else delay(NORMAL_DELAY);
+  83   1           SD_SCL=1;
+  84   1           if(is_init) delay(DELAY_TIME);
+  85   1           else delay(NORMAL_DELAY);
+  86   1      
+  87   1           SD_SI=_dat3;
+  88   1           SD_SCL=0; 
+  89   1           if(is_init) delay(DELAY_TIME); 
+  90   1           else delay(NORMAL_DELAY);
+  91   1           SD_SCL=1;
+  92   1           if(is_init) delay(DELAY_TIME);
+  93   1           else delay(NORMAL_DELAY);
+  94   1      
+  95   1           SD_SI=_dat2;
+  96   1           SD_SCL=0;
+  97   1           if(is_init) delay(DELAY_TIME); 
+  98   1           else delay(NORMAL_DELAY);
+  99   1           SD_SCL=1;
+ 100   1           if(is_init) delay(DELAY_TIME);
+ 101   1           else delay(NORMAL_DELAY);
+ 102   1      
+ 103   1           SD_SI=_dat1;
+ 104   1           SD_SCL=0; 
+ 105   1           if(is_init) delay(DELAY_TIME); 
+ 106   1           else delay(NORMAL_DELAY);
+ 107   1           SD_SCL=1;
+ 108   1           if(is_init) delay(DELAY_TIME);
+ 109   1           else delay(NORMAL_DELAY);
+ 110   1      
+ 111   1           SD_SI=_dat0;
+ 112   1           SD_SCL=0;
+ 113   1           if(is_init) delay(DELAY_TIME);  
+ 114   1           else delay(NORMAL_DELAY);
+ 115   1           SD_SCL=1;
+ 116   1           if(is_init) delay(DELAY_TIME);
+C51 COMPILER V9.57.0.0   SD                                                                12/28/2022 16:43:59 PAGE 3   
+
+ 117   1           else delay(NORMAL_DELAY);
+ 118   1      }
+ 119          
+ 120          /******************************************************************
+ 121           - ¹¦ÄÜÃèÊö£ºIOÄ£ÄâSPI£¬¶ÁÈ¡Ò»¸ö×Ö½Ú
+ 122           - Á¥ÊôÄ£¿é£ºSD¿¨Ä£¿é
+ 123           - º¯ÊýÊôÐÔ£ºÄÚ²¿
+ 124           - ²ÎÊýËµÃ÷£ºÎÞ
+ 125           - ·µ»ØËµÃ÷£º·µ»Ø¶Áµ½µÄ×Ö½Ú
+ 126           ******************************************************************/
+ 127          
+ 128          unsigned char SD_spi_read() //SPI¶ÁÒ»¸ö×Ö½Ú
+ 129          {  
+ 130   1           SD_SO=1;
+ 131   1      
+ 132   1           SD_SCL=1;
+ 133   1           if(is_init) delay(DELAY_TIME);
+ 134   1           else delay(NORMAL_DELAY);
+ 135   1           SD_SCL=0;
+ 136   1           if(is_init) delay(DELAY_TIME); 
+ 137   1           else delay(NORMAL_DELAY);
+ 138   1           _dat7=SD_SO; 
+ 139   1      
+ 140   1           SD_SCL=1;
+ 141   1           if(is_init) delay(DELAY_TIME);
+ 142   1           else delay(NORMAL_DELAY);
+ 143   1           SD_SCL=0;
+ 144   1           if(is_init) delay(DELAY_TIME);
+ 145   1           else delay(NORMAL_DELAY);
+ 146   1           _dat6=SD_SO; 
+ 147   1      
+ 148   1           SD_SCL=1;
+ 149   1           if(is_init) delay(DELAY_TIME);
+ 150   1           else delay(NORMAL_DELAY);
+ 151   1           SD_SCL=0;
+ 152   1           if(is_init) delay(DELAY_TIME);
+ 153   1           else delay(NORMAL_DELAY);
+ 154   1           _dat5=SD_SO; 
+ 155   1      
+ 156   1           SD_SCL=1;
+ 157   1           if(is_init) delay(DELAY_TIME);
+ 158   1           else delay(NORMAL_DELAY);
+ 159   1           SD_SCL=0;
+ 160   1           if(is_init) delay(DELAY_TIME);
+ 161   1           else delay(NORMAL_DELAY);
+ 162   1           _dat4=SD_SO; 
+ 163   1      
+ 164   1           SD_SCL=1;
+ 165   1           if(is_init) delay(DELAY_TIME);
+ 166   1           else delay(NORMAL_DELAY);
+ 167   1           SD_SCL=0;
+ 168   1           if(is_init) delay(DELAY_TIME); 
+ 169   1           else delay(NORMAL_DELAY);
+ 170   1           _dat3=SD_SO; 
+ 171   1      
+ 172   1           SD_SCL=1;
+ 173   1           if(is_init) delay(DELAY_TIME);
+ 174   1           else delay(NORMAL_DELAY);
+ 175   1           SD_SCL=0;
+ 176   1           if(is_init) delay(DELAY_TIME);
+ 177   1           else delay(NORMAL_DELAY);
+ 178   1           _dat2=SD_SO; 
+C51 COMPILER V9.57.0.0   SD                                                                12/28/2022 16:43:59 PAGE 4   
+
+ 179   1      
+ 180   1           SD_SCL=1;
+ 181   1           if(is_init) delay(DELAY_TIME);
+ 182   1           else delay(NORMAL_DELAY);
+ 183   1           SD_SCL=0;
+ 184   1           if(is_init) delay(DELAY_TIME);
+ 185   1           else delay(NORMAL_DELAY);
+ 186   1           _dat1=SD_SO;
+ 187   1      
+ 188   1           SD_SCL=1;
+ 189   1           if(is_init) delay(DELAY_TIME);
+ 190   1           else delay(NORMAL_DELAY);
+ 191   1           SD_SCL=0;
+ 192   1           if(is_init) delay(DELAY_TIME);
+ 193   1           else delay(NORMAL_DELAY);
+ 194   1           _dat0=SD_SO; 
+ 195   1           
+ 196   1           return (_dat);
+ 197   1      }
+ 198          
+ 199          /******************************************************************
+ 200           - ¹¦ÄÜÃèÊö£ºÏòSD¿¨Ð´ÃüÁî
+ 201           - Á¥ÊôÄ£¿é£ºSD¿¨Ä£¿é
+ 202           - º¯ÊýÊôÐÔ£ºÄÚ²¿
+ 203           - ²ÎÊýËµÃ÷£ºSD¿¨µÄÃüÁîÊÇ6¸ö×Ö½Ú£¬pcmdÊÇÖ¸ÏòÃüÁî×Ö½ÚÐòÁÐµÄÖ¸Õë
+ 204           - ·µ»ØËµÃ÷£ºÃüÁîÐ´Èëºó£¬SD¿¨µÄ»ØÓ¦Öµ£¬µ÷ÓÃ²»³É¹¦£¬½«·µ»Ø0xff
+ 205           ******************************************************************/
+ 206          
+ 207          unsigned char SD_Write_Cmd(unsigned char *pcmd) //ÏòSD¿¨Ð´ÃüÁî£¬pcmdÊÇÃüÁî×Ö½ÚÐòÁÐµÄÊ×µØÖ·
+ 208          {
+ 209   1           unsigned char temp,time=0;
+ 210   1           u16 tmp16 = 0;
+ 211   1      
+ 212   1           SD_CS=1;
+ 213   1           SD_spi_write(0xff); //Ìá¸ß¼æÈÝÐÔ£¬Èç¹ûÃ»ÓÐÕâÀï£¬ÓÐÐ©SD¿¨¿ÉÄÜ²»Ö§³Ö   
+ 214   1           SD_CS=0;
+ 215   1           SD_spi_write(pcmd[0]);
+ 216   1           SD_spi_write(pcmd[1]);
+ 217   1           SD_spi_write(pcmd[2]);
+ 218   1           SD_spi_write(pcmd[3]);
+ 219   1           SD_spi_write(pcmd[4]);
+ 220   1           SD_spi_write(pcmd[5]);
+ 221   1           do 
+ 222   1           {  
+ 223   2                temp = SD_spi_read();//Ò»Ö±¶Á£¬Ö±µ½¶Áµ½µÄ²»ÊÇ0xff»ò³¬Ê±
+ 224   2                time++;
+ 225   2           }while((temp==0xff)&&(time<TRY_TIME)); 
+ 226   1           return(temp);
+ 227   1      }
+ 228          
+ 229          /******************************************************************
+ 230           - ¹¦ÄÜÃèÊö£º¸´Î»SD¿¨£¬ÓÃµ½CMD0£¬Ê¹ÓÃSD¿¨ÇÐ»»µ½SPIÄ£Ê½
+ 231           - Á¥ÊôÄ£¿é£ºSD¿¨Ä£¿é
+ 232           - º¯ÊýÊôÐÔ£ºÄÚ²¿
+ 233           - ²ÎÊýËµÃ÷£ºÎÞ
+ 234           - ·µ»ØËµÃ÷£ºµ÷ÓÃ³É¹¦£¬·µ»Ø0x00£¬·ñÔò·µ»ØINIT_CMD0_ERROR (sd.hÖÐÓÐ¶¨Òå)
+ 235           ******************************************************************/
+ 236          
+ 237          unsigned char SD_Reset()//SD¿¨¸´Î»£¬½øÈëSPIÄ£Ê½£¬Ê¹ÓÃCMD0£¨0ºÅÃüÁî£©
+ 238          {
+ 239   1           unsigned char temp,i;
+ 240   1           unsigned char pcmd[] = {0x40,0x00,0x00,0x00,0x00,0x95}; 
+C51 COMPILER V9.57.0.0   SD                                                                12/28/2022 16:43:59 PAGE 5   
+
+ 241   1           u16 tryTime;
+ 242   1      
+ 243   1           spi_init();
+ 244   1      
+ 245   1           is_init=1; //Set the init flag
+ 246   1      
+ 247   1           SD_CS=1;
+ 248   1           for(i=0;i<0x0f;i++) //³õÊ¼Ê±£¬Ê×ÏÈÒª·¢ËÍ×îÉÙ74¸öÊ±ÖÓÐÅºÅ£¬ÕâÊÇ±ØÐëµÄ£¡£¡£¡
+ 249   1           {
+ 250   2              SD_spi_write(0xff); //120 clk
+ 251   2           }
+ 252   1      
+ 253   1           SD_CS=0;
+ 254   1           tryTime=0;
+ 255   1           do
+ 256   1           { 
+ 257   2                temp=SD_Write_Cmd(pcmd);//Ð´ÈëCMD0
+ 258   2                tryTime++;
+ 259   2                if(tryTime == TRY_TIME) 
+ 260   2                { 
+ 261   3                     SD_CS=1;
+ 262   3                     return(INIT_CMD0_ERROR);//CMD0Ð´ÈëÊ§°Ü
+ 263   3                }
+ 264   2                // DEBUGINFO("µÚ%d´Î³¢ÊÔ\n",tryTime);
+ 265   2           }while(temp!=0x01);
+ 266   1      
+ 267   1           
+ 268   1           SD_CS=1;
+ 269   1           SD_spi_write(0xff); //°´ÕÕSD¿¨µÄ²Ù×÷Ê±ÐòÔÚÕâÀï²¹8¸öÊ±ÖÓ 
+ 270   1           // DEBUGINFO("Ö´ÐÐÍê40ÃüÁî\n");
+ 271   1           return RESET_OK;//·µ»Ø5,ËµÃ÷¸´Î»²Ù×÷³É¹¦
+ 272   1      }
+ 273          
+ 274          /******************************************************************
+ 275           - ¹¦ÄÜÃèÊö£º³õÊ¼»¯SD¿¨£¬Ê¹ÓÃCMD1
+ 276           - Á¥ÊôÄ£¿é£ºSD¿¨Ä£¿é
+ 277           - º¯ÊýÊôÐÔ£ºÄÚ²¿
+ 278           - ²ÎÊýËµÃ÷£ºÎÞ
+ 279           - ·µ»ØËµÃ÷£ºµ÷ÓÃ³É¹¦£¬·µ»Ø0x00£¬·ñÔò·µ»ØINIT_CMD1_ERROR (sd.hÖÐÓÐ¶¨Òå)
+ 280           ******************************************************************/
+ 281          
+ 282          unsigned char SD_Init() //³õÊ¼»¯£¬Ê¹ÓÃCMD1£¨1ºÅÃüÁî£©
+ 283          { 
+ 284   1           u16 tmp16 = 0;     
+ 285   1           unsigned char time,temp;
+ 286   1           unsigned char pcmd[] = {0x48,0x00,0x00,0x01,0xaa,0x87};
+ 287   1      
+ 288   1           SD_CS=0;
+ 289   1           time=0;
+ 290   1           do
+ 291   1           { 
+ 292   2                temp=SD_Write_Cmd(pcmd);
+ 293   2                time++;
+ 294   2                if(time==TRY_TIME) 
+ 295   2                { 
+ 296   3                     SD_CS=1;
+ 297   3                     return(INIT_CMD1_ERROR);//CMD8Ð´ÈëÊ§°Ü
+ 298   3                }
+ 299   2           }while(temp!=1);
+ 300   1       
+ 301   1          time=0;
+ 302   1              do
+C51 COMPILER V9.57.0.0   SD                                                                12/28/2022 16:43:59 PAGE 6   
+
+ 303   1              { 
+ 304   2                time++;
+ 305   2                      SD_spi_read();
+ 306   2                      SD_spi_read();
+ 307   2                      SD_spi_read();
+ 308   2                      SD_spi_read();
+ 309   2                      pcmd[0] = 0x77;
+ 310   2                      pcmd[3] = 0x00;
+ 311   2                      pcmd[4] = 0x00;
+ 312   2                      pcmd[5] = 0xff;
+ 313   2                      temp = SD_Write_Cmd(pcmd);
+ 314   2                      pcmd[0] = 0x69;
+ 315   2                      pcmd[1] = 0x40;
+ 316   2                      if(time==TRY_TIME) 
+ 317   2                      { 
+ 318   3                              SD_CS=1;
+ 319   3                              return(INIT_CMD1_ERROR);//CMD55Ð´ÈëÊ§°Ü
+ 320   3                      }
+ 321   2                tmp16 = SD_Write_Cmd(pcmd);
+ 322   2                // DEBUGINFO("69·µ»ØÖµ%d\n",tmp16);
+ 323   2               }while(0 != tmp16);
+ 324   1                       
+ 325   1               is_init=0; //³õÊ¼»¯Íê±Ï£¬½«is_initÉèÖÃÎª0,ÎªÁËÌá¸ßÒÔºóµÄÊý¾Ý´«ÊäËÙ¶È 
+ 326   1                       
+ 327   1               SD_CS=1;  //¹Ø×°SD¿¨µÄÆ¬Ñ¡ 
+ 328   1      
+ 329   1               SD_spi_write(0xff); //°´ÕÕSD¿¨µÄ²Ù×÷Ê±ÐòÔÚÕâÀï²¹8¸öÊ±ÖÓ
+ 330   1      
+ 331   1          return(INIT_OK); //·µ»Ø0,ËµÃ÷³õÊ¼»¯²Ù×÷³É¹¦
+ 332   1      } 
+ 333          
+ 334          /****************************************************************************
+ 335           - ¹¦ÄÜÃèÊö£º¶ÁÈ¡addrÉÈÇøµÄ512¸ö×Ö½Úµ½bufferÖ¸ÏòµÄÊý¾Ý»º³åÇø
+ 336           - Á¥ÊôÄ£¿é£ºSD¿¨Ä£¿é
+ 337           - º¯ÊýÊôÐÔ£ºÄÚ²¿
+ 338           - ²ÎÊýËµÃ÷£ºaddr:ÉÈÇøµØÖ·
+ 339                       buffer:Ö¸ÏòÊý¾Ý»º³åÇøµÄÖ¸Õë
+ 340           - ·µ»ØËµÃ÷£ºµ÷ÓÃ³É¹¦£¬·µ»Ø0x00£¬·ñÔò·µ»ØREAD_BLOCK_ERROR (sd.hÖÐÓÐ¶¨Òå)
+ 341           - ×¢£ºSD¿¨³õÊ¼»¯³É¹¦ºó£¬¶ÁÐ´ÉÈÇøÊ±£¬¾¡Á¿½«SPIËÙ¶ÈÌáÉÏÀ´£¬Ìá¸ßÐ§ÂÊ
+ 342           ****************************************************************************/
+ 343          
+ 344          unsigned char SdReadSector(unsigned long addr,unsigned char *Buffer)//´ÓSD¿¨µÄÖ¸¶¨ÉÈÇøÖÐ¶Á³ö512¸ö×Ö½Ú£¬Ê¹Ó
+             -ÃCMD17£¨17ºÅÃüÁî£©
+ 345          {
+ 346   1           unsigned int j;
+ 347   1           unsigned char time,temp;
+ 348   1           unsigned char pcmd[]={0x51,0x00,0x00,0x00,0x00,0xFF}; //CMD17µÄ×Ö½ÚÐòÁÐ
+ 349   1           u16 tmp16 = 0; 
+ 350   1           u32 tmp32 = 0;   
+ 351   1      
+ 352   1           pcmd[1]=((addr&0xFF000000)>>24);
+ 353   1           pcmd[2]=((addr&0x00FF0000)>>16);
+ 354   1           pcmd[3]=((addr&0x0000FF00)>>8);
+ 355   1           pcmd[4]=(addr&0x000000FF);
+ 356   1      
+ 357   1           SD_CS=0;//´ò¿ªÆ¬Ñ¡  
+ 358   1           time=0;
+ 359   1           do
+ 360   1           {
+ 361   2              pcmd[0] = 0x77;
+ 362   2              temp = SD_Write_Cmd(pcmd);
+ 363   2              pcmd[0] = 0x51;
+C51 COMPILER V9.57.0.0   SD                                                                12/28/2022 16:43:59 PAGE 7   
+
+ 364   2              temp = SD_Write_Cmd(pcmd); //Ð´ÈëCMD17
+ 365   2              time++;
+ 366   2              if(time==TRY_TIME) 
+ 367   2              {
+ 368   3                SD_CS=1;
+ 369   3                return(READ_BLOCK_ERROR); //¶Á¿éÊ§°Ü
+ 370   3              }
+ 371   2           }while(temp!=0);   
+ 372   1           
+ 373   1           time=0;
+ 374   1           do
+ 375   1           {
+ 376   2              time++;
+ 377   2              if(time==TRY_TIME) 
+ 378   2              {
+ 379   3                SD_CS=1;
+ 380   3                return(READ_BLOCK_ERROR); //¶Á¿éÊ§°Ü
+ 381   3              }
+ 382   2           }while(SD_spi_read() != 0xfe);
+ 383   1            
+ 384   1           for(j=0;j<512;j++)  //½«Êý¾ÝÐ´Èëµ½Êý¾Ý»º³åÇøÖÐ
+ 385   1           {   
+ 386   2              Buffer[j]=SD_spi_read();
+ 387   2           }
+ 388   1           
+ 389   1           SD_spi_read();
+ 390   1           SD_spi_read();//¶ÁÈ¡Á½¸ö×Ö½ÚµÄCRCÐ£ÑéÂë£¬²»ÓÃ¹ØÐÄËüÃÇ
+ 391   1      
+ 392   1           SD_CS=1;  //SD¿¨¹Ø±ÕÆ¬Ñ¡ 
+ 393   1           
+ 394   1           SD_spi_write(0xFF);//°´ÕÕSD¿¨µÄ²Ù×÷Ê±ÐòÔÚÕâÀï²¹8¸öÊ±ÖÓ
+ 395   1      
+ 396   1           return 0;
+ 397   1      }
+ 398          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1237    ----
+   CONSTANT SIZE    =     18    ----
+   XDATA SIZE       =   ----      42
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

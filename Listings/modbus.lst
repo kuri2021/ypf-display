@@ -1,0 +1,486 @@
+C51 COMPILER V9.57.0.0   MODBUS                                                            07/03/2023 17:10:09 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MODBUS
+OBJECT MODULE PLACED IN .\Objects\modbus.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE lib\modbus.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\source;.\l
+                    -ib) DEBUG OBJECTEXTEND PRINT(.\Listings\modbus.lst) OBJECT(.\Objects\modbus.obj)
+
+line level    source
+
+   1          #include "modbus.h"
+   2          #include "uart.h"
+   3          #include "umath.h"
+   4          #include "timer.h"
+   5          
+   6          MMODBUS pageModbusReg[PAGE_MAX_NUM];
+   7          u8 modbusNum,modbusTreatID;//modbusTreatID,ÓÃÀ´Ö¸Ê¾µ±Ç°ÕýÔÚ´¦ÀíÄÄÒ»Ìõ£¬modbusNum±íÊ¾µ±Ç°»º´æÇøÖÐÒ»¹²ÓÐ¶àÉÙ
+             -Ìõ
+   8          MMODBUS *emergencyTreat[EMERTENCY_NUM];
+   9          u8 emergencyTail,emergencyHead;
+  10          static MMODBUS *pNowOrder;
+  11          static u8 ModbusBusy;      //Ö¸Ê¾ÊÇ·ñÓÐMODBUSÃüÁîÕýÔÚ·¢ËÍ
+  12          
+  13          u8 isEmergencyFull(void)//ÓÃÓÚ¼ì²é½ô¼±´¦ÀíÊÇ·ñÊÇÂúµÄ£¬ÂúµÄ²»ÄÜÔÙ´Î×°ÌîÊý¾Ý£¬ÒÔÃâÔì³É´íÂÒ
+  14          {
+  15   1              u8 tmp;
+  16   1      
+  17   1              tmp = emergencyHead+1;
+  18   1              if(tmp>=EMERTENCY_NUM)
+  19   1                      tmp = 0;
+  20   1              if(tmp==emergencyTail)
+  21   1                      return 1;
+  22   1              else
+  23   1                      return 0;
+  24   1      }
+  25          
+  26          u8 isEmergencyEmpty(void)
+  27          {
+  28   1              if(emergencyHead==emergencyTail)
+  29   1                      return 1;
+  30   1              else
+  31   1                      return 0;
+  32   1      }
+  33          
+  34          void clrEmergency(void)
+  35          {
+  36   1              emergencyHead = emergencyTail = 0;
+  37   1      }
+  38          
+  39          void pushToEmergency(MMODBUS *modbusOrder)//ÓÃÓÚ¼ÓÔØÒ»¸ö½á¹¹°üÖ¸Õëµ½Êý×éÖÐ
+  40          {
+  41   1              if(isEmergencyFull())
+  42   1                      return;
+  43   1              emergencyTreat[emergencyHead]=modbusOrder;
+  44   1              emergencyHead++;
+  45   1              if(emergencyHead>=EMERTENCY_NUM)
+  46   1                      emergencyHead = 0;
+  47   1      }
+  48          
+  49          MMODBUS *popFromEmergency(void)
+  50          {
+  51   1              u8 tmp;
+  52   1      
+  53   1              if(isEmergencyEmpty())
+C51 COMPILER V9.57.0.0   MODBUS                                                            07/03/2023 17:10:09 PAGE 2   
+
+  54   1                      return NULL;
+  55   1              else
+  56   1              {
+  57   2                      tmp = emergencyTail;
+  58   2                      emergencyTail++;
+  59   2                      if(emergencyTail>=EMERTENCY_NUM)
+  60   2                              emergencyTail = 0;
+  61   2                      return emergencyTreat[tmp];
+  62   2              }
+  63   1      }
+  64          
+  65          #define SLAVE_PORT 0
+  66          #define SLAVE_ID 1
+  67          void modbusSlaveTreat(void)//Ö§³Ö03 10Ö¸Áî,ÆäËûÖ¸Áî¿ÉÒÔ×ÔÐÐÌí¼Ó¡£½«VP 0000-FFFF×÷Îªmodbus´Ó»ú¼Ä´æÆ÷
+  68          {
+  69   1              u16 len,len1,i;
+  70   1              u8 tmp[512];
+  71   1              u16 headtmp;
+  72   1              u16 slaveAddr;
+  73   1              u16 slaveLen;
+  74   1              
+  75   1              if(Uart_Struct[SLAVE_PORT].rx_tail != Uart_Struct[SLAVE_PORT].rx_head)
+  76   1              {
+  77   2                      if(Uart_Struct[SLAVE_PORT].rx_buf[Uart_Struct[SLAVE_PORT].rx_tail]==SLAVE_ID)
+  78   2                      {
+  79   3                              EA = 0;
+  80   3                              headtmp = Uart_Struct[SLAVE_PORT].rx_head;
+  81   3                              EA = 1;
+  82   3                  if(headtmp < Uart_Struct[SLAVE_PORT].rx_tail)
+  83   3                  {
+  84   4                      len = (headtmp+SERIAL_SIZE) - Uart_Struct[SLAVE_PORT].rx_tail;
+  85   4                  }
+  86   3                  else
+  87   3                  {
+  88   4                      len = headtmp - Uart_Struct[SLAVE_PORT].rx_tail;
+  89   4                  }
+  90   3                              if(len >= START_TREAT_LENGTH)
+  91   3                              {
+  92   4                                      if(Uart_Struct[SLAVE_PORT].rx_buf[(Uart_Struct[SLAVE_PORT].rx_tail+1)&SERIAL_COUNT] == READ_REGISTER)
+  93   4                                      {
+  94   5                                              if(len>=8)
+  95   5                                              {
+  96   6                                                      for(i=0;i<8;i++)
+  97   6                                                      {
+  98   7                                                              tmp[i] = Uart_Struct[SLAVE_PORT].rx_buf[Uart_Struct[SLAVE_PORT].rx_tail];
+  99   7                                                              Uart_Struct[SLAVE_PORT].rx_tail++;
+ 100   7                                                              Uart_Struct[SLAVE_PORT].rx_tail &= SERIAL_COUNT;
+ 101   7                                                      }
+ 102   6                                                      if(Calculate_CRC16(tmp,8,0)==0)
+ 103   6                                                      {
+ 104   7                                                              slaveAddr = *(u16*)&tmp[2];
+ 105   7                                                              slaveLen = *(u16*)&tmp[4];
+ 106   7                                                              if(slaveLen >= 127)
+ 107   7                                                                      slaveLen = 127;
+ 108   7                                                              tmp[2] = (slaveLen << 1);
+ 109   7                                                              read_dgus_vp(slaveAddr,&tmp[3],slaveLen);
+ 110   7                                                              Calculate_CRC16(tmp,tmp[2]+3,1);
+ 111   7                                                              Uart_Send_Data(SLAVE_PORT,tmp[2]+5,tmp);
+ 112   7                                                      }
+ 113   6                                              }
+ 114   5                                      }
+ 115   4                                      else if(Uart_Struct[SLAVE_PORT].rx_buf[(Uart_Struct[SLAVE_PORT].rx_tail+1)&SERIAL_COUNT] == WRITE_REGI
+C51 COMPILER V9.57.0.0   MODBUS                                                            07/03/2023 17:10:09 PAGE 3   
+
+             -STER)
+ 116   4                                      {
+ 117   5                                              len1 = Uart_Struct[SLAVE_PORT].rx_buf[(Uart_Struct[SLAVE_PORT].rx_tail+6)&SERIAL_COUNT]+9;
+ 118   5                                              if(len >= len1)
+ 119   5                                              {
+ 120   6                                                      for(i=0;i<len1;i++)
+ 121   6                                                      {
+ 122   7                                                              tmp[i] = Uart_Struct[SLAVE_PORT].rx_buf[Uart_Struct[SLAVE_PORT].rx_tail];
+ 123   7                                                              Uart_Struct[SLAVE_PORT].rx_tail++;
+ 124   7                                                              Uart_Struct[SLAVE_PORT].rx_tail &= SERIAL_COUNT;
+ 125   7                                                      }
+ 126   6                                                      if(Calculate_CRC16(tmp,len1,0)==0)
+ 127   6                                                      {
+ 128   7                                                              slaveAddr = *(u16*)&tmp[2];
+ 129   7                                                              slaveLen = (tmp[6]>>1);
+ 130   7                                                              write_dgus_vp(slaveAddr,&tmp[7],slaveLen);
+ 131   7                                                              Calculate_CRC16(tmp,6,1);
+ 132   7                                                              Uart_Send_Data(SLAVE_PORT,8,tmp);
+ 133   7                                                      }
+ 134   6                                              }
+ 135   5                                      }
+ 136   4                                      else 
+ 137   4                                      {
+ 138   5                                              Uart_Struct[SLAVE_PORT].rx_tail++;
+ 139   5                                              Uart_Struct[SLAVE_PORT].rx_tail &= SERIAL_COUNT;
+ 140   5                                      }
+ 141   4                              }
+ 142   3                      }
+ 143   2                      else
+ 144   2                      {
+ 145   3                              Uart_Struct[SLAVE_PORT].rx_tail++;
+ 146   3                              Uart_Struct[SLAVE_PORT].rx_tail &= SERIAL_COUNT;
+ 147   3                      }
+ 148   2              }
+ 149   1      }
+ 150          
+ 151          void modbusRxTreat(void)
+ 152          {
+ 153   1              u16 len,len1,i,lentmp;
+ 154   1              u8 tmp[512];
+ 155   1              u16 headtmp;
+ 156   1              u8 tmp8;
+ 157   1              
+ 158   1              EA = 0;
+ 159   1              headtmp = Uart_Struct[UART485].rx_head;
+ 160   1              EA = 1;
+ 161   1              if(Uart_Struct[UART485].rx_tail != headtmp)
+ 162   1              {
+ 163   2                      if(Uart_Struct[UART485].rx_buf[Uart_Struct[UART485].rx_tail]==pNowOrder->SlaveAddr)//²éÕÒµ±Ç°ÕýÔÚ·¢ËÍÃüÁ
+             -îµÄmodbusµØÖ·
+ 164   2                      {
+ 165   3                  if(headtmp < Uart_Struct[UART485].rx_tail)
+ 166   3                  {
+ 167   4                      len = (headtmp+SERIAL_SIZE) - Uart_Struct[UART485].rx_tail;
+ 168   4                  }
+ 169   3                  else
+ 170   3                  {
+ 171   4                      len = headtmp - Uart_Struct[UART485].rx_tail;
+ 172   4                  }
+ 173   3                              if(len >= START_TREAT_LENGTH)//»º´æµ½Ò»¶¨³¤¶Èºó²Å¿ªÊ¼´¦ÀíÊý¾Ý
+ 174   3                              {
+ 175   4                                      if(Uart_Struct[UART485].rx_buf[(Uart_Struct[UART485].rx_tail+1)&SERIAL_COUNT] == pNowOrder->Order)//²é
+C51 COMPILER V9.57.0.0   MODBUS                                                            07/03/2023 17:10:09 PAGE 4   
+
+             -ÕÒµ½ÁËµØÖ·£¬²¢ÇÒºóÃæÊÇÏìÓ¦µÄÖ¸Áî
+ 176   4                                      {
+ 177   5                                              if(0x01==pNowOrder->Order)
+ 178   5                                              {
+ 179   6                                                      len1 = Uart_Struct[UART485].rx_buf[(Uart_Struct[UART485].rx_tail+2)&SERIAL_COUNT];
+ 180   6                                                      lentmp = pNowOrder->Length / 8;
+ 181   6                                                      if((pNowOrder->Length%8)!=0)
+ 182   6                                                              lentmp++;
+ 183   6                                                      if(len1==lentmp)
+ 184   6                                                      {
+ 185   7                                                              if(len >= len1+5)
+ 186   7                                                              {
+ 187   8                                                                      for(i=0;i<len1+5;i++)
+ 188   8                                                                      {
+ 189   9                                                                              tmp[i] = Uart_Struct[UART485].rx_buf[Uart_Struct[UART485].rx_tail];
+ 190   9                                                                              Uart_Struct[UART485].rx_tail++;
+ 191   9                                                                              Uart_Struct[UART485].rx_tail &= SERIAL_COUNT;
+ 192   9                                                                      }
+ 193   8                                                                      if(Calculate_CRC16(tmp,len1+5,0)==0)//Ð£ÑéÕýÈ·
+ 194   8                                                                      {
+ 195   9                                                                              ModbusBusy = 0;//±êÖ¾Î»±ä³É¿ÕÏÐ£¬¿ÉÒÔ¼ÌÐø·¢ËÍÏÂÒ»°üÊý¾Ý
+ 196   9                                                                              for(i=0;i<pNowOrder->Length;i++)
+ 197   9                                                                              {
+ 198  10                                                                                      tmp8 = 0x01<<(7-i%8);
+ 199  10                                                                                      if(tmp[3+i/8]&tmp8)
+ 200  10                                                                                              headtmp = 1;
+ 201  10                                                                                      else
+ 202  10                                                                                              headtmp = 0;
+ 203  10                                                                                      write_dgus_vp(pNowOrder->VPaddr+i,(u8*)&headtmp,1);
+ 204  10                                                                              }
+ 205   9                                                                      }
+ 206   8                                                              }
+ 207   7                                                      }
+ 208   6                                                      else
+ 209   6                                                      {
+ 210   7                                                              Uart_Struct[UART485].rx_tail++;
+ 211   7                                                              Uart_Struct[UART485].rx_tail &= SERIAL_COUNT;//¼ÌÐøËÑË÷
+ 212   7                                                      }
+ 213   6                                              }
+ 214   5                                              else if(0x03==pNowOrder->Order)
+ 215   5                                              {
+ 216   6                                                      len1 = Uart_Struct[UART485].rx_buf[(Uart_Struct[UART485].rx_tail+2)&SERIAL_COUNT];
+ 217   6                                                      lentmp = pNowOrder->Length << 1;
+ 218   6                                                      if(len1==lentmp)
+ 219   6                                                      {
+ 220   7                                                              if(len >= len1+5)
+ 221   7                                                              {
+ 222   8                                                                      for(i=0;i<len1+5;i++)
+ 223   8                                                                      {
+ 224   9                                                                              tmp[i] = Uart_Struct[UART485].rx_buf[Uart_Struct[UART485].rx_tail];
+ 225   9                                                                              Uart_Struct[UART485].rx_tail++;
+ 226   9                                                                              Uart_Struct[UART485].rx_tail &= SERIAL_COUNT;
+ 227   9                                                                      }
+ 228   8                                                                      if(Calculate_CRC16(tmp,len1+5,0)==0)//Ð£ÑéÕýÈ·
+ 229   8                                                                      {
+ 230   9                                                                              ModbusBusy = 0;//±êÖ¾Î»±ä³É¿ÕÏÐ£¬¿ÉÒÔ¼ÌÐø·¢ËÍÏÂÒ»°üÊý¾Ý
+ 231   9                                                                              write_dgus_vp(pNowOrder->VPaddr,&tmp[3],pNowOrder->Length);
+ 232   9                                                                      }
+ 233   8                                                              }
+ 234   7                                                      }
+ 235   6                                                      else
+ 236   6                                                      {
+C51 COMPILER V9.57.0.0   MODBUS                                                            07/03/2023 17:10:09 PAGE 5   
+
+ 237   7                                                              Uart_Struct[UART485].rx_tail++;
+ 238   7                                                              Uart_Struct[UART485].rx_tail &= SERIAL_COUNT;//¼ÌÐøËÑË÷
+ 239   7                                                      }
+ 240   6                                              }
+ 241   5                                              else if((0x05==pNowOrder->Order)||(0x06==pNowOrder->Order)||(0x10==pNowOrder->Order))
+ 242   5                                              {
+ 243   6                                                      if(len >= 8)
+ 244   6                                                      {
+ 245   7                                                              for(i=0;i<8;i++)
+ 246   7                                                              {
+ 247   8                                                                      tmp[i] = Uart_Struct[UART485].rx_buf[Uart_Struct[UART485].rx_tail];
+ 248   8                                                                      Uart_Struct[UART485].rx_tail++;
+ 249   8                                                                      Uart_Struct[UART485].rx_tail &= SERIAL_COUNT;
+ 250   8                                                              }
+ 251   7                                                              if(Calculate_CRC16(tmp,8,0)==0)//Ð£ÑéÕýÈ·
+ 252   7                                                              {
+ 253   8                                                                      if(*(u16*)&tmp[2] == pNowOrder->ModbusReg)
+ 254   8                                                                      {
+ 255   9                                                                              ModbusBusy = 0;//±êÖ¾Î»±ä³É¿ÕÏÐ£¬¿ÉÒÔ¼ÌÐø·¢ËÍÏÂÒ»°üÊý¾Ý
+ 256   9                                                                      }
+ 257   8                                                              }
+ 258   7                                                      }
+ 259   6                                              }
+ 260   5                                              else
+ 261   5                                              {
+ 262   6                                                      Uart_Struct[UART485].rx_tail++;
+ 263   6                                                      Uart_Struct[UART485].rx_tail &= SERIAL_COUNT;//¼ÌÐøËÑË÷
+ 264   6                                              }
+ 265   5                                      }
+ 266   4                                      else 
+ 267   4                                      {
+ 268   5                                              Uart_Struct[UART485].rx_tail++;
+ 269   5                                              Uart_Struct[UART485].rx_tail &= SERIAL_COUNT;//¼ÌÐøËÑË÷
+ 270   5                                      }
+ 271   4                              }
+ 272   3                      }
+ 273   2                      else
+ 274   2                      {
+ 275   3                              Uart_Struct[UART485].rx_tail++;
+ 276   3                              Uart_Struct[UART485].rx_tail &= SERIAL_COUNT;//¼ÌÐøËÑË÷
+ 277   3                      }
+ 278   2              }
+ 279   1      }
+ 280          
+ 281          u8 AnalysisMosbusOrder(u8 *pBuf)//¸ù¾Ýµ±Ç°Ö¸ÁîµÄ¸ñÊ½½«Òª·¢ËÍµÄÊý¾Ý·Åµ½PbufÀïÃæ£¬²¢·µ»Ø·¢ËÍ³¤¶È
+ 282          {
+ 283   1              u8 len;
+ 284   1              u8 tmp[4];
+ 285   1      
+ 286   1              if(pNowOrder->mode == 0)
+ 287   1              {
+ 288   2      
+ 289   2              }
+ 290   1              else if(pNowOrder->mode == 1)
+ 291   1              {
+ 292   2                      if(pNowOrder->flag==0x5a)
+ 293   2                      {
+ 294   3                              pNowOrder->flag = 0x00;
+ 295   3                      }
+ 296   2                      else
+ 297   2                      {
+ 298   3                              return 0;
+C51 COMPILER V9.57.0.0   MODBUS                                                            07/03/2023 17:10:09 PAGE 6   
+
+ 299   3                      }
+ 300   2              }
+ 301   1              else
+ 302   1              {
+ 303   2                      return 0;
+ 304   2              }
+ 305   1              len = 0;
+ 306   1              switch (pNowOrder->Order)
+ 307   1              {
+ 308   2                      case 0x01://¶ÁÎ»×´Ì¬¼Ä´æÆ÷
+ 309   2                              if(pNowOrder->Length)
+ 310   2                              {
+ 311   3                                      pBuf[0] = pNowOrder->SlaveAddr;//´Ó»úµØÖ·
+ 312   3                                      pBuf[1] = 0x01;//¹¦ÄÜÂë
+ 313   3                                      pBuf[2] = (u8)(pNowOrder->ModbusReg>>8);
+ 314   3                                      pBuf[3] = (u8)(pNowOrder->ModbusReg);//Î»¼Ä´æÆ÷ÆðÊ¼µØÖ·
+ 315   3                                      pBuf[4] = 0;
+ 316   3                                      pBuf[5] = pNowOrder->Length;//Î»¼Ä´æÆ÷³¤¶È£¬×î´óÖ§³Ö255
+ 317   3                                      len = 6;
+ 318   3                              }
+ 319   2                              else 
+ 320   2                              {
+ 321   3                                      len = 0;
+ 322   3                              }
+ 323   2                              break;
+ 324   2                      case 0x03://¶Á±£³Ö¼Ä´æÆ÷
+ 325   2                              if(pNowOrder->Length)
+ 326   2                              {
+ 327   3                                      pBuf[0] = pNowOrder->SlaveAddr;//´Ó»úµØÖ·
+ 328   3                                      pBuf[1] = 0x03;//¹¦ÄÜÂë
+ 329   3                                      pBuf[2] = (u8)(pNowOrder->ModbusReg>>8);
+ 330   3                                      pBuf[3] = (u8)(pNowOrder->ModbusReg);//¼Ä´æÆ÷ÆðÊ¼µØÖ·
+ 331   3                                      pBuf[4] = 0;
+ 332   3                                      pBuf[5] = pNowOrder->Length;//Î»¼Ä´æÆ÷³¤¶È£¬×î´óÖ§³Ö255
+ 333   3                                      len = 6;
+ 334   3                              }
+ 335   2                              else 
+ 336   2                              {
+ 337   3                                      len = 0;
+ 338   3                              }
+ 339   2                              break;
+ 340   2                      case 0x05://Ð´µ¥¸öÎ»¼Ä´æÆ÷
+ 341   2                              pBuf[0] = pNowOrder->SlaveAddr;//´Ó»úµØÖ·
+ 342   2                              pBuf[1] = 0x05;//¹¦ÄÜÂë
+ 343   2                              pBuf[2] = (u8)(pNowOrder->ModbusReg>>8);
+ 344   2                              pBuf[3] = (u8)(pNowOrder->ModbusReg);//Î»¼Ä´æÆ÷ÆðÊ¼µØÖ·
+ 345   2                              read_dgus_vp(pNowOrder->VPaddr,tmp,1);
+ 346   2                              if(tmp[1])
+ 347   2                                      pBuf[4] = 0xff;//Î»×ªÌ¬ÎªON
+ 348   2                              else
+ 349   2                                      pBuf[4] = 0;//Î»×´Ì¬ÎªOFF
+ 350   2                              pBuf[5] = 0x00;
+ 351   2                              len = 6;
+ 352   2                              break;  
+ 353   2                      case 0x06://Ð´µ¥¸ö¼Ä´æÆ÷
+ 354   2                              pBuf[0] = pNowOrder->SlaveAddr;//´Ó»úµØÖ·
+ 355   2                              pBuf[1] = 0x06;//¹¦ÄÜÂë
+ 356   2                              pBuf[2] = (u8)(pNowOrder->ModbusReg>>8);
+ 357   2                              pBuf[3] = (u8)(pNowOrder->ModbusReg);//¼Ä´æÆ÷ÆðÊ¼µØÖ·
+ 358   2                              read_dgus_vp(pNowOrder->VPaddr,&pBuf[4],1);
+ 359   2                              len = 6;
+ 360   2                              break;
+C51 COMPILER V9.57.0.0   MODBUS                                                            07/03/2023 17:10:09 PAGE 7   
+
+ 361   2                      case 0x10://Ð´¶à¸ö¼Ä´æÆ÷
+ 362   2                              if((pNowOrder->Length>0)&&(pNowOrder->Length<0x7b))
+ 363   2                              {
+ 364   3                                      pBuf[0] = pNowOrder->SlaveAddr;//´Ó»úµØÖ·
+ 365   3                                      pBuf[1] = 0x10;//¹¦ÄÜÂë
+ 366   3                                      pBuf[2] = (u8)(pNowOrder->ModbusReg>>8);
+ 367   3                                      pBuf[3] = (u8)(pNowOrder->ModbusReg);//¼Ä´æÆ÷ÆðÊ¼µØÖ·
+ 368   3                                      pBuf[4] = 0;
+ 369   3                                      pBuf[5] = pNowOrder->Length;//Î»¼Ä´æÆ÷³¤¶È£¬×î´óÖ§³Ö0x7b
+ 370   3                                      pBuf[6] = pNowOrder->Length<<1;//Ð´Èë¼Ä´æÆ÷×Ö½ÚÊý
+ 371   3                                      len = pBuf[6] + 7;
+ 372   3                                      read_dgus_vp(pNowOrder->VPaddr,&pBuf[7],pNowOrder->Length);//Êµ¼ÊÊý¾Ý
+ 373   3                              }
+ 374   2                              else
+ 375   2                              {
+ 376   3                                      len = 0;
+ 377   3                              }
+ 378   2                              break;
+ 379   2                      default:
+ 380   2                              break;
+ 381   2              }
+ 382   1              if(len)
+ 383   1              {
+ 384   2                      Calculate_CRC16(pBuf,len,1);
+ 385   2                      return len+2;//·µ»Ø·¢ËÍ³¤¶È+2×Ö½ÚCRC
+ 386   2              }
+ 387   1              return 0;//0±íÊ¾±¾ÌõÖ¸ÁîÎÞÐ§
+ 388   1      }
+ 389          
+ 390          void modbusTxTreat(void)
+ 391          {
+ 392   1              u8 sendbuf[512];
+ 393   1              u8 len;
+ 394   1      
+ 395   1              if(modbusNum==0)//µ±Ç°Ò³µÄ¼Ä´æÆ÷¸öÊýÎª0µÄÊ±ºò£¬²»´¦Àí·¢ËÍ
+ 396   1              {
+ 397   2                      modbusTreatID = 0;
+ 398   2                      return;
+ 399   2              }
+ 400   1              if(ModbusBusy)//ÓÐÊý¾ÝÕýÔÚ´¦ÀíµÄÊ±ºò£¬²»´¦Àí·¢ËÍ
+ 401   1                      return;
+ 402   1              pNowOrder = popFromEmergency();
+ 403   1              if(pNowOrder != NULL)
+ 404   1              {
+ 405   2                      len = AnalysisMosbusOrder(sendbuf);
+ 406   2                      if(len)
+ 407   2                      {
+ 408   3                              ModbusBusy=1;
+ 409   3                              Uart_Send_Data(UART485,len,sendbuf);
+ 410   3                              StartTimer(MODBUS_TIMER,pNowOrder->waitTime);
+ 411   3                      }
+ 412   2              }
+ 413   1              else
+ 414   1              {
+ 415   2                      pNowOrder = &pageModbusReg[modbusTreatID];
+ 416   2                      modbusTreatID++;
+ 417   2                      if(modbusTreatID >= modbusNum)
+ 418   2                              modbusTreatID = 0;
+ 419   2                      len = AnalysisMosbusOrder(sendbuf);
+ 420   2                      if(len)
+ 421   2                      {
+ 422   3                              ModbusBusy=1;
+C51 COMPILER V9.57.0.0   MODBUS                                                            07/03/2023 17:10:09 PAGE 8   
+
+ 423   3                              Uart_Send_Data(UART485,len,sendbuf);
+ 424   3                              StartTimer(MODBUS_TIMER,pNowOrder->waitTime);
+ 425   3                      }
+ 426   2              }
+ 427   1      }
+ 428          
+ 429          void modbusTreat(void)
+ 430          {
+ 431   1              if(ModbusBusy)
+ 432   1              {
+ 433   2                      if(GetTimeOutFlag(MODBUS_TIMER))//³¬Ê±ºó£¬Ç¿ÖÆ´¦ÀíÏÂÒ»°ü
+ 434   2                      {
+ 435   3                              ModbusBusy = 0;
+ 436   3                              EA = 0;
+ 437   3                              Uart_Struct[UART485].rx_tail = Uart_Struct[UART485].rx_head;
+ 438   3                              EA = 1;
+ 439   3                      }
+ 440   2              }
+ 441   1              modbusTxTreat();
+ 442   1              modbusRxTreat();
+ 443   1              modbusSlaveTreat();
+ 444   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   3418    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    824    1565
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

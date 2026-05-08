@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "adc.h": "c",
+        "umath.h": "c",
+        "canbus.h": "c",
+        "dwin8283.h": "c",
+        "sys.h": "c",
+        "include.h": "c",
+        "t5los8051.h": "c",
+        "stdio.h": "c",
+        "uart.h": "c",
+        "norflash.h": "c",
+        "STDIO.H": "cpp",
+        "string.h": "c",
+        "const.h": "c",
+        "math.h": "c"
+    }
+}

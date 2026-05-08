@@ -1,0 +1,328 @@
+C51 COMPILER V9.56.0.0   DWIN8283                                                          04/17/2026 15:36:16 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DWIN8283
+OBJECT MODULE PLACED IN .\Objects\dwin8283.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lib\dwin8283.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\source;.
+                    -\lib) DEBUG OBJECTEXTEND PRINT(.\Listings\dwin8283.lst) TABS(2) OBJECT(.\Objects\dwin8283.obj)
+
+line level    source
+
+   1          #include "dwin8283.h"
+   2          #include "uart.h"
+   3          //#include "canbus.h"
+   4          
+   5          #define NUM 2
+   6          #define DWIN_UART UART2
+   7          
+   8          #define MAX_BYTE_LEN 512
+   9          #define MIN_CHECK_LEN 6
+  10          #define FRAME_HEAD 0x5AA5
+  11          #define WRITE_VP 0x82
+  12          #define READ_VP 0x83
+  13          //#define ENABLE_CRC
+  14          //#define AUTO_UPLOAD
+  15          
+  16          QUENE DwinFrame[NUM];
+  17          u8 SendTmp[MAX_BYTE_LEN];
+  18          //CANBUS8283  DataBuf;
+  19          
+  20          void Pro8283Init(void)
+  21          {
+  22   1         // u8 CanReg[4]={0x0F,0x40,0x72,0x00};
+  23   1      
+  24   1          // UartInit(DWIN_UART,115200);  //ʹ��8283Э�飬��ʼ����ش��ڲ�����
+  25   1          // UartInit(UART4,115200);  //ʹ��8283Э�飬��ʼ����ش��ڲ�����
+  26   1            UartInit(DWIN_UART,38400);  //ʹ��8283Э�飬��ʼ����ش��ڲ�����
+  27   1          UartInit(UART4,38400);  //ʹ��8283Э�飬��ʼ����ش��ڲ�����
+  28   1         // CanBusInit(CanReg);
+  29   1      
+  30   1          DwinFrame[0].pQuene = Uart_Struct[DWIN_UART].rx_buf;
+  31   1          DwinFrame[0].QueneHead = &Uart_Struct[DWIN_UART].rx_head;
+  32   1          DwinFrame[0].QueneTail = &Uart_Struct[DWIN_UART].rx_tail;
+  33   1          DwinFrame[0].QueneSize = SERIAL_SIZE;
+  34   1          
+  35   1          DwinFrame[1].pQuene = Uart_Struct[UART4].rx_buf;
+  36   1          DwinFrame[1].QueneHead = &Uart_Struct[UART4].rx_head;
+  37   1          DwinFrame[1].QueneTail = &Uart_Struct[UART4].rx_tail;
+  38   1          DwinFrame[1].QueneSize = SERIAL_SIZE;
+  39   1      
+  40   1          /* DwinFrame[1].pQuene = DataBuf.Busbuf;
+  41   1          DwinFrame[1].QueneHead = &DataBuf.Can8283RxHead;
+  42   1          DwinFrame[1].QueneTail = &DataBuf.Can8283RxTail;
+  43   1          DwinFrame[1].QueneSize = 256; */
+  44   1      }
+  45          
+  46          #ifdef ENABLE_CRC
+              u16 Calculate_CRC16_8283(u8 *updata, u16 len)
+              {
+                  u16 Reg_CRC=0xffff;
+                  u16 i;
+                  u8 j;
+                  u16 crctmp;
+              
+                  for (i=0;i<len;i++)
+C51 COMPILER V9.56.0.0   DWIN8283                                                          04/17/2026 15:36:16 PAGE 2   
+
+                  {
+                      Reg_CRC^=*updata++;
+                      for (j=0;j<8;j++)
+                      {
+                          if (Reg_CRC & 0x0001)
+                          {
+                             Reg_CRC=Reg_CRC>>1^0XA001;
+                          }
+                          else
+                          {
+                             Reg_CRC>>=1;
+                          }
+                      }
+                  }
+                  crctmp = Reg_CRC << 8;
+                  crctmp |= (Reg_CRC>>8);
+                  // *updata++ = (u8)Reg_CRC;
+                  // *updata = (u8)(Reg_CRC>>8);
+                  return crctmp;
+              }
+              #endif
+  76          
+  77          #ifdef AUTO_UPLOAD
+              u8 AutoUploadValue(void)
+              {
+                  // u8 buf[MAX_BYTE_LEN];
+                  u16 address;
+                  u8 len;
+              
+                  read_dgus_vp(0xf00,SendTmp,2);
+                  if(SendTmp[0]==0x5a)
+                  {
+                      SendTmp[0] = 0;
+                      write_dgus_vp(0xf00,SendTmp,2);
+                      len = SendTmp[3];
+                      if(len>=200)
+                          len = 100;
+                      address = *(u16*)&SendTmp[1];
+                      SendTmp[0]=0x5a;
+                      SendTmp[1]=0xa5;
+                      SendTmp[2]=(len<<1)+4;
+                      SendTmp[3]=0x83;
+                      SendTmp[4]=address>>8;
+                      SendTmp[5]=address;
+                      SendTmp[6]=len;
+                      read_dgus_vp(address,&SendTmp[7],len);
+                      #ifdef ENABLE_CRC
+                          *(u16*)&SendTmp[SendTmp[2]+3] = Calculate_CRC16_8283(&SendTmp[3],SendTmp[2]);
+                          SendTmp[2] += 2;
+                      #endif
+                      // Uatr_Send_Data(DWIN_UART,buf[2]+3,buf);
+                      return DO_SEND_DATA;
+                  }
+                  return NOT_SEND_DATA;
+              }
+              #endif
+ 111          u8  Pro8283RxTreat(QUENE *pBuf)
+ 112          {
+ 113   1        u16 len,len1,i;
+ 114   1        // u8 tmp[MAX_BYTE_LEN];
+ 115   1          u16 tmp16,headtmp,tailtmp;
+ 116   1      
+C51 COMPILER V9.56.0.0   DWIN8283                                                          04/17/2026 15:36:16 PAGE 3   
+
+ 117   1        EA = 0;
+ 118   1          headtmp = *pBuf->QueneHead;
+ 119   1          EA = 1;
+ 120   1        if(*pBuf->QueneTail != headtmp)
+ 121   1        {
+ 122   2              if(headtmp < *pBuf->QueneTail)
+ 123   2              {
+ 124   3                  len = (headtmp+pBuf->QueneSize) - *pBuf->QueneTail;
+ 125   3              }
+ 126   2              else
+ 127   2              {
+ 128   3                  len = headtmp - *pBuf->QueneTail;
+ 129   3              }
+ 130   2              if(len < MIN_CHECK_LEN)
+ 131   2                  return NOT_SEND_DATA;
+ 132   2              tmp16 = pBuf->pQuene[*pBuf->QueneTail];
+ 133   2              tmp16 <<= 8;
+ 134   2              tailtmp = *pBuf->QueneTail + 1;
+ 135   2              if (tailtmp >=  pBuf->QueneSize)
+ 136   2              {
+ 137   3                  tailtmp = 0;
+ 138   3              }
+ 139   2              tmp16 |= pBuf->pQuene[tailtmp];
+ 140   2          if(FRAME_HEAD == tmp16)
+ 141   2          {
+ 142   3                  tailtmp = *pBuf->QueneTail + 3;
+ 143   3                  if (tailtmp >=  pBuf->QueneSize)
+ 144   3                  {
+ 145   4                      tailtmp -= pBuf->QueneSize;
+ 146   4                  }
+ 147   3                  if(pBuf->pQuene[tailtmp] == WRITE_VP)
+ 148   3                  {
+ 149   4                      tailtmp = *pBuf->QueneTail + 2;
+ 150   4                      if (tailtmp >=  pBuf->QueneSize)
+ 151   4                      {
+ 152   5                          tailtmp -= pBuf->QueneSize;
+ 153   5                      }
+ 154   4                      len1 = pBuf->pQuene[tailtmp]+3;
+ 155   4                      if(len >= len1)
+ 156   4                      {
+ 157   5                          for(i=0;i<len1;i++)
+ 158   5                          {
+ 159   6                              SendTmp[i] = pBuf->pQuene[*pBuf->QueneTail];
+ 160   6                              *pBuf->QueneTail += 1;
+ 161   6                              if (*pBuf->QueneTail >=  pBuf->QueneSize)
+ 162   6                              {
+ 163   7                                  *pBuf->QueneTail = 0;
+ 164   7                              }
+ 165   6                          }
+ 166   5                      #ifdef ENABLE_CRC
+                           
+                                  if(Calculate_CRC16_8283(&SendTmp[3],SendTmp[2])==0)
+                                  {
+                                  
+                          SendTmp[2] -= 2;
+                              #endif
+ 173   5                              write_dgus_vp(*(u16*)&SendTmp[4],&SendTmp[6],(SendTmp[2]-3)>>1);
+ 174   5                              SendTmp[2] = 3;
+ 175   5                              *(u16*)&SendTmp[4] = 0x4f4b;
+ 176   5                          #ifdef ENABLE_CRC
+                                      *(u16*)&SendTmp[6] = Calculate_CRC16_8283(&SendTmp[3],SendTmp[2]);
+                                      SendTmp[2] += 2;
+C51 COMPILER V9.56.0.0   DWIN8283                                                          04/17/2026 15:36:16 PAGE 4   
+
+                                  #endif
+ 180   5                              // Uatr_Send_Data(DWIN_UART,tmp[2]+3,tmp);
+ 181   5                              return DO_SEND_DATA;
+ 182   5                      #ifdef ENABLE_CRC
+                                 
+                                  }
+                              #endif
+ 186   5                      }
+ 187   4                  }
+ 188   3                  else if(pBuf->pQuene[tailtmp] == READ_VP)
+ 189   3                  {
+ 190   4                      tailtmp = *pBuf->QueneTail + 2;
+ 191   4                      if (tailtmp >=  pBuf->QueneSize)
+ 192   4                      {
+ 193   5                          tailtmp -= pBuf->QueneSize;
+ 194   5                      }
+ 195   4                      len1 = pBuf->pQuene[tailtmp]+3;
+ 196   4                      if(len >= len1)
+ 197   4                      {
+ 198   5                          for(i=0;i<len1;i++)
+ 199   5                          {
+ 200   6                              SendTmp[i] = pBuf->pQuene[*pBuf->QueneTail];
+ 201   6                              *pBuf->QueneTail += 1;
+ 202   6                              if (*pBuf->QueneTail >=  pBuf->QueneSize)
+ 203   6                              {
+ 204   7                                  *pBuf->QueneTail = 0;
+ 205   7                              }
+ 206   6                          }
+ 207   5                          #ifdef ENABLE_CRC
+                                      if(Calculate_CRC16_8283(&SendTmp[3],SendTmp[2])==0)
+                                      {
+                                  #endif
+ 211   5                                  read_dgus_vp(*(u16*)&SendTmp[4],&SendTmp[7],SendTmp[6]);
+ 212   5                                  SendTmp[2] = (SendTmp[6]<<1) + 4;
+ 213   5                              #ifdef ENABLE_CRC
+                                          *(u16*)&SendTmp[SendTmp[2]+3] = Calculate_CRC16_8283(&SendTmp[3],SendTmp[2]);
+                                          SendTmp[2] += 2;
+                                      #endif
+ 217   5                                  // Uatr_Send_Data(DWIN_UART,tmp[2]+3,tmp);
+ 218   5                                  return DO_SEND_DATA;
+ 219   5                          #ifdef ENABLE_CRC
+                                      }
+                                  #endif
+ 222   5                      }
+ 223   4                  }
+ 224   3                  else 
+ 225   3                  {
+ 226   4                      *pBuf->QueneTail += 1;
+ 227   4                      if (*pBuf->QueneTail >=  pBuf->QueneSize)
+ 228   4                      {
+ 229   5                          *pBuf->QueneTail = 0;
+ 230   5                      }
+ 231   4                  }
+ 232   3          }
+ 233   2          else
+ 234   2          {
+ 235   3            *pBuf->QueneTail += 1;
+ 236   3                  if (*pBuf->QueneTail >=  pBuf->QueneSize)
+ 237   3                  {
+ 238   4                      *pBuf->QueneTail = 0;
+ 239   4                  }
+ 240   3          }
+C51 COMPILER V9.56.0.0   DWIN8283                                                          04/17/2026 15:36:16 PAGE 5   
+
+ 241   2        }
+ 242   1          return NOT_SEND_DATA;
+ 243   1      }
+ 244          
+ 245          
+ 246          #define FRAME_ID 0X23
+ 247          void Pro8283Deal(void)
+ 248          {
+ 249   1        /* u8 i,len;
+ 250   1          u16 tmp[4];
+ 251   1          tmp[0] = DataBuf.Can8283RxHead;
+ 252   1          tmp[1] = DataBuf.Can8283RxTail;
+ 253   1          tmp[2] = CanData.CanRxHead;
+ 254   1          tmp[3] = CanData.CanRxTail;
+ 255   1          write_dgus_vp(0x4000,(u8*)tmp,4); */
+ 256   1      
+ 257   1          //��CAN�����ݽ�����������
+ 258   1      /*     if(CanData.CanRxHead != CanData.CanRxTail)
+ 259   1        {
+ 260   1          if(CanData.BusRXbuf[CanData.CanRxTail].ID == (u32)FRAME_ID)
+ 261   1              {
+ 262   1                  len = CanData.BusRXbuf[CanData.CanRxTail].status & 0x0f;
+ 263   1                  for(i=0;i<len;i++)
+ 264   1                  {
+ 265   1                      DataBuf.Busbuf[DataBuf.Can8283RxHead] = CanData.BusRXbuf[CanData.CanRxTail].candata[i];
+ 266   1                      DataBuf.Can8283RxHead++;
+ 267   1                      if(DataBuf.Can8283RxHead>=256)
+ 268   1                          DataBuf.Can8283RxHead = 0;
+ 269   1                  }
+ 270   1              }
+ 271   1          CanData.CanRxTail++;
+ 272   1        } */
+ 273   1      #ifdef AUTO_UPLOAD
+                  if(DO_SEND_DATA == AutoUploadValue())
+                  {
+                      Uart_Send_Data(DWIN_UART,SendTmp[2]+3,SendTmp);
+                     /*  CanTx(0x23,0,SendTmp[2]+3,SendTmp); */
+                  }
+              #endif
+ 280   1          if(DO_SEND_DATA == Pro8283RxTreat(&DwinFrame[0]))
+ 281   1          {
+ 282   2              Uart_Send_Data(DWIN_UART,SendTmp[2]+3,SendTmp);
+ 283   2          }
+ 284   1          if(DO_SEND_DATA == Pro8283RxTreat(&DwinFrame[1]))
+ 285   1          {
+ 286   2              Uart_Send_Data(UART4,SendTmp[2]+3,SendTmp);
+ 287   2          }
+ 288   1      /*     if(DO_SEND_DATA == Pro8283RxTreat(&DwinFrame[1]))
+ 289   1          {
+ 290   1              CanTx(0x24,0,SendTmp[2]+3,SendTmp);
+ 291   1          } */
+ 292   1          
+ 293   1      }
+ 294          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1554    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    534      15
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+C51 COMPILER V9.56.0.0   DWIN8283                                                          04/17/2026 15:36:16 PAGE 6   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

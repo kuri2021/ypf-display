@@ -1,0 +1,70 @@
+C51 COMPILER V9.56.0.0   HISTORY                                                           04/17/2026 15:36:16 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE HISTORY
+OBJECT MODULE PLACED IN .\Objects\history.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE source\history.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\source
+                    -;.\lib) DEBUG OBJECTEXTEND PRINT(.\Listings\history.lst) TABS(2) OBJECT(.\Objects\history.obj)
+
+line level    source
+
+   1          #include "history.h"
+   2          
+   3          // HISTORICAL_DATA hisData[500];
+   4          HISTORICAL_ERR hisErr[ErrMaxNum];
+   5          u8 ErrBuf = 0;
+   6          u8 ErrBufOld = 0;
+   7          u16 ErrNum = 0;
+   8          
+   9          void historyErrInit(void)
+  10          {
+  11   1          //----------------test----------------
+  12   1          static u8 shijian[]={24,9,18,3,9,30,0};
+  13   1          write_dgus_vp(0x10,shijian,4);
+  14   1          //------------------------------------
+  15   1          vp_nor_flash_read(0, ErrTxtVP, sizeof(hisErr) < 1);
+  16   1          read_dgus_vp(ErrTxtVP, (u8 *)&hisErr, sizeof(hisErr) < 1);
+  17   1      }
+  18          void ErrFun(void)
+  19          {
+  20   1          u8 timenow[10];
+  21   1          ErrBuf = Read_Dgus(ErrVP);
+  22   1          if (ErrBufOld != ErrBuf)
+  23   1          {
+  24   2              ErrBufOld = ErrBuf;
+  25   2              if (ErrBuf)
+  26   2              {
+  27   3                  ErrNum++;
+  28   3                  if (ErrNum == ErrMaxNum)
+  29   3                      ErrNum = 0;
+  30   3                  read_dgus_vp(0x10, timenow, 4);
+  31   3                  hisErr[ErrNum].flag = 0x5A;
+  32   3                  hisErr[ErrNum].hnum = ErrNum;
+  33   3                  hisErr[ErrNum].hyear = timenow[0];
+  34   3                  hisErr[ErrNum].hmonth = timenow[1];
+  35   3                  hisErr[ErrNum].hdate = timenow[2];
+  36   3                  hisErr[ErrNum].hhour = timenow[4];
+  37   3                  hisErr[ErrNum].hmin = timenow[5];
+  38   3                  hisErr[ErrNum].hsec = timenow[6];
+  39   3                  hisErr[ErrNum].faultNumber = ErrBuf;
+  40   3                  Nor_Flash_write(0, (u8 *)&hisErr, NOR_FLASH_LEN);
+  41   3                  write_dgus_vp(ErrTxtVP, (u8 *)&hisErr, sizeof(hisErr) < 1);
+  42   3              }
+  43   2          }
+  44   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    449    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    371      10
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.56.0.0   HISTORY                                                           04/17/2026 15:36:16 PAGE 2   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

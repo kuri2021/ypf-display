@@ -86,9 +86,10 @@ static u8 page_number    = 0;
 
 static u8 read500_enable = 0;
 u8 xdata page_set[4] = {0};
+u8 xdata txt_off[6] = {0};
 
-u16 Page[29] = {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28
+u16 Page[36] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,29,30,31,32,33,34,35
 };
 
 static u16 start_flag = 0;
@@ -292,8 +293,6 @@ void QuickSettingTextSet(u16 count, u16 select_position){
             }
         }break;
     }
-    
-
 }
 
 void select_num(u16 page, u16 count) { // 텍스트 색 설정
@@ -512,6 +511,11 @@ void Page_Change_Handler(u8 n) {
     write_dgus_vp(0x0084, page_set, 2);
 }
 
+void Page_Change_UI(u8 i){
+    page_number = i;
+    Page_Change_Handler(page_number);
+}
+
 void Page21InIt() {
     //탑 세팅온도
     SetTextColorWhite(0x9403);
@@ -577,7 +581,7 @@ static void ShowMMSS2(u16 t) {
 
 static u16 timer = 0;
 
-void SecCnt_Start() { 
+void SecCnt_Start() {
     sec_active = 1; 
     SetTextColorYellow(0x9273);
     SetTextColorYellow(0x9333);
@@ -612,7 +616,6 @@ void SecCnt_TickTask(void) {
     } 
 }
 
-
 void Picture1213_Init(void) {
     u16 result = 0;
 
@@ -642,6 +645,146 @@ void Picture1213_Init(void) {
 
     SetTextColorWhite(0x9273);
 }
+
+static u8 adminSP = 0;
+static u8 admin_plag = 0;
+
+static u8 usersetting_plag = 0;
+static u8 usersettingSP = 0;
+
+static u8 IOtest_plag = 0;
+static u8 IOtestSP = 0;
+
+static u8 LogError_plag = 0;
+static u8 LogErrorSP = 0;
+
+static u8 Language_plag = 0;
+static u8 LanguageSP = 0;
+
+static u8 Engineer_plag = 0;
+static u8 EngineerSP = 0;
+
+void admin_text_change(){
+      switch(adminSP){
+        case 0:{
+            SetTextColorYellow(0x5013);
+            SetTextColorWhite(0x5023);
+            SetTextColorWhite(0x5033);
+            SetTextColorWhite(0x5043);
+            SetTextColorWhite(0x5053);
+            SetTextColorWhite(0x5063);
+            SetTextColorWhite(0x5073);
+            SetTextColorWhite(0x5643);
+        }break;
+        case 1:{
+            SetTextColorWhite(0x5013);
+            SetTextColorYellow(0x5023);
+            SetTextColorWhite(0x5033);
+            SetTextColorWhite(0x5043);
+            SetTextColorWhite(0x5053);
+            SetTextColorWhite(0x5063);
+            SetTextColorWhite(0x5073);
+            SetTextColorWhite(0x5643);
+        }break;
+        case 2:{
+              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5023);
+            SetTextColorYellow(0x5033);
+            SetTextColorWhite(0x5043);
+            SetTextColorWhite(0x5053);
+            SetTextColorWhite(0x5063);
+            SetTextColorWhite(0x5073);
+            SetTextColorWhite(0x5643);
+        }break;
+        case 3:{
+              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5023);
+            SetTextColorWhite(0x5033);
+            SetTextColorYellow(0x5043);
+            SetTextColorWhite(0x5053);
+            SetTextColorWhite(0x5063);
+            SetTextColorWhite(0x5073);
+            SetTextColorWhite(0x5643);
+        }break;
+        case 4:{
+              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5023);
+            SetTextColorWhite(0x5033);
+            SetTextColorWhite(0x5043);
+            SetTextColorYellow(0x5053);
+            SetTextColorWhite(0x5063);
+            SetTextColorWhite(0x5073);
+            SetTextColorWhite(0x5643);
+        }break;
+        case 5:{
+              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5023);
+            SetTextColorWhite(0x5033);
+            SetTextColorWhite(0x5043);
+            SetTextColorWhite(0x5053);
+            SetTextColorYellow(0x5063);
+            SetTextColorWhite(0x5073);
+            SetTextColorWhite(0x5643);
+        }break;
+        case 6:{
+              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5023);
+            SetTextColorWhite(0x5033);
+            SetTextColorWhite(0x5043);
+            SetTextColorWhite(0x5053);
+            SetTextColorWhite(0x5063);
+            SetTextColorYellow(0x5073);
+            SetTextColorWhite(0x5643);
+        }break;
+        case 7:{
+              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5023);
+            SetTextColorWhite(0x5033);
+            SetTextColorWhite(0x5043);
+            SetTextColorWhite(0x5053);
+            SetTextColorWhite(0x5063);
+            SetTextColorWhite(0x5073);
+            SetTextColorYellow(0x5643);
+        }break;
+    }
+}
+
+void admin_page_change(){
+    switch(adminSP){
+        case 0:{
+            usersetting_plag = 1;
+            Page_Change_UI(29);
+        }break;
+        case 1:{
+            IOtest_plag = 1;
+            Page_Change_UI(30);
+        }break;
+        // case 2:{
+        //     Page_Change_UI(31);
+        // }break;
+        case 3:{
+            LogError_plag = 1;
+            Page_Change_UI(34);
+        }break;
+        case 4:{
+            Page_Change_UI(31);
+        }break;
+        case 5:{
+            Language_plag = 1;
+            Page_Change_UI(32);
+        }break;
+        case 6:{
+            Page_Change_UI(33);
+        }break;
+        case 7:{
+            Engineer_plag = 1;
+            Page_Change_UI(35);
+        }break;
+    }
+
+}
+
+
 
 void encoder_page_change(u16 state)
 {
@@ -1268,6 +1411,13 @@ void encoder_page_change(u16 state)
                         page_number--;
                         Page_Change_Handler(page_number);
                     }
+                }else if(page_number == 28){
+                    if(adminSP == 0){
+                        adminSP = 7;
+                    }else{
+                        adminSP--;
+                    }
+                    admin_text_change();
                 }
             }
             enc_busy = 1;
@@ -1761,6 +1911,13 @@ void encoder_page_change(u16 state)
                         page_number++;
                         Page_Change_Handler(page_number);
                     }
+                }else if(page_number == 28){
+                    if(adminSP == 7){
+                        adminSP = 0;
+                    }else{
+                        adminSP++;
+                    }
+                    admin_text_change();
                 }
             }
             enc_busy = 1;
@@ -1768,7 +1925,9 @@ void encoder_page_change(u16 state)
         } break;
 
         case 3: {
-            if (settingflag == 1) {
+            if(admin_plag == 1){
+                admin_page_change(); 
+            }else if (settingflag == 1) {
                 if(page_number == 21){
                     if(counting21 == 1){
                         select_position++;
@@ -1893,7 +2052,6 @@ void encoder_page_change(u16 state)
                         read_dgus_vp(VP_SET_P, (u8*)&press, 2);
                         write_dgus_vp(0x2930, (u8*)&press,    2);
 
-
                         result = 0;
                         counting21 = 1;
                         Page21Functioning(counting21);
@@ -1933,40 +2091,40 @@ void encoder_page_change(u16 state)
                         settingflag = 1;
                         read_dgus_vp(VP_SET_P, (u8*)&press, 1);
                         write_dgus_vp(0x2920, (u8*)&press, 1);
-                        page_number = 20;
-                        Page_Change_Handler(page_number);
                         SetTextColorBlue(0x9213);
                         ChangeImage(0x3980, 0);
+                        Page_Change_UI(20);
                     } break;
 
                     case 5: {
-                        if(f_ready==1){
-                            page_number = 23;
-                            Page_Change_Handler(page_number);
-                        }else if(f_start == 1){
-                            page_number = 24;
-                            Page_Change_Handler(page_number);
-                        }else if(f_cooling==1){
-                            page_number = 25;
-                            Page_Change_Handler(page_number);
-                        }else{
-                            page_number = 23;
-                            Page_Change_Handler(page_number);
-                            SetTextColorWhite(0x9273);
-                        }
-                        if(deleay_flag == 0){
-                            read_dgus_vp(VP_SET_H, (u8*)&result, 2);
-                            min = result / 60;
-                            second = result % 60;
-                            write_dgus_vp(0x2850, (u8*)&min,    1);
-                            write_dgus_vp(0x2860, (u8*)&second, 1);
-                        } 
+                        // if(f_ready==1){
+                        //     page_number = 23;
+                        //     Page_Change_Handler(page_number);
+                        // }else if(f_start == 1){
+                        //     page_number = 24;
+                        //     Page_Change_Handler(page_number);
+                        // }else if(f_cooling==1){
+                        //     page_number = 25;
+                        //     Page_Change_Handler(page_number);
+                        // }else{
+                        //     page_number = 23;
+                        //     Page_Change_Handler(page_number);
+                        //     SetTextColorWhite(0x9273);
+                        // }
+                        // if(deleay_flag == 0){
+                        //     read_dgus_vp(VP_SET_H, (u8*)&result, 2);
+                        //     min = result / 60;
+                        //     second = result % 60;
+                        //     write_dgus_vp(0x2850, (u8*)&min,    1);
+                        //     write_dgus_vp(0x2860, (u8*)&second, 1);
+                        // } 
+                        Page_Change_UI(28);
+                        admin_plag = 1;
+                        admin_text_change();
                     } break;
 
                     case 6: {
-                        page_number  = 13;
                         settingflag  = 1;
-                        Page_Change_Handler(page_number);
                         read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
                         TT100 = result / 100;
                         TT10   = (result / 10) % 10;
@@ -1974,13 +2132,12 @@ void encoder_page_change(u16 state)
                         write_dgus_vp(0x2000, (u8*)&TT100, 1);
                         write_dgus_vp(0x2010, (u8*)&TT10,     1);
                         write_dgus_vp(0x2020, (u8*)&TT1,     1);
-                        
                         select_num(page_number, 0);
                         ChangeImage(0x3910, 0);
+                        Page_Change_UI(13);
                     } break;
 
                     case 7: {
-                        page_number  = 14;
                         settingflag  = 1;
                         read_dgus_vp(VP_SET_CHTT, (u8*)&result, 1);
                         TC10   = (result / 10) % 10;
@@ -1988,14 +2145,12 @@ void encoder_page_change(u16 state)
                         write_dgus_vp(0x2110, (u8*)&TC10,     1);
                         write_dgus_vp(0x2120, (u8*)&TC1,     1);
                         select_num(page_number, 0);
-                        Page_Change_Handler(page_number);
                         ChangeImage(0x3920, 0);
+                        Page_Change_UI(14);
                     } break;
 
                     case 8: {
-                        page_number  = 15;
                         settingflag  = 1;
-                        Page_Change_Handler(page_number);
                         hundred_velue = hundreds[2];
                         ten_velue     = tens[2];
                         one_velue     = ones[2];
@@ -2004,24 +2159,21 @@ void encoder_page_change(u16 state)
                         write_dgus_vp(0x2220, (u8*)&one_velue,     1);
                         select_num(page_number, 0);
                         ChangeImage(0x3930, 0);
+                        Page_Change_UI(15);
                     } break;
 
                     case 9: {
                         if (page6flag == 1) {
                             page6flag   = 0;
-                            page_number = 1;
-                            Page_Change_Handler(page_number);
+                           Page_Change_UI(1);
                         } else {
                             page10flag  = 0;
-                            page_number = 2;
-                            Page_Change_Handler(page_number);
+                            Page_Change_UI(2);
                         }
                     } break;
 
                     case 10: {
-                        page_number  = 16;
                         settingflag  = 1;
-                        Page_Change_Handler(page_number);
                         read_dgus_vp(VP_SET_TB, (u8*)&result, 1);
                         BT100 = result / 100;
                         BT10   = (result / 10) % 10;
@@ -2031,10 +2183,10 @@ void encoder_page_change(u16 state)
                         write_dgus_vp(0x2320, (u8*)&BT1,     1);
                         select_num(page_number, 0);
                         ChangeImage(0x2940, 0);
+                        Page_Change_UI(16);
                     } break;
 
                     case 11: {
-                        page_number  = 17;
                         settingflag  = 1;
                         read_dgus_vp(VP_SET_CHTB, (u8*)&result, 1);
                         BC10    = result / 10;
@@ -2043,13 +2195,12 @@ void encoder_page_change(u16 state)
                         write_dgus_vp(0x2420, (u8*)&BC1,     1);
                         select_num(page_number, 0);
                         ChangeImage(0x3950, 0);
-                        Page_Change_Handler(page_number);
+                        Page_Change_UI(17);
                     } break;
 
                     case 12: {
-                        page_number  = 18;
                         settingflag  = 1;
-                        Page_Change_Handler(page_number);
+                        Page_Change_UI(18);
                         hundred_velue = hundreds[5];
                         ten_velue     = tens[5];
                         one_velue     = ones[5];
@@ -2079,8 +2230,7 @@ void encoder_page_change(u16 state)
                     }break;
 
                     case 22:{
-                        page_number = 5;
-                        Page_Change_Handler(page_number);
+                        Page_Change_UI(5);
                     }break;
 
                     case 23:{
@@ -2088,8 +2238,7 @@ void encoder_page_change(u16 state)
                         // Page_Change_Handler(page_number);
                         // read_dgus_vp(VP_SET_H, (u8*)&timer, 1);
                         // ShowMMSS2(timer);
-                        page_number = 5;
-                        Page_Change_Handler(page_number);
+                        Page_Change_UI(5);
                     }break;
                     // case 24:{
                     //     SecCnt_Start();
@@ -2101,8 +2250,7 @@ void encoder_page_change(u16 state)
                     //     Page_Change_Handler(page_number);
                     // }break;
                     case 27:{
-                        page_number = 0;
-                        Page_Change_Handler(page_number);
+                        Page_Change_UI(0);
                     }break;
 
                 }
@@ -2110,25 +2258,32 @@ void encoder_page_change(u16 state)
         } break;
 
         case 4: {
-            if (page_number == 21) {
+            if(page_number == 28){
+                Page_Change_UI(5);
+            }
+            if(admin_plag==1){
+                usersetting_plag = 0;
+                usersettingSP = 0;
+                IOtest_plag = 0;
+                IOtestSP = 0;
+                Language_plag = 0;
+                LanguageSP = 0;
+                LogError_plag = 0;
+                LogErrorSP = 0;
+                Engineer_plag = 0;
+                EngineerSP = 0;
+                Page_Change_UI(28);
+            }else if (page_number == 21) {
                 if(settingflag == 0){
                 page21flag   = 0; 
                  settingflag = 0; 
-                 page_number = 0; 
                  counting21 = 0; 
-                 Page_Change_Handler(page_number); 
+                 Page_Change_UI(0);
                  Page21InIt();
                 }
             }
-            // switch(page_number){
-            //     case 24:{
-            //         SecCnt_Stop();
-            //         page_number = 25;
-            //             Page_Change_Handler(page_number);
-            // }break;
-            // }
-            
             ui_poll_enable = 0;
         } break;
     }
 }
+

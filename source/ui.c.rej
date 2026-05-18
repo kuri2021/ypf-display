@@ -1,0 +1,7 @@
+diff a/source/ui.c b/source/ui.c	(rejected hunks)
+@@ -2134,3 +2134,4 @@
+ 
+ 
+ 
++void Admin_page_change(u16 AdminSP)
+\ No newline at end of file

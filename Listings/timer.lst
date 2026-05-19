@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   TIMER                                                             04/17/2026 15:36:13 PAGE 1   
+C51 COMPILER V9.56.0.0   TIMER                                                             05/19/2026 13:57:34 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE TIMER
@@ -62,7 +62,7 @@ line level    source
   52   1          EnableTimer=0;
   53   1        
   54   1          TMOD|=0x01;
-C51 COMPILER V9.56.0.0   TIMER                                                             04/17/2026 15:36:13 PAGE 2   
+C51 COMPILER V9.56.0.0   TIMER                                                             05/19/2026 13:57:34 PAGE 2   
 
   55   1          TH0=T1MS>>8;        //1ms¶¨Ê±Æ÷
   56   1          TL0=T1MS;
@@ -126,7 +126,7 @@ line level    source
  114   1        TH1=T1MS>>8;
  115   1        TL1=T1MS;
  116   1        P10 = !P10;
-C51 COMPILER V9.56.0.0   TIMER                                                             04/17/2026 15:36:13 PAGE 3   
+C51 COMPILER V9.56.0.0   TIMER                                                             05/19/2026 13:57:34 PAGE 3   
 
  117   1        EA = 1;
  118   1      }
@@ -190,7 +190,7 @@ line level    source
  176          {
  177   1          EA=0;
  178   1          EnableTimer&=~(1<<(ID));
-C51 COMPILER V9.56.0.0   TIMER                                                             04/17/2026 15:36:13 PAGE 4   
+C51 COMPILER V9.56.0.0   TIMER                                                             05/19/2026 13:57:34 PAGE 4   
 
  179   1          OutTimeFlag&=~(1<<ID);
  180   1          EA=1;
@@ -254,7 +254,7 @@ line level    source
                   PinOutput(PWMPort[i],PWMPin[i],0);
                 }
               }
-C51 COMPILER V9.56.0.0   TIMER                                                             04/17/2026 15:36:13 PAGE 5   
+C51 COMPILER V9.56.0.0   TIMER                                                             05/19/2026 13:57:34 PAGE 5   
 
               #endif
 

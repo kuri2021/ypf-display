@@ -116,6 +116,43 @@ static u16 recoll_value = 0;
 static u16 check_addr;
 static u16 check_count = 0;
 
+static u8 loding = 0;
+static u8 main1 = 1;
+static u8 main2 = 2;
+static u8 main3 = 3;
+static u8 main4 = 4;
+static u8 main5 = 5;
+static u8 main6 = 6;
+static u8 main7 = 7;
+static u8 quickSetting= 8;
+static u8 topHeating = 9;
+static u8 topCooling = 10;
+static u8 topFrame = 11;
+static u8 botHeating = 12;
+static u8 botCooling = 13;
+static u8 botFrame = 14;
+static u8 exit = 15;
+static u8 topHeatingS = 16;
+static u8 topCoolingS = 17;
+static u8 topFrameS = 18;
+static u8 botHeatingS = 19;
+static u8 botCoolingS = 20;
+static u8 botFrameS = 21;
+static u8 delayS = 22;
+static u8 pressureS = 23;
+static u8 workPageN = 24;
+static u8 workPageH = 25;
+static u8 workPageC = 26;
+static u8 adminList = 27;
+static u8 adminUserSetting = 28;
+static u8 adminIOTest = 29;
+static u8 adminFactoryResetNotice = 30;
+static u8 adminLogError = 31;
+static u8 adminMaintenance = 32;
+static u8 adminLanguage = 33;
+static u8 adminCompany = 34;
+static u8 adminEngineermod = 35;
+
 void check_Start(u16 addr, u16 velue){
     check_addr = addr;
     legacy_value = velue;
@@ -315,7 +352,6 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
                 SetTextColorBlack(0x9013);
                 SetTextColorBlack(0x9023);
             }
-
             if (count == 3) {
                 ChangeImage(0x3910, 1);
             } else {
@@ -516,7 +552,7 @@ void Page_Change_UI(u8 i){
     Page_Change_Handler(page_number);
 }
 
-void Page21InIt() {
+void quickSettingInIt() {
     //탑 세팅온도
     SetTextColorWhite(0x9403);
     SetTextColorWhite(0x9413);
@@ -564,7 +600,7 @@ static u8 sec_active = 0;
 static u16 sec_value = 0;
 static u16 time_result = 0;
 static u16 elapsed_time = 0;
-
+static u16 timer = 0;
 
 static void ShowMMSS(u16 t) { 
     u16 m = t / 60; 
@@ -579,8 +615,6 @@ static void ShowMMSS2(u16 t) {
     write_dgus_vp(0x3200, (u8*)&s, 1); 
 }
 
-static u16 timer = 0;
-
 void SecCnt_Start() {
     sec_active = 1; 
     SetTextColorYellow(0x9273);
@@ -588,9 +622,7 @@ void SecCnt_Start() {
     SetTextColorYellow(0x9343);
     read_dgus_vp(VP_SET_H, (u8*)&timer, 1); 
     StartTimer(TMR_1S, ONE_SEC); 
- }
-
- 
+}
 
 void SecCnt_Stop(void) { 
     sec_active = 0;
@@ -717,7 +749,7 @@ void admin_text_change(){
             SetTextColorWhite(0x5643);
         }break;
         case 5:{
-              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5013);
             SetTextColorWhite(0x5023);
             SetTextColorWhite(0x5033);
             SetTextColorWhite(0x5043);
@@ -737,7 +769,7 @@ void admin_text_change(){
             SetTextColorWhite(0x5643);
         }break;
         case 7:{
-              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5013);
             SetTextColorWhite(0x5023);
             SetTextColorWhite(0x5033);
             SetTextColorWhite(0x5043);
@@ -786,6 +818,7 @@ void admin_page_change(){
 
 
 
+
 void encoder_page_change(u16 state)
 {
     u16 keep = 0;
@@ -794,18 +827,19 @@ void encoder_page_change(u16 state)
    
     u16 f_ready, f_start, f_tempon, f_cooling, f_deleay, f_toptemp, f_bottemp,f_topcool,f_botcool, f_stop,f_run,f_pump,f_outpump,f_sensor_err;   
     static u8 enc_busy = 0;  
-    static u16 hundred_velue = 0;
-    static u16 ten_velue     = 0;
-    static u16 one_velue     = 0;
     static u8 select_flag    = 0;  // 타입 보강
     static u8 select_position = 0; // 타입 보강
+    
+    static u8 topSelectflag = 0;
+	  static u8 botSelectflag = 0;
+    static u8 quickSettingflag = 0; 
+	  static u8 quickSettingS = 0;
+    static u16 hundred_velue = 0; 
+    static u16 ten_velue = 0;
+	  static u16 one_velue = 0;
 
 
     static settingflag      = 0;
-    static u8 page6flag     = 0, page10flag = 0;
-
-    static u8 page21flag    = 0;
-    static u16 counting21   = 0;
 
     static u16 flags = 0;
 
@@ -882,39 +916,39 @@ void encoder_page_change(u16 state)
              second = result % 60;
              write_dgus_vp(0x2850, (u8*)&min,    1);
              write_dgus_vp(0x2860, (u8*)&second, 1);
-            page21flag = 0;
+            quickSettingflag = 0;
             select_flag=0;
             select_position = 0;
             settingflag = 0;
-            counting21 = 0;
+            quickSettingS = 0;
             start_flag = 0;
             deleay_flag = 0;
             page24_flag = 0;
             SecCnt_Stop();
     }else if(f_tempon==1||f_bottemp==1||f_toptemp==1){
-            Page21InIt();
+            quickSettingInIt();
             start_flag = 1;
             page_number = 24;
             Page_Change_Handler(page_number);
-            page21flag = 0;
+            quickSettingflag = 0;
             select_flag=0;
             select_position = 0;
             settingflag = 0;
-            counting21 = 0;
+            quickSettingS = 0;
             error_flag = 0;
         }else if(f_deleay==1){
-            Page21InIt();
+            quickSettingInIt();
             start_flag = 1;
             page_number = 24;
             Page_Change_Handler(page_number);
-            page21flag = 0;
+            quickSettingflag = 0;
             select_flag=0;
             select_position = 0;
             settingflag = 0;
-            counting21 = 0;
+            quickSettingS = 0;
             error_flag = 0;
         }else if(f_botcool==1||f_topcool == 1){
-            Page21InIt();
+            quickSettingInIt();
             page_number = 25;
             Page_Change_Handler(page_number);
             SecCnt_Stop();
@@ -922,19 +956,18 @@ void encoder_page_change(u16 state)
                 timer = 0;
                 ShowMMSS2(timer);
             }
-            page21flag = 0;
+            quickSettingflag = 0;
             select_flag=0;
             select_position = 0;
             settingflag = 0;
-            counting21 = 0;
+            quickSettingS = 0;
             start_flag = 1;
     }
     switch (state) {
         case 1: {
             // 데이터 설정 모드
             if (settingflag == 1) {
-                switch (page_number) {
-                    case 13: {
+                if(page_number == topHeatingS){
                          if (select_position == 0) {
                                 keep = TT1;
                                 if (TT1 == 0) {
@@ -979,10 +1012,8 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2000, (u8*)&TT100, 1);
                                 }
                         }
-                    } break;
-
-                    case 14: {
-                            if (select_position == 0) {
+                }else if(page_number == topCoolingS){
+                        if (select_position == 0) {
                                 keep = TC1;
                                 if (TC1 == 0) {
                                     TC1 = 9;
@@ -1012,10 +1043,8 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2110, (u8*)&TC10, 1);
                                 }
                             }
-                    } break;
-
-                    case 15: {
-                            if (select_position == 0) {
+                }else if(page_number == topFrameS){
+                       if (select_position == 0) {
                                 keep = hundred_velue;
                                 if (hundred_velue == 0) {
                                     hundred_velue = 2;
@@ -1062,10 +1091,8 @@ void encoder_page_change(u16 state)
                                 }
                             
                         }
-                    } break;
-
-                    case 16: {
-                            if (select_position == 0) {
+                }else if(page_number == botHeatingS){
+                    if (select_position == 0) {
                                 keep = BT1;
                                 if (BT1 == 0) {
                                     BT1 = 9;
@@ -1108,10 +1135,8 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2300, (u8*)&BT100, 1);
                                 }
                         }
-                    } break;
-
-                    case 17: {
-                            if (select_position == 0) {
+                }else if(page_number == botCoolingS){
+                    if (select_position == 0) {
                                 keep = BC1;
                                 if (BC1 == 0) {
                                     BC1 = 9;
@@ -1141,10 +1166,8 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2410, (u8*)&BC10, 1);
                                 }
                             }
-                    } break;
-
-                    case 18: {
-                            if (select_position == 0) {
+                }else if(page_number == botFrameS){
+                    if (select_position == 0) {
                                 keep = hundred_velue;
                                 if (hundred_velue == 2) {
                                     hundred_velue = 0;
@@ -1191,10 +1214,8 @@ void encoder_page_change(u16 state)
                                 }
                             
                         }
-                    } break;
-
-                    case 19: {
-                            if (select_position == 0) {
+                }else if(page_number == delayS){
+                       if (select_position == 0) {
                                  keep = min;
                                 if (min == 0) {
                                      if(second != 0){
@@ -1228,17 +1249,13 @@ void encoder_page_change(u16 state)
                                 }
                                 // write_dgus_vp(0x2860, (u8*)&second, 1);
                             }
-                    } break;
-
-                    case 20: {
-                            if (select_position == 0 && press > 1) {
-                                press--;
-                                write_dgus_vp(0x2920, (u8*)&press, 1);
-                            }
-                    } break;
-
-                    case 21:{
-                        if(counting21 == 1){
+                }else if(page_number == pressureS){
+                    if (select_position == 0 && press > 1) {
+                        press--;
+                        write_dgus_vp(0x2920, (u8*)&press, 1);
+                    }
+                }else if(page_number == quickSetting){
+                        if(quickSettingS == 1){
                              if (select_position == 0) {
                                
                            keep = TT1;
@@ -1283,12 +1300,12 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2800, (u8*)&TT100, 1);
                                 }
                             }
-                        }else if(counting21 == 2){
+                        }else if(quickSettingS == 2){
                             if(press > 1){
                                 press --;
                                 write_dgus_vp(0x2930, (u8*)&press, 1);
                             }
-                        }else if(counting21 == 3){
+                        }else if(quickSettingS == 3){
                            if (select_position == 0) {
                               keep = BT1;
                                 if (BT1 == 0) {
@@ -1332,7 +1349,7 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2870, (u8*)&BT100, 1);
                                 }
                             }
-                        }else if(counting21 == 4){
+                        }else if(quickSettingS == 4){
                             if (select_position == 0) {
                                 keep = min;
                                  if (min == 0) {
@@ -1369,49 +1386,38 @@ void encoder_page_change(u16 state)
                                 
                             }
                         }
-                    }
-
                 }
-            } else if (page21flag == 1) { // 세팅 모드가 아닌 텍스트와 페이지 색 변경
+            } else if (quickSettingflag == 1) { // 세팅 모드가 아닌 텍스트와 페이지 색 변경
                 if (settingflag == 0) {
-                    Page21InIt();
-                    if (counting21 == 1) {  // 21페이지 카운팅 증가
-                        counting21 = 4;
+                    quickSettingInIt();
+                    if (quickSettingS == 1) {  // 21페이지 카운팅 증가
+                        quickSettingS = 4;
                     } else {
-                        counting21--;
+                        quickSettingS--;
                     }
-                    Page21Functioning(counting21);
+                    Page21Functioning(quickSettingS);
                 }
             } else {  // 페이지 전환(역방향)
-                if ((page_number > 0 && page_number <= 5)) {
-                    page_number--;
-                    Page_Change_Handler(page_number);
-                } else if (page_number == 0) {
-                    page_number = 5;
-                    Page_Change_Handler(page_number);
-                } else if (page6flag == 1) {
-                    if (page_number == 6) {
-                        page_number = 9;
-                        Page_Change_Handler(page_number);
-                    }else if(page_number == 9){
-                        page_number = 7;
-                        Page_Change_Handler(page_number);
+                if ((page_number > main1)) {
+                    Page_Change_UI(page_number--);
+                } else if (page_number == main1) {
+                    Page_Change_UI(main7);
+                } else if (topSelectflag == 1) {
+                    if (page_number == exit) {
+                        Page_Change_UI(topFrame);
+                    }else if(page_number == topHeating){
+                        Page_Change_UI(exit);
                     }else {
                         page_number--;
                         Page_Change_Handler(page_number);
                     }
-                } else if (page10flag == 1) {
-                    if (page_number == 9) {
-                        page_number = 11;
-                        Page_Change_Handler(page_number);
-                    }else if(page_number == 10){
-                        page_number = 9;
-                        Page_Change_Handler(page_number);
+                } else if (botSelectflag == 1) {
+                    if (page_number == botHeating) {
+                        Page_Change_UI(exit);
                     }else {
-                        page_number--;
-                        Page_Change_Handler(page_number);
+                        Page_Change_UI(page_number--);
                     }
-                }else if(page_number == 28){
+                } else if (page_number == adminList){
                     if(adminSP == 0){
                         adminSP = 7;
                     }else{
@@ -1427,9 +1433,8 @@ void encoder_page_change(u16 state)
         case 2: {
             // 데이터 설정 모드
             if (settingflag == 1) {
-                switch (page_number) {
-                    case 13: {
-                            if (select_position == 0) {
+                if(page_number == topHeatingS){
+                    if (select_position == 0) {
                                   keep = TT1;
                                 if (TT1 != 9) {
                                     TT1++;
@@ -1473,10 +1478,8 @@ void encoder_page_change(u16 state)
                                 }
                             
                         }
-                    } break;
-
-                    case 14: {
-                            if (select_position == 0) {
+                }else if(page_number == topCoolingS){
+                      if (select_position == 0) {
                            keep = TC1;
                                 if (TC1 != 9) {
                                     TC1++;
@@ -1506,10 +1509,8 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2110, (u8*)&TC10, 1);
                                 }
                             }
-                    } break;
-
-                    case 15: {
-                            if (select_position == 0) {
+                }else if(page_number == topFrameS){
+                      if (select_position == 0) {
                                 keep = hundred_velue;
                                 if (hundred_velue == 9) {
                                     hundred_velue = 0;
@@ -1556,11 +1557,9 @@ void encoder_page_change(u16 state)
                                 }
                             
                         }
-                    } break;
-
-                    case 16: {
-                            if (select_position == 0) {
-                          keep = BT1;
+                }else if(page_number == botHeatingS){
+                      if (select_position == 0) {
+                             keep = BT1;
                                 if (BT1 != 9) {
                                     BT1++;
                                 } else {
@@ -1604,10 +1603,8 @@ void encoder_page_change(u16 state)
                                
                             
                         }
-                    } break;
-
-                    case 17: {
-                            if (select_position == 0) {
+                }else if(page_number == botCoolingS){
+                    if (select_position == 0) {
                               keep = BC1;
                                 if (BC1 == 9) {
                                     BC1 = 0;
@@ -1638,10 +1635,8 @@ void encoder_page_change(u16 state)
                                 
                              
                             }
-                    } break;
-
-                    case 18: {
-                            if (select_position == 0) {
+                }else if(page_number == botFrameS){
+                     if (select_position == 0) {
                                 keep = hundred_velue;
                                 if (hundred_velue == 9) {
                                     hundred_velue = 0;
@@ -1688,10 +1683,8 @@ void encoder_page_change(u16 state)
                                 }
                             
                         }
-                    } break;
-
-                    case 19: {
-                            if (select_position == 0) {
+                }else if(page_number == delayS){
+                    if (select_position == 0) {
                                 keep = min;
                                 if (min == 59) {
                                     if(second != 0){
@@ -1729,17 +1722,13 @@ void encoder_page_change(u16 state)
                                 // write_dgus_vp(0x2860, (u8*)&second, 1);
                             
                         }
-                    } break;
-
-                    case 20: {
-                            if (press < 20) {
+                }else if(page_number == pressureS){
+                    if (press < 20) {
                                 press++;
                                 write_dgus_vp(0x2920, (u8*)&press, 1);
                             }
-                    } break;
-
-                    case 21:{
-                        if(counting21 == 1){
+                }else if(page_number == quickSetting){
+                    if(quickSettingS == 1){
                              if (select_position == 0) {
                                  keep = TT1;
                                 if (TT1 != 9) {
@@ -1783,12 +1772,12 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2800, (u8*)&TT100, 1);
                                 }
                             }
-                        }else if(counting21 == 2){
+                        }else if(quickSettingS == 2){
                             if(press != 20){
                                 press ++;
                                write_dgus_vp(0x2930, (u8*)&press, 1);
                             }
-                        }else if(counting21 == 3){
+                        }else if(quickSettingS == 3){
                            if (select_position == 0) {
                              keep = BT1;
                                 if (BT1 != 9) {
@@ -1832,7 +1821,7 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2870, (u8*)&BT100, 1);
                                 }
                             }
-                        }else if(counting21 == 4){
+                        }else if(quickSettingS == 4){
                             if (select_position == 0) {
                                 keep = min;
                                 if (min == 59) {
@@ -1870,48 +1859,39 @@ void encoder_page_change(u16 state)
                                 // write_dgus_vp(0x2860, (u8*)&second, 1);
                             }
                         }
-                    }break;
                 }
-            } else if (page21flag == 1) { // 21페이지 작동 (정방향)
-                if (page_number == 21) {
-                    Page21InIt();
-                    if (counting21 == 4) {  // 21페이지 카운팅 증가
-                        counting21 = 1;
+            } else if (quickSettingflag == 1) { // 21페이지 작동 (정방향)
+                if (page_number == quickSetting) {
+                    quickSettingInIt();
+                    if (quickSettingS == 4) {  // 21페이지 카운팅 증가
+                        quickSettingS = 1;
                     } else {
-                        counting21++;
+                        quickSettingS++;
                     }
-                    Page21Functioning(counting21);
+                    Page21Functioning(quickSettingS);
                 }
             } else { // 페이지 전환(정방향)
-                if (page_number < 5) {
-                    page_number++;
-                    Page_Change_Handler(page_number);
-                } else if (page_number == 5) {
-                    page_number = 0;
-                    Page_Change_Handler(page_number);
-                } else if (page6flag == 1) {
-                    if (page_number == 9) {
-                        page_number = 6;
-                        Page_Change_Handler(page_number);
-                    }else if(page_number == 7){
-                        page_number=9;
-                        Page_Change_Handler(page_number);
+                if (page_number < main7) {
+                    Page_Change_UI(page_number++);
+                } else if (page_number == main7) {
+                    Page_Change_UI(main1);
+                } else if (topSelectflag == 1) {
+                    if (page_number == topFrame) {
+                         Page_Change_UI(exit);
+                    }else if(page_number == exit){
+                        Page_Change_UI(topHeating);
                     }else {
-                        page_number++;
-                        Page_Change_Handler(page_number);
+                        Page_Change_UI(page_number++);
                     }
-                } else if (page10flag == 1) {
-                    if (page_number == 9) {
-                        page_number = 10;
-                        Page_Change_Handler(page_number);
-                    }else if(page_number == 11){
-                        page_number = 9;
-                        Page_Change_Handler(page_number);
+                } else if (botSelectflag == 1) {
+                    if (page_number == botFrame) {
+                        Page_Change_UI(exit);
+                    }else if(page_number == exit){
+                         Page_Change_UI(botHeating);
                     } else {
-                        page_number++;
-                        Page_Change_Handler(page_number);
+                        Page_Change_UI(page_number++);
                     }
-                }else if(page_number == 28){
+                } else if (page_number == adminList){
                     if(adminSP == 7){
                         adminSP = 0;
                     }else{
@@ -1928,35 +1908,35 @@ void encoder_page_change(u16 state)
             if(admin_plag == 1){
                 admin_page_change(); 
             }else if (settingflag == 1) {
-                if(page_number == 21){
-                    if(counting21 == 1){
+                if(page_number == quickSetting){
+                    if(quickSettingS == 1){
                         select_position++;
                         if(select_position ==3){
                             settingflag = 0;
                             select_position = 0;
                             result = (u16)(TT100 * 100 + TT10 * 10 +TT1);
                             check_Start(VP_SET_TT,result);
-                            QuickSettingTextSet(counting21, 100);
+                            QuickSettingTextSet(quickSettingS, 100);
                         }else{
-                            QuickSettingTextSet(counting21, select_position);
+                            QuickSettingTextSet(quickSettingS, select_position);
                         }
-                    }else if(counting21 == 2){
+                    }else if(quickSettingS == 2){
                         settingflag = 0;
                         select_position = 0;
                         check_Start(VP_SET_P,press);
                         SetTextColorYellow(0x9253);
-                    }else if(counting21 == 3){
+                    }else if(quickSettingS == 3){
                         select_position++;
                         if(select_position ==3){
                             settingflag = 0;
                             select_position = 0;
                             result = (u16)(BT100 * 100 + BT10 * 10 +BT1);
                             check_Start(VP_SET_TB,result);
-                            QuickSettingTextSet(counting21, 100);
+                            QuickSettingTextSet(quickSettingS, 100);
                         }else{
-                            QuickSettingTextSet(counting21, select_position);
+                            QuickSettingTextSet(quickSettingS, select_position);
                         }
-                    }else if(counting21 == 4){
+                    }else if(quickSettingS == 4){
                         select_position++;
                         if(select_position ==2){
                             settingflag = 0;
@@ -1968,63 +1948,54 @@ void encoder_page_change(u16 state)
                             check_Start(VP_SET_H,result);
                             write_dgus_vp(VP_TEST1, (u8*)&result, 1);
                             write_dgus_vp(VP_TEST2, (u8*)&result, 1);
-                            QuickSettingTextSet(counting21, 100);
+                            QuickSettingTextSet(quickSettingS, 100);
                         }else{
-                            QuickSettingTextSet(counting21, select_position);
+                            QuickSettingTextSet(quickSettingS, select_position);
                         }
                     }
                 }else{
                     select_position++;
                     select_num(page_number, select_position);
-                    if(page_number == 13 && select_position == 4){
+                    if(page_number == topHeatingS && select_position == 4){
                         settingflag     = 0;
                         select_position = 0;
-                        page_number = 6;
                         result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
                         check_Start(VP_SET_TT,result);
-                        Page_Change_Handler(page_number);
-                    }else if(page_number == 14 && select_position == 3){
+                        Page_Change_UI(topHeating);
+                    }else if(page_number == topCoolingS && select_position == 3){
                         settingflag     = 0;
                         select_position = 0;
-                        page_number = 7;
                         result = (u16)(TC10 * 10 + TC1);
                         check_Start(VP_SET_CHTT,result);
-                        Page_Change_Handler(page_number);
-                    }else if(page_number == 16 && select_position == 4){
+                        Page_Change_UI(topCooling);
+                    }else if(page_number == topFrameS && select_position == 4){
                         settingflag     = 0;
                         select_position = 0;
-                        page_number = 10;
                         result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
                         check_Start(VP_SET_TB,result);
-                        Page_Change_Handler(page_number);
-                    }else if(page_number == 17 && select_position == 3){
+                        Page_Change_UI(topFrame);
+                    }else if(page_number == botHeatingS && select_position == 3){
                         settingflag     = 0;
                         select_position = 0;
-                        page_number = 11;
                         result = (u16)(BC10 * 10 + BC1);
                         check_Start(VP_SET_CHTB,result);
-                        Page_Change_Handler(page_number);
-                    }else if(page_number == 19 && select_position == 3){
+                        Page_Change_UI(botHeating);
+                    }else if(page_number == botCoolingS && select_position == 3){
                         settingflag     = 0;
                         select_position = 0;
-                        page_number     = 3;
-                        Page_Change_Handler(page_number);
                         result = (u16)(min * 60 + second);
                         check_Start(VP_SET_H,result);
-                         write_dgus_vp(VP_TEST1, (u8*)&result, 1);
-                            write_dgus_vp(VP_TEST2, (u8*)&result, 1);
-                    }else if(page_number == 20 && select_position == 2){
+                        Page_Change_UI(botCooling);
+                    }else if(page_number == botFrameS && select_position == 2){
                         settingflag     = 0;
                         select_position = 0;
-                        page_number     = 4;
-                        Page_Change_Handler(page_number);
                         check_Start(VP_SET_P,press);
+                        Page_Change_UI(botFrame);
                     }else break;
                 }
             } else {
-                switch (page_number) {
-                    case 0: {
-                        read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
+                if(page_number == main1){
+                      read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
                         TT100 = result / 100;
                         TT10   = (result / 10) % 10;
                         TT1     = result % 10;
@@ -2053,206 +2024,124 @@ void encoder_page_change(u16 state)
                         write_dgus_vp(0x2930, (u8*)&press,    2);
 
                         result = 0;
-                        counting21 = 1;
-                        Page21Functioning(counting21);
+                        quickSettingS = 1;
+                        Page21Functioning(quickSettingS);
 
                         page_number = 21;
                         Page_Change_Handler(page_number);
-                        page21flag = 1;
-                    } break;
-
-                    case 1: {
-                        page6flag   = 1;
-                        page_number = 6;
-                        Page_Change_Handler(page_number);
-                    } break;
-
-                    case 2: {
-                        page10flag  = 1;
-                        page_number = 10;
-                        Page_Change_Handler(page_number);
-                    } break;
-
-                    case 3: {
-                        settingflag = 1;
-                        page_number = 19;
-                        read_dgus_vp(VP_SET_H, (u8*)&result,    1);
-                        min = result / 60;
-                        second = result % 60;
-                        write_dgus_vp(0x2850, (u8*)&min,    1);
-                        write_dgus_vp(0x2860, (u8*)&second, 1);
-                        Page_Change_Handler(page_number);
-                        SetTextColorBlue(0x9193);
-                        SetTextColorBlack(0x9203);
-                        ChangeImage(0x3970, 0);
-                    } break;
-
-                    case 4: {
-                        settingflag = 1;
-                        read_dgus_vp(VP_SET_P, (u8*)&press, 1);
-                        write_dgus_vp(0x2920, (u8*)&press, 1);
-                        SetTextColorBlue(0x9213);
-                        ChangeImage(0x3980, 0);
-                        Page_Change_UI(20);
-                    } break;
-
-                    case 5: {
-                        // if(f_ready==1){
-                        //     page_number = 23;
-                        //     Page_Change_Handler(page_number);
-                        // }else if(f_start == 1){
-                        //     page_number = 24;
-                        //     Page_Change_Handler(page_number);
-                        // }else if(f_cooling==1){
-                        //     page_number = 25;
-                        //     Page_Change_Handler(page_number);
-                        // }else{
-                        //     page_number = 23;
-                        //     Page_Change_Handler(page_number);
-                        //     SetTextColorWhite(0x9273);
-                        // }
-                        // if(deleay_flag == 0){
-                        //     read_dgus_vp(VP_SET_H, (u8*)&result, 2);
-                        //     min = result / 60;
-                        //     second = result % 60;
-                        //     write_dgus_vp(0x2850, (u8*)&min,    1);
-                        //     write_dgus_vp(0x2860, (u8*)&second, 1);
-                        // } 
-                        Page_Change_UI(28);
-                        admin_plag = 1;
-                        admin_text_change();
-                    } break;
-
-                    case 6: {
-                        settingflag  = 1;
-                        read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
-                        TT100 = result / 100;
-                        TT10   = (result / 10) % 10;
-                        TT1    = result % 10;
-                        write_dgus_vp(0x2000, (u8*)&TT100, 1);
-                        write_dgus_vp(0x2010, (u8*)&TT10,     1);
-                        write_dgus_vp(0x2020, (u8*)&TT1,     1);
-                        select_num(page_number, 0);
-                        ChangeImage(0x3910, 0);
-                        Page_Change_UI(13);
-                    } break;
-
-                    case 7: {
-                        settingflag  = 1;
-                        read_dgus_vp(VP_SET_CHTT, (u8*)&result, 1);
-                        TC10   = (result / 10) % 10;
-                        TC1     = result % 10;
-                        write_dgus_vp(0x2110, (u8*)&TC10,     1);
-                        write_dgus_vp(0x2120, (u8*)&TC1,     1);
-                        select_num(page_number, 0);
-                        ChangeImage(0x3920, 0);
-                        Page_Change_UI(14);
-                    } break;
-
-                    case 8: {
-                        settingflag  = 1;
-                        hundred_velue = hundreds[2];
-                        ten_velue     = tens[2];
-                        one_velue     = ones[2];
-                        write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
-                        write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
-                        write_dgus_vp(0x2220, (u8*)&one_velue,     1);
-                        select_num(page_number, 0);
-                        ChangeImage(0x3930, 0);
-                        Page_Change_UI(15);
-                    } break;
-
-                    case 9: {
-                        if (page6flag == 1) {
-                            page6flag   = 0;
-                           Page_Change_UI(1);
-                        } else {
-                            page10flag  = 0;
-                            Page_Change_UI(2);
+                        quickSettingflag = 1;
+                }else if(page_number == main2){
+                    topSelectflag   = 1;
+                    Page_Change_UI(topHeating);
+                }else if(page_number == main3){
+                    botSelectflag = 1;
+                    Page_Change_UI(botHeating);
+                }else if(page_number == main4){
+                    settingflag = 1;
+                    read_dgus_vp(VP_SET_H, (u8*)&result,    1);
+                    min = result / 60;
+                    second = result % 60;
+                    write_dgus_vp(0x2850, (u8*)&min,    1);
+                    write_dgus_vp(0x2860, (u8*)&second, 1);
+                    Page_Change_Handler(page_number);
+                    SetTextColorBlue(0x9193);
+                    SetTextColorBlack(0x9203);
+                    ChangeImage(0x3970, 0);
+                    Page_Change_UI(delayS);
+                }else if(page_number == main5){
+                    settingflag = 1;
+                    read_dgus_vp(VP_SET_P, (u8*)&press, 1);
+                    write_dgus_vp(0x2920, (u8*)&press, 1);
+                    SetTextColorBlue(0x9213);
+                    ChangeImage(0x3980, 0);
+                    Page_Change_UI(pressureS);
+                }else if(page_number == main6){
+                    quickSettingflag = 1;
+                     if(f_ready==1){
+                        Page_Change_UI(workPageN);
+                        }else if(f_start == 1){
+                            Page_Change_UI(workPageH);
+                        }else if(f_cooling==1){
+                            Page_Change_UI(workPageC);
+                        }else{
+                            Page_Change_UI(workPageN);
                         }
-                    } break;
-
-                    case 10: {
-                        settingflag  = 1;
-                        read_dgus_vp(VP_SET_TB, (u8*)&result, 1);
-                        BT100 = result / 100;
-                        BT10   = (result / 10) % 10;
-                        BT1    = result % 10;
-                        write_dgus_vp(0x2300, (u8*)&BT100, 1);
-                        write_dgus_vp(0x2310, (u8*)&BT10,     1);
-                        write_dgus_vp(0x2320, (u8*)&BT1,     1);
-                        select_num(page_number, 0);
-                        ChangeImage(0x2940, 0);
-                        Page_Change_UI(16);
-                    } break;
-
-                    case 11: {
-                        settingflag  = 1;
-                        read_dgus_vp(VP_SET_CHTB, (u8*)&result, 1);
-                        BC10    = result / 10;
-                        BC1     = result % 10;
-                        write_dgus_vp(0x2410, (u8*)&BC10,     1);
-                        write_dgus_vp(0x2420, (u8*)&BC1,     1);
-                        select_num(page_number, 0);
-                        ChangeImage(0x3950, 0);
-                        Page_Change_UI(17);
-                    } break;
-
-                    case 12: {
-                        settingflag  = 1;
-                        Page_Change_UI(18);
-                        hundred_velue = hundreds[5];
-                        ten_velue     = tens[5];
-                        one_velue     = ones[5];
-                        write_dgus_vp(0x2500, (u8*)&hundred_velue, 1);
-                        write_dgus_vp(0x2510, (u8*)&ten_velue,     1);
-                        write_dgus_vp(0x2520, (u8*)&one_velue,     1);
-                        select_num(page_number, 0);
-                        ChangeImage(0x3960, 0);
-                    } break;
-
-                    case 21 : {
-                        if(counting21!=0){
-                            settingflag = 1;
-                            QuickSettingTextSet(counting21,0);
-                            if(counting21 == 1){
-                                 read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
-                                 TT100 = result / 100;
-                                 TT10   = (result / 10) % 10;
-                                 TT1     = result % 10;
-                            }else if(counting21 ==3){
-                                read_dgus_vp(VP_SET_TB, (u8*)&result, 1);
-                                 BT100 = result / 100;
-                                 BT10   = (result / 10) % 10;
-                                 BT1     = result % 10;
-                            }
-                        }
-                    }break;
-
-                    case 22:{
-                        Page_Change_UI(5);
-                    }break;
-
-                    case 23:{
-                        // page_number = 24;
-                        // Page_Change_Handler(page_number);
-                        // read_dgus_vp(VP_SET_H, (u8*)&timer, 1);
-                        // ShowMMSS2(timer);
-                        Page_Change_UI(5);
-                    }break;
-                    // case 24:{
-                    //     SecCnt_Start();
-                    //     //  page_number = 25;
-                    //     // Page_Change_Handler(page_number);
-                    // }break;
-                    // case 25:{
-                    //      page_number = 5;
-                    //     Page_Change_Handler(page_number);
-                    // }break;
-                    case 27:{
-                        Page_Change_UI(0);
-                    }break;
-
+                        if(deleay_flag == 0){
+                            read_dgus_vp(VP_SET_H, (u8*)&result, 2);
+                            min = result / 60;
+                            second = result % 60;
+                            write_dgus_vp(0x2850, (u8*)&min,    1);
+                            write_dgus_vp(0x2860, (u8*)&second, 1);
+                        } 
+                }else if(page_number == main7){
+                    Page_Change_UI(adminList);
+                    admin_plag = 1;
+                    admin_text_change();
+                }else if(page_number == topHeating){
+                    settingflag  = 1;
+                    hundred_velue = hundreds[2];
+                    ten_velue     = tens[2];
+                    one_velue     = ones[2];
+                    write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
+                    write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
+                    write_dgus_vp(0x2220, (u8*)&one_velue,     1);
+                    select_num(page_number, 0);
+                    ChangeImage(0x3930, 0);
+                    Page_Change_UI(topHeatingS);
+                }else if(page_number == topCooling){
+                    settingflag  = 1;
+                    hundred_velue = hundreds[2];
+                    ten_velue     = tens[2];
+                    one_velue     = ones[2];
+                    write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
+                    write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
+                    write_dgus_vp(0x2220, (u8*)&one_velue,     1);
+                    select_num(page_number, 0);
+                    ChangeImage(0x3930, 0);
+                    Page_Change_UI(topFrameS);
+                }else if(page_number == botHeating){
+                    settingflag  = 1;
+                    hundred_velue = hundreds[2];
+                    ten_velue     = tens[2];
+                    one_velue     = ones[2];
+                    write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
+                    write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
+                    write_dgus_vp(0x2220, (u8*)&one_velue,     1);
+                    select_num(page_number, 0);
+                    ChangeImage(0x3930, 0);
+                    Page_Change_UI(botHeatingS);
+                }else if(page_number == botCooling){
+                    settingflag  = 1;
+                    hundred_velue = hundreds[2];
+                    ten_velue     = tens[2];
+                    one_velue     = ones[2];
+                    write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
+                    write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
+                    write_dgus_vp(0x2220, (u8*)&one_velue,     1);
+                    select_num(page_number, 0);
+                    ChangeImage(0x3930, 0);
+                    Page_Change_UI(botCoolingS);
+                }else if(page_number == botFrame){
+                    settingflag  = 1;
+                    hundred_velue = hundreds[2];
+                    ten_velue     = tens[2];
+                    one_velue     = ones[2];
+                    write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
+                    write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
+                    write_dgus_vp(0x2220, (u8*)&one_velue,     1);
+                    select_num(page_number, 0);
+                    ChangeImage(0x3930, 0);
+                    Page_Change_UI(botFrameS);
+                }else if(page_number == exit){
+                    if (topSelectflag == 1) {
+                        topSelectflag = 0;
+                        Page_Change_UI(main2);
+                    } else {
+                        botSelectflag  = 0;
+                        Page_Change_UI(main3);
+                    }
+                }else if(page_number == quickSetting){
+                    Page_Change_UI(main6);
                 }
             }
         } break;
@@ -2275,11 +2164,11 @@ void encoder_page_change(u16 state)
                 Page_Change_UI(28);
             }else if (page_number == 21) {
                 if(settingflag == 0){
-                page21flag   = 0; 
+                quickSettingflag   = 0; 
                  settingflag = 0; 
-                 counting21 = 0; 
+                 quickSettingS = 0; 
                  Page_Change_UI(0);
-                 Page21InIt();
+                 quickSettingInIt();
                 }
             }
             ui_poll_enable = 0;

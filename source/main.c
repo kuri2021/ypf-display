@@ -28,7 +28,7 @@ static u16 system_ready = 0;
 void main()
 {
     u16 state;
-    u8 page_number = 26;
+    u8 page_number = 0;
     u8 did_first_page = 0;  
     u16 test1 = 10;
     u16 test2 = 3567;
@@ -54,7 +54,7 @@ void main()
         Pro8283Deal();
       if (!system_ready && GetTimeOutFlag(TMR_7)) {
         system_ready = 1;
-         page_number = 0;
+         page_number = 1;
         Page_Change_Handler(page_number); // �ϵ���ʾ����
     }
      if (!system_ready) continue;  // 준비될 때까지 아래 실행 안함

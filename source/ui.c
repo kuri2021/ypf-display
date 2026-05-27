@@ -19,6 +19,72 @@ static void SetTextColorYellow(u16 sp_addr);
 static void SetTextColorGreen(u16 sp_addr);
 static void ChangeImage(u16 vp_addr, u16 index);
 
+
+#define Q_TOP_H_S 0X1000 #define Q_TOP_H_V 0X2000 
+#define Q_TOP_T_S 0X1010 #define Q_TOP_T_V 0X2010
+// #define Q_TOP_O_S 0X1020 #define Q_TOP_O_V 0X2020
+#define Q_TOP_O_S 0X1030 #define Q_TOP_O_V 0X2030
+
+// #define Q_D_S 0X1040 #define Q_D_V 0X2040
+#define Q_P_S 0X1050 #define Q_P_V 0X2050
+
+#define Q_BOT_H_S 0X1060 #define Q_BOT_H_V 0X2060
+#define Q_BOT_T_S 0X1070 #define Q_BOT_T_V 0X2070
+#define Q_BOT_O_S 0X1080 #define Q_BOT_O_V 0X2080
+
+#define Q_D_TEXT_S 0X1090 #define Q_D_TEXT_V 0X2090
+#define Q_D_M_S 0X1100 #define Q_D_S_V 0X2100
+#define Q_D_DIVIDE_S 0X1110 #define Q_D_DIVIDE_V 0X2110
+#define Q_D_S_S 0X1120 #define Q_D_S_V 0X2120
+
+#define Q_TOP_H_S 0X1130 #define Q_TOP_H_V 0X2130
+#define Q_TOP_H_S 0X1140 #define Q_TOP_H_V 0X2140
+#define Q_TOP_H_S 0X1150 #define Q_TOP_H_V 0X2150
+#define Q_TOP_H_S 0X1160 #define Q_TOP_H_V 0X2160
+#define Q_TOP_H_S 0X1170 #define Q_TOP_H_V 0X2170
+#define Q_TOP_H_S 0X1180 #define Q_TOP_H_V 0X2180
+#define Q_TOP_H_S 0X1190 #define Q_TOP_H_V 0X2190
+#define Q_TOP_H_S 0X1200 #define Q_TOP_H_V 0X2200
+#define Q_TOP_H_S 0X1210 #define Q_TOP_H_V 0X2210
+#define Q_TOP_H_S 0X1220 #define Q_TOP_H_V 0X2220
+#define Q_TOP_H_S 0X1230 #define Q_TOP_H_V 0X2230
+#define Q_TOP_H_S 0X1240 #define Q_TOP_H_V 0X2240
+#define Q_TOP_H_S 0X1250 #define Q_TOP_H_V 0X2250
+#define Q_TOP_H_S 0X1260 #define Q_TOP_H_V 0X2260
+#define Q_TOP_H_S 0X1270 #define Q_TOP_H_V 0X2270
+#define Q_TOP_H_S 0X1280 #define Q_TOP_H_V 0X2280
+#define Q_TOP_H_S 0X1290 #define Q_TOP_H_V 0X2290
+#define Q_TOP_H_S 0X1300 #define Q_TOP_H_V 0X2300 
+#define Q_TOP_T_S 0X1310 #define Q_TOP_T_V 0X2310
+#define Q_TOP_H_S 0X1320 #define Q_TOP_H_V 0X2320
+#define Q_TOP_H_S 0X1330 #define Q_TOP_H_V 0X2330
+#define Q_TOP_H_S 0X1340 #define Q_TOP_H_V 0X2340
+#define Q_TOP_H_S 0X1350 #define Q_TOP_H_V 0X2350
+#define Q_TOP_H_S 0X1360 #define Q_TOP_H_V 0X2360
+#define Q_TOP_H_S 0X1370 #define Q_TOP_H_V 0X2370
+#define Q_TOP_H_S 0X1380 #define Q_TOP_H_V 0X2380
+#define Q_TOP_H_S 0X1390 #define Q_TOP_H_V 0X2390
+#define Q_TOP_H_S 0X1400 #define Q_TOP_H_V 0X2400
+#define Q_TOP_H_S 0X1410 #define Q_TOP_H_V 0X2410
+#define Q_TOP_H_S 0X1420 #define Q_TOP_H_V 0X2420
+#define Q_TOP_H_S 0X1430 #define Q_TOP_H_V 0X2430
+#define Q_TOP_H_S 0X1440 #define Q_TOP_H_V 0X2440
+#define Q_TOP_H_S 0X1450 #define Q_TOP_H_V 0X2450
+#define Q_TOP_H_S 0X1460 #define Q_TOP_H_V 0X2460
+#define Q_TOP_H_S 0X1470 #define Q_TOP_H_V 0X2470
+#define Q_TOP_H_S 0X1480 #define Q_TOP_H_V 0X2480
+#define Q_TOP_H_S 0X1490 #define Q_TOP_H_V 0X2490
+#define Q_TOP_H_S 0X1500 #define Q_TOP_H_V 0X2500
+#define Q_TOP_H_S 0X1510 #define Q_TOP_H_V 0X2510
+#define Q_TOP_H_S 0X1520 #define Q_TOP_H_V 0X2520
+#define Q_TOP_H_S 0X1530 #define Q_TOP_H_V 0X2530
+#define Q_TOP_H_S 0X1540 #define Q_TOP_H_V 0X2540
+#define Q_TOP_H_S 0X1550 #define Q_TOP_H_V 0X2550
+#define Q_TOP_H_S 0X1560 #define Q_TOP_H_V 0X2560
+#define Q_TOP_H_S 0X1570 #define Q_TOP_H_V 0X2570
+#define Q_TOP_H_S 0X1580 #define Q_TOP_H_V 0X2580
+#define Q_TOP_H_S 0X1590 #define Q_TOP_H_V 0X2590
+
 #define COL_BLACK 0x0000
 #define COL_WHITE 0xFFFF
 #define COL_RED   0xC044
@@ -144,14 +210,14 @@ static u8 workPageN = 24;
 static u8 workPageH = 25;
 static u8 workPageC = 26;
 static u8 adminList = 27;
-static u8 adminUserSetting = 28;
-static u8 adminIOTest = 29;
-static u8 adminFactoryResetNotice = 30;
-static u8 adminLogError = 31;
-static u8 adminMaintenance = 32;
-static u8 adminLanguage = 33;
-static u8 adminCompany = 34;
-static u8 adminEngineermod = 35;
+// static u8 adminUserSetting = 28;
+// static u8 adminIOTest = 29;
+// static u8 adminFactoryResetNotice = 30;
+// static u8 adminLogError = 31;
+// static u8 adminMaintenance = 32;
+// static u8 adminLanguage = 33;
+// static u8 adminCompany = 34;
+// static u8 adminEngineermod = 35;
 
 void check_Start(u16 addr, u16 velue){
     check_addr = addr;
@@ -215,53 +281,13 @@ void UI_Read500ms_Stop(void){
 }
 
 static u8 ui_poll_enable = 0;
-static u16 timer_keep = 0;
-
-void SettingHundred(u16 addr_h,u16 addr_t, u16 addr_o, u16 result){
-    u16 h = result / 100;
-    u16 t = (result / 10) % 10;
-    u16 o = result % 10;
-
-    write_dgus_vp(addr_h, (u8*)&h, 1);
-    write_dgus_vp(addr_t, (u8*)&t, 1);
-    write_dgus_vp(addr_o, (u8*)&o, 1);
-}
-
-void SettingTime(u16 addr_m,u16 addr_s, u16 time){
-    u16 m = time/60;
-    u16 s = time%60;
-
-    write_dgus_vp(addr_m, (u8*)&m, 1);
-    write_dgus_vp(addr_s, (u8*)&s, 1);
-}
-
-
-
-void Picture1_Temp(u16 n) {
-    u16 x = 0, y = 1;
-
-    write_dgus_vp(0x2900, (u8*)&x, 1);
-    write_dgus_vp(0x3900, (u8*)&y, 1);
-
-    switch (n) {
-        case 0: {
-            write_dgus_vp(0x2900, (u8*)&x, 1);
-            write_dgus_vp(0x3900, (u8*)&y, 1);
-        } break;
-
-        case 1: {
-            write_dgus_vp(0x2901, (u8*)&x, 1);
-            write_dgus_vp(0x3901, (u8*)&y, 1);
-        } break;
-    }
-}
 
 void QuickSettingTextSet(u16 count, u16 select_position){
     switch(count){
         case 1:{
             switch(select_position){
                 case 0:{
-                     SetTextColorYellow(0x9403);
+                    SetTextColorYellow(0x9403);
                     SetTextColorYellow(0x9413);
                     SetTextColorBlue(0x9423);
                 }break;
@@ -1398,9 +1424,12 @@ void encoder_page_change(u16 state)
                     Page21Functioning(quickSettingS);
                 }
             } else {  // 페이지 전환(역방향)
-              if (page_number == main1) {
+                if(page_number > 1 && page_number <=7){
+                    page_number--;
+                    Page_Change_Handler(page_number);
+                }else if (page_number == main1) {
                     page_number = main7;
-                    Page_Change_Handler(page_number--);
+                    Page_Change_Handler(page_number);
                 } else if (topSelectflag == 1) {
                     if (page_number == exit) {
                         Page_Change_UI(topFrame);
@@ -1414,7 +1443,8 @@ void encoder_page_change(u16 state)
                     if (page_number == botHeating) {
                         Page_Change_UI(exit);
                     }else {
-                        Page_Change_UI(page_number--);
+                        page_number--;
+                        Page_Change_UI(page_number);
                     }
                 } else if (page_number == adminList){
                     if(adminSP == 0){
@@ -1423,8 +1453,6 @@ void encoder_page_change(u16 state)
                         adminSP--;
                     }
                     admin_text_change();
-                }else{
-                    Page_Change_Handler(page_number--);
                 }
             }
             enc_busy = 1;
@@ -1872,16 +1900,20 @@ void encoder_page_change(u16 state)
                     Page21Functioning(quickSettingS);
                 }
             } else { // 페이지 전환(정방향)
-            if (page_number == main7) {
+                if(page_number < main7 && page_number >= main1){
+                    page_number++;
+                    Page_Change_Handler(page_number);
+                }else if (page_number == main7) {
                     page_number = main1;
-                    Page_Change_Handler(page_number++);
+                    Page_Change_Handler(page_number);
                 } else if (topSelectflag == 1) {
                     if (page_number == topFrame) {
                          Page_Change_UI(exit);
                     }else if(page_number == exit){
                         Page_Change_UI(topHeating);
                     }else {
-                        Page_Change_UI(page_number++);
+                        page_number++;
+                        Page_Change_UI(page_number);
                     }
                 } else if (botSelectflag == 1) {
                     if (page_number == botFrame) {
@@ -1889,7 +1921,8 @@ void encoder_page_change(u16 state)
                     }else if(page_number == exit){
                          Page_Change_UI(botHeating);
                     } else {
-                        Page_Change_UI(page_number++);
+                        page_number++;
+                        Page_Change_UI(page_number);
                     }
                 } else if (page_number == adminList){
                     if(adminSP == 7){
@@ -1898,8 +1931,6 @@ void encoder_page_change(u16 state)
                         adminSP++;
                     }
                     admin_text_change();
-                }else{
-                    Page_Change_Handler(page_number++);
                 }
             }
             enc_busy = 1;
@@ -1907,9 +1938,7 @@ void encoder_page_change(u16 state)
         } break;
 
         case 3: {
-            if(admin_plag == 1){
-                admin_page_change(); 
-            }else if (settingflag == 1) {
+            if (settingflag == 1) {
                 if(page_number == quickSetting){
                     if(quickSettingS == 1){
                         select_position++;
@@ -1995,46 +2024,49 @@ void encoder_page_change(u16 state)
                         Page_Change_UI(botFrame);
                     }else break;
                 }
-            } else {
-                if(page_number == main1){
-                      read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
+            }else if(admin_plag == 1){
+                admin_page_change(); 
+            }else{
+                 if(page_number == main1){
+                        read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
                         TT100 = result / 100;
                         TT10   = (result / 10) % 10;
                         TT1     = result % 10;
 
-                        write_dgus_vp(0x2800, (u8*)&TT100, 1);
-                        write_dgus_vp(0x2810, (u8*)&TT10,     1);
-                        write_dgus_vp(0x2820, (u8*)&TT1,     1);
+                        write_dgus_vp(0x2000, (u8*)&TT100, 1);
+                        write_dgus_vp(0x2010, (u8*)&TT10,     1);
+                        write_dgus_vp(0x2020, (u8*)&TT1,     1);
 
                         read_dgus_vp(VP_SET_TB, (u8*)&result, 1);
                         BT100 = result / 100;
                         BT10   = (result / 10) % 10;
                         BT1     = result % 10;
 
-                        write_dgus_vp(0x2870, (u8*)&BT100, 1);
-                        write_dgus_vp(0x2880, (u8*)&BT10,     1);
-                        write_dgus_vp(0x2890, (u8*)&BT1 ,     1);
+                        write_dgus_vp(0x2060, (u8*)&BT100, 1);
+                        write_dgus_vp(0x2070, (u8*)&BT10,     1);
+                        write_dgus_vp(0x2080, (u8*)&BT1 ,     1);
 
                         read_dgus_vp(VP_SET_H, (u8*)&result, 2);
                         min = result / 60;
                         second = result % 60;
 
-                        write_dgus_vp(0x2850, (u8*)&min,    2);
-                        write_dgus_vp(0x2860, (u8*)&second ,     2);
+                        write_dgus_vp(0x2110, (u8*)&min,    2);
+                        write_dgus_vp(0x2120, (u8*)&second ,     2);
 
                         read_dgus_vp(VP_SET_P, (u8*)&press, 2);
-                        write_dgus_vp(0x2930, (u8*)&press,    2);
+                        write_dgus_vp(0x2050, (u8*)&press,    2);
 
                         result = 0;
                         quickSettingS = 1;
                         Page21Functioning(quickSettingS);
 
-                        page_number = 21;
+                        page_number = quickSetting;
                         Page_Change_Handler(page_number);
                         quickSettingflag = 1;
                 }else if(page_number == main2){
                     topSelectflag   = 1;
-                    Page_Change_UI(topHeating);
+                    page_number = topHeating;
+                    Page_Change_Handler(page_number);
                 }else if(page_number == main3){
                     botSelectflag = 1;
                     Page_Change_UI(botHeating);
@@ -2076,10 +2108,22 @@ void encoder_page_change(u16 state)
                             write_dgus_vp(0x2860, (u8*)&second, 1);
                         } 
                 }else if(page_number == main7){
-                    Page_Change_UI(adminList);
-                    admin_plag = 1;
+                    page_number = adminList;
+                    Page_Change_Handler(page_number);
                     admin_text_change();
+                    admin_plag = 1;
                 }else if(page_number == topHeating){
+                    settingflag  = 1;
+                    hundred_velue = hundreds[2];
+                    ten_velue     = tens[2];
+                    one_velue     = ones[2];
+                    write_dgus_vp(0x2150, (u8*)&hundred_velue, 1);
+                    write_dgus_vp(0x2160, (u8*)&ten_velue,     1);
+                    write_dgus_vp(0x2170, (u8*)&one_velue,     1);
+                    select_num(page_number, 0);
+                    ChangeImage(0x2180, 0);
+                    Page_Change_UI(topHeatingS);
+                }else if(page_number == topCooling){
                     settingflag  = 1;
                     hundred_velue = hundreds[2];
                     ten_velue     = tens[2];
@@ -2089,8 +2133,8 @@ void encoder_page_change(u16 state)
                     write_dgus_vp(0x2220, (u8*)&one_velue,     1);
                     select_num(page_number, 0);
                     ChangeImage(0x3930, 0);
-                    Page_Change_UI(topHeatingS);
-                }else if(page_number == topCooling){
+                    Page_Change_UI(topCoolingS);
+                }else if(page_number == topFrame){
                     settingflag  = 1;
                     hundred_velue = hundreds[2];
                     ten_velue     = tens[2];
@@ -2142,16 +2186,13 @@ void encoder_page_change(u16 state)
                         botSelectflag  = 0;
                         Page_Change_UI(main3);
                     }
-                }else if(page_number == quickSetting){
+                }else if(page_number == workPageN){
                     Page_Change_UI(main6);
                 }
             }
         } break;
 
-        case 4: {
-            if(page_number == 28){
-                Page_Change_UI(5);
-            }
+        case 4: {7
             if(admin_plag==1){
                 usersetting_plag = 0;
                 usersettingSP = 0;
@@ -2163,13 +2204,14 @@ void encoder_page_change(u16 state)
                 LogErrorSP = 0;
                 Engineer_plag = 0;
                 EngineerSP = 0;
-                Page_Change_UI(28);
-            }else if (page_number == 21) {
+                admin_plag = 0;
+                Page_Change_UI(main7);
+            }else if (page_number == quickSetting) {
                 if(settingflag == 0){
-                quickSettingflag   = 0; 
+                quickSettingflag = 0; 
                  settingflag = 0; 
                  quickSettingS = 0; 
-                 Page_Change_UI(0);
+                 Page_Change_UI(main1);
                  quickSettingInIt();
                 }
             }

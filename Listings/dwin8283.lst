@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 14:16:38 PAGE 1   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 16:23:11 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DWIN8283
@@ -62,7 +62,7 @@ line level    source
                   u16 crctmp;
               
                   for (i=0;i<len;i++)
-C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 14:16:38 PAGE 2   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 16:23:11 PAGE 2   
 
                   {
                       Reg_CRC^=*updata++;
@@ -126,7 +126,7 @@ line level    source
  114   1        // u8 tmp[MAX_BYTE_LEN];
  115   1          u16 tmp16,headtmp,tailtmp;
  116   1      
-C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 14:16:38 PAGE 3   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 16:23:11 PAGE 3   
 
  117   1        EA = 0;
  118   1          headtmp = *pBuf->QueneHead;
@@ -190,7 +190,7 @@ line level    source
  176   5                          #ifdef ENABLE_CRC
                                       *(u16*)&SendTmp[6] = Calculate_CRC16_8283(&SendTmp[3],SendTmp[2]);
                                       SendTmp[2] += 2;
-C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 14:16:38 PAGE 4   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 16:23:11 PAGE 4   
 
                                   #endif
  180   5                              // Uatr_Send_Data(DWIN_UART,tmp[2]+3,tmp);
@@ -254,7 +254,7 @@ line level    source
  238   4                      *pBuf->QueneTail = 0;
  239   4                  }
  240   3          }
-C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 14:16:38 PAGE 5   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 16:23:11 PAGE 5   
 
  241   2        }
  242   1          return NOT_SEND_DATA;
@@ -318,7 +318,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    XDATA SIZE       =    534      15
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
-C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 14:16:38 PAGE 6   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          05/27/2026 16:23:11 PAGE 6   
 
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----

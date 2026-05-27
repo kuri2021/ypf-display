@@ -28,7 +28,6 @@ static u16 system_ready = 0;
 void main()
 {
     u16 state;
-    u8 page_number = 0;
     u8 did_first_page = 0;  
     u16 test1 = 10;
     u16 test2 = 3567;

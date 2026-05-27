@@ -82,7 +82,7 @@ static void ChangeImage(u16 vp_addr, u16 index);
 static u8  g_cnt_active = 0;
 static u16 g_cnt_value  = 0;
 
-static u8 page_number    = 0;
+u8 page_number;
 
 static u8 read500_enable = 0;
 u8 xdata page_set[4] = {0};
@@ -831,12 +831,12 @@ void encoder_page_change(u16 state)
     static u8 select_position = 0; // 타입 보강
     
     static u8 topSelectflag = 0;
-	  static u8 botSelectflag = 0;
+	static u8 botSelectflag = 0;
     static u8 quickSettingflag = 0; 
-	  static u8 quickSettingS = 0;
+	static u8 quickSettingS = 0;
     static u16 hundred_velue = 0; 
     static u16 ten_velue = 0;
-	  static u16 one_velue = 0;
+	static u16 one_velue = 0;
 
 
     static settingflag      = 0;
@@ -1398,10 +1398,9 @@ void encoder_page_change(u16 state)
                     Page21Functioning(quickSettingS);
                 }
             } else {  // 페이지 전환(역방향)
-                if ((page_number > main1)) {
-                    Page_Change_UI(page_number--);
-                } else if (page_number == main1) {
-                    Page_Change_UI(main7);
+              if (page_number == main1) {
+                    page_number = main7;
+                    Page_Change_Handler(page_number--);
                 } else if (topSelectflag == 1) {
                     if (page_number == exit) {
                         Page_Change_UI(topFrame);
@@ -1424,6 +1423,8 @@ void encoder_page_change(u16 state)
                         adminSP--;
                     }
                     admin_text_change();
+                }else{
+                    Page_Change_Handler(page_number--);
                 }
             }
             enc_busy = 1;
@@ -1871,10 +1872,9 @@ void encoder_page_change(u16 state)
                     Page21Functioning(quickSettingS);
                 }
             } else { // 페이지 전환(정방향)
-                if (page_number < main7) {
-                    Page_Change_UI(page_number++);
-                } else if (page_number == main7) {
-                    Page_Change_UI(main1);
+            if (page_number == main7) {
+                    page_number = main1;
+                    Page_Change_Handler(page_number++);
                 } else if (topSelectflag == 1) {
                     if (page_number == topFrame) {
                          Page_Change_UI(exit);
@@ -1898,6 +1898,8 @@ void encoder_page_change(u16 state)
                         adminSP++;
                     }
                     admin_text_change();
+                }else{
+                    Page_Change_Handler(page_number++);
                 }
             }
             enc_busy = 1;

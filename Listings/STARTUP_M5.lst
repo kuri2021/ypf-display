@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  STARTUP_M5                                                           05/19/2026 13:57:34 PAGE     1
+A51 MACRO ASSEMBLER  STARTUP_M5                                                           05/27/2026 14:16:35 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.5.0
@@ -122,7 +122,7 @@ LOC  OBJ            LINE     SOURCE
 
                       57     ;  <q> IBPSTACK: Enable SMALL model reentrant stack
 
-A51 MACRO ASSEMBLER  STARTUP_M5                                                           05/19/2026 13:57:34 PAGE     2
+A51 MACRO ASSEMBLER  STARTUP_M5                                                           05/27/2026 14:16:35 PAGE     2
 
                       58     ;     <i> Stack space for reentrant functions in the SMALL model.
 
@@ -256,7 +256,7 @@ LOC  OBJ            LINE     SOURCE
 
   00A9               123     IP0         DATA    0A9H
 
-A51 MACRO ASSEMBLER  STARTUP_M5                                                           05/19/2026 13:57:34 PAGE     3
+A51 MACRO ASSEMBLER  STARTUP_M5                                                           05/27/2026 14:16:35 PAGE     3
 
   00B9               124     IP1         DATA    0B9H
 
@@ -387,7 +387,7 @@ LOC  OBJ            LINE     SOURCE
 
                      186     IF XDATALEN <> 0
 
-A51 MACRO ASSEMBLER  STARTUP_M5                                                           05/19/2026 13:57:34 PAGE     4
+A51 MACRO ASSEMBLER  STARTUP_M5                                                           05/27/2026 14:16:35 PAGE     4
 
 0030 908000          187                     MOV     DPTR,#XDATASTART
 
@@ -507,7 +507,7 @@ LOC  OBJ            LINE     SOURCE
 
                      245                     END
 
-A51 MACRO ASSEMBLER  STARTUP_M5                                                           05/19/2026 13:57:34 PAGE     5
+A51 MACRO ASSEMBLER  STARTUP_M5                                                           05/27/2026 14:16:35 PAGE     5
 
 SYMBOL TABLE LISTING
 ------ ----- -------

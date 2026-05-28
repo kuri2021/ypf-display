@@ -160,6 +160,8 @@ static void ChangeImage(u16 vp_addr, u16 index);
 static u8  g_cnt_active = 0;
 static u16 g_cnt_value  = 0;
 
+
+
 u8 page_number;
 
 static u8 read500_enable = 0;
@@ -221,27 +223,27 @@ static u8 pressureS = 23;
 static u8 workPageN = 24;
 static u8 workPageH = 25;
 static u8 workPageC = 26;
+static u8 adminList = 27;
+static u8 adminUserSetting = 28;
+static u8 adminIOTest = 29;
+static u8 adminFactoryResetNotice = 30;
+static u8 adminLogError = 31;
+static u8 adminMaintenance = 32;
+static u8 adminLanguage = 33;
+static u8 adminCompany = 34;
+static u8 adminEngineermod = 35;
 
-// static u8 adminList = 27;
-static u8 adminList = 28;
-// static u8 adminIOTest = 29;
-// static u8 adminFactoryResetNotice = 30;
-// static u8 adminLogError = 31;
-// static u8 adminMaintenance = 32;
-// static u8 adminLanguage = 33;
-// static u8 adminCompany = 34;
-// static u8 adminEngineermod = 35;
+static u16 toptempmin = 1;
+static u16 toptempmax = 200;
+static u16 bottempmin = 1;
+static u16 bottempmax = 200;
+static u16 pressmin = 0;
+static u16 pressmax = 20;
+static u16 delaymin = 0;
+static u16 delaymax = 3600;
 
+static u16 language = 0;
 
-// static u8 adminList = 27;
-// static u8 adminUserSetting = 28;
-// static u8 adminIOTest = 29;
-// static u8 adminFactoryResetNotice = 30;
-// static u8 adminLogError = 31;
-// static u8 adminMaintenance = 32;
-// static u8 adminLanguage = 33;
-// static u8 adminCompany = 34;
-// static u8 adminEngineermod = 35;
 
 void check_Start(u16 addr, u16 velue){
     check_addr = addr;
@@ -731,19 +733,23 @@ void Picture1213_Init(void) {
 static u8 adminSP = 0;
 static u8 admin_plag = 0;
 
-static u8 usersetting_plag = 0;
 static u8 usersettingSP = 0;
+static u8 usersettingSelect_plag = 0;
 
-static u8 IOtest_plag = 0;
 static u8 IOtestSP = 0;
+static u8 IOtestSelectSP = 0;
 
-static u8 LogError_plag = 0;
+static u8 factoryReset_plag = 0;
+static u8 factoryResetSP = 0;
+
 static u8 LogErrorSP = 0;
 
-static u8 Language_plag = 0;
+static u8 maintenance_plag = 0;
+
 static u8 LanguageSP = 0;
 
-static u8 Engineer_plag = 0;
+static u8 company_plag = 0;
+
 static u8 EngineerSP = 0;
 
 void admin_text_change(){
@@ -831,43 +837,305 @@ void admin_text_change(){
     }
 }
 
+// void adminUserSettingEdit(){
+//     switch(usersettingSP){
+//         case 0:{
+//             if(usersettingSelectSP == 0){
+//                 SetTextColorWhite(0x5163);
+//                 SetTextColorWhite(0x5173);
+//             }else if(usersettingSelectSP == 1){
+//                 SetTextColorYellow(0x5163);
+//                 SetTextColorWhite(0x5173);
+//             }else if(usersettingSelectSP == 2){
+//                 SetTextColorWhite(0x5163);
+//                 SetTextColorYellow(0x5173);
+//             }
+//         }break;
+//         case 1:{
+//             if(usersettingSelectSP == 0){
+//                 SetTextColorWhite(0x5163);
+//                 SetTextColorWhite(0x5173);
+//             }else if(usersettingSelectSP == 1){
+//                 SetTextColorYellow(0x5163);
+//                 SetTextColorWhite(0x5173);
+//             }else if(usersettingSelectSP == 2){
+//                 SetTextColorWhite(0x5163);
+//                 SetTextColorYellow(0x5173);
+//             }
+//         }break;
+//         case 2:{
+//             if(usersettingSelectSP == 0){
+//                 SetTextColorWhite(0x5163);
+//                 SetTextColorWhite(0x5173);
+//             }else if(usersettingSelectSP == 1){
+//                 SetTextColorYellow(0x5163);
+//                 SetTextColorWhite(0x5173);
+//             }else if(usersettingSelectSP == 2){
+//                 SetTextColorWhite(0x5163);
+//                 SetTextColorYellow(0x5173);
+//             }
+//         }break;
+//         case 3:{
+//               if(usersettingSelectSP == 0){
+//                 SetTextColorWhite(0x5193);
+//                 SetTextColorWhite(0x5203);
+//             }else if(usersettingSelectSP == 1){
+//                 SetTextColorYellow(0x5193);
+//                 SetTextColorWhite(0x5203);
+//             }else if(usersettingSelectSP == 2){
+//                 SetTextColorWhite(0x5193);
+//                 SetTextColorYellow(0x5203);
+//             }
+//         }break;
+//     }
+// }
+
+void adminUserSettingText(u16 state){
+    switch(state){
+        case 1:{
+            if(usersettingSP==0){
+                usersettingSP = 3;
+            }else{
+                usersettingSP--;
+            }
+        }break;
+        case 2:{
+            if(usersettingSP==3){
+                usersettingSP = 0;
+            }else{
+                usersettingSP++;
+            }
+        }break;
+    }
+    switch(usersettingSP){
+        case 0:{
+            SetTextColorYellow(0x5093);
+            SetTextColorWhite(0x5123);
+            SetTextColorWhite(0x5153);
+            SetTextColorWhite(0x5183);
+        }break;
+        case 1:{
+            SetTextColorWhite(0x5093);
+            SetTextColorYellow(0x5123);
+            SetTextColorWhite(0x5153);
+            SetTextColorWhite(0x5183);
+        }break;
+        case 2:{
+            SetTextColorWhite(0x5093);
+            SetTextColorWhite(0x5123);
+            SetTextColorYellow(0x5153);
+            SetTextColorWhite(0x5183);
+        }break;
+        case 3:{
+            SetTextColorWhite(0x5093);
+            SetTextColorWhite(0x5123);
+            SetTextColorWhite(0x5153);
+            SetTextColorYellow(0x5183);
+        }break;
+    }
+}
+
+void adminIoTestText(u16 state){
+    switch(state){
+        case 1:{
+            if(IOtestSP ==0){
+                IOtestSP = 5;
+            }else{
+                IOtestSP--;
+            }
+        }break;
+        case 2:{
+            if(IOtestSP==5){
+                IOtestSP = 0;
+            }else{
+                IOtestSP++;
+            }
+        }break;
+    }
+
+     switch(IOtestSP){
+        case 0:{
+            SetTextColorYellow(0x5213);
+            SetTextColorWhite(0x5243);
+            SetTextColorWhite(0x5273);
+            SetTextColorWhite(0x5303);
+            SetTextColorWhite(0x5343);
+            SetTextColorWhite(0x5373);
+        }break;
+        case 1:{
+            SetTextColorWhite(0x5213);
+            SetTextColorYellow(0x5243);
+            SetTextColorWhite(0x5273);
+            SetTextColorWhite(0x5303);
+            SetTextColorWhite(0x5343);
+            SetTextColorWhite(0x5373);
+        }break;
+        case 2:{
+            SetTextColorWhite(0x5213);
+            SetTextColorWhite(0x5243);
+            SetTextColorYellow(0x5273);
+            SetTextColorWhite(0x5303);
+            SetTextColorWhite(0x5343);
+            SetTextColorWhite(0x5373);
+        }break;
+        case 3:{
+            SetTextColorWhite(0x5213);
+            SetTextColorWhite(0x5243);
+            SetTextColorWhite(0x5273);
+            SetTextColorYellow(0x5303);
+            SetTextColorWhite(0x5343);
+            SetTextColorWhite(0x5373);
+        }break;
+        case 4:{
+            SetTextColorWhite(0x5213);
+            SetTextColorWhite(0x5243);
+            SetTextColorWhite(0x5273);
+            SetTextColorWhite(0x5303);
+            SetTextColorYellow(0x5343);
+            SetTextColorWhite(0x5373);
+        }break;
+        case 5:{
+            SetTextColorWhite(0x5213);
+            SetTextColorWhite(0x5243);
+            SetTextColorWhite(0x5273);
+            SetTextColorWhite(0x5303);
+            SetTextColorWhite(0x5343);
+            SetTextColorYellow(0x5373);
+        }break;
+    }
+}
+
+void adminfactoryResetText(u16 state){
+     switch(state){
+        case 1:{
+            if(factoryResetSP ==0){
+                factoryResetSP = 1;
+            }else{
+                factoryResetSP--;
+            }
+        }break;
+        case 2:{
+            if(factoryResetSP==1){
+                factoryResetSP = 0;
+            }else{
+                factoryResetSP++;
+            }
+        }break;
+    }
+    if(factoryResetSP == 0){
+        SetTextColorYellow(0x5793);
+        SetTextColorWhite(0x5803);
+    }else{
+        SetTextColorWhite(0x5793);
+        SetTextColorYellow(0x5803);
+    }
+}
+
+void adminLogErrorText(u16 state){
+     switch(state){
+        case 1:{
+            if(LogErrorSP  ==0){
+                LogErrorSP  = 1;
+            }else{
+                LogErrorSP --;
+            }
+        }break;
+        case 2:{
+            if(LogErrorSP ==1){
+                LogErrorSP  = 0;
+            }else{
+                LogErrorSP ++;
+            }
+        }break;
+    }
+    if(LogErrorSP  == 0){
+        SetTextColorYellow(0x5673);
+        SetTextColorWhite(0x5683);
+    }else{
+        SetTextColorWhite(0x5673);
+        SetTextColorYellow(0x5683);
+    }
+}
+
+void adminLanguageText(u16 state){
+      switch(state){
+        case 1:{
+            if(LanguageSP  ==0){
+                LanguageSP  = 2;
+            }else{
+                LanguageSP --;
+            }
+        }break;
+        case 2:{
+            if(LanguageSP == 2){
+                LanguageSP  = 0;
+            }else{
+                LanguageSP ++;
+            }
+        }break;
+    }
+    if(LanguageSP  == 0){
+        SetTextColorYellow(0x5553);
+        SetTextColorWhite(0x5563);
+        SetTextColorWhite(0x5573);
+    }else if(LanguageSP  == 1){
+        SetTextColorWhite(0x5553);
+        SetTextColorYellow(0x5563);
+        SetTextColorWhite(0x5573);
+    }else if(LanguageSP  == 2){
+        SetTextColorWhite(0x5553);
+        SetTextColorWhite(0x5563);
+        SetTextColorYellow(0x5573);
+    }
+}
+
+
 void admin_page_change(){
     switch(adminSP){
         case 0:{
-            usersetting_plag = 1;
-            Page_Change_UI(29);
+            SetTextColorYellow(0x5093);
+            SetTextColorWhite(0x5123);
+            SetTextColorWhite(0x5153);
+            SetTextColorWhite(0x5183);
+            Page_Change_UI(adminUserSetting);
         }break;
         case 1:{
-            IOtest_plag = 1;
-            Page_Change_UI(30);
+            SetTextColorYellow(0x5213);
+            SetTextColorWhite(0x5243);
+            SetTextColorWhite(0x5273);
+            SetTextColorWhite(0x5303);
+            SetTextColorWhite(0x5343);
+            SetTextColorWhite(0x5373);
+            Page_Change_UI(adminIOTest);
         }break;
-        // case 2:{
-        //     Page_Change_UI(31);
-        // }break;
+        case 2:{
+            SetTextColorYellow(0x5793);
+            SetTextColorWhite(0x5803);
+            Page_Change_UI(adminFactoryResetNotice);
+        }break;
         case 3:{
-            LogError_plag = 1;
-            Page_Change_UI(34);
+            SetTextColorYellow(0x5673);
+            SetTextColorWhite(0x5683);
+            Page_Change_UI(adminLogError);
         }break;
         case 4:{
-            Page_Change_UI(31);
+            Page_Change_UI(adminMaintenance);
         }break;
         case 5:{
-            Language_plag = 1;
-            Page_Change_UI(32);
+            SetTextColorYellow(0x5553);
+            SetTextColorWhite(0x5563);
+            SetTextColorWhite(0x5573);
+            Page_Change_UI(adminLanguage);
         }break;
         case 6:{
-            Page_Change_UI(33);
+            Page_Change_UI(adminCompany);
         }break;
         case 7:{
-            Engineer_plag = 1;
-            Page_Change_UI(35);
+            Page_Change_UI(adminEngineermod);
         }break;
     }
 
 }
-
-
-
 
 void encoder_page_change(u16 state)
 {
@@ -1436,7 +1704,27 @@ void encoder_page_change(u16 state)
                                 
                             }
                         }
+                }else if(admin_plag == 1){
+                if(page_number == adminUserSetting){
+                    
+                }else if(page_number == adminIOTest){
+                    
+                }else if(page_number == adminFactoryResetNotice){
+
+                }else if(page_number == adminLogError){
+
+                }else if(page_number == adminMaintenance){
+
+                }else if(page_number == adminLanguage){
+
+                }else if(page_number == adminCompany){
+
+                }else if(page_number == adminEngineermod){
+
                 }
+                }
+
+                
             } else if (quickSettingflag == 1) { // 세팅 모드가 아닌 텍스트와 페이지 색 변경
                 if (settingflag == 0) {
                     quickSettingInIt();
@@ -1470,13 +1758,32 @@ void encoder_page_change(u16 state)
                         page_number--;
                         Page_Change_UI(page_number);
                     }
-                } else if (page_number == adminList){
+                } else if (admin_plag ==1){
+                if(page_number == adminList){
                     if(adminSP == 0){
                         adminSP = 7;
                     }else{
                         adminSP--;
                     }
                     admin_text_change();
+                }else if(page_number == adminUserSetting){
+                    adminUserSettingText(state);
+                }else if(page_number == adminIOTest){
+                    adminIoTestText(state);
+                }else if(page_number == adminFactoryResetNotice){
+                    adminfactoryResetText(state);
+                }else if(page_number == adminLogError){
+                    adminLogErrorText(state);
+                }else if(page_number == adminMaintenance){
+                    //저장된 값만 보여줌
+                }else if(page_number == adminLanguage){
+                    adminLanguageText(state);
+                }else if(page_number == adminCompany){
+                    // 그냥 회사 소개임
+                }else if(page_number == adminEngineermod){
+                    // 특수 기믹을 넣어야하여 넣지 않음
+                }
+                    
                 }
             }
             enc_busy = 1;
@@ -1912,8 +2219,28 @@ void encoder_page_change(u16 state)
                                 // write_dgus_vp(0x2860, (u8*)&second, 1);
                             }
                         }
+                }else if(admin_plag ==1){
+                if(page_number == adminList){//어드민 메인 리스트
+
+                }else if(page_number == adminUserSetting){
+                    
+                }else if(page_number == adminIOTest){
+                    adminIoTestText(state);
+                }else if(page_number == adminFactoryResetNotice){
+                    adminfactoryResetText(state);
+                }else if(page_number == adminLogError){
+                    adminLogErrorText(state);
+                }else if(page_number == adminMaintenance){
+                    //저장된 값만 보여줌
+                }else if(page_number == adminLanguage){
+                    adminLanguageText(state);
+                }else if(page_number == adminCompany){
+                    // 그냥 회사 소개임
+                }else if(page_number == adminEngineermod){
+                    // 특수 기믹을 넣어야하여 넣지 않음
                 }
-            } else if (quickSettingflag == 1) { // 21페이지 작동 (정방향)
+            }
+            }else if (quickSettingflag == 1) { // 21페이지 작동 (정방향)
                 if (page_number == quickSetting) {
                     quickSettingInIt();
                     if (quickSettingS == 4) {  // 21페이지 카운팅 증가
@@ -1948,14 +2275,32 @@ void encoder_page_change(u16 state)
                         page_number++;
                         Page_Change_UI(page_number);
                     }
-                } else if (page_number == adminList){
+                } else if (admin_plag ==1){
+                if(page_number == adminList){
                     if(adminSP == 7){
                         adminSP = 0;
                     }else{
                         adminSP++;
                     }
                     admin_text_change();
+                }else if(page_number == adminUserSetting){
+                    adminUserSettingText(state);
+                }else if(page_number == adminIOTest){
+                    adminIoTestText(state);
+                }else if(page_number == adminFactoryResetNotice){
+                    adminfactoryResetText(state);
+                }else if(page_number == adminLogError){
+                    adminLogErrorText(state);
+                }else if(page_number == adminMaintenance){
+                    //저장된 값만 보여줌
+                }else if(page_number == adminLanguage){
+                    adminLanguageText(state);
+                }else if(page_number == adminCompany){
+                    // 그냥 회사 소개임
+                }else if(page_number == adminEngineermod){
+                    // 특수 기믹을 넣어야하여 넣지 않음
                 }
+            }
             }
             enc_busy = 1;
             StartTimer(TMR_ENCODER, ENC_DELAY_MS);
@@ -2049,7 +2394,25 @@ void encoder_page_change(u16 state)
                     }else break;
                 }
             }else if(admin_plag == 1){
-                admin_page_change(); 
+                if(page_number == adminList){
+                    admin_page_change();
+                }else if(page_number == adminUserSetting){
+                    settingflag = 1;
+                }else if(page_number == adminIOTest){
+                    settingflag = 1;
+                }else if(page_number == adminFactoryResetNotice){
+                    settingflag = 1;
+                }else if(page_number == adminLogError){
+                    settingflag = 1;
+                }else if(page_number == adminMaintenance){
+
+                }else if(page_number == adminLanguage){
+                    settingflag = 1;
+                }else if(page_number == adminCompany){
+
+                }else if(page_number == adminEngineermod){
+                    settingflag = 1;
+                }
             }else{
                  if(page_number == main1){
                         read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
@@ -2134,7 +2497,6 @@ void encoder_page_change(u16 state)
                 }else if(page_number == main7){
                     page_number = adminList;
                     admin_plag = 1;
-                    // page_number = 28;
                     Page_Change_Handler(page_number);
                     admin_text_change();
                 }else if(page_number == topHeating){
@@ -2219,18 +2581,17 @@ void encoder_page_change(u16 state)
 
         case 4: {
             if(admin_plag==1){
-                usersetting_plag = 0;
                 usersettingSP = 0;
-                IOtest_plag = 0;
                 IOtestSP = 0;
-                Language_plag = 0;
                 LanguageSP = 0;
-                LogError_plag = 0;
                 LogErrorSP = 0;
-                Engineer_plag = 0;
                 EngineerSP = 0;
-                admin_plag = 0;
-                Page_Change_UI(main7);
+                if(page_number == adminList){
+                    admin_plag = 0;
+                    Page_Change_UI(main7);
+                }else{
+                    Page_Change_UI(adminList);
+                }
             }else if (page_number == quickSetting) {
                 if(settingflag == 0){
                 quickSettingflag = 0; 

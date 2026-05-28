@@ -20,70 +20,82 @@ static void SetTextColorGreen(u16 sp_addr);
 static void ChangeImage(u16 vp_addr, u16 index);
 
 
-#define Q_TOP_H_S 0X1000 #define Q_TOP_H_V 0X2000 
-#define Q_TOP_T_S 0X1010 #define Q_TOP_T_V 0X2010
-// #define Q_TOP_O_S 0X1020 #define Q_TOP_O_V 0X2020
-#define Q_TOP_O_S 0X1030 #define Q_TOP_O_V 0X2030
+#define Q_TOP_H_S 0X1000 
+#define Q_TOP_H_V 0X2000 
+#define Q_TOP_T_S 0X1010 
+#define Q_TOP_T_V 0X2010
+// #define Q_TOP_O_S 0X1020 
+// #define Q_TOP_O_V 0X2020
+#define Q_TOP_O_S 0X1030 
+#define Q_TOP_O_V 0X2030
 
 // #define Q_D_S 0X1040 #define Q_D_V 0X2040
-#define Q_P_S 0X1050 #define Q_P_V 0X2050
+#define Q_P_S 0X1050 
+#define Q_P_V 0X2050
 
-#define Q_BOT_H_S 0X1060 #define Q_BOT_H_V 0X2060
-#define Q_BOT_T_S 0X1070 #define Q_BOT_T_V 0X2070
-#define Q_BOT_O_S 0X1080 #define Q_BOT_O_V 0X2080
+#define Q_BOT_H_S 0X1060 
+#define Q_BOT_H_V 0X2060
+#define Q_BOT_T_S 0X1070 
+#define Q_BOT_T_V 0X2070
+#define Q_BOT_O_S 0X1080 
+#define Q_BOT_O_V 0X2080
 
-#define Q_D_TEXT_S 0X1090 #define Q_D_TEXT_V 0X2090
-#define Q_D_M_S 0X1100 #define Q_D_S_V 0X2100
-#define Q_D_DIVIDE_S 0X1110 #define Q_D_DIVIDE_V 0X2110
-#define Q_D_S_S 0X1120 #define Q_D_S_V 0X2120
+#define Q_D_TEXT_S 0X1090 
+#define Q_D_TEXT_V 0X2090
+#define Q_D_M_S 0X1100 
+#define Q_D_S_V 0X2100
+#define Q_D_DIVIDE_S 0X1110 
+#define Q_D_DIVIDE_V 0X2110
+#define Q_D_S_S 0X1120 
+#define Q_D_S_V 0X2120
 
-#define Q_TOP_H_S 0X1130 #define Q_TOP_H_V 0X2130
-#define Q_TOP_H_S 0X1140 #define Q_TOP_H_V 0X2140
-#define Q_TOP_H_S 0X1150 #define Q_TOP_H_V 0X2150
-#define Q_TOP_H_S 0X1160 #define Q_TOP_H_V 0X2160
-#define Q_TOP_H_S 0X1170 #define Q_TOP_H_V 0X2170
-#define Q_TOP_H_S 0X1180 #define Q_TOP_H_V 0X2180
-#define Q_TOP_H_S 0X1190 #define Q_TOP_H_V 0X2190
-#define Q_TOP_H_S 0X1200 #define Q_TOP_H_V 0X2200
-#define Q_TOP_H_S 0X1210 #define Q_TOP_H_V 0X2210
-#define Q_TOP_H_S 0X1220 #define Q_TOP_H_V 0X2220
-#define Q_TOP_H_S 0X1230 #define Q_TOP_H_V 0X2230
-#define Q_TOP_H_S 0X1240 #define Q_TOP_H_V 0X2240
-#define Q_TOP_H_S 0X1250 #define Q_TOP_H_V 0X2250
-#define Q_TOP_H_S 0X1260 #define Q_TOP_H_V 0X2260
-#define Q_TOP_H_S 0X1270 #define Q_TOP_H_V 0X2270
-#define Q_TOP_H_S 0X1280 #define Q_TOP_H_V 0X2280
-#define Q_TOP_H_S 0X1290 #define Q_TOP_H_V 0X2290
-#define Q_TOP_H_S 0X1300 #define Q_TOP_H_V 0X2300 
-#define Q_TOP_T_S 0X1310 #define Q_TOP_T_V 0X2310
-#define Q_TOP_H_S 0X1320 #define Q_TOP_H_V 0X2320
-#define Q_TOP_H_S 0X1330 #define Q_TOP_H_V 0X2330
-#define Q_TOP_H_S 0X1340 #define Q_TOP_H_V 0X2340
-#define Q_TOP_H_S 0X1350 #define Q_TOP_H_V 0X2350
-#define Q_TOP_H_S 0X1360 #define Q_TOP_H_V 0X2360
-#define Q_TOP_H_S 0X1370 #define Q_TOP_H_V 0X2370
-#define Q_TOP_H_S 0X1380 #define Q_TOP_H_V 0X2380
-#define Q_TOP_H_S 0X1390 #define Q_TOP_H_V 0X2390
-#define Q_TOP_H_S 0X1400 #define Q_TOP_H_V 0X2400
-#define Q_TOP_H_S 0X1410 #define Q_TOP_H_V 0X2410
-#define Q_TOP_H_S 0X1420 #define Q_TOP_H_V 0X2420
-#define Q_TOP_H_S 0X1430 #define Q_TOP_H_V 0X2430
-#define Q_TOP_H_S 0X1440 #define Q_TOP_H_V 0X2440
-#define Q_TOP_H_S 0X1450 #define Q_TOP_H_V 0X2450
-#define Q_TOP_H_S 0X1460 #define Q_TOP_H_V 0X2460
-#define Q_TOP_H_S 0X1470 #define Q_TOP_H_V 0X2470
-#define Q_TOP_H_S 0X1480 #define Q_TOP_H_V 0X2480
-#define Q_TOP_H_S 0X1490 #define Q_TOP_H_V 0X2490
-#define Q_TOP_H_S 0X1500 #define Q_TOP_H_V 0X2500
-#define Q_TOP_H_S 0X1510 #define Q_TOP_H_V 0X2510
-#define Q_TOP_H_S 0X1520 #define Q_TOP_H_V 0X2520
-#define Q_TOP_H_S 0X1530 #define Q_TOP_H_V 0X2530
-#define Q_TOP_H_S 0X1540 #define Q_TOP_H_V 0X2540
-#define Q_TOP_H_S 0X1550 #define Q_TOP_H_V 0X2550
-#define Q_TOP_H_S 0X1560 #define Q_TOP_H_V 0X2560
-#define Q_TOP_H_S 0X1570 #define Q_TOP_H_V 0X2570
-#define Q_TOP_H_S 0X1580 #define Q_TOP_H_V 0X2580
-#define Q_TOP_H_S 0X1590 #define Q_TOP_H_V 0X2590
+// #define Q_TOP_H_S 0X1130 #define Q_TOP_H_V 0X2130
+// #define Q_TOP_H_S 0X1140 #define Q_TOP_H_V 0X2140
+// #define Q_TOP_H_S 0X1150 #define Q_TOP_H_V 0X2150
+// #define Q_TOP_H_S 0X1160 #define Q_TOP_H_V 0X2160
+// #define Q_TOP_H_S 0X1170 #define Q_TOP_H_V 0X2170
+// #define Q_TOP_H_S 0X1180 #define Q_TOP_H_V 0X2180
+// #define Q_TOP_H_S 0X1190 #define Q_TOP_H_V 0X2190
+// #define Q_TOP_H_S 0X1200 #define Q_TOP_H_V 0X2200
+// #define Q_TOP_H_S 0X1210 #define Q_TOP_H_V 0X2210
+// #define Q_TOP_H_S 0X1220 #define Q_TOP_H_V 0X2220
+// #define Q_TOP_H_S 0X1230 #define Q_TOP_H_V 0X2230
+// #define Q_TOP_H_S 0X1240 #define Q_TOP_H_V 0X2240
+// #define Q_TOP_H_S 0X1250 #define Q_TOP_H_V 0X2250
+// #define Q_TOP_H_S 0X1260 #define Q_TOP_H_V 0X2260
+// #define Q_TOP_H_S 0X1270 #define Q_TOP_H_V 0X2270
+// #define Q_TOP_H_S 0X1280 #define Q_TOP_H_V 0X2280
+// #define Q_TOP_H_S 0X1290 #define Q_TOP_H_V 0X2290
+// #define Q_TOP_H_S 0X1300 #define Q_TOP_H_V 0X2300 
+// #define Q_TOP_T_S 0X1310 #define Q_TOP_T_V 0X2310
+// #define Q_TOP_H_S 0X1320 #define Q_TOP_H_V 0X2320
+// #define Q_TOP_H_S 0X1330 #define Q_TOP_H_V 0X2330
+// #define Q_TOP_H_S 0X1340 #define Q_TOP_H_V 0X2340
+// #define Q_TOP_H_S 0X1350 #define Q_TOP_H_V 0X2350
+// #define Q_TOP_H_S 0X1360 #define Q_TOP_H_V 0X2360
+// #define Q_TOP_H_S 0X1370 #define Q_TOP_H_V 0X2370
+// #define Q_TOP_H_S 0X1380 #define Q_TOP_H_V 0X2380
+// #define Q_TOP_H_S 0X1390 #define Q_TOP_H_V 0X2390
+// #define Q_TOP_H_S 0X1400 #define Q_TOP_H_V 0X2400
+// #define Q_TOP_H_S 0X1410 #define Q_TOP_H_V 0X2410
+// #define Q_TOP_H_S 0X1420 #define Q_TOP_H_V 0X2420
+// #define Q_TOP_H_S 0X1430 #define Q_TOP_H_V 0X2430
+// #define Q_TOP_H_S 0X1440 #define Q_TOP_H_V 0X2440
+// #define Q_TOP_H_S 0X1450 #define Q_TOP_H_V 0X2450
+// #define Q_TOP_H_S 0X1460 #define Q_TOP_H_V 0X2460
+// #define Q_TOP_H_S 0X1470 #define Q_TOP_H_V 0X2470
+// #define Q_TOP_H_S 0X1480 #define Q_TOP_H_V 0X2480
+// #define Q_TOP_H_S 0X1490 #define Q_TOP_H_V 0X2490
+// #define Q_TOP_H_S 0X1500 #define Q_TOP_H_V 0X2500
+// #define Q_TOP_H_S 0X1510 #define Q_TOP_H_V 0X2510
+// #define Q_TOP_H_S 0X1520 #define Q_TOP_H_V 0X2520
+// #define Q_TOP_H_S 0X1530 #define Q_TOP_H_V 0X2530
+// #define Q_TOP_H_S 0X1540 #define Q_TOP_H_V 0X2540
+// #define Q_TOP_H_S 0X1550 #define Q_TOP_H_V 0X2550
+// #define Q_TOP_H_S 0X1560 #define Q_TOP_H_V 0X2560
+// #define Q_TOP_H_S 0X1570 #define Q_TOP_H_V 0X2570
+// #define Q_TOP_H_S 0X1580 #define Q_TOP_H_V 0X2580
+// #define Q_TOP_H_S 0X1590 #define Q_TOP_H_V 0X2590
 
 #define COL_BLACK 0x0000
 #define COL_WHITE 0xFFFF
@@ -209,7 +221,19 @@ static u8 pressureS = 23;
 static u8 workPageN = 24;
 static u8 workPageH = 25;
 static u8 workPageC = 26;
-static u8 adminList = 27;
+
+// static u8 adminList = 27;
+static u8 adminList = 28;
+// static u8 adminIOTest = 29;
+// static u8 adminFactoryResetNotice = 30;
+// static u8 adminLogError = 31;
+// static u8 adminMaintenance = 32;
+// static u8 adminLanguage = 33;
+// static u8 adminCompany = 34;
+// static u8 adminEngineermod = 35;
+
+
+// static u8 adminList = 27;
 // static u8 adminUserSetting = 28;
 // static u8 adminIOTest = 29;
 // static u8 adminFactoryResetNotice = 30;
@@ -2109,9 +2133,10 @@ void encoder_page_change(u16 state)
                         } 
                 }else if(page_number == main7){
                     page_number = adminList;
+                    admin_plag = 1;
+                    // page_number = 28;
                     Page_Change_Handler(page_number);
                     admin_text_change();
-                    admin_plag = 1;
                 }else if(page_number == topHeating){
                     settingflag  = 1;
                     hundred_velue = hundreds[2];
@@ -2192,7 +2217,7 @@ void encoder_page_change(u16 state)
             }
         } break;
 
-        case 4: {7
+        case 4: {
             if(admin_plag==1){
                 usersetting_plag = 0;
                 usersettingSP = 0;

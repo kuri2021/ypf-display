@@ -1457,10 +1457,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
                                 if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2020, (u8*)&TT1, 1);
+                                    write_dgus_vp(0x2170, (u8*)&TT1, 1);
                                 } else {
                                     TT1 = keep;
-                                    write_dgus_vp(0x2020, (u8*)&TT1, 1);
+                                    write_dgus_vp(0x2170, (u8*)&TT1, 1);
                                 }
                               
                             } else if (select_position == 1) {
@@ -1472,10 +1472,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
                                 if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2010, (u8*)&TT10, 1);
+                                    write_dgus_vp(0x2160, (u8*)&TT10, 1);
                                 } else {
                                     TT10 = keep;
-                                    write_dgus_vp(0x2010, (u8*)&TT10, 1);
+                                    write_dgus_vp(0x2160, (u8*)&TT10, 1);
                                 }
                             } else if (select_position == 2) {
                               keep = TT100;
@@ -1486,10 +1486,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
                                 if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2000, (u8*)&TT100, 1);
+                                    write_dgus_vp(0x2150, (u8*)&TT100, 1);
                                 } else {
                                     TT100 = keep;
-                                    write_dgus_vp(0x2000, (u8*)&TT100, 1);
+                                    write_dgus_vp(0x2150, (u8*)&TT100, 1);
                                 }
                         }
                 }else if(page_number == topCoolingS){
@@ -1581,10 +1581,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
                                 if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2320, (u8*)&BT1, 1);
+                                    write_dgus_vp(0x2280, (u8*)&BT1, 1);
                                 } else {
                                     BT1 = keep;
-                                    write_dgus_vp(0x2320, (u8*)&BT1, 1);
+                                    write_dgus_vp(0x2280, (u8*)&BT1, 1);
                                 }
                             } else if (select_position == 1) {
                                 keep = BT10;
@@ -1595,10 +1595,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
                                 if (result <= bottempmax && result > bottempmin ) {
-                                    write_dgus_vp(0x2310, (u8*)&BT10, 1);
+                                    write_dgus_vp(0x2270, (u8*)&BT10, 1);
                                 } else {
                                     BT10 = keep;
-                                    write_dgus_vp(0x2310, (u8*)&BT10, 1);
+                                    write_dgus_vp(0x2270, (u8*)&BT10, 1);
                                 }
                             } else if (select_position == 2) {
                                 keep = BT100;
@@ -1609,10 +1609,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
                                 if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2300, (u8*)&BT100, 1);
+                                    write_dgus_vp(0x2260, (u8*)&BT100, 1);
                                 } else {
                                     BT100 = keep;
-                                    write_dgus_vp(0x2300, (u8*)&BT100, 1);
+                                    write_dgus_vp(0x2260, (u8*)&BT100, 1);
                                 }
                         }
                 }else if(page_number == botCoolingS){
@@ -1921,8 +1921,6 @@ void encoder_page_change(u16 state)
                     }
                     }
                     
-                }else if(page_number == adminFactoryResetNotice){
-
                 }else if(page_number == adminLogError){
 
                 }else if(page_number == adminMaintenance){
@@ -1935,8 +1933,6 @@ void encoder_page_change(u16 state)
 
                 }
                 }
-
-                
             } else if (quickSettingflag == 1) { // 세팅 모드가 아닌 텍스트와 페이지 색 변경
                 if (settingflag == 0) {
                     quickSettingInIt();
@@ -2067,10 +2063,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
                                 if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2020, (u8*)&TT1, 1);
+                                    write_dgus_vp(0x2170, (u8*)&TT1, 1);
                                 } else {
                                     TT1 = keep;
-                                    write_dgus_vp(0x2020, (u8*)&TT1, 1);
+                                    write_dgus_vp(0x2170, (u8*)&TT1, 1);
                                 }
                             } else if (select_position == 1) {
                                 keep = TT10;
@@ -2081,10 +2077,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
                                 if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2010, (u8*)&TT10, 1);
+                                    write_dgus_vp(0x2160, (u8*)&TT10, 1);
                                 } else {
                                     TT10 = keep;
-                                    write_dgus_vp(0x2010, (u8*)&TT10, 1);
+                                    write_dgus_vp(0x2160, (u8*)&TT10, 1);
                                 }
                             } else if (select_position == 2) {
                                   keep = TT100;
@@ -2095,10 +2091,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
                                 if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2000, (u8*)&TT100, 1);
+                                    write_dgus_vp(0x2150, (u8*)&TT100, 1);
                                 } else {
                                     TT100 = keep;
-                                    write_dgus_vp(0x2000, (u8*)&TT100, 1);
+                                    write_dgus_vp(0x2150, (u8*)&TT100, 1);
                                 }
                             
                         }
@@ -2191,10 +2187,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
                                 if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2320, (u8*)&BT1, 1);
+                                    write_dgus_vp(0x2280, (u8*)&BT1, 1);
                                 } else {
                                     BT1 = keep;
-                                    write_dgus_vp(0x2320, (u8*)&BT1, 1);
+                                    write_dgus_vp(0x2280, (u8*)&BT1, 1);
                                 }
                             } else if (select_position == 1) {
                                 keep = BT10;
@@ -2205,10 +2201,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
                                 if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2310, (u8*)&BT10, 1);
+                                    write_dgus_vp(0x2270, (u8*)&BT10, 1);
                                 } else {
                                     BT10 = keep;
-                                    write_dgus_vp(0x2310, (u8*)&BT10, 1);
+                                    write_dgus_vp(0x2270, (u8*)&BT10, 1);
                                 }
                             } else if (select_position == 2) {
                                        keep = BT100;
@@ -2219,10 +2215,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
                                 if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2300, (u8*)&BT100, 1);
+                                    write_dgus_vp(0x2260, (u8*)&BT100, 1);
                                 } else {
                                     BT100 = keep;
-                                    write_dgus_vp(0x2300, (u8*)&BT100, 1);
+                                    write_dgus_vp(0x2260, (u8*)&BT100, 1);
                                 }
                                
                             
@@ -2813,9 +2809,9 @@ void encoder_page_change(u16 state)
                         TT10   = (result / 10) % 10;
                         TT1     = result % 10;
 
-                        write_dgus_vp(0x2000, (u8*)&TT100, 1);
-                        write_dgus_vp(0x2010, (u8*)&TT10,     1);
-                        write_dgus_vp(0x2020, (u8*)&TT1,     1);
+                        write_dgus_vp(0x2150, (u8*)&TT100, 1);
+                        write_dgus_vp(0x2160, (u8*)&TT10,     1);
+                        write_dgus_vp(0x2170, (u8*)&TT1,     1);
 
                         read_dgus_vp(VP_SET_TB, (u8*)&result, 1);
                         BT100 = result / 100;

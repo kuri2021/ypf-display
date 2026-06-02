@@ -424,7 +424,7 @@ void QuickSettingTextSet(u16 count, u16 select_position){
 
 void select_num(u16 page, u16 count) { // 텍스트 색 설정
     switch (page) {
-        case 13: {
+        case 16: {
             if (count == 0) {
                 SetTextColorBlack(0x1153);
                 SetTextColorBlack(0x1163);
@@ -449,7 +449,7 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
             }
         } break;
 
-        case 14: {
+        case 17: {
             if (count == 0) {
                 SetTextColorBlack(0x1193);
                 SetTextColorBlue(0x1203);
@@ -469,7 +469,7 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
             }
         } break;
 
-        case 15: {
+        case 18: {
             if (count == 0) {
                 SetTextColorBlack(0x1223);
                 SetTextColorBlack(0x9083);
@@ -496,7 +496,7 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
             }
         } break;
 
-        case 16: {
+        case 19: {
             if (count == 0) {
                 SetTextColorBlack(0x1263);
                 SetTextColorBlack(0x1233);
@@ -523,7 +523,7 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
             }
         } break;
 
-        case 17: {
+        case 20: {
             if (count == 0) {
                      SetTextColorBlack(0x1303);
                 SetTextColorBlue(0x1313);
@@ -541,7 +541,7 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
             }
         } break;
 
-        case 18: {
+        case 21: {
             if (count == 0) {
                 SetTextColorBlack(0x1333);
                 SetTextColorBlack(0x1343);
@@ -567,7 +567,7 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
             }
         } break;
 
-        case 19: {
+        case 22: {
             if (count == 0) {
                 SetTextColorBlue(0x1373);
                 SetTextColorBlack(0x1383);
@@ -586,7 +586,7 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
             }
         } break;
 
-        case 20: {
+        case 23: {
             if (count == 1) {
                 SetTextColorBlack(0x1403);
                 ChangeImage(0x2410, 1);
@@ -612,13 +612,13 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
         //     }
         // } break;
 
-        case 23: {
-            if (count == 0) {
-                SetTextColorBlue(0x9433);
-            } else if (count == 1) {
-                SetTextColorWhite(0x9433);
-            }
-        } break;
+        // case 23: {
+        //     if (count == 0) {
+        //         SetTextColorBlue(0x9433);
+        //     } else if (count == 1) {
+        //         SetTextColorWhite(0x9433);
+        //     }
+        // } break;
     }
 }
 
@@ -854,7 +854,7 @@ void admin_text_change(){
             SetTextColorWhite(0x5643);
         }break;
         case 6:{
-              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5013);
             SetTextColorWhite(0x5023);
             SetTextColorWhite(0x5033);
             SetTextColorWhite(0x5043);
@@ -1429,8 +1429,7 @@ language_change();
     }
 
     if(f_ready==1&& start_flag == 1){
-            page_number = 23;
-            Page_Change_Handler(page_number);
+            Page_Change_UI(workPageN);
              read_dgus_vp(VP_SET_H, (u8*)&result,    1);
              min = result / 60;
              second = result % 60;
@@ -1448,8 +1447,7 @@ language_change();
     }else if(f_tempon==1||f_bottemp==1||f_toptemp==1){
             quickSettingInIt();
             start_flag = 1;
-            page_number = 24;
-            Page_Change_Handler(page_number);
+            Page_Change_UI(workPageH);
             quickSettingflag = 0;
             select_flag=0;
             select_position = 0;
@@ -1459,8 +1457,7 @@ language_change();
         }else if(f_deleay==1){
             quickSettingInIt();
             start_flag = 1;
-            page_number = 24;
-            Page_Change_Handler(page_number);
+            Page_Change_UI(workPageH);
             quickSettingflag = 0;
             select_flag=0;
             select_position = 0;
@@ -1469,8 +1466,7 @@ language_change();
             error_flag = 0;
         }else if(f_botcool==1||f_topcool == 1){
             quickSettingInIt();
-            page_number = 25;
-            Page_Change_Handler(page_number);
+            Page_Change_UI(workPageC);
             SecCnt_Stop();
             if(timer == 1){
                 timer = 0;

@@ -153,13 +153,6 @@ u8 topTempChinese[] = {
 #define VP_SET_NTC_BASE_T 0x810C  // 상 프레임 기준 온도 설정
 #define VP_SET_NTC_BASE_B 0x8110  // 하 프레임 기준 온도 설정
 
-#define VP_TOP_HEATER 0x8200  // 하 프레임 기준 온도 설정
-#define VP_BOT_HEATER 0x8210  // 하 프레임 기준 온도 설정
-#define VP_TOP_PAN 0x8220  // 하 프레임 기준 온도 설정
-#define VP_BOT_PAN 0x8230  // 하 프레임 기준 온도 설정
-#define VP_TOP_PUMP 0x8240  // 하 프레임 기준 온도 설정
-#define VP_TOP_SOL 0x8250  // 하 프레임 기준 온도 설정
-
 #define VP_SET_LIMT_TOP_MIN          0x4100  // 상판 온도 최저값
 #define VP_SET_LIMT_TOP_MAX          0x4110  // 상판 온도 최대값
 #define VP_SET_LIMT_BOT_MIN          0x4130  // 하판 온도 최저값
@@ -168,6 +161,8 @@ u8 topTempChinese[] = {
 #define VP_SET_LIMT_PRESS_MAX          0x4170  // 압력 최대값
 #define VP_SET_LIMT_DELAY_MIN          0x4190  // 지연시간 최저값
 #define VP_SET_LIMT_DELAY_MAX          0x4200  // 지연시간 최대값
+
+#define VP_IO_TEST 0x8210  // io테스트 주소
 
 
 #define VP_ELAPSED_TIME 0x8114 // 유지 경과 시간
@@ -192,8 +187,8 @@ static u8 read500_enable = 0;
 u8 xdata page_set[4] = {0};
 u8 xdata txt_off[6] = {0};
 
-u16 Page[36] = {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,29,30,31,32,33,34,35
+u16 Page[39] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,29,30,31,32,33,34,35,36,37,38
 };
 
 static u16 start_flag = 0;
@@ -256,6 +251,9 @@ static u8 adminMaintenance = 32;
 static u8 adminLanguage = 33;
 static u8 adminCompany = 34;
 static u8 adminEngineermod = 35;
+static u8 adminEngineermodS = 36;
+static u8 adminActiveLog = 37;
+static u8 adminErrorLog = 38;
 
 static u16 toptempmin = 1;
 static u16 toptempmax = 200;
@@ -266,7 +264,23 @@ static u16 pressmax = 20;
 static u16 delaymin = 0;
 static u16 delaymax = 3600;
 
-static u16 language = 0;
+// static u16 language = 0;
+
+static u16 pw = 123456;
+static u16 inputpw = 0;
+
+
+char language[] = "eng";
+
+void language_change(void)
+{
+    write_dgus_vp(0x4270, (u8*)"TOP HEATER", strlen("TOP HEATER"));
+    write_dgus_vp(0x4270, (u8*)"TOP HEATER", strlen("TOP HEATER"));
+    // if(strcmp(language, "eng") == 0)
+    // {
+    //     write_dgus_vp(0x4270, (u8*)"TOP HEATER", 1);
+    // }
+}
 
 
 void check_Start(u16 addr, u16 velue){
@@ -337,71 +351,71 @@ void QuickSettingTextSet(u16 count, u16 select_position){
         case 1:{
             switch(select_position){
                 case 0:{
-                    SetTextColorYellow(0x9403);
-                    SetTextColorYellow(0x9413);
-                    SetTextColorBlue(0x9423);
+                    SetTextColorYellow(0x1003);
+                    SetTextColorYellow(0x1013);
+                    SetTextColorBlue(0x1033);
                 }break;
                  case 1:{
-                    SetTextColorYellow(0x9403);
-                    SetTextColorBlue(0x9413);
-                    SetTextColorYellow(0x9423);
+                    SetTextColorYellow(0x1003);
+                    SetTextColorBlue(0x1013);
+                    SetTextColorYellow(0x1033);
                 }break;
                  case 2:{
-                    SetTextColorBlue(0x9403);
-                    SetTextColorYellow(0x9413);
-                    SetTextColorYellow(0x9423);
+                    SetTextColorBlue(0x1003);
+                    SetTextColorYellow(0x1013);
+                    SetTextColorYellow(0x1033);
            
                 }break;
                 
                 default : {
-                    SetTextColorYellow(0x9403);
-                    SetTextColorYellow(0x9413);
-                    SetTextColorYellow(0x9423);
+                    SetTextColorYellow(0x1003);
+                    SetTextColorYellow(0x1013);
+                    SetTextColorYellow(0x1033);
                 }break;
             }
         }break;
 
         case 2:{
-            SetTextColorBlue(0x9253);
+            SetTextColorBlue(0x1053);
         }break;
 
         case 3:{
              switch(select_position){
                 case 0:{
-                       SetTextColorYellow(0x9453);
-                    SetTextColorYellow(0x9463);
-                    SetTextColorBlue(0x9473);
+                       SetTextColorYellow(0x1063);
+                    SetTextColorYellow(0x1073);
+                    SetTextColorBlue(0x1083);
                 }break;
                  case 1:{
-                    SetTextColorYellow(0x9453);
-                    SetTextColorBlue(0x9463);
-                    SetTextColorYellow(0x9473);
+                    SetTextColorYellow(0x1063);
+                    SetTextColorBlue(0x1073);
+                    SetTextColorYellow(0x1083);
                 }break;
                  case 2:{
-                      SetTextColorBlue(0x9453);
-                    SetTextColorYellow(0x9463);
-                    SetTextColorYellow(0x9473);
+                      SetTextColorBlue(0x1063);
+                    SetTextColorYellow(0x1073);
+                    SetTextColorYellow(0x1083);
                 }break;
                 default : {
-                    SetTextColorYellow(0x9453);
-                    SetTextColorYellow(0x9463);
-                    SetTextColorYellow(0x9473);
+                    SetTextColorYellow(0x1063);
+                    SetTextColorYellow(0x1073);
+                    SetTextColorYellow(0x1083);
                 }break;
             }
         }break;
          case 4:{
               switch(select_position){
                 case 0:{
-                    SetTextColorBlue(0x9283);
-                    SetTextColorYellow(0x9293);
+                    SetTextColorBlue(0x1113);
+                    SetTextColorYellow(0x1133);
                 }break;
                  case 1:{
-                    SetTextColorYellow(0x9283);
-                    SetTextColorBlue(0x9293);
+                    SetTextColorYellow(0x1113);
+                    SetTextColorBlue(0x1133);
                 }break;
                 default : {
-                    SetTextColorYellow(0x9283);
-                    SetTextColorYellow(0x9293);
+                    SetTextColorYellow(0x1113);
+                    SetTextColorYellow(0x1133);
                 }break;
             }
         }break;
@@ -412,65 +426,65 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
     switch (page) {
         case 13: {
             if (count == 0) {
-                SetTextColorBlack(0x9003);
-                SetTextColorBlack(0x9013);
-                SetTextColorBlue(0x9023);
+                SetTextColorBlack(0x1153);
+                SetTextColorBlack(0x1163);
+                SetTextColorBlue(0x1173);
             } else if (count == 1) {
-                SetTextColorBlack(0x9003);
-                SetTextColorBlue(0x9013);
-                SetTextColorBlack(0x9023);
+                SetTextColorBlack(0x1153);
+                SetTextColorBlue(0x1163);
+                SetTextColorBlack(0x1173);
             } else if (count == 2) {
-                   SetTextColorBlue(0x9003);
-                SetTextColorBlack(0x9013);
-                SetTextColorBlack(0x9023);
+                   SetTextColorBlue(0x1153);
+                SetTextColorBlack(0x1163);
+                SetTextColorBlack(0x1173);
             } else {
-                SetTextColorBlack(0x9003);
-                SetTextColorBlack(0x9013);
-                SetTextColorBlack(0x9023);
+                SetTextColorBlack(0x1153);
+                SetTextColorBlack(0x1163);
+                SetTextColorBlack(0x1173);
             }
             if (count == 3) {
-                ChangeImage(0x3910, 1);
+                ChangeImage(0x2180, 1);
             } else {
-                ChangeImage(0x3910, 0);
+                ChangeImage(0x2180, 0);
             }
         } break;
 
         case 14: {
             if (count == 0) {
-                SetTextColorBlack(0x9053);
-                SetTextColorBlue(0x9063);
+                SetTextColorBlack(0x1193);
+                SetTextColorBlue(0x1203);
                 
             } else if (count == 1) {
-                SetTextColorBlue(0x9053);
-                SetTextColorBlack(0x9063);
+                SetTextColorBlue(0x1193);
+                SetTextColorBlack(0x1203);
             }else if (count == 2) {
-                SetTextColorBlack(0x9053);
-                SetTextColorBlack(0x9063);
+                SetTextColorBlack(0x1193);
+                SetTextColorBlack(0x1203);
             }
 
             if (count == 2) {
-                ChangeImage(0x3920, 1);
+                ChangeImage(0x2210, 1);
             } else {
-                ChangeImage(0x3920, 0);
+                ChangeImage(0x2210, 0);
             }
         } break;
 
         case 15: {
             if (count == 0) {
-                SetTextColorBlack(0x9073);
+                SetTextColorBlack(0x1223);
                 SetTextColorBlack(0x9083);
                 SetTextColorBlue(0x9093);
             } else if (count == 1) {
-                SetTextColorBlack(0x9073);
+                SetTextColorBlack(0x1223);
                 SetTextColorBlue(0x9083);
                 SetTextColorBlack(0x9093);
             } else if (count == 2) {
               
-                SetTextColorBlue(0x9073);
+                SetTextColorBlue(0x1223);
                 SetTextColorBlack(0x9083);
                 SetTextColorBlack(0x9093);
             } else {
-                SetTextColorBlack(0x9073);
+                SetTextColorBlack(0x1223);
                 SetTextColorBlack(0x9083);
                 SetTextColorBlack(0x9093);
             }
@@ -484,117 +498,117 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
 
         case 16: {
             if (count == 0) {
-                SetTextColorBlack(0x9103);
-                SetTextColorBlack(0x9113);
-                SetTextColorBlue(0x9123);
+                SetTextColorBlack(0x1263);
+                SetTextColorBlack(0x1233);
+                SetTextColorBlue(0x1243);
                
             } else if (count == 1) {
-                SetTextColorBlack(0x9103);
-                SetTextColorBlue(0x9113);
-                SetTextColorBlack(0x9123);
+                SetTextColorBlack(0x1263);
+                SetTextColorBlue(0x1233);
+                SetTextColorBlack(0x1243);
             } else if (count == 2) {
-                 SetTextColorBlue(0x9103);
-                SetTextColorBlack(0x9113);
-                SetTextColorBlack(0x9123);
+                 SetTextColorBlue(0x1263);
+                SetTextColorBlack(0x1233);
+                SetTextColorBlack(0x1243);
             } else {
-                SetTextColorBlack(0x9103);
-                SetTextColorBlack(0x9113);
-                SetTextColorBlack(0x9123);
+                SetTextColorBlack(0x1263);
+                SetTextColorBlack(0x1233);
+                SetTextColorBlack(0x1243);
             }
 
             if (count == 3) {
-                ChangeImage(0x3940, 1);
+                ChangeImage(0x2250, 1);
             } else {
-                ChangeImage(0x3940, 0);
+                ChangeImage(0x2250, 0);
             }
         } break;
 
         case 17: {
             if (count == 0) {
-                     SetTextColorBlack(0x9143);
-                SetTextColorBlue(0x9153);
+                     SetTextColorBlack(0x1303);
+                SetTextColorBlue(0x1313);
             } else if (count == 1) {
-           SetTextColorBlue(0x9143);
-                SetTextColorBlack(0x9153);
+           SetTextColorBlue(0x1303);
+                SetTextColorBlack(0x1313);
             } else if (count == 2) {    
-                SetTextColorBlack(0x9143);
-                SetTextColorBlack(0x9153);
+                SetTextColorBlack(0x1303);
+                SetTextColorBlack(0x1313);
             }
             if (count == 2) {
-                ChangeImage(0x3950, 1);
+                ChangeImage(0x2320, 1);
             } else {
-                ChangeImage(0x3950, 0);
+                ChangeImage(0x2320, 0);
             }
         } break;
 
         case 18: {
             if (count == 0) {
-                SetTextColorBlack(0x9163);
-                SetTextColorBlack(0x9173);
-                SetTextColorBlue(0x9183);
+                SetTextColorBlack(0x1333);
+                SetTextColorBlack(0x1343);
+                SetTextColorBlue(0x1353);
             } else if (count == 1) {
-                SetTextColorBlack(0x9163);
-                SetTextColorBlue(0x9173);
-                SetTextColorBlack(0x9183);
+                SetTextColorBlack(0x1333);
+                SetTextColorBlue(0x1343);
+                SetTextColorBlack(0x1353);
             } else if (count == 2) {
-                SetTextColorBlue(0x9163);
-                SetTextColorBlack(0x9173);
-                SetTextColorBlack(0x9183);
+                SetTextColorBlue(0x1333);
+                SetTextColorBlack(0x1343);
+                SetTextColorBlack(0x1353);
             } else {
-                SetTextColorBlack(0x9163);
-                SetTextColorBlack(0x9173);
-                SetTextColorBlack(0x9183);
+                SetTextColorBlack(0x1333);
+                SetTextColorBlack(0x1343);
+                SetTextColorBlack(0x1353);
             }
 
             if (count == 3) {
-                ChangeImage(0x3960, 1);
+                ChangeImage(0x2360, 1);
             } else {
-                ChangeImage(0x3960, 0);
+                ChangeImage(0x2360, 0);
             }
         } break;
 
         case 19: {
             if (count == 0) {
-                SetTextColorBlue(0x9193);
-                SetTextColorBlack(0x9203);
+                SetTextColorBlue(0x1373);
+                SetTextColorBlack(0x1383);
             } else if (count == 1) {
-                SetTextColorBlack(0x9193);
-                SetTextColorBlue(0x9203);
+                SetTextColorBlack(0x1373);
+                SetTextColorBlue(0x1383);
             } else {
-                SetTextColorBlack(0x9193);
-                SetTextColorBlack(0x9203);
+                SetTextColorBlack(0x1373);
+                SetTextColorBlack(0x1383);
             }
 
             if (count == 2) {
-                ChangeImage(0x3970, 1);
+                ChangeImage(0x2390, 1);
             } else {
-                ChangeImage(0x3970, 0);
+                ChangeImage(0x2390, 0);
             }
         } break;
 
         case 20: {
             if (count == 1) {
-                SetTextColorBlack(0x9213);
-                ChangeImage(0x3980, 1);
+                SetTextColorBlack(0x1403);
+                ChangeImage(0x2410, 1);
             } else {
-                SetTextColorBlue(0x9213);
-                ChangeImage(0x3980, 0);
+                SetTextColorBlue(0x1403);
+                ChangeImage(0x2410, 0);
             }
         } break;
 
         // case 22: {
         //     if (count == 0) {
-        //         SetTextColorBlue(0x9403);
-        //         SetTextColorWhite(0x9413);
-        //         SetTextColorWhite(0x9423);
+        //         SetTextColorBlue(0x1003);
+        //         SetTextColorWhite(0x1013);
+        //         SetTextColorWhite(0x1033);
         //     } else if (count == 1) {
-        //         SetTextColorWhite(0x9403);
-        //         SetTextColorBlue(0x9413);
-        //         SetTextColorWhite(0x9423);
+        //         SetTextColorWhite(0x1003);
+        //         SetTextColorBlue(0x1013);
+        //         SetTextColorWhite(0x1033);
         //     } else if (count == 2) {
-        //         SetTextColorWhite(0x9403);
-        //         SetTextColorWhite(0x9413);
-        //         SetTextColorBlue(0x9423);
+        //         SetTextColorWhite(0x1003);
+        //         SetTextColorWhite(0x1013);
+        //         SetTextColorBlue(0x1033);
         //     }
         // } break;
 
@@ -630,19 +644,19 @@ void Page_Change_UI(u8 i){
 
 void quickSettingInIt() {
     //탑 세팅온도
-    SetTextColorWhite(0x9403);
-    SetTextColorWhite(0x9413);
-    SetTextColorWhite(0x9423);
+    SetTextColorWhite(0x1003);
+    SetTextColorWhite(0x1013);
+    SetTextColorWhite(0x1033);
     // 압력
-    SetTextColorWhite(0x9223);
-    SetTextColorWhite(0x9253);
+    SetTextColorWhite(0x1043);
+    SetTextColorWhite(0x1053);
     //바텀 세팅온도
-    SetTextColorWhite(0x9453);
-    SetTextColorWhite(0x9463);
-    SetTextColorWhite(0x9473);
+    SetTextColorWhite(0x1063);
+    SetTextColorWhite(0x1073);
+    SetTextColorWhite(0x1083);
     // 시간
-    SetTextColorWhite(0x9283);
-    SetTextColorWhite(0x9293);
+    SetTextColorWhite(0x1113);
+    SetTextColorWhite(0x1133);
     SetTextColorWhite(0x9273);
 
     ChangeImage(0x3000, 0);
@@ -650,21 +664,21 @@ void quickSettingInIt() {
 
 void Page21Functioning(u16 count) {
     if (count == 1) {
-        SetTextColorYellow(0x9403);
-        SetTextColorYellow(0x9413);
-        SetTextColorYellow(0x9423);
+        SetTextColorYellow(0x1003);
+        SetTextColorYellow(0x1013);
+        SetTextColorYellow(0x1033);
         ChangeImage(0x3000, 1);
     } else if (count == 2) {
-        SetTextColorYellow(0x9223);
-        SetTextColorYellow(0x9253);
+        SetTextColorYellow(0x1043);
+        SetTextColorYellow(0x1053);
     } else if (count == 3) {
-        SetTextColorYellow(0x9453);
-        SetTextColorYellow(0x9463);
-        SetTextColorYellow(0x9473);
+        SetTextColorYellow(0x1063);
+        SetTextColorYellow(0x1073);
+        SetTextColorYellow(0x1083);
         ChangeImage(0x3000, 2);
     } else if (count == 4) {
-        SetTextColorYellow(0x9283);
-        SetTextColorYellow(0x9293);
+        SetTextColorYellow(0x1113);
+        SetTextColorYellow(0x1133);
     }
 }
 
@@ -681,8 +695,8 @@ static u16 timer = 0;
 static void ShowMMSS(u16 t) { 
     u16 m = t / 60; 
     u16 s = t % 60; 
-    write_dgus_vp(0x2850, (u8*)&m, 1); 
-    write_dgus_vp(0x2860, (u8*)&s, 1); 
+    write_dgus_vp(0x2110, (u8*)&m, 1); 
+    write_dgus_vp(0x2130, (u8*)&s, 1); 
 }
 static void ShowMMSS2(u16 t) { 
     u16 m = t / 60; 
@@ -810,7 +824,7 @@ void admin_text_change(){
             SetTextColorWhite(0x5643);
         }break;
         case 3:{
-              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5013);
             SetTextColorWhite(0x5023);
             SetTextColorWhite(0x5033);
             SetTextColorYellow(0x5043);
@@ -820,7 +834,7 @@ void admin_text_change(){
             SetTextColorWhite(0x5643);
         }break;
         case 4:{
-              SetTextColorWhite(0x5013);
+            SetTextColorWhite(0x5013);
             SetTextColorWhite(0x5023);
             SetTextColorWhite(0x5033);
             SetTextColorWhite(0x5043);
@@ -1038,60 +1052,86 @@ void adminIoTestText(u16 state){
     }
 }
 
+static u8 io; 
+
 void adminIoTestWork(){
     switch(IOtestSP){
         case 0:{
             if(IOtestSelect_plag == 1){
                 SetTextColorYellow(0x5223);
                 SetTextColorWhite(0x5233);
+                io=1;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }else{
                 SetTextColorWhite(0x5223);
                 SetTextColorYellow(0x5233);
+                io = 0;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }
         }break;
         case 1:{
              if(IOtestSelect_plag == 1){
                 SetTextColorYellow(0x5253);
                 SetTextColorWhite(0x5263);
+                io=2;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }else{
                 SetTextColorWhite(0x5253);
                 SetTextColorYellow(0x5263);
+                io = 0;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }
         }break;
         case 2:{
              if(IOtestSelect_plag == 1){
                 SetTextColorYellow(0x5283);
                 SetTextColorWhite(0x5293);
+                io=3;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }else{
                 SetTextColorWhite(0x5283);
                 SetTextColorYellow(0x5293);
+                io = 0;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }
         }break;
         case 3:{
              if(IOtestSelect_plag == 1){
                 SetTextColorYellow(0x5313);
                 SetTextColorWhite(0x5323);
+                io=4;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }else{
                 SetTextColorWhite(0x5313);
                 SetTextColorYellow(0x5323);
+                io = 0;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }
         }break;
         case 4:{
              if(IOtestSelect_plag == 1){
                 SetTextColorYellow(0x5353);
                 SetTextColorWhite(0x5363);
+                io=5;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }else{
                 SetTextColorWhite(0x5353);
                 SetTextColorYellow(0x5363);
+                io = 0;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }
         }break;
         case 5:{
              if(IOtestSelect_plag == 1){
                 SetTextColorYellow(0x5383);
                 SetTextColorWhite(0x5393);
+                io=6;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }else{
                 SetTextColorWhite(0x5383);
                 SetTextColorYellow(0x5393);
+                io = 0;
+                write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
             }
         }break;
     }
@@ -1330,7 +1370,7 @@ void encoder_page_change(u16 state)
     if ((state == 1 || state == 2) && enc_busy) {
         return;
     }
-
+language_change();
     read_dgus_vp(VP_FLAGS, (u8*)&flags, 1);
 
     f_ready = (flags & FLAG_READY)   ? 1 : 0;
@@ -1394,8 +1434,8 @@ void encoder_page_change(u16 state)
              read_dgus_vp(VP_SET_H, (u8*)&result,    1);
              min = result / 60;
              second = result % 60;
-             write_dgus_vp(0x2850, (u8*)&min,    1);
-             write_dgus_vp(0x2860, (u8*)&second, 1);
+             write_dgus_vp(0x2110, (u8*)&min,    1);
+             write_dgus_vp(0x2130, (u8*)&second, 1);
             quickSettingflag = 0;
             select_flag=0;
             select_position = 0;
@@ -1456,7 +1496,7 @@ void encoder_page_change(u16 state)
                                     TT1--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
+                                if (result <= toptempmax && result >= toptempmin) {
                                     write_dgus_vp(0x2170, (u8*)&TT1, 1);
                                 } else {
                                     TT1 = keep;
@@ -1471,7 +1511,7 @@ void encoder_page_change(u16 state)
                                     TT10--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
+                                if (result <= toptempmax && result >= toptempmin) {
                                     write_dgus_vp(0x2160, (u8*)&TT10, 1);
                                 } else {
                                     TT10 = keep;
@@ -1485,7 +1525,7 @@ void encoder_page_change(u16 state)
                                     TT100--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
+                                if (result <= toptempmax && result >= toptempmin) {
                                     write_dgus_vp(0x2150, (u8*)&TT100, 1);
                                 } else {
                                     TT100 = keep;
@@ -1502,10 +1542,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(TC10 * 10 + TC1);
                                 if (result <= 80 && result > 0) {
-                                    write_dgus_vp(0x2120, (u8*)&TC1, 1);
+                                    write_dgus_vp(0x2100, (u8*)&TC1, 1);
                                 } else {
                                     TC1 = keep;
-                                    write_dgus_vp(0x2120, (u8*)&TC1, 1);
+                                    write_dgus_vp(0x2200, (u8*)&TC1, 1);
                                 }
                              
                             } else if (select_position == 1) {
@@ -1517,10 +1557,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(TC10 * 10 + TC1);
                                 if (result <= 80 && result > 0) {
-                                    write_dgus_vp(0x2110, (u8*)&TC10, 1);
+                                    write_dgus_vp(0x2190, (u8*)&TC10, 1);
                                 } else {
                                     TC10 = keep;
-                                    write_dgus_vp(0x2110, (u8*)&TC10, 1);
+                                    write_dgus_vp(0x2190, (u8*)&TC10, 1);
                                 }
                             }
                 }else if(page_number == topFrameS){
@@ -1580,7 +1620,7 @@ void encoder_page_change(u16 state)
                                     BT1--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
+                                if (result <= bottempmax && result >= bottempmin) {
                                     write_dgus_vp(0x2280, (u8*)&BT1, 1);
                                 } else {
                                     BT1 = keep;
@@ -1594,7 +1634,7 @@ void encoder_page_change(u16 state)
                                     BT10--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin ) {
+                                if (result <= bottempmax && result >= bottempmin ) {
                                     write_dgus_vp(0x2270, (u8*)&BT10, 1);
                                 } else {
                                     BT10 = keep;
@@ -1608,7 +1648,7 @@ void encoder_page_change(u16 state)
                                     BT100--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
+                                if (result <= bottempmax && result >= bottempmin) {
                                     write_dgus_vp(0x2260, (u8*)&BT100, 1);
                                 } else {
                                     BT100 = keep;
@@ -1625,10 +1665,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(BC10 * 10 + BC1);
                                 if (result <= 80 && result > 0) {
-                                    write_dgus_vp(0x2420, (u8*)&BC1, 1);
+                                    write_dgus_vp(0x2310, (u8*)&BC1, 1);
                                 } else {
                                     BC1 = keep;
-                                    write_dgus_vp(0x2420, (u8*)&BC1, 1);
+                                    write_dgus_vp(0x2310, (u8*)&BC1, 1);
                                 }
                            
                             } else if (select_position == 1) {
@@ -1640,10 +1680,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(BC10 * 10 + BC1);
                                 if (result <= 80 && result > 0) {
-                                    write_dgus_vp(0x2410, (u8*)&BC10, 1);
+                                    write_dgus_vp(0x2300, (u8*)&BC10, 1);
                                 } else {
                                     BC10 = keep;
-                                    write_dgus_vp(0x2410, (u8*)&BC10, 1);
+                                    write_dgus_vp(0x2300, (u8*)&BC10, 1);
                                 }
                             }
                 }else if(page_number == botFrameS){
@@ -1708,10 +1748,10 @@ void encoder_page_change(u16 state)
                                 }
                                   result = (u16)(min * 60 + second);
                                  if(result<= delaymax && result > delaymin){
-                                    write_dgus_vp(0x2850, (u8*)&min, 1);
+                                    write_dgus_vp(0x2370, (u8*)&min, 1);
                                 }else{
                                     min = keep;
-                                    write_dgus_vp(0x2850, (u8*)&min, 1);
+                                    write_dgus_vp(0x2370, (u8*)&min, 1);
                                 }
                             } else if (select_position == 1) {
                                 keep = second;
@@ -1722,17 +1762,16 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(min * 60 + second);
                                  if(result<= delaymax && result > delaymin){
-                                    write_dgus_vp(0x2860, (u8*)&second, 1);
+                                    write_dgus_vp(0x2280, (u8*)&second, 1);
                                 }else{
                                     second = keep;
-                                    write_dgus_vp(0x2860, (u8*)&second, 1);
+                                    write_dgus_vp(0x2280, (u8*)&second, 1);
                                 }
-                                // write_dgus_vp(0x2860, (u8*)&second, 1);
                             }
                 }else if(page_number == pressureS){
                     if (select_position == 0 && press > pressmin) {
                         press--;
-                        write_dgus_vp(0x2920, (u8*)&press, 1);
+                        write_dgus_vp(0x2400, (u8*)&press, 1);
                     }
                 }else if(page_number == quickSetting){
                         if(quickSettingS == 1){
@@ -1744,11 +1783,11 @@ void encoder_page_change(u16 state)
                                     TT1--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2820, (u8*)&TT1, 1);
+                                if (result <= toptempmax && result >= toptempmin) {
+                                    write_dgus_vp(0x2030, (u8*)&TT1, 1);
                                 } else {
                                     TT1 = keep;
-                                    write_dgus_vp(0x2820, (u8*)&TT1, 1);
+                                    write_dgus_vp(0x2030, (u8*)&TT1, 1);
                                 }
                             } else if (select_position == 1) {
                                 keep = TT10;
@@ -1758,11 +1797,11 @@ void encoder_page_change(u16 state)
                                     TT10--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2810, (u8*)&TT10, 1);
+                                if (result <= toptempmax && result >= toptempmin) {
+                                    write_dgus_vp(0x2010, (u8*)&TT10, 1);
                                 } else {
                                     TT10 = keep;
-                                    write_dgus_vp(0x2810, (u8*)&TT10, 1);
+                                    write_dgus_vp(0x2010, (u8*)&TT10, 1);
                                 }
                             } else if (select_position == 2) {
                                  keep = TT100;
@@ -1772,17 +1811,17 @@ void encoder_page_change(u16 state)
                                     TT100--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2800, (u8*)&TT100, 1);
+                                if (result <= toptempmax && result >= toptempmin) {
+                                    write_dgus_vp(0x2000, (u8*)&TT100, 1);
                                 } else {
                                     TT100 = keep;
-                                    write_dgus_vp(0x2800, (u8*)&TT100, 1);
+                                    write_dgus_vp(0x2000, (u8*)&TT100, 1);
                                 }
                             }
                         }else if(quickSettingS == 2){
                             if(press > pressmin){
                                 press --;
-                                write_dgus_vp(0x2930, (u8*)&press, 1);
+                                write_dgus_vp(0x2050, (u8*)&press, 1);
                             }
                         }else if(quickSettingS == 3){
                            if (select_position == 0) {
@@ -1793,11 +1832,11 @@ void encoder_page_change(u16 state)
                                     BT1--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2890, (u8*)&BT1, 1);
+                                if (result <= bottempmax && result >= bottempmin) {
+                                    write_dgus_vp(0x2080, (u8*)&BT1, 1);
                                 } else {
                                     BT1 = keep;
-                                    write_dgus_vp(0x2890, (u8*)&BT1, 1);
+                                    write_dgus_vp(0x2080, (u8*)&BT1, 1);
                                 }
                             } else if (select_position == 1) {
                                 keep = BT10;
@@ -1807,11 +1846,11 @@ void encoder_page_change(u16 state)
                                     BT10--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2880, (u8*)&BT10, 1);
+                                if (result <= bottempmax && result >= bottempmin) {
+                                    write_dgus_vp(0x2070, (u8*)&BT10, 1);
                                 } else {
                                     BT10 = keep;
-                                    write_dgus_vp(0x2880, (u8*)&BT10, 1);
+                                    write_dgus_vp(0x2070, (u8*)&BT10, 1);
                                 }
                             } else if (select_position == 2) {
                                          keep = BT100;
@@ -1821,11 +1860,11 @@ void encoder_page_change(u16 state)
                                     BT100--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2870, (u8*)&BT100, 1);
+                                if (result <= bottempmax && result >= bottempmin) {
+                                    write_dgus_vp(0x2060, (u8*)&BT100, 1);
                                 } else {
                                     BT100 = keep;
-                                    write_dgus_vp(0x2870, (u8*)&BT100, 1);
+                                    write_dgus_vp(0x2060, (u8*)&BT100, 1);
                                 }
                             }
                         }else if(quickSettingS == 4){
@@ -1842,10 +1881,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(min * 60 + second);
                                 if(result<= delaymax && result > delaymin){
-                                    write_dgus_vp(0x2850, (u8*)&min, 1);
+                                    write_dgus_vp(0x2110, (u8*)&min, 1);
                                 }else{
                                     min = keep;
-                                    write_dgus_vp(0x2850, (u8*)&min, 1);
+                                    write_dgus_vp(0x2110, (u8*)&min, 1);
                                 }
                                 
                             } else if (select_position == 1) {
@@ -1857,10 +1896,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(min * 60 + second);
                                  if(result<= delaymax && result > delaymin){
-                                    write_dgus_vp(0x2860, (u8*)&second, 1);
+                                    write_dgus_vp(0x2130, (u8*)&second, 1);
                                 }else{
                                     second = keep;
-                                    write_dgus_vp(0x2860, (u8*)&second, 1);
+                                    write_dgus_vp(0x2130, (u8*)&second, 1);
                                 }
                                 
                             }
@@ -2040,6 +2079,7 @@ void encoder_page_change(u16 state)
                         }
                         write_dgus_vp(0x4750, (u8*)&EngineerPw6 , 1);
                     }break;
+
                     }
                     // 특수 기믹을 넣어야하여 넣지 않음
                 }
@@ -2062,7 +2102,7 @@ void encoder_page_change(u16 state)
                                     TT1 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
+                                if (result <= toptempmax && result >= toptempmin) {
                                     write_dgus_vp(0x2170, (u8*)&TT1, 1);
                                 } else {
                                     TT1 = keep;
@@ -2076,7 +2116,7 @@ void encoder_page_change(u16 state)
                                     TT10 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
+                                if (result <= toptempmax && result >= toptempmin) {
                                     write_dgus_vp(0x2160, (u8*)&TT10, 1);
                                 } else {
                                     TT10 = keep;
@@ -2090,7 +2130,7 @@ void encoder_page_change(u16 state)
                                     TT100 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
+                                if (result <= toptempmax && result >= toptempmin) {
                                     write_dgus_vp(0x2150, (u8*)&TT100, 1);
                                 } else {
                                     TT100 = keep;
@@ -2108,14 +2148,13 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(TC10 * 10 + TC1);
                                 if (result <= 80 && result > 0) {
-                                    write_dgus_vp(0x2120, (u8*)&TC1, 1);
+                                    write_dgus_vp(0x2200, (u8*)&TC1, 1);
                                 } else {
                                     TC1 = keep;
-                                    write_dgus_vp(0x2120, (u8*)&TC1, 1);
+                                    write_dgus_vp(0x2200, (u8*)&TC1, 1);
                                 }
                             } else if (select_position == 1) {
-                         
-                                     keep = TC10;
+                                keep = TC10;
                                 if (TC10 == 8) {
                                     TC10 = 0;
                                 } else {
@@ -2123,10 +2162,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(TC10 * 10 + TC1);
                                 if (result <= 80 && result > 0) {
-                                    write_dgus_vp(0x2110, (u8*)&TC10, 1);
+                                    write_dgus_vp(0x2190, (u8*)&TC10, 1);
                                 } else {
                                     TC10 = keep;
-                                    write_dgus_vp(0x2110, (u8*)&TC10, 1);
+                                    write_dgus_vp(0x2190, (u8*)&TC10, 1);
                                 }
                             }
                 }else if(page_number == topFrameS){
@@ -2186,7 +2225,7 @@ void encoder_page_change(u16 state)
                                     BT1 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
+                                if (result <= bottempmax && result >= bottempmin) {
                                     write_dgus_vp(0x2280, (u8*)&BT1, 1);
                                 } else {
                                     BT1 = keep;
@@ -2200,7 +2239,7 @@ void encoder_page_change(u16 state)
                                     BT10 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
+                                if (result <= bottempmax && result >= bottempmin) {
                                     write_dgus_vp(0x2270, (u8*)&BT10, 1);
                                 } else {
                                     BT10 = keep;
@@ -2214,7 +2253,7 @@ void encoder_page_change(u16 state)
                                     BT100 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
+                                if (result <= bottempmax && result >= bottempmin) {
                                     write_dgus_vp(0x2260, (u8*)&BT100, 1);
                                 } else {
                                     BT100 = keep;
@@ -2233,10 +2272,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(BC10 * 10 + BC1);
                                 if (result <= 80 && result > 0) {
-                                    write_dgus_vp(0x2420, (u8*)&BC1, 1);
+                                    write_dgus_vp(0x2310, (u8*)&BC1, 1);
                                 } else {
                                     BC1 = keep;
-                                    write_dgus_vp(0x2420, (u8*)&BC1, 1);
+                                    write_dgus_vp(0x2310, (u8*)&BC1, 1);
                                 }
                             } else if (select_position == 1) {
                                     keep = BC10;
@@ -2247,10 +2286,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(BC10 * 10 + BC1);
                                 if (result <= 80 && result > 0) {
-                                    write_dgus_vp(0x2410, (u8*)&BC10, 1);
+                                    write_dgus_vp(0x2300, (u8*)&BC10, 1);
                                 } else {
                                     BC10 = keep;
-                                    write_dgus_vp(0x2410, (u8*)&BC10, 1);
+                                    write_dgus_vp(0x2300, (u8*)&BC10, 1);
                                 }
                                 
                              
@@ -2319,12 +2358,12 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(min * 60 + second);
                                  if(result<= delaymax && result > delaymin){
-                                    write_dgus_vp(0x2850, (u8*)&min, 1);
+                                    write_dgus_vp(0x2370, (u8*)&min, 1);
                                 }else{
                                     min = keep;
-                                    write_dgus_vp(0x2850, (u8*)&min, 1);
+                                    write_dgus_vp(0x2370, (u8*)&min, 1);
                                 }
-                                // write_dgus_vp(0x2850, (u8*)&min, 1);
+                                // write_dgus_vp(0x2110, (u8*)&min, 1);
                             } else if (select_position == 1) {
                                 keep = second;
                                 if (second == 59) {
@@ -2334,16 +2373,16 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(min * 60 + second);
                                  if(result<= delaymax && result > delaymin){
-                                    write_dgus_vp(0x2860, (u8*)&second, 1);
+                                    write_dgus_vp(0x2380, (u8*)&second, 1);
                                 }else{
                                     second = keep;
-                                    write_dgus_vp(0x2860, (u8*)&second, 1);
+                                    write_dgus_vp(0x2380, (u8*)&second, 1);
                                 }
                         }
                 }else if(page_number == pressureS){
                     if (press < pressmax) {
                                 press++;
-                                write_dgus_vp(0x2920, (u8*)&press, 1);
+                                write_dgus_vp(0x2400, (u8*)&press, 1);
                             }
                 }else if(page_number == quickSetting){
                     if(quickSettingS == 1){
@@ -2355,11 +2394,11 @@ void encoder_page_change(u16 state)
                                     TT1 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2820, (u8*)&TT1, 1);
+                                if (result <= toptempmax && result >=toptempmin) {
+                                    write_dgus_vp(0x2030, (u8*)&TT1, 1);
                                 } else {
                                     TT1 = keep;
-                                    write_dgus_vp(0x2820, (u8*)&TT1, 1);
+                                    write_dgus_vp(0x2030, (u8*)&TT1, 1);
                                 }
                             } else if (select_position == 1) {
                                 keep = TT10;
@@ -2369,11 +2408,11 @@ void encoder_page_change(u16 state)
                                     TT10 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2810, (u8*)&TT10, 1);
+                                if (result <= toptempmax && result >= toptempmin) {
+                                    write_dgus_vp(0x2010, (u8*)&TT10, 1);
                                 } else {
                                     TT10 = keep;
-                                    write_dgus_vp(0x2810, (u8*)&TT10, 1);
+                                    write_dgus_vp(0x2010, (u8*)&TT10, 1);
                                 }
                             } else if (select_position == 2) {
                                 keep = TT100;
@@ -2383,17 +2422,17 @@ void encoder_page_change(u16 state)
                                     TT100 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result > toptempmin) {
-                                    write_dgus_vp(0x2800, (u8*)&TT100, 1);
+                                if (result <= toptempmax && result >= toptempmin) {
+                                    write_dgus_vp(0x2000, (u8*)&TT100, 1);
                                 } else {
                                     TT100 = keep;
-                                    write_dgus_vp(0x2800, (u8*)&TT100, 1);
+                                    write_dgus_vp(0x2000, (u8*)&TT100, 1);
                                 }
                             }
                         }else if(quickSettingS == 2){
                             if(press != pressmax){
                                 press ++;
-                               write_dgus_vp(0x2930, (u8*)&press, 1);
+                               write_dgus_vp(0x2050, (u8*)&press, 1);
                             }
                         }else if(quickSettingS == 3){
                            if (select_position == 0) {
@@ -2404,11 +2443,11 @@ void encoder_page_change(u16 state)
                                     BT1 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2890, (u8*)&BT1, 1);
+                                if (result <= bottempmax && result >= bottempmin) {
+                                    write_dgus_vp(0x2080, (u8*)&BT1, 1);
                                 } else {
                                     BT1 = keep;
-                                    write_dgus_vp(0x2890, (u8*)&BT1, 1);
+                                    write_dgus_vp(0x2080, (u8*)&BT1, 1);
                                 }
                             } else if (select_position == 1) {
                                 keep = BT10;
@@ -2418,11 +2457,11 @@ void encoder_page_change(u16 state)
                                     BT10 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2880, (u8*)&BT10, 1);
+                                if (result <= bottempmax && result >= bottempmin) {
+                                    write_dgus_vp(0x2070, (u8*)&BT10, 1);
                                 } else {
                                     BT10 = keep;
-                                    write_dgus_vp(0x2880, (u8*)&BT10, 1);
+                                    write_dgus_vp(0x2070, (u8*)&BT10, 1);
                                 }
                             } else if (select_position == 2) {
                                    keep = BT100;
@@ -2432,11 +2471,11 @@ void encoder_page_change(u16 state)
                                     BT100 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result > bottempmin) {
-                                    write_dgus_vp(0x2870, (u8*)&BT100, 1);
+                                if (result <= bottempmax && result >= bottempmin) {
+                                    write_dgus_vp(0x2060, (u8*)&BT100, 1);
                                 } else {
                                     BT100 = keep;
-                                    write_dgus_vp(0x2870, (u8*)&BT100, 1);
+                                    write_dgus_vp(0x2060, (u8*)&BT100, 1);
                                 }
                             }
                         }else if(quickSettingS == 4){
@@ -2454,11 +2493,11 @@ void encoder_page_change(u16 state)
                                     min++;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= delaymax && result > delaymin){
-                                    write_dgus_vp(0x2850, (u8*)&min, 1);
+                                 if(result<= delaymax && result >= delaymin){
+                                    write_dgus_vp(0x2110, (u8*)&min, 1);
                                 }else{
                                     min = keep;
-                                    write_dgus_vp(0x2850, (u8*)&min, 1);
+                                    write_dgus_vp(0x2110, (u8*)&min, 1);
                                 }
                             } else if (select_position == 1) {
                                 keep = second;
@@ -2468,11 +2507,11 @@ void encoder_page_change(u16 state)
                                     second++;
                                 }
                                 result = (u16)(min * 60 + second);
-                                if(result<= delaymax && result > delaymin){
-                                    write_dgus_vp(0x2860, (u8*)&second, 1);
+                                if(result<= delaymax && result >= delaymin){
+                                    write_dgus_vp(0x2130, (u8*)&second, 1);
                                 }else{
                                     second = keep;
-                                    write_dgus_vp(0x2860, (u8*)&second, 1);
+                                    write_dgus_vp(0x2130, (u8*)&second, 1);
                                 }
                             }
                         }
@@ -2527,8 +2566,6 @@ void encoder_page_change(u16 state)
                         }
                     }
                       }
-                }else if(page_number == adminIOTest){
-                    
                 }else if(page_number == adminFactoryResetNotice){
                     adminfactoryResetText(state);
                 }else if(page_number == adminLogError){
@@ -2644,7 +2681,7 @@ void encoder_page_change(u16 state)
                         write_dgus_vp(0x4740, (u8*)&EngineerPw5 , 1);
                     }break;
                     case 5:{
-                         if(EngineerPw6==9){
+                        if(EngineerPw6==9){
                             EngineerPw6 = 0;
                         }else{
                             EngineerPw6++;
@@ -2677,7 +2714,7 @@ void encoder_page_change(u16 state)
                         settingflag = 0;
                         select_position = 0;
                         check_Start(VP_SET_P,press);
-                        SetTextColorYellow(0x9253);
+                        SetTextColorYellow(0x1053);
                     }else if(quickSettingS == 3){
                         select_position++;
                         if(select_position ==3){
@@ -2694,10 +2731,10 @@ void encoder_page_change(u16 state)
                         if(select_position ==2){
                             settingflag = 0;
                             select_position = 0;
-                            read_dgus_vp(0x2850, (u8*)&min,1);
-                            read_dgus_vp(0x2860, (u8*)&second,1);
+                            read_dgus_vp(0x2110, (u8*)&min,1);
+                            read_dgus_vp(0x2130, (u8*)&second,1);
                             result = (u16)(min*60 + second);                            
-                            write_dgus_vp(0x2860, (u8*)&second, 1);
+                            write_dgus_vp(0x2130, (u8*)&second, 1);
                             check_Start(VP_SET_H,result);
                             QuickSettingTextSet(quickSettingS, 100);
                         }else{
@@ -2718,10 +2755,12 @@ void encoder_page_change(u16 state)
                     adminUserSettingEdit();
                 }else if(page_number == adminFactoryResetNotice){
                     settingflag = 1;
-                }else if(page_number == adminLogError){
-                    settingflag = 1;
                 }else if(page_number == adminMaintenance){
-
+                    if(LogErrorSP == 0){
+                        Page_Change_UI(adminActiveLog);
+                    }else if(LogErrorSP == 1){
+                        Page_Change_UI(adminErrorLog);
+                    }
                 }else if(page_number == adminLanguage){
                     settingflag = 1;
                 }else if(page_number == adminCompany){
@@ -2786,11 +2825,15 @@ void encoder_page_change(u16 state)
                 }else if(page_number == adminFactoryResetNotice){
                     Page_Change_UI(adminList);
                 }else if(page_number == adminLogError){
-                    
+                    if(LogErrorSP == 0){
+                        Page_Change_UI(adminActiveLog);
+                    }else if(LogErrorSP == 1){
+                        Page_Change_UI(adminErrorLog);
+                    }
                 }else if(page_number == adminMaintenance){
                     Page_Change_UI(main7);
                 }else if(page_number == adminLanguage){
-                    
+                    Page_Change_UI(main7);
                 }else if(page_number == adminCompany){
                     Page_Change_UI(main7);
                 }else if(page_number == adminEngineermod){
@@ -2799,8 +2842,14 @@ void encoder_page_change(u16 state)
                         EngineermodTextChange();
                     }else if(EngineerSP==5){
                         EngineerSP = 0;
-                        Page_Change_UI(adminList);
+                        Page_Change_UI(adminEngineermodS);
                     }
+                }else if(page_number == adminActiveLog){
+                    Page_Change_UI(adminLogError);
+                }else if(page_number == adminErrorLog){
+                    Page_Change_UI(adminLogError);
+                }else if(page_number == adminEngineermodS){
+                    settingflag = 1;
                 }
             }else{
                  if(page_number == main1){
@@ -2809,9 +2858,9 @@ void encoder_page_change(u16 state)
                         TT10   = (result / 10) % 10;
                         TT1     = result % 10;
 
-                        write_dgus_vp(0x2150, (u8*)&TT100, 1);
-                        write_dgus_vp(0x2160, (u8*)&TT10,     1);
-                        write_dgus_vp(0x2170, (u8*)&TT1,     1);
+                        write_dgus_vp(0X2000, (u8*)&TT100, 1);
+                        write_dgus_vp(0x2010, (u8*)&TT10,     1);
+                        write_dgus_vp(0x2030, (u8*)&TT1,     1);
 
                         read_dgus_vp(VP_SET_TB, (u8*)&result, 1);
                         BT100 = result / 100;
@@ -2851,22 +2900,21 @@ void encoder_page_change(u16 state)
                     read_dgus_vp(VP_SET_H, (u8*)&result,    1);
                     min = result / 60;
                     second = result % 60;
-                    write_dgus_vp(0x2850, (u8*)&min,    1);
-                    write_dgus_vp(0x2860, (u8*)&second, 1);
+                    write_dgus_vp(0x2110, (u8*)&min,    1);
+                    write_dgus_vp(0x2130, (u8*)&second, 1);
                     Page_Change_Handler(page_number);
-                    SetTextColorBlue(0x9193);
-                    SetTextColorBlack(0x9203);
-                    ChangeImage(0x3970, 0);
+                    SetTextColorBlue(0x1373);
+                    SetTextColorBlack(0x1383);
+                    ChangeImage(0x2390, 0);
                     Page_Change_UI(delayS);
                 }else if(page_number == main5){
                     settingflag = 1;
                     read_dgus_vp(VP_SET_P, (u8*)&press, 1);
                     write_dgus_vp(0x2920, (u8*)&press, 1);
-                    SetTextColorBlue(0x9213);
-                    ChangeImage(0x3980, 0);
+                    SetTextColorBlue(0x1403);
+                    ChangeImage(0x2410, 0);
                     Page_Change_UI(pressureS);
                 }else if(page_number == main6){
-                    quickSettingflag = 1;
                      if(f_ready==1){
                         Page_Change_UI(workPageN);
                         }else if(f_start == 1){
@@ -2880,8 +2928,8 @@ void encoder_page_change(u16 state)
                             read_dgus_vp(VP_SET_H, (u8*)&result, 2);
                             min = result / 60;
                             second = result % 60;
-                            write_dgus_vp(0x2850, (u8*)&min,    1);
-                            write_dgus_vp(0x2860, (u8*)&second, 1);
+                            write_dgus_vp(0x2110, (u8*)&min,    1);
+                            write_dgus_vp(0x2130, (u8*)&second, 1);
                         } 
                 }else if(page_number == main7){
                     page_number = adminList;
@@ -2890,69 +2938,37 @@ void encoder_page_change(u16 state)
                     admin_text_change();
                 }else if(page_number == topHeating){
                     settingflag  = 1;
-                    hundred_velue = hundreds[2];
-                    ten_velue     = tens[2];
-                    one_velue     = ones[2];
-                    write_dgus_vp(0x2150, (u8*)&hundred_velue, 1);
-                    write_dgus_vp(0x2160, (u8*)&ten_velue,     1);
-                    write_dgus_vp(0x2170, (u8*)&one_velue,     1);
+                    write_dgus_vp(0X2150, (u8*)&TT100, 1);
+                    write_dgus_vp(0x2160, (u8*)&TT10,     1);
+                    write_dgus_vp(0x2170, (u8*)&TT1,     1);
                     select_num(page_number, 0);
                     ChangeImage(0x2180, 0);
                     Page_Change_UI(topHeatingS);
                 }else if(page_number == topCooling){
                     settingflag  = 1;
-                    hundred_velue = hundreds[2];
-                    ten_velue     = tens[2];
-                    one_velue     = ones[2];
-                    write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
-                    write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
-                    write_dgus_vp(0x2220, (u8*)&one_velue,     1);
+                    write_dgus_vp(0x2190, (u8*)&TC10, 1);
+                    write_dgus_vp(0x2200, (u8*)&TC1,     1);
                     select_num(page_number, 0);
-                    ChangeImage(0x3930, 0);
+                    ChangeImage(0x2210, 0);
                     Page_Change_UI(topCoolingS);
                 }else if(page_number == topFrame){
-                    settingflag  = 1;
-                    hundred_velue = hundreds[2];
-                    ten_velue     = tens[2];
-                    one_velue     = ones[2];
-                    write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
-                    write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
-                    write_dgus_vp(0x2220, (u8*)&one_velue,     1);
-                    select_num(page_number, 0);
-                    ChangeImage(0x3930, 0);
                     Page_Change_UI(topFrameS);
                 }else if(page_number == botHeating){
                     settingflag  = 1;
-                    hundred_velue = hundreds[2];
-                    ten_velue     = tens[2];
-                    one_velue     = ones[2];
-                    write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
-                    write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
-                    write_dgus_vp(0x2220, (u8*)&one_velue,     1);
+                    write_dgus_vp(0x2260, (u8*)&BT100, 1);
+                    write_dgus_vp(0x2270, (u8*)&BT10,     1);
+                    write_dgus_vp(0x2280, (u8*)&BT1,     1);
                     select_num(page_number, 0);
-                    ChangeImage(0x3930, 0);
+                    ChangeImage(0x2290, 0);
                     Page_Change_UI(botHeatingS);
                 }else if(page_number == botCooling){
                     settingflag  = 1;
-                    hundred_velue = hundreds[2];
-                    ten_velue     = tens[2];
-                    one_velue     = ones[2];
-                    write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
-                    write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
-                    write_dgus_vp(0x2220, (u8*)&one_velue,     1);
+                    write_dgus_vp(0x2300, (u8*)&BC10,     1);
+                    write_dgus_vp(0x2310, (u8*)&BC1,     1);
                     select_num(page_number, 0);
-                    ChangeImage(0x3930, 0);
+                    ChangeImage(0x2320, 0);
                     Page_Change_UI(botCoolingS);
                 }else if(page_number == botFrame){
-                    settingflag  = 1;
-                    hundred_velue = hundreds[2];
-                    ten_velue     = tens[2];
-                    one_velue     = ones[2];
-                    write_dgus_vp(0x2200, (u8*)&hundred_velue, 1);
-                    write_dgus_vp(0x2210, (u8*)&ten_velue,     1);
-                    write_dgus_vp(0x2220, (u8*)&one_velue,     1);
-                    select_num(page_number, 0);
-                    ChangeImage(0x3930, 0);
                     Page_Change_UI(botFrameS);
                 }else if(page_number == exit){
                     if (topSelectflag == 1) {
@@ -2964,6 +2980,9 @@ void encoder_page_change(u16 state)
                     }
                 }else if(page_number == workPageN){
                     Page_Change_UI(main6);
+                }else if(page_number == quickSetting){
+                    settingflag = 1;
+                    QuickSettingTextSet(quickSettingS, 0);
                 }
             }
         } break;

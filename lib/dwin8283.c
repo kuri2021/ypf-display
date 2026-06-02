@@ -21,10 +21,10 @@ void Pro8283Init(void)
 {
    // u8 CanReg[4]={0x0F,0x40,0x72,0x00};
 
-    // UartInit(DWIN_UART,115200);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
-    // UartInit(UART4,115200);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
-      UartInit(DWIN_UART,38400);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
-    UartInit(UART4,38400);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
+    UartInit(DWIN_UART,115200);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
+     UartInit(UART4,115200);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
+      //UartInit(DWIN_UART,38400);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
+    //UartInit(UART4,38400);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
    // CanBusInit(CanReg);
 
     DwinFrame[0].pQuene = Uart_Struct[DWIN_UART].rx_buf;

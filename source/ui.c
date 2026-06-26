@@ -2132,7 +2132,3 @@ void encoder_page_change(u16 state)
         } break;
     }
 }
-
-
-
-void Admin_page_change(u16 AdminSP)

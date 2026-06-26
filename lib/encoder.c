@@ -23,8 +23,8 @@ u16 Encoder_recevie(void)
 	static u8 F_Encoder_Check=0;
 	static u8 rEn_Right_Read;
 	static u8 rEn_Left_Read;
-    static u8 x=0;
-    static u16 y=0;
+  static u8 x=0;
+  static u16 y=0;
 	delay_us(250);//延时一段时间，否则无法获取数据
 	if(GetPinIn(3,1))//if(GetPinIn(CWPORT,CWPIN))//根据实际的IO口决定
 		KEY_CW_PORT = 1;

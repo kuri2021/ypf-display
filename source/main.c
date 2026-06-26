@@ -46,7 +46,8 @@ void main()
     StartTimer(TMR_7, CHECK_TIME);
 
     write_dgus_vp(VP_DATA_PUSH, (u8*)&test1, 1);
- 
+
+    admin_language_eng();
     
     while (1)
     {
@@ -61,11 +62,11 @@ void main()
         write_dgus_vp_check();
         state = Encoder_recevie();
         encoder_page_change(state);
-           if (g_need_upgrade)
-        {
-            g_need_upgrade = 0;
-   //         EnterCCodeUpgrade();
-        }
+//            if (g_need_upgrade)
+//         {
+//             g_need_upgrade = 0;
+//    //         EnterCCodeUpgrade();
+//         }
     }
 
 }

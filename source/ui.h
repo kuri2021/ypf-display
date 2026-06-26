@@ -16,6 +16,7 @@ void SecCnt_TickTask(void);
 void SecCnt_Start120(u16 time);
 void write_dgus_vp_check(void);
 void test_vp(void);
+void admin_language_eng(void);
 extern u8 page_number;
 #endif
 

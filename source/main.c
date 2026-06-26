@@ -22,6 +22,7 @@
 static u16 system_ready = 0;
 
 #define VP_DATA_PUSH          0x8200  // 유지시간 설정
+#define VP_ACTIVE          0x8500  // 유지시간 설정
 
 
 
@@ -30,8 +31,7 @@ void main()
     u16 state;
     u8 page_number = 26;
     u8 did_first_page = 0;  
-    u16 test1 = 10;
-    u16 test2 = 3567;
+    u16 flag = 10;
     T0_Init();
     T1_Init();
     init_rtc();
@@ -46,7 +46,8 @@ void main()
     LOG("start\r\n");
     StartTimer(TMR_7, CHECK_TIME);
 
-    write_dgus_vp(VP_DATA_PUSH, (u8*)&test1, 1);
+    write_dgus_vp(VP_DATA_PUSH, (u8*)&flag, 1);
+     write_dgus_vp(VP_ACTIVE, (u8*)&flag, 1);
  
     
     while (1)

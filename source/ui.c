@@ -1063,7 +1063,7 @@ void encoder_page_change(u16 state)
                                     min--;
                                 }
                                   result = (u16)(min * 60 + second);
-                                 if(result<= 3600 && result > 0){
+                                 if(result<= 3600 && result >= 0){
                                     write_dgus_vp(0x2850, (u8*)&min, 1);
                                 }else{
                                     min = keep;
@@ -1077,7 +1077,7 @@ void encoder_page_change(u16 state)
                                     second--;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= 3600 && result > 0){
+                                 if(result<= 3600 && result >= 0){
                                     write_dgus_vp(0x2860, (u8*)&second, 1);
                                 }else{
                                     second = keep;
@@ -1088,7 +1088,7 @@ void encoder_page_change(u16 state)
                     } break;
 
                     case 20: {
-                            if (select_position == 0 && press > 1) {
+                            if (select_position == 0 && press > 0) {
                                 press--;
                                 write_dgus_vp(0x2920, (u8*)&press, 1);
                             }
@@ -1141,7 +1141,7 @@ void encoder_page_change(u16 state)
                                 }
                             }
                         }else if(counting21 == 2){
-                            if(press > 1){
+                            if(press > 0){
                                 press --;
                                 write_dgus_vp(0x2930, (u8*)&press, 1);
                             }
@@ -1202,7 +1202,7 @@ void encoder_page_change(u16 state)
                                     min--;
                                 }
                                 result = (u16)(min * 60 + second);
-                                if(result<= 3600 && result > 0){
+                                if(result<= 3600 && result >= 0){
                                     write_dgus_vp(0x2850, (u8*)&min, 1);
                                 }else{
                                     min = keep;
@@ -1217,7 +1217,7 @@ void encoder_page_change(u16 state)
                                     second--;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= 3600 && result > 0){
+                                 if(result<= 3600 && result >= 0){
                                     write_dgus_vp(0x2860, (u8*)&second, 1);
                                 }else{
                                     second = keep;
@@ -1555,7 +1555,7 @@ void encoder_page_change(u16 state)
                                     min++;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= 3600 && result > 0){
+                                 if(result<= 3600 && result >= 0){
                                     write_dgus_vp(0x2850, (u8*)&min, 1);
                                 }else{
                                     min = keep;
@@ -1570,7 +1570,7 @@ void encoder_page_change(u16 state)
                                     second++;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= 3600 && result > 0){
+                                 if(result<= 3600 && result >= 0){
                                     write_dgus_vp(0x2860, (u8*)&second, 1);
                                 }else{
                                     second = keep;
@@ -1697,7 +1697,7 @@ void encoder_page_change(u16 state)
                                     min++;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= 3600 && result > 0){
+                                 if(result<= 3600 && result >= 0){
                                     write_dgus_vp(0x2850, (u8*)&min, 1);
                                 }else{
                                     min = keep;
@@ -1711,7 +1711,7 @@ void encoder_page_change(u16 state)
                                     second++;
                                 }
                                 result = (u16)(min * 60 + second);
-                                if(result<= 3600 && result > 0){
+                                if(result<= 3600 && result >= 0){
                                     write_dgus_vp(0x2860, (u8*)&second, 1);
                                 }else{
                                     second = keep;

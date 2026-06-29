@@ -600,7 +600,7 @@ void SecCnt_TickTask(void) {
     } 
 }
 
-void Init(void) {
+void Picture1213_Init(void) {
     u16 result = 0;
 
     read_dgus_vp(VP_SET_P, (u8*)&press, 1);
@@ -1939,7 +1939,7 @@ void encoder_page_change(u16 state)
                     page_number = adminList;
                     //admin_plag = 1;
                     Page_Change_Handler(page_number);
-                    admin_text_change();
+                    // admin_text_change();
                 }else if(page_number == topHeating){
                     settingflag  = 1;
                     write_dgus_vp(0X2150, (u8*)&TT100, 1);

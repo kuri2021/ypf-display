@@ -1,7 +1,6 @@
 #ifndef __LANGUAGE_H__
 #define __LANGUAGE_H__
 
-typedef unsigned short u16;
 
 /* 한국어 */
 // 어드민 리스트

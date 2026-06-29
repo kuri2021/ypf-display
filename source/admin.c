@@ -33,11 +33,10 @@ static u8 LanguageSP = 0;
 
 static u8 company_plag = 0;
 
-static u8 EngineerSP = 0;
 static u16 EngineerPw1 = 0,EngineerPw2 = 0,EngineerPw3 = 0,EngineerPw4 = 0,EngineerPw5 = 0,EngineerPw6 = 0;
 
 static u8 io; 
-
+u8 EngineerSP = 0;
 u16 toptempmin = 1;
 u16 toptempmax = 200;
 u16 bottempmin = 1;

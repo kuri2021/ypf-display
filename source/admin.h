@@ -1,7 +1,5 @@
-#ifndef __LANGUAGE_H__
-#define __LANGUAGE_H__
-
-typedef unsigned short u16;
+#ifndef __ADMIN_H__
+#define __ADMIN_H__
 
 void admin_User_Setting_Function(u16 i);
 void admin_List(u16 i);
@@ -19,6 +17,8 @@ void EngineermodTextChange(void);
 void admin_page_change(void);
 void admininit(void);
 
+extern u8 EngineerSP;
+extern u8 adminSP;
 extern u16 toptempmin;
 extern u16 toptempmax;
 extern u16 bottempmin;
@@ -27,5 +27,11 @@ extern u16 pressmin;
 extern u16 pressmax;
 extern u16 delaymin;
 extern u16 delaymax;
+extern u16 EngineerPw1;
+extern u16 EngineerPw2;
+extern u16 EngineerPw3;
+extern u16 EngineerPw4;
+extern u16 EngineerPw5;
+extern u16 EngineerPw6;
 
 #endif

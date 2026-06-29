@@ -3,16 +3,17 @@
 ".\Objects\timer.obj",
 ".\Objects\uart.obj",
 ".\Objects\debug.obj",
-".\Objects\main.obj",
-".\Objects\ui.obj",
-".\Objects\history.obj",
 ".\Objects\dwin8283.obj",
 ".\Objects\canbus.obj",
 ".\Objects\norflash.obj",
 ".\Objects\rtc.obj",
 ".\Objects\iic.obj",
 ".\Objects\umath.obj",
-".\Objects\encoder.obj" 
+".\Objects\encoder.obj",
+".\Objects\ui.obj",
+".\Objects\color.obj",
+".\Objects\history.obj",
+".\Objects\main.obj" 
 TO ".\Objects\T5L51" 
 PRINT(".\Listings\T5L51.m51") RAMSIZE(256) 
 DISABLEWARNING (16) 

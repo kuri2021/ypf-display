@@ -3,7 +3,6 @@
 #include <string.h>
 #include "hmi.h"
 #include "sys.h"
-#include "color.h"
 
 // ===== add prototypes (put these after includes) =====
 static void DGUS_WriteWord(u16 vp, u16 val);
@@ -13,6 +12,11 @@ static void DGUS_ApplyColor_SP_8803_BE(u16 sp_addr, u16 rgb565);
 static void DGUS_ApplyColor_ATTR_VP(u16 attr_vp, u16 rgb565);
 void DGUS_Color_Diagnose_And_Apply(u16 sp_addr, u16 attr_vp, u8 do_sweep);
 
+static void SetTextColorRed(u16 sp_addr);
+static void SetTextColorBlack(u16 sp_addr);
+static void SetTextColorWhite(u16 sp_addr);
+static void SetTextColorYellow(u16 sp_addr);
+static void SetTextColorGreen(u16 sp_addr);
 static void ChangeImage(u16 vp_addr, u16 index);
 
 #define COL_BLACK 0x0000
@@ -348,6 +352,38 @@ void write_dgus_vp_check(void) {
     }
     } 
 }
+
+
+void SetTextColorRed(u16 sp_addr) {
+    u16 color = 0xC064;  // RGB565 빨강
+    write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+}
+
+void SetTextColorBlack(u16 sp_addr) {
+    u16 color = 0x18E3;
+    write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+}
+
+void SetTextColorYellow(u16 sp_addr) {
+    u16 color = 0xFF60;
+    write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+}
+
+void SetTextColorBlue(u16 sp_addr) {
+    u16 color = 0x051D;
+    write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+}
+
+void SetTextColorGray(u16 sp_addr) {
+    u16 color = 0xCE59;
+    write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+}
+
+void SetTextColorWhite(u16 sp_addr) {
+    u16 color = 0xFFFF;
+    write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+}
+
 void UI_Read500ms_Stop(void){
   read500_enable = 0;
 }
@@ -534,7 +570,7 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
 
         case 20: {
             if (count == 0) {
-                SetTextColorBlack(0x1303);
+                     SetTextColorBlack(0x1303);
                 SetTextColorBlue(0x1313);
             } else if (count == 1) {
            SetTextColorBlue(0x1303);
@@ -3439,7 +3475,7 @@ void encoder_page_change(u16 state)
                     }else break;
                 }
             }else if(admin_plag == 1){
-                // admin_language_eng();
+                admin_language_eng();
                 // if(page_number == adminList){
                 //     admin_page_change();
                 // }else if(page_number == adminUserSetting){

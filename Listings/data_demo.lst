@@ -1,0 +1,83 @@
+C51 COMPILER V9.56.0.0   DATA_DEMO                                                         06/29/2026 15:18:41 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DATA_DEMO
+OBJECT MODULE PLACED IN .\Objects\data_demo.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE source\data_demo.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(.\driver;.\sour
+                    -ce;.\lib) DEBUG OBJECTEXTEND PRINT(.\Listings\data_demo.lst) TABS(2) OBJECT(.\Objects\data_demo.obj)
+
+line level    source
+
+   1          #include "data_demo.h"
+   2          #include "sys.h"   // write_dgus_vp, read_dgus_vp 선언 포함
+   3          
+   4          // 보드 → 디스플레이 : 현재 상태 전달 예제
+   5          void Demo_SendBoardToDisplay(void)
+   6          {
+   7   1          u16 val16;
+   8   1      
+   9   1          // 현재 상 히터 온도 = 185℃
+  10   1          val16 = 185;
+  11   1          write_dgus_vp(0x8000, (u8*)&val16, 2);
+  12   1      
+  13   1          // 현재 하 히터 온도 = 172℃
+  14   1          val16 = 172;
+  15   1          write_dgus_vp(0x8002, (u8*)&val16, 2);
+  16   1      
+  17   1          // 현재 압력 = 2.5 bar (엑셀 기준 0.1bar 단위 → 25)
+  18   1          val16 = 25;
+  19   1          write_dgus_vp(0x8004, (u8*)&val16, 2);
+  20   1      
+  21   1          // 상태 코드 = 2 (예: HEATUP)
+  22   1          val16 = 2;
+  23   1          write_dgus_vp(0x800A, (u8*)&val16, 2);
+  24   1      
+  25   1          // 플래그 예시 (비트 조합 값)
+  26   1          val16 = 0x0003; // bit0=RUN, bit1=HEATER
+  27   1          write_dgus_vp(0x800C, (u8*)&val16, 2);
+  28   1      
+  29   1          // 에러 코드/인자
+  30   1          val16 = 101; // 예: 온도센서 오류
+  31   1          write_dgus_vp(0x8010, (u8*)&val16, 2);
+  32   1      
+  33   1          val16 = 34; // 예: 채널 번호
+  34   1          write_dgus_vp(0x8012, (u8*)&val16, 2);
+  35   1      }
+  36          
+  37          
+  38          // 디스플레이 → 보드 : 설정값 읽기 예제
+  39          void Demo_ReadDisplayToBoard(void)
+  40          {
+  41   1          u16 buf[8];
+  42   1      
+  43   1          // 목표 압력 읽기 (0x8100, 단위 0.1bar)
+  44   1          read_dgus_vp(0x8100, (u8*)buf, 2);
+  45   1          u16 targetP = buf[0];
+*** ERROR C141 IN LINE 45 OF source\data_demo.c: syntax error near 'u16'
+*** ERROR C202 IN LINE 45 OF source\data_demo.c: 'targetP': undefined identifier
+  46   1      
+  47   1          // 유지 시간 읽기 (0x8102, 단위 초)
+  48   1          read_dgus_vp(0x8102, (u8*)buf, 2);
+  49   1          u16 holdTimeSec = buf[0];
+*** ERROR C141 IN LINE 49 OF source\data_demo.c: syntax error near 'u16'
+*** ERROR C202 IN LINE 49 OF source\data_demo.c: 'holdTimeSec': undefined identifier
+  50   1      
+C51 COMPILER V9.56.0.0   DATA_DEMO                                                         06/29/2026 15:18:41 PAGE 2   
+
+  51   1          // 상 히터 목표온도 (0x8110)
+  52   1          read_dgus_vp(0x8110, (u8*)buf, 2);
+  53   1          u16 setTopTemp = buf[0];
+*** ERROR C141 IN LINE 53 OF source\data_demo.c: syntax error near 'u16'
+*** ERROR C202 IN LINE 53 OF source\data_demo.c: 'setTopTemp': undefined identifier
+  54   1      
+  55   1          // 하 히터 목표온도 (0x8112)
+  56   1          read_dgus_vp(0x8112, (u8*)buf, 2);
+  57   1          u16 setBotTemp = buf[0];
+*** ERROR C141 IN LINE 57 OF source\data_demo.c: syntax error near 'u16'
+*** ERROR C202 IN LINE 57 OF source\data_demo.c: 'setBotTemp': undefined identifier
+  58   1      
+  59   1          // 디버그 출력 (필요 시 UART로 확인)
+  60   1          // printf("TargetP=%d, Hold=%d, Ttop=%d, Tbot=%d\n", targetP, holdTimeSec, setTopTemp, setBotTemp);
+  61   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  8 ERROR(S)

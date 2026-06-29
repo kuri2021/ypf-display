@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MAIN                                                              06/30/2026 08:40:52 PAGE 1   
+C51 COMPILER V9.56.0.0   MAIN                                                              06/30/2026 08:44:44 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
@@ -50,21 +50,20 @@ line level    source
   40   1          SetPinIn(2, 0);
   41   1          StartTimer(0, 60000);
   42   1          StartTimer(1, 500);                                                     
-  43   1          Init();
+  43   1          Pro8283Init();
   44   1          DEBUGINIT();
   45   1          EA = 1;
   46   1          Page_Change_Handler(page_number); // �ϵ���ʾ����
-  47   1          Picture1213_Init();               // �ϵ�12ҳ��13ҳͼ����ʾ
-*** WARNING C206 IN LINE 47 OF source\main.c: 'Picture1213_Init': missing function-prototype
+  47   1          Init();               // �ϵ�12ҳ��13ҳͼ����ʾ
   48   1          LOG("start\r\n");
   49   1          StartTimer(TMR_7, CHECK_TIME);
   50   1          write_dgus_vp(VP_DATA_PUSH, (u8*)&test1, 1);
   51   1          admin_language_eng();
   52   1          
   53   1          while (1)
-C51 COMPILER V9.56.0.0   MAIN                                                              06/30/2026 08:40:52 PAGE 2   
-
   54   1          {
+C51 COMPILER V9.56.0.0   MAIN                                                              06/30/2026 08:44:44 PAGE 2   
+
   55   2              Pro8283Deal();
   56   2            if (!system_ready && GetTimeOutFlag(TMR_7)) {
   57   3              system_ready = 1;
@@ -97,4 +96,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

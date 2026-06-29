@@ -32,7 +32,6 @@ compiling timer.c...
 compiling uart.c...
 compiling debug.c...
 compiling main.c...
-source\main.c(47): warning C206: 'Picture1213_Init': missing function-prototype
 compiling ui.c...
 source\ui.c(1942): warning C206: 'admin_text_change': missing function-prototype
 compiling history.c...
@@ -46,15 +45,8 @@ compiling encoder.c...
 lib\encoder.c(26): warning C280: 'x': unreferenced local variable
 linking...
 *** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
-    SYMBOL:  PICTURE1213_INIT
-    MODULE:  .\Objects\main.obj (MAIN)
-*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
     SYMBOL:  ADMIN_LANGUAGE_ENG
     MODULE:  .\Objects\main.obj (MAIN)
-*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  PICTURE1213_INIT
-    MODULE:  .\Objects\main.obj (MAIN)
-    ADDRESS: 6921H
 *** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
     SYMBOL:  ADMIN_LANGUAGE_ENG
     MODULE:  .\Objects\main.obj (MAIN)
@@ -1048,7 +1040,7 @@ linking...
     SYMBOL:  _READ_DGUS
     MODULE:  .\Objects\history.obj (HISTORY)
     ADDRESS: 5D35H
-Program Size: data=29.0 xdata=17524 code=32300
+Program Size: data=29.0 xdata=17515 code=32300
 creating hex file from ".\Objects\T5L51"...
 User command #1: 1.bat
 C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG>CD Objects 
@@ -1056,8 +1048,8 @@ C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG\Objects>srec_cat.exe -Disable_Sequen
 C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG\Objects>copy T5L51.bin E:\DWIN_SET  
         1개 파일이 복사되었습니다.
 C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG\Objects>echo.
-".\Objects\T5L51" - 0 Error(s), 261 Warning(s).
-Build Time Elapsed:  00:00:06
+".\Objects\T5L51" - 0 Error(s), 258 Warning(s).
+Build Time Elapsed:  00:00:08
 </pre>
 </body>
 </html>

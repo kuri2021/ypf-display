@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   COLOR                                                             06/29/2026 15:24:15 PAGE 1   
+C51 COMPILER V9.56.0.0   COLOR                                                             06/29/2026 16:35:21 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE COLOR
@@ -11,35 +11,42 @@ line level    source
    1          #include "sys.h"
    2          #include "color.h"
    3          
-   4          void SetTextColorRed(u16 sp_addr) {
-   5   1          u16 color = 0xC064;  // RGB565 빨강
-   6   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
-   7   1      }
-   8          
-   9          void SetTextColorBlack(u16 sp_addr) {
-  10   1          u16 color = 0x18E3;
-  11   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
-  12   1      }
-  13          
-  14          void SetTextColorYellow(u16 sp_addr) {
-  15   1          u16 color = 0xFF60;
-  16   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
-  17   1      }
-  18          
-  19          void SetTextColorBlue(u16 sp_addr) {
-  20   1          u16 color = 0x051D;
-  21   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
-  22   1      }
-  23          
-  24          void SetTextColorGray(u16 sp_addr) {
-  25   1          u16 color = 0xCE59;
-  26   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
-  27   1      }
-  28          
-  29          void SetTextColorWhite(u16 sp_addr) {
-  30   1          u16 color = 0xFFFF;
-  31   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
-  32   1      }
+   4          #define COL_BLACK 0x0000
+   5          #define COL_WHITE 0xFFFF
+   6          #define COL_RED   0xC044
+   7          #define COL_GREEN 0x07E0
+   8          #define COL_BLUE  0x051C
+   9          #define COL_GREY  0xCE59
+  10          
+  11          void SetTextColorRed(u16 sp_addr) {
+  12   1          u16 color = 0xC064;  // RGB565 빨강
+  13   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+  14   1      }
+  15          
+  16          void SetTextColorBlack(u16 sp_addr) {
+  17   1          u16 color = 0x18E3;
+  18   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+  19   1      }
+  20          
+  21          void SetTextColorYellow(u16 sp_addr) {
+  22   1          u16 color = 0xFF60;
+  23   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+  24   1      }
+  25          
+  26          void SetTextColorBlue(u16 sp_addr) {
+  27   1          u16 color = 0x051D;
+  28   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+  29   1      }
+  30          
+  31          void SetTextColorGray(u16 sp_addr) {
+  32   1          u16 color = 0xCE59;
+  33   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+  34   1      }
+  35          
+  36          void SetTextColorWhite(u16 sp_addr) {
+  37   1          u16 color = 0xFFFF;
+  38   1          write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+  39   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

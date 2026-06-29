@@ -8,6 +8,9 @@
 #include "debug.h"
 #include "hmi.h"
 #include "data_demo.h"
+#include "language.h"
+#include "admin.h"
+
 #define USE_LOG 0
 #define TAG "MAIN"
 #if (USE_LOG && DEBUG)
@@ -37,16 +40,14 @@ void main()
     SetPinIn(2, 0);
     StartTimer(0, 60000);
     StartTimer(1, 500);                                                     
-    Pro8283Init();
+    Init();
     DEBUGINIT();
     EA = 1;
     Page_Change_Handler(page_number); // �ϵ���ʾ����
     Picture1213_Init();               // �ϵ�12ҳ��13ҳͼ����ʾ
     LOG("start\r\n");
     StartTimer(TMR_7, CHECK_TIME);
-
     write_dgus_vp(VP_DATA_PUSH, (u8*)&test1, 1);
-
     admin_language_eng();
     
     while (1)

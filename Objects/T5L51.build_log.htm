@@ -33,8 +33,9 @@ compiling uart.c...
 compiling debug.c...
 compiling main.c...
 compiling ui.c...
-source\ui.c(768): warning C206: 'Page_Change_UI': missing function-prototype
-source\ui.c(768): error C267: 'Page_Change_UI': requires ANSI-style prototype
+source\ui.c(1570): warning C206: 'quickSettingInIt': missing function-prototype
+source\ui.c(2659): warning C206: 'admin_page_change': missing function-prototype
+source\ui.c(2668): warning C206: 'adminUserSettingEdit': missing function-prototype
 compiling history.c...
 compiling dwin8283.c...
 compiling canbus.c...
@@ -44,8 +45,68 @@ compiling iic.c...
 compiling umath.c...
 compiling encoder.c...
 lib\encoder.c(26): warning C280: 'x': unreferenced local variable
-Target not created.
-Build Time Elapsed:  00:00:02
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_NEED_UPGRADE
+    MODULE:  .\Objects\main.obj (MAIN)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_NEED_UPGRADE
+    MODULE:  .\Objects\main.obj (MAIN)
+    ADDRESS: 7E72H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADMINUSERSETTINGEDIT
+    MODULE:  .\Objects\ui.obj (UI)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ADMIN_PAGE_CHANGE
+    MODULE:  .\Objects\ui.obj (UI)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  QUICKSETTINGINIT
+    MODULE:  .\Objects\ui.obj (UI)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  QUICKSETTINGINIT
+    MODULE:  .\Objects\ui.obj (UI)
+    ADDRESS: 045FH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  QUICKSETTINGINIT
+    MODULE:  .\Objects\ui.obj (UI)
+    ADDRESS: 04A7H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  QUICKSETTINGINIT
+    MODULE:  .\Objects\ui.obj (UI)
+    ADDRESS: 19AAH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  QUICKSETTINGINIT
+    MODULE:  .\Objects\ui.obj (UI)
+    ADDRESS: 2FABH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADMIN_PAGE_CHANGE
+    MODULE:  .\Objects\ui.obj (UI)
+    ADDRESS: 341CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ADMINUSERSETTINGEDIT
+    MODULE:  .\Objects\ui.obj (UI)
+    ADDRESS: 3449H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  QUICKSETTINGINIT
+    MODULE:  .\Objects\ui.obj (UI)
+    ADDRESS: 3CB4H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READ_DGUS
+    MODULE:  .\Objects\history.obj (HISTORY)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READ_DGUS
+    MODULE:  .\Objects\history.obj (HISTORY)
+    ADDRESS: 7295H
+Program Size: data=29.0 xdata=18777 code=38963
+creating hex file from ".\Objects\T5L51"...
+User command #1: 1.bat
+C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG>CD Objects 
+C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG\Objects>srec_cat.exe -Disable_Sequence_Warning T5L51.hex -Intel -o T5L51.bin -Binary  
+C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG\Objects>copy T5L51.bin E:\DWIN_SET  
+        1개 파일이 복사되었습니다.
+C:\Users\WSB\Desktop\make\T5L51_DWIN8283CFG\Objects>echo.
+".\Objects\T5L51" - 0 Error(s), 18 Warning(s).
+Build Time Elapsed:  00:00:05
 </pre>
 </body>
 </html>

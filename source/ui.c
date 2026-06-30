@@ -79,6 +79,147 @@ static void ChangeImage(u16 vp_addr, u16 index);
 
 #define VP_NOR_FLASH_RW_CMD 0x0008
 
+const u16 USER_SETTING_KOR[] = {0xC720, 0xC800, 0x0020, 0xC138, 0xD305};//유저 세팅
+const u16 CHECK_KOR[] ={0x0049, 0x004F, 0x0020, 0xD14C, 0xC2A4, 0xD2B8};// io 테스트
+const u16 FACTORY_RESET_KOR[] = {0xACF5, 0xC7A5, 0x0020, 0xCD08, 0xAE30, 0xD654};// 공장 초기화
+const u16 LOG_ERROR_KOR[] ={0xB85C, 0xADF8, 0x0020, 0x0026, 0x0020, 0xC5D0, 0xB7EC};// 로그 및 에러
+const u16 WORK_TIME_KOR[] ={0xC791, 0xB3D9, 0x0020, 0xC2DC, 0xAC04};// 작업 시간
+const u16 LANGUAGE_KOR[] = {0xC5B8, 0XC5B4};//언어
+const u16 COMPANY_KOR[] ={0xD68C, 0xC0AC, 0xC18C, 0xAC1C};// 회사 소개
+const u16 ENGINEER_MODE_KOR[] ={0xC5D4, 0xC9C0, 0xB2C8, 0xC5B4, 0x0020, 0xBAA8, 0xB4DC};//엔지니어 모드
+
+// 유저 세팅
+const u16 TOP_TEMP[]      = {0xC0C1,0xD310,0x0020,0xC628,0xB3C4};
+const u16 BOTTOM_TEMP[]   = {0xD558,0xD310,0x0020,0xC628,0xB3C4};
+const u16 PRESSURE[]      = {0xC555,0xB825};
+const u16 DELAY_TIME[]    = {0xC9C0,0xC5F0,0xC2DC,0xAC04};
+
+//IO테스트
+const u16 TOP_HEATER_KOR[]      = {0xC0C1,0xD310,0x0020,0xD788,0xD130};
+const u16 BOTTOM_HEATER_KOR[]   = {0xD558,0xD310,0x0020,0xD788,0xD130};
+const u16 TOP_FAN_KOR[]         = {0xC0C1,0xD310,0x0020,0xD32C};
+const u16 BOTTOM_FAN_KOR[]      = {0xD558,0xD310,0x0020,0xD32C};
+const u16 COMPRESSOR_KOR[]      = {0xCF64,0xD504,0xB808,0xC0E4};
+const u16 SOLENOID_KOR[]        = {0xC194,0xB808,0xB178,0xC774,0xB4DC};
+
+//공장 초기화
+const u16 INIT_QUESTION1[] ={0xB370, 0xC774, 0xD130, 0xC774, 0xD130, 0xB97C};
+const u16 INIT_QUESTION2[] ={0xCD08, 0xAE30, 0xD654,0xD558, 0xC2DC, 0xACA0,0xC2B5, 0xB2C8, 0xAE4C};
+const u16 OK_KOR[] ={0xD655,0xC778};
+const u16 CANCEL_KOR[] ={0xCDE8,0xC18C};
+
+//로그 & 에러
+const u16 ACTIVE_LOG[] ={0xD65C, 0xC131, 0x0020, 0xB85C, 0xADF8};
+const u16 ERROR_LOG[] ={0xC5D0, 0xB7EC, 0x0020, 0xB85C, 0xADF8};
+
+//
+const u16 HEATING_TIME_KOR[] = {0xAC00,0xC5F4,0xC2DC,0xAC04}; // 가열시간
+const u16 FAN_KOR[] = {0xD32C}; // 팬
+
+const u16 ENGLISH_KOR[] = {0xC601,0xC5B4}; // 영어
+const u16 CHINESE_KOR[] = {0xC911,0xAD6D,0xC5B4}; // 중국어
+const u16 KOREAN_KOR[] = {0xD55C,0xAD6D,0xC5B4}; // 한국어
+
+const u16 YONGLI_KOREA_KOR[] = {0xC6A9,0xB9AC,0xCF54,0xB9AC,0xC544}; // 용리코리아
+const u16 GYEONGGI_DO_KOR[] = {0xACBD,0xAE30,0xB3C4}; // 경기도
+const u16 PAJU_JORI_EUP_KOR[] = {0xD30C,0xC8FC,0xC2DC,0x0020,0xC870,0xB9AC,0xC74D}; // 파주시 조리읍
+const u16 DANGJAEBONG_RO_29_KOR[] = {0xB2F9,0xC7AC,0xBD09,0xB85C,0x0020,0x0032,0x0039}; // 당재봉로 29
+const u16 TEL_KOR[] = {0x0030,0x0033,0x0031,0x002D,0x0039,0x0035,0x0033,0x002D,0x0034,0x0030,0x0036,0x0033}; // 031-953-4063
+
+//영어
+
+const u16 ADMIN[] = {0x0041,0x0044,0x004D,0x0049,0x004E,0x0000};
+//어드민 리스트
+const u16 USER_SETTING_ENG[] = {0x0055,0x0053,0x0045,0x0052,0x0020,0x0053,0x0045,0x0054,0x0054,0x0049,0x004E,0x0047};// User Setting
+const u16 IO_TEST_ENG[] = {0x0049,0x004F,0x0020,0x0054,0x0045,0x0053,0x0054};// IO Test
+const u16 FACTORY_RESET_ENG[] = {0x0046,0x0041,0x0043,0x0054,0x004F,0x0052,0x0059,
+0x000D,0x000A,
+0x0052,0x0045,0x0053,0x0045,0x0054};// Factory Reset
+const u16 LOG_ERROR_ENG[] = {0x004C,0x004F,0x0047,0x0020,0x0026,0x0020,0x0045,0x0052,0x0052,0x004F,0x0052};// Log & Error
+const u16 RUN_TIME_ENG[] = {0x0052,0x0055,0x004E,0x0020,0x0054,0x0049,0x004D,0x0045};// Run Time
+const u16 LANGUAGE_ENG[] = {0x004C, 0x0041, 0x004E, 0x0047, 0x0055, 0x0041, 0x0047, 0x0045};//Language
+const u16 COMPANY_INFO_ENG[] = {0x0043,0x004F,0x004D,0x0050,0x0041,0x004E,0x0059,0x0020,0x0049,0x004E,0x0046,0x004F};// Company Info
+const u16 ENGINEER_MODE_ENG[] = {0x0045,0x004E,0x0047,0x0049,0x004E,0x0045,0x0045,0x0052,0x0020,0x004D,0x004F,0x0044,0x0045};// Engineer Mode
+
+//유저세팅
+const u16 TOP_TEMP_ENG[] = {0x0054,0x004F,0x0050,0x0020,0x0054,0x0045,0x004D,0x0050};// Top Temp
+const u16 BOTTOM_TEMP_ENG[] = {0x0042,0x004F,0x0054,0x0054,0x004F,0x004D,0x0020,0x0054,0x0045,0x004D,0x0050};// Bottom Temp
+const u16 PRESSURE_ENG[] = {0x0050,0x0052,0x0045,0x0053,0x0053,0x0055,0x0052,0x0045};// Pressure
+const u16 DELAY_TIME_ENG[] = {0x0044,0x0045,0x004C,0x0041,0x0059,0x0020,0x0054,0x0049,0x004D,0x0045};// Delay Time
+
+//IO 테스트
+const u16 TOP_HEATER_ENG[] = {0x0054,0x004F,0x0050,0x0020,0x0048,0x0045,0x0041,0x0054,0x0045,0x0052};// Top Heater
+const u16 BOTTOM_HEATER_ENG[] = {0x0042,0x004F,0x0054,0x0054,0x004F,0x004D,0x0020,0x0048,0x0045,0x0041,0x0054,0x0045,0x0052};// Bottom Heater
+const u16 TOP_FAN_ENG[] = {0x0054,0x004F,0x0050,0x0020,0x0046,0x0041,0x004E};// Top Fan
+const u16 BOTTOM_FAN_ENG[] = {0x0042,0x004F,0x0054,0x0054,0x004F,0x004D,0x0020,0x0046,0x0041,0x004E};// Bottom Fan
+const u16 COMPRESSOR_ENG[] = {0x0043,0x004F,0x004D,0x0050,0x0052,0x0045,0x0053,0x0053,0x004F,0x0052};// Compressor
+const u16 SOLENOID_ENG[] = {0x0053,0x004F,0x004C,0x0045,0x004E,0x004F,0x0049,0x0044};// Solenoid
+
+//공장 초기화
+const u16 DATA_ENG[] = {0x0044,0x0041,0x0054,0x0041};// Data
+const u16 INIT_QUESTION_ENG[] = {0x0049,0x004E,0x0049,0x0054,0x0049,0x0041,0x004C,0x0049,0x005A,0x0045,0x003F};// Initialize?
+const u16 YES_ENG[] = {0x0059,0x0045,0x0053}; // YES
+const u16 NO_ENG[] = {0x004E,0x004F}; // NO
+
+//로그 & 에러
+const u16 ACTIVE_LOG_ENG[] = {0x0041,0x0043,0x0054,0x0049,0x0056,0x0045,0x0020,0x004C,0x004F,0x0047};// Active Log
+const u16 ERROR_LOG_ENG[] = {0x0045,0x0052,0x0052,0x004F,0x0052,0x0020,0x004C,0x004F,0x0047};// Error Log
+
+// English / Chinese / Korean
+const u16 ENGLISH_ENG[] = {0x0045,0x004E,0x0047,0x004C,0x0049,0x0053,0x0048};
+const u16 CHINESE_ENG[] = {0x0043,0x0048,0x0049,0x004E,0x0045,0x0053,0x0045};
+const u16 KOREAN_ENG[] = {0x004B,0x004F,0x0052,0x0045,0x0041,0x004E};
+
+//회사 소개
+const u16 YONGLI_KOREA_ENG[] = {0x0059,0x004F,0x004E,0x0047,0x004C,0x0049,0x0020,0x004B,0x004F,0x0052,0x0045,0x0041}; // YONGLI KOREA
+const u16 GYEONGGI_DO_ENG[] = {0x0047,0x0059,0x0045,0x004F,0x004E,0x0047,0x0047,0x0049,0x002D,0x0044,0x004F}; // GYEONGGI-DO
+const u16 PAJU_JORI_ENG[] = {0x0050,0x0041,0x004A,0x0055,0x002D,0x0053,0x0049,0x002C,0x0020,0x004A,0x004F,0x0052,0x0049,0x002D,0x0045,0x0055,0x0050}; // PAJU-SI, JORI-EUP
+const u16 DANGJAEBONG_RO_29_ENG[] = {0x0032,0x0039,0x0020,0x0044,0x0061,0x006E,0x0067,0x006A,0x0061,0x0065,0x0062,0x006F,0x006E,0x0067,0x002D,0x0072,0x006F}; //Dangjaebong-ro29 
+const u16 ADDRESS_ENG[] = {0x0044,0x0041,0x004E,0x0047,0x004A,0x0041,0x0045,0x0042,0x004F,0x004E,0x0047,0x002D,0x0052,0x004F,0x0020,0x0032,0x0039}; // DANGJAEBONG-RO 29
+
+//중국어
+//어드민 리스트
+const u16 USER_SETTING_CHN[]    = {0x7528,0x6237,0x8BBE,0x7F6E};                         // 用户设置
+const u16 IO_TEST_CHN[]         = {0x0049,0x004F,0x6D4B,0x8BD5};                         // IO测试
+const u16 FACTORY_RESET_CHN[]   = {0x5DE5,0x5382,0x521D,0x59CB,0x5316};                 // 工厂初始化
+const u16 LOG_ERROR_CHN[]       = {0x65E5,0x5FD7,0x0020,0x0026,0x0020,0x9519,0x8BEF};   // 日志 & 错误
+const u16 RUN_TIME_CHN[]        = {0x8FD0,0x884C,0x65F6,0x95F4};                         // 运行时间
+const u16 LANGUAGE_CHN[]        = {0x8BED, 0x8A00};                                       // 语言
+const u16 COMPANY_INFO_CHN[]    = {0x516C,0x53F8,0x7B80,0x4ECB};                         // 公司简介
+const u16 ENGINEER_MODE_CHN[]   = {0x5DE5,0x7A0B,0x5E08,0x6A21,0x5F0F};                 // 工程师模式
+
+//IO테스트
+const u16 TOP_HEATER_CHN[]      = {0x9876,0x677F,0x52A0,0x70ED,0x5668};                 // 顶板加热器
+const u16 BOTTOM_HEATER_CHN[]   = {0x5E95,0x677F,0x52A0,0x70ED,0x5668};                 // 底板加热器
+const u16 TOP_FAN_CHN[]         = {0x9876,0x677F,0x98CE,0x6247};                         // 顶板风扇
+const u16 BOTTOM_FAN_CHN[]      = {0x5E95,0x677F,0x98CE,0x6247};                         // 底板风扇
+const u16 COMPRESSOR_CHN[]      = {0x538B,0x7F29,0x673A};                               // 压缩机
+const u16 SOLENOID_CHN[]        = {0x7535,0x78C1,0x9600};                               // 电磁阀
+const u16 TOP_TEMP_CHN[]        = {0x9876,0x677F,0x6E29,0x5EA6};                         // 顶板温度
+const u16 BOTTOM_TEMP_CHN[]     = {0x5E95,0x677F,0x6E29,0x5EA6};                         // 底板温度
+const u16 PRESSURE_CHN[]        = {0x538B,0x529B};                                       // 压力
+const u16 DELAY_TIME_CHN[]      = {0x5EF6,0x8FDF,0x65F6,0x95F4};                         // 延迟时间
+//공장 초기화
+const u16 DATA_CHN[]            = {0x6570,0x636E};                                       // 数据
+const u16 INIT_QUESTION_CHN[]   = {0x521D,0x59CB,0x5316,0x5417,0x003F};                 // 初始化吗?
+const u16 YES_CHN[] = {0x786E,0x8BA4};   // 确认
+const u16 NO_CHN[]  = {0x53D6,0x6D88};   // 取消
+//로그 & 에러
+const u16 ACTIVE_LOG_CHN[]      = {0x8FD0,0x884C,0x65E5,0x5FD7};                         // 运行日志
+const u16 ERROR_LOG_CHN[]       = {0x9519,0x8BEF,0x65E5,0x5FD7};                         // 错误日志
+//언어 변경
+const u16 ENGLISH_CHN[]         = {0x82F1,0x8BED};                                       // 英语
+const u16 CHINESE_CHN[]         = {0x4E2D,0x6587};                                       // 中文
+const u16 KOREAN_CHN[]          = {0x97E9,0x8BED};                                       // 韩语
+//회사 소개
+const u16 GYEONGGI_DO_CHN[]     = {0x4EAC,0x757F,0x9053};                               // 京畿道
+const u16 PAJU_JORI_CHN[]       = {0x5761,0x5DDE,0x5E02,0x0020,0x6761,0x91CC,0x9091};   // 坡州市 条里邑
+const u16 ADDRESS_CHN[]         = {0x5802,0x624D,0x5CF0,0x8DEF,0x0020,0x0032,0x0039};   // 堂才峰路 29
+const u16 TEL_CHN[]             = {0x0030,0x0033,0x0031,0x002D,0x0039,0x0035,0x0033,0x002D,0x0034,0x0030,0x0036,0x0033}; // 031-953-4063
+
+
+
+
 static u8  g_cnt_active = 0;
 static u16 g_cnt_value  = 0;
 
@@ -155,6 +296,49 @@ static u8 adminCompany = 36;
 static u8 adminEngineermod = 37;
 static u8 adminEngineermodS = 38;
 
+
+static u16 language = 0;
+
+static u8 adminSP = 0;
+static u8 admin_plag = 0;
+
+static u8 usersettingSP = 0;
+static u8 usersettingSelect_plag = 0;
+static u8 usersettingEditSP = 0;
+
+static u8 IOtestSP = 0;
+static u8 IOtestSelect_plag = 0;
+
+static u8 factoryReset_plag = 0;
+static u8 factoryResetSP = 0;
+
+static u8 LogErrorSP = 0;
+
+static u8 maintenance_plag = 0;
+
+static u8 LanguageSP = 0;
+
+static u8 company_plag = 0;
+
+static u8 EngineerSP = 0;
+static u16 EngineerPw1 = 0,EngineerPw2 = 0,EngineerPw3 = 0,EngineerPw4 = 0,EngineerPw5 = 0,EngineerPw6 = 0;
+
+static u8 io; 
+
+static u16 toptempmin = 1;
+static u16 toptempmax = 200;
+static u16 bottempmin = 1;
+static u16 bottempmax = 200;
+static u16 pressmin = 0;
+static u16 pressmax = 20;
+static u16 delaymin = 0;
+static u16 delaymax = 3600;
+
+
+
+
+
+
 void check_Start(u16 addr, u16 velue){
     check_addr = addr;
     legacy_value = velue;
@@ -210,6 +394,366 @@ void SetTextColorGray(u16 sp_addr) {
 void SetTextColorWhite(u16 sp_addr) {
     u16 color = 0xFFFF;
     write_dgus_vp(sp_addr, (u8*)&color, 1);  // 1워드 쓰기
+}
+void adminfactoryResetText(u16 state){
+     switch(state){
+        case 1:{
+            if(factoryResetSP ==0){
+                factoryResetSP = 1;
+            }else{
+                factoryResetSP--;
+            }
+        }break;
+        case 2:{
+            if(factoryResetSP==1){
+                factoryResetSP = 0;
+            }else{
+                factoryResetSP++;
+            }
+        }break;
+        case 3:{
+
+        }break;
+    }
+    if(factoryResetSP == 0){
+        SetTextColorYellow(0x5793);
+        SetTextColorWhite(0x5803);
+    }else{
+        SetTextColorWhite(0x5793);
+        SetTextColorYellow(0x5803);
+    }
+}
+
+void adminIoTestText(u16 state){
+    switch(state){
+        case 1:{
+            if(IOtestSP ==0){
+                IOtestSP = 5;
+            }else{
+                IOtestSP--;
+            }
+        }break;
+        case 2:{
+            if(IOtestSP==5){
+                IOtestSP = 0;
+            }else{
+                IOtestSP++;
+            }
+        }break;
+    }
+
+     switch(IOtestSP){
+        case 0:{
+            SetTextColorYellow(0x5193);
+            SetTextColorWhite(0x5213);
+            SetTextColorWhite(0x5233);
+            SetTextColorWhite(0x5253);
+            SetTextColorWhite(0x5273);
+            SetTextColorWhite(0x5293);
+        }break;
+        case 1:{
+            SetTextColorWhite(0x5193);
+            SetTextColorYellow(0x5213);
+            SetTextColorWhite(0x5233);
+            SetTextColorWhite(0x5253);
+            SetTextColorWhite(0x5273);
+            SetTextColorWhite(0x5293);
+        }break;
+        case 2:{
+            SetTextColorWhite(0x5193);
+            SetTextColorWhite(0x5213);
+            SetTextColorYellow(0x5233);
+            SetTextColorWhite(0x5253);
+            SetTextColorWhite(0x5273);
+            SetTextColorWhite(0x5293);
+        }break;
+        case 3:{
+            SetTextColorWhite(0x5193);
+            SetTextColorWhite(0x5213);
+            SetTextColorWhite(0x5233);
+            SetTextColorYellow(0x5253);
+            SetTextColorWhite(0x5273);
+            SetTextColorWhite(0x5293);
+        }break;
+        case 4:{
+            SetTextColorWhite(0x5193);
+            SetTextColorWhite(0x5213);
+            SetTextColorWhite(0x5233);
+            SetTextColorWhite(0x5253);
+            SetTextColorYellow(0x5273);
+            SetTextColorWhite(0x5293);
+        }break;
+        case 5:{
+            SetTextColorWhite(0x5193);
+            SetTextColorWhite(0x5213);
+            SetTextColorWhite(0x5233);
+            SetTextColorWhite(0x5253);
+            SetTextColorWhite(0x5273);
+            SetTextColorYellow(0x5293);
+        }break;
+    }
+}
+
+void adminLogErrorText(u16 state){
+     switch(state){
+        case 1:{
+            if(LogErrorSP  ==0){
+                LogErrorSP  = 1;
+            }else{
+                LogErrorSP --;
+            }
+        }break;
+        case 2:{
+            if(LogErrorSP ==1){
+                LogErrorSP  = 0;
+            }else{
+                LogErrorSP ++;
+            }
+        }break;
+    }
+    if(LogErrorSP  == 0){
+        SetTextColorYellow(0x5673);
+        SetTextColorWhite(0x5683);
+    }else{
+        SetTextColorWhite(0x5673);
+        SetTextColorYellow(0x5683);
+    }
+}
+//어드민 언어 변경
+void adminLanguageText(u16 state){
+      switch(state){
+        case 1:{
+            if(LanguageSP  ==0){
+                LanguageSP  = 2;
+            }else{
+                LanguageSP --;
+            }
+        }break;
+        case 2:{
+            if(LanguageSP == 2){
+                LanguageSP  = 0;
+            }else{
+                LanguageSP ++;
+            }
+        }break;
+    }
+    if(LanguageSP  == 0){
+        SetTextColorYellow(0x5553);
+        SetTextColorWhite(0x5563);
+        SetTextColorWhite(0x5573);
+    }else if(LanguageSP  == 1){
+        SetTextColorWhite(0x5553);
+        SetTextColorYellow(0x5563);
+        SetTextColorWhite(0x5573);
+    }else if(LanguageSP  == 2){
+        SetTextColorWhite(0x5553);
+        SetTextColorWhite(0x5563);
+        SetTextColorYellow(0x5573);
+    }
+}
+
+
+void admin_User_Setting_text_color(){
+    if(usersettingSP == 0){
+        SetTextColorYellow(0x5063);
+        SetTextColorWhite(0x5093);
+        SetTextColorWhite(0x5123);
+        SetTextColorWhite(0x5153);
+        if(usersettingSelect_plag == 1){
+            if(usersettingEditSP == 0){
+                SetTextColorYellow(0x5073);
+                SetTextColorWhite(0x5083);
+            }else if(usersettingEditSP == 1){
+                SetTextColorWhite(0x5073);
+                SetTextColorYellow(0x5083);
+            }
+        }else{
+            SetTextColorWhite(0x5073);
+            SetTextColorWhite(0x5083);
+        }
+    }else if(usersettingSP == 1){
+        SetTextColorWhite(0x5063);
+        SetTextColorYellow(0x5093);
+        SetTextColorWhite(0x5123);
+        SetTextColorWhite(0x5153);
+        if(usersettingSelect_plag == 1){
+            if(usersettingEditSP == 0){
+                SetTextColorYellow(0x5103);
+                SetTextColorWhite(0x5113);
+            }else if(usersettingEditSP == 1){
+                SetTextColorWhite(0x5103);
+                SetTextColorYellow(0x5113);
+            }
+        }else{
+            SetTextColorWhite(0x5103);
+            SetTextColorWhite(0x5113);
+        }
+    }else if(usersettingSP == 2){
+        SetTextColorWhite(0x5063);
+        SetTextColorWhite(0x5093);
+        SetTextColorYellow(0x5123);
+        SetTextColorWhite(0x5153);
+        if(usersettingSelect_plag == 1){
+            if(usersettingEditSP == 0){
+                SetTextColorYellow(0x5133);
+                SetTextColorWhite(0x5143);
+            }else if(usersettingEditSP == 1){
+                SetTextColorWhite(0x5133);
+                SetTextColorYellow(0x5143);
+            }
+        }else{
+            SetTextColorWhite(0x5133);
+            SetTextColorWhite(0x5143);
+        }
+    }else if(usersettingSP == 3){
+        SetTextColorWhite(0x5063);
+        SetTextColorWhite(0x5093);
+        SetTextColorWhite(0x5123);
+        SetTextColorYellow(0x5153);
+        if(usersettingSelect_plag == 1){
+            if(usersettingEditSP == 0){
+                SetTextColorYellow(0x5163);
+                SetTextColorWhite(0x5173);
+            }else if(usersettingEditSP == 1){
+                SetTextColorWhite(0x5163);
+                SetTextColorYellow(0x5173);
+            }
+        }else{
+            SetTextColorWhite(0x5163);
+            SetTextColorWhite(0x5173);
+        }
+    }
+   
+}
+
+void admin_User_Setting_Function(u16 i){
+    if(i == 0){
+        usersettingSP = 0;
+        usersettingSelect_plag = 0;
+    }else if(i == 1){
+        if(usersettingSelect_plag == 0){
+            if(usersettingSP == 0){
+                usersettingSP = 3;
+            }else{
+                usersettingSP--;
+            }
+        }else{
+            if(usersettingEditSP==0){
+                if(usersettingSP == 0){
+                    if(toptempmin>1 && toptempmax > toptempmin){
+                        toptempmin--;
+                    }
+                    write_dgus_vp(0x4070, (u8*)&toptempmin, 1);
+                }else if(usersettingSP == 1){
+                    if(bottempmin>1 && bottempmax > bottempmin){
+                        bottempmin--;
+                    }
+                    write_dgus_vp(0x4100, (u8*)&bottempmin, 1);
+                }else if(usersettingSP == 2){
+                    if(pressmin>0 && pressmax > pressmin){
+                        pressmin--;
+                    }
+                    write_dgus_vp(0x4130, (u8*)&pressmin, 1);
+                }else if(usersettingSP == 3){
+                    if(delaymin>1 && delaymax > delaymin){
+                        delaymin--;
+                    }
+                    write_dgus_vp(0x4160, (u8*)&delaymin, 1);
+                }
+            }else if(usersettingEditSP == 1){
+                if(usersettingSP == 0){
+                    if(toptempmax > toptempmin){
+                        toptempmax--;
+                    }
+                    write_dgus_vp(0x4080, (u8*)&toptempmax, 1);
+                }else if(usersettingSP == 1){
+                    if(bottempmax > bottempmin){
+                        bottempmax--;
+                    }
+                    write_dgus_vp(0x4110, (u8*)&bottempmax, 1);
+                }else if(usersettingSP == 2){
+                    if(pressmax > pressmin){
+                        pressmax--;
+                    }
+                    write_dgus_vp(0x4140, (u8*)&pressmax, 1);
+                }else if(usersettingSP == 3){
+                    if(delaymax > delaymin){
+                        delaymax--;
+                    }
+                    write_dgus_vp(0x4170, (u8*)&delaymax, 1);
+                }
+            }
+        }
+        admin_User_Setting_text_color();
+    }else if(i == 2){
+        if(usersettingSelect_plag == 0){
+            if(usersettingSP == 3){
+                usersettingSP = 0;
+            }else{
+                usersettingSP++;
+            }
+        }else {
+            if(usersettingEditSP==0){
+                if(usersettingSP == 0){
+                    if(toptempmax > toptempmin){
+                        toptempmin++;
+                    }
+                    write_dgus_vp(0x4070, (u8*)&toptempmin, 1);
+                }else if(usersettingSP == 1){
+                    if(bottempmax > bottempmin){
+                        bottempmin++;
+                    }
+                    write_dgus_vp(0x4100, (u8*)&bottempmin, 1);
+                }else if(usersettingSP == 2){
+                    if(pressmax > pressmin){
+                        pressmin++;
+                    }
+                    write_dgus_vp(0x4130, (u8*)&pressmin, 1);
+                }else if(usersettingSP == 3){
+                    if(delaymax > delaymin){
+                        delaymin++;
+                    }
+                    write_dgus_vp(0x4160, (u8*)&delaymin, 1);
+                }
+            }else if(usersettingEditSP == 1){
+                if(usersettingSP == 0){
+                    if(toptempmax < 220 && toptempmax > toptempmin){
+                        toptempmax++;
+                    }
+                    write_dgus_vp(0x4080, (u8*)&toptempmax, 1);
+                }else if(usersettingSP == 1){
+                    if(bottempmax < 220 && bottempmax > bottempmin){
+                        bottempmax++;
+                    }
+                    write_dgus_vp(0x4110, (u8*)&bottempmax, 1);
+                }else if(usersettingSP == 2){
+                    if(pressmax < 20 && pressmax > pressmin){
+                        pressmax++;
+                    }
+                    write_dgus_vp(0x4140, (u8*)&pressmax, 1);
+                }else if(usersettingSP == 3){
+                    if(delaymax < 180 &&delaymax > delaymin){
+                        delaymax++;
+                    }
+                    write_dgus_vp(0x4170, (u8*)&delaymax, 1);
+                }
+            }
+        }
+        admin_User_Setting_text_color();
+    }else if(i == 3){
+        if(usersettingSelect_plag == 0){
+            usersettingSelect_plag = 1;
+            admin_User_Setting_text_color();
+        }else {
+            if(usersettingEditSP == 0){
+                usersettingEditSP = 1;
+            }else if(usersettingEditSP == 1){
+                usersettingSelect_plag = 0;
+                usersettingEditSP = 0;
+            }
+        }
+        
+    }           
 }
 
 void UI_Read500ms_Stop(void){
@@ -552,6 +1096,11 @@ void Page_Change_Handler(u8 n) {
     write_dgus_vp(0x0084, page_set, 2);
 }
 
+void Page_Change_UI(u8 i){
+    page_number = i;
+    Page_Change_Handler(page_number);
+}
+
 void Page21InIt() {
     //탑 세팅온도
     SetTextColorWhite(0x9403);
@@ -570,6 +1119,243 @@ void Page21InIt() {
     SetTextColorWhite(0x9273);
 
     ChangeImage(0x3000, 0);
+}
+void admin_text_change(){
+    u16 len = 0;
+    //어드민 페이지 타이틀
+    if(language == 0){
+        if(page_number == 27){
+            write_dgus_vp(0x4010, (u8*)&ADMIN, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }else if(page_number == 28){
+            write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }else if(page_number == 29){
+            write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }else if(page_number == 30){
+            write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }else if(page_number == 31){
+            write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }else if(page_number == 32){
+            write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }else if(page_number == 33){
+            write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }else if(page_number == 34){
+            write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }else if(page_number == 28){
+            write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }else if(page_number == 28){
+            write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }else if(page_number == 28){
+            write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+            len = 12;
+            write_dgus_vp(0x5018, (u8*)&len, 1);
+        }
+    }else if(language == 1){
+
+    }else if(language == 2){
+
+    }
+
+     switch(adminSP){
+        case 0:{
+            if(language == 0){
+                write_dgus_vp(0x4020, (u8*)&ENGINEER_MODE_ENG, 13);
+                len = 26;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+
+                write_dgus_vp(0x4030, (u8*)&USER_SETTING_ENG, 12);
+                len = 24;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+
+                write_dgus_vp(0x4040, (u8*)&IO_TEST_ENG, 12);
+                len = 14;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+            }else if(language == 1){
+             
+            }else if(language == 2){
+                write_dgus_vp(0x4010, (u8*)&USER_SETTING_KOR, 5);
+                len = 10;
+                write_dgus_vp(0x5018, (u8*)&len, 1);
+
+                write_dgus_vp(0x4020, (u8*)&CHECK_KOR, 6);
+                len = 12;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+            }
+        }break;
+        case 1:{
+            if(language == 0){
+                write_dgus_vp(0x4020, (u8*)&USER_SETTING_ENG, 12);
+                len = 24;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+
+                write_dgus_vp(0x4030, (u8*)&IO_TEST_ENG, 7);
+                len = 14;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+
+                write_dgus_vp(0x4040, (u8*)&FACTORY_RESET_ENG, 10);
+                len = 20;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+            }else if(language == 1){
+                write_dgus_vp(0x4030, (u8*)&USER_SETTING_CHN, 4);
+                len = 8;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+                write_dgus_vp(0x4400, (u8*)&IO_TEST_CHN, 4);
+                len = 8;
+                write_dgus_vp(0x5408, (u8*)&len, 1);
+            }else if(language == 2){
+                write_dgus_vp(0x4010, (u8*)&USER_SETTING_KOR, 5);
+                len = 10;
+                write_dgus_vp(0x5018, (u8*)&len, 1);
+
+                write_dgus_vp(0x4020, (u8*)&CHECK_KOR, 6);
+                len = 12;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+            }
+        }break;
+        case 2:{
+            if(language == 0){
+               write_dgus_vp(0x4020, (u8*)&USER_SETTING_ENG, 12);
+                len = 24;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+
+                write_dgus_vp(0x4030, (u8*)&IO_TEST_ENG, 7);
+                len = 14;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+
+                write_dgus_vp(0x4040, (u8*)&FACTORY_RESET_ENG, 10);
+                len = 20;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+            }
+           
+        }break;
+        case 3:{
+            if(language == 0){
+               write_dgus_vp(0x4020, (u8*)&IO_TEST_ENG, 7);
+                len = 14;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+
+                write_dgus_vp(0x4030, (u8*)&FACTORY_RESET_ENG, 10);
+                len = 20;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+
+                write_dgus_vp(0x4040, (u8*)&LOG_ERROR_ENG, 10);
+                len = 20;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+            }
+        }break;
+        case 4:{
+            if(language == 0){
+               write_dgus_vp(0x4020, (u8*)&FACTORY_RESET_ENG, 10);
+                len = 20;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+
+                write_dgus_vp(0x4030, (u8*)&LOG_ERROR_ENG, 10);
+                len = 20;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+
+                write_dgus_vp(0x4040, (u8*)&RUN_TIME_ENG, 8);
+                len = 16;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+            }
+        }break;
+        case 5:{
+          if(language == 0){
+               write_dgus_vp(0x4020, (u8*)&LOG_ERROR_ENG, 10);
+                len = 20;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+
+                write_dgus_vp(0x4030, (u8*)&RUN_TIME_ENG, 8);
+                len = 16;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+
+                write_dgus_vp(0x4040, (u8*)&LANGUAGE_ENG, 8);
+                len = 16;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+            }
+        }break;
+        case 6:{
+            if(language == 0){
+               write_dgus_vp(0x4020, (u8*)&RUN_TIME_ENG, 8);
+                len = 16;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+
+                write_dgus_vp(0x4030, (u8*)&LANGUAGE_ENG, 8);
+                len = 16;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+
+                write_dgus_vp(0x4040, (u8*)&COMPANY_INFO_ENG, 12);
+                len = 24;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+            }
+        }break;
+        case 7:{
+            if(language == 0){
+               write_dgus_vp(0x4020, (u8*)&LANGUAGE_ENG, 8);
+                len = 16;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+
+                write_dgus_vp(0x4030, (u8*)&COMPANY_INFO_ENG, 12);
+                len = 24;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+
+                write_dgus_vp(0x4040, (u8*)&ENGINEER_MODE_ENG, 13);
+                len = 26;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+            }
+        }break;
+        case 8:{
+            if(language == 0){
+               write_dgus_vp(0x4020, (u8*)&COMPANY_INFO_ENG, 12);
+                len = 24;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+
+                write_dgus_vp(0x4030, (u8*)&ENGINEER_MODE_ENG, 13);
+                len = 26;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+
+                write_dgus_vp(0x4040, (u8*)&USER_SETTING_ENG, 12);
+                len = 24;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+            }
+        }break;
+    }
+}
+
+void admin_List(u16 i){
+    if (i == 1)
+    {
+        if(adminSP==0){
+            adminSP = 8;
+        }else{
+            adminSP--;
+        }
+    }else if(i == 2){
+        if(adminSP == 8){
+            adminSP = 0;
+        }else{
+            adminSP++;
+        }
+    }
+    admin_text_change(); 
 }
 
 void Page21Functioning(u16 count) {
@@ -1274,7 +2060,7 @@ void encoder_page_change(u16 state)
                     admin_List(state);
                 }if(page_number == adminUserSetting){
                    admin_User_Setting_Function(state);
-                }else if(page_number == adminIoTest){
+                }else if(page_number == adminIOTest){
                     adminIoTestText(state);
                 }else if(page_number == adminFactoryResetNotice){
                     adminfactoryResetText(state);

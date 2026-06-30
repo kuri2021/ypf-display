@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 1   
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE ADMIN
@@ -10,1255 +10,1583 @@ line level    source
 
    1          #include "sys.h"
    2          #include "language.h"
-*** ERROR C141 IN LINE 4 OF source\language.h: syntax error near 'u16'
    3          #include "admin.h"
-   4          
-   5          
-   6          #define VP_ADMIN_LIST_TITLE          0X4010
-   7          #define VP_ADMIN_LIST_1          0X4020
-   8          #define VP_ADMIN_LIST_2          0X4030
-   9          #define VP_ADMIN_LIST_3          0X4040
-  10          
-  11          static u16 language = 0;
+   4          #include "ui.h"
+   5          #include "color.h"
+   6          
+   7          
+   8          #define VP_ADMIN_LIST_TITLE          0X4010
+   9          #define VP_ADMIN_LIST_1          0X4020
+  10          #define VP_ADMIN_LIST_2          0X4030
+  11          #define VP_ADMIN_LIST_3          0X4040
   12          
-  13          static u8 adminSP = 0;
-  14          static u8 admin_plag = 0;
-  15          
-  16          static u8 usersettingSP = 0;
-  17          static u8 usersettingSelect_plag = 0;
-  18          static u8 usersettingEditSP = 0;
-  19          
-  20          static u8 IOtestSP = 0;
-  21          static u8 IOtestSelect_plag = 0;
-  22          
-  23          static u8 factoryReset_plag = 0;
-  24          static u8 factoryResetSP = 0;
-  25          
-  26          static u8 LogErrorSP = 0;
+  13          static u16 language = 0;
+  14          
+  15          u8 adminSP = 0;
+  16          static u8 admin_plag = 0;
+  17          
+  18          static u8 usersettingSP = 0;
+  19          static u8 usersettingSelect_plag = 0;
+  20          static u8 usersettingEditSP = 0;
+  21          
+  22          static u8 IOtestSP = 0;
+  23          static u8 IOtestSelect_plag = 0;
+  24          
+  25          static u8 factoryReset_plag = 0;
+  26          static u8 factoryResetSP = 0;
   27          
-  28          static u8 maintenance_plag = 0;
+  28          static u8 LogErrorSP = 0;
   29          
-  30          static u8 LanguageSP = 0;
+  30          static u8 maintenance_plag = 0;
   31          
-  32          static u8 company_plag = 0;
+  32          static u8 LanguageSP = 0;
   33          
-  34          static u8 EngineerSP = 0;
-  35          static u16 EngineerPw1 = 0,EngineerPw2 = 0,EngineerPw3 = 0,EngineerPw4 = 0,EngineerPw5 = 0,EngineerPw6 = 0
-             -;
-  36          
-  37          static u8 io; 
-  38          //uint16_t buf[1];
-  39          static u8 test2 = 0;
+  34          static u8 company_plag = 0;
+  35          
+  36          u8 EngineerSP = 0;
+  37          u16 EngineerPw1 = 0,EngineerPw2 = 0,EngineerPw3 = 0,EngineerPw4 = 0,EngineerPw5 = 0,EngineerPw6 = 0;
+  38          
+  39          static u8 io; 
   40          
-  41          
-  42          
-  43          void admin_text_change(){
-  44   1          u16 len = 0;
-  45   1            switch(adminSP){
-  46   2              case 0:{
-  47   3                  len = 0;
-  48   3                  write_dgus_vp(0x5028, (u8*)&len, 1);
-  49   3                  if(language == 0){
-  50   4                      write_dgus_vp(0x4020, (u8*)&USER_SETTING_ENG, 12);
-  51   4                      len = 24;
-  52   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 2   
+  41          u16 toptempmin = 1;
+  42          u16 toptempmax = 200;
+  43          u16 bottempmin = 1;
+  44          u16 bottempmax = 200;
+  45          u16 pressmin = 0;
+  46          u16 pressmax = 20;
+  47          u16 delaymin = 0;
+  48          u16 delaymax = 3600;
+  49          
+  50          void admin_User_Setting_text_color(){
+  51   1          if(usersettingSP == 0){
+  52   2              SetTextColorYellow(0x5063);
+  53   2              SetTextColorWhite(0x5093);
+  54   2              SetTextColorWhite(0x5123);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 2   
 
-  53   4                      write_dgus_vp(0x4400, (u8*)&IO_TEST_ENG, 7);
-  54   4                      len = 14;
-  55   4                      write_dgus_vp(0x5408, (u8*)&len, 1);
-  56   4                  }else if(language == 1){
-  57   4                      write_dgus_vp(0x4030, (u8*)&USER_SETTING_CHN, 4);
-  58   4                      len = 8;
-  59   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
-  60   4                      write_dgus_vp(0x4400, (u8*)&IO_TEST_CHN, 4);
-  61   4                      len = 8;
-  62   4                      write_dgus_vp(0x5408, (u8*)&len, 1);
-  63   4                  }else if(language == 2){
-  64   4                      write_dgus_vp(0x4010, (u8*)&USER_SETTING_KOR, 5);
-  65   4                      len = 10;
-  66   4                      write_dgus_vp(0x5018, (u8*)&len, 1);
-  67   4      
-  68   4                      write_dgus_vp(0x4020, (u8*)&CHECK_KOR, 6);
-  69   4                      len = 12;
-  70   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
-  71   4                  }
-  72   3              }break;
-  73   2              case 1:{
-  74   3                  if(language == 0){
-  75   4                      write_dgus_vp(0x4020, (u8*)&USER_SETTING_ENG, 12);
-  76   4                      len = 24;
-  77   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
-  78   4                      write_dgus_vp(0x4030, (u8*)&IO_TEST_ENG, 7);
-  79   4                      len = 14;
-  80   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
-  81   4                      write_dgus_vp(0x4400, (u8*)&IO_TEST_ENG, 7);
-  82   4                      len = 14;
-  83   4                      write_dgus_vp(0x5408, (u8*)&len, 1);
-  84   4                  }else if(language == 1){
-  85   4                      write_dgus_vp(0x4030, (u8*)&USER_SETTING_CHN, 4);
-  86   4                      len = 8;
-  87   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
-  88   4                      write_dgus_vp(0x4400, (u8*)&IO_TEST_CHN, 4);
-  89   4                      len = 8;
-  90   4                      write_dgus_vp(0x5408, (u8*)&len, 1);
-  91   4                  }else if(language == 2){
-  92   4                      write_dgus_vp(0x4010, (u8*)&USER_SETTING_KOR, 5);
-  93   4                      len = 10;
-  94   4                      write_dgus_vp(0x5018, (u8*)&len, 1);
-  95   4      
-  96   4                      write_dgus_vp(0x4020, (u8*)&CHECK_KOR, 6);
-  97   4                      len = 12;
-  98   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
-  99   4                  }
- 100   3              }break;
- 101   2              case 2:{
- 102   3                    SetTextColorWhite(0x5013);
- 103   3                  SetTextColorWhite(0x5023);
- 104   3                  SetTextColorYellow(0x5033);
- 105   3                  SetTextColorWhite(0x5043);
- 106   3                  SetTextColorWhite(0x5053);
- 107   3                  SetTextColorWhite(0x5063);
- 108   3                  SetTextColorWhite(0x5073);
- 109   3                  SetTextColorWhite(0x5643);
- 110   3              }break;
- 111   2              case 3:{
- 112   3                  SetTextColorWhite(0x5013);
- 113   3                  SetTextColorWhite(0x5023);
- 114   3                  SetTextColorWhite(0x5033);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 3   
+  55   2              SetTextColorWhite(0x5153);
+  56   2              if(usersettingSelect_plag == 1){
+  57   3                  if(usersettingEditSP == 0){
+  58   4                      SetTextColorYellow(0x5073);
+  59   4                      SetTextColorWhite(0x5083);
+  60   4                  }else if(usersettingEditSP == 1){
+  61   4                      SetTextColorWhite(0x5073);
+  62   4                      SetTextColorYellow(0x5083);
+  63   4                  }
+  64   3              }else{
+  65   3                  SetTextColorWhite(0x5073);
+  66   3                  SetTextColorWhite(0x5083);
+  67   3              }
+  68   2          }else if(usersettingSP == 1){
+  69   2              SetTextColorWhite(0x5063);
+  70   2              SetTextColorYellow(0x5093);
+  71   2              SetTextColorWhite(0x5123);
+  72   2              SetTextColorWhite(0x5153);
+  73   2              if(usersettingSelect_plag == 1){
+  74   3                  if(usersettingEditSP == 0){
+  75   4                      SetTextColorYellow(0x5103);
+  76   4                      SetTextColorWhite(0x5113);
+  77   4                  }else if(usersettingEditSP == 1){
+  78   4                      SetTextColorWhite(0x5103);
+  79   4                      SetTextColorYellow(0x5113);
+  80   4                  }
+  81   3              }else{
+  82   3                  SetTextColorWhite(0x5103);
+  83   3                  SetTextColorWhite(0x5113);
+  84   3              }
+  85   2          }else if(usersettingSP == 2){
+  86   2              SetTextColorWhite(0x5063);
+  87   2              SetTextColorWhite(0x5093);
+  88   2              SetTextColorYellow(0x5123);
+  89   2              SetTextColorWhite(0x5153);
+  90   2              if(usersettingSelect_plag == 1){
+  91   3                  if(usersettingEditSP == 0){
+  92   4                      SetTextColorYellow(0x5133);
+  93   4                      SetTextColorWhite(0x5143);
+  94   4                  }else if(usersettingEditSP == 1){
+  95   4                      SetTextColorWhite(0x5133);
+  96   4                      SetTextColorYellow(0x5143);
+  97   4                  }
+  98   3              }else{
+  99   3                  SetTextColorWhite(0x5133);
+ 100   3                  SetTextColorWhite(0x5143);
+ 101   3              }
+ 102   2          }else if(usersettingSP == 3){
+ 103   2              SetTextColorWhite(0x5063);
+ 104   2              SetTextColorWhite(0x5093);
+ 105   2              SetTextColorWhite(0x5123);
+ 106   2              SetTextColorYellow(0x5153);
+ 107   2              if(usersettingSelect_plag == 1){
+ 108   3                  if(usersettingEditSP == 0){
+ 109   4                      SetTextColorYellow(0x5163);
+ 110   4                      SetTextColorWhite(0x5173);
+ 111   4                  }else if(usersettingEditSP == 1){
+ 112   4                      SetTextColorWhite(0x5163);
+ 113   4                      SetTextColorYellow(0x5173);
+ 114   4                  }
+ 115   3              }else{
+ 116   3                  SetTextColorWhite(0x5163);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 3   
 
- 115   3                  SetTextColorYellow(0x5043);
- 116   3                  SetTextColorWhite(0x5053);
- 117   3                  SetTextColorWhite(0x5063);
- 118   3                  SetTextColorWhite(0x5073);
- 119   3                  SetTextColorWhite(0x5643);
- 120   3              }break;
- 121   2              case 4:{
- 122   3                  SetTextColorWhite(0x5013);
- 123   3                  SetTextColorWhite(0x5023);
- 124   3                  SetTextColorWhite(0x5033);
- 125   3                  SetTextColorWhite(0x5043);
- 126   3                  SetTextColorYellow(0x5053);
- 127   3                  SetTextColorWhite(0x5063);
- 128   3                  SetTextColorWhite(0x5073);
- 129   3                  SetTextColorWhite(0x5643);
- 130   3              }break;
- 131   2              case 5:{
- 132   3                  SetTextColorWhite(0x5013);
- 133   3                  SetTextColorWhite(0x5023);
- 134   3                  SetTextColorWhite(0x5033);
- 135   3                  SetTextColorWhite(0x5043);
- 136   3                  SetTextColorWhite(0x5053);
- 137   3                  SetTextColorYellow(0x5063);
- 138   3                  SetTextColorWhite(0x5073);
- 139   3                  SetTextColorWhite(0x5643);
- 140   3              }break;
- 141   2              case 6:{
- 142   3                  SetTextColorWhite(0x5013);
- 143   3                  SetTextColorWhite(0x5023);
- 144   3                  SetTextColorWhite(0x5033);
- 145   3                  SetTextColorWhite(0x5043);
- 146   3                  SetTextColorWhite(0x5053);
- 147   3                  SetTextColorWhite(0x5063);
- 148   3                  SetTextColorYellow(0x5073);
- 149   3                  SetTextColorWhite(0x5643);
- 150   3              }break;
- 151   2              case 7:{
- 152   3                  SetTextColorWhite(0x5013);
- 153   3                  SetTextColorWhite(0x5023);
- 154   3                  SetTextColorWhite(0x5033);
- 155   3                  SetTextColorWhite(0x5043);
- 156   3                  SetTextColorWhite(0x5053);
- 157   3                  SetTextColorWhite(0x5063);
- 158   3                  SetTextColorWhite(0x5073);
- 159   3                  SetTextColorYellow(0x5643);
- 160   3              }break;
- 161   2          }
- 162   1      }
- 163          //어드민 유저 세팅
- 164          void adminUserSettingEdit(){
- 165   1          switch(usersettingSP){
- 166   2              case 0:{
- 167   3                  if(usersettingSelect_plag == 0){
- 168   4                      SetTextColorWhite(0x5103);
- 169   4                      SetTextColorWhite(0x5113);
- 170   4                  }else{
- 171   4                      if(usersettingEditSP == 0){
- 172   5                          SetTextColorYellow(0x5103);
- 173   5                          SetTextColorWhite(0x5113);
- 174   5                      }else if(usersettingEditSP == 1){
- 175   5                          SetTextColorWhite(0x5103);
- 176   5                          SetTextColorYellow(0x5113);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 4   
+ 117   3                  SetTextColorWhite(0x5173);
+ 118   3              }
+ 119   2          }
+ 120   1         
+ 121   1      }
+ 122          
+ 123          void admin_User_Setting_Function(u16 i){
+ 124   1          if(i == 0){
+ 125   2              usersettingSP = 0;
+ 126   2              usersettingSelect_plag = 0;
+ 127   2          }else if(i == 1){
+ 128   2              if(usersettingSelect_plag == 0){
+ 129   3                  if(usersettingSP == 0){
+ 130   4                      usersettingSP = 3;
+ 131   4                  }else{
+ 132   4                      usersettingSP--;
+ 133   4                  }
+ 134   3              }else{
+ 135   3                  if(usersettingEditSP==0){
+ 136   4                      if(usersettingSP == 0){
+ 137   5                          if(toptempmin>1 && toptempmax > toptempmin){
+ 138   6                              toptempmin--;
+ 139   6                          }
+ 140   5                          write_dgus_vp(0x4070, (u8*)&toptempmin, 1);
+ 141   5                      }else if(usersettingSP == 1){
+ 142   5                          if(bottempmin>1 && bottempmax > bottempmin){
+ 143   6                              bottempmin--;
+ 144   6                          }
+ 145   5                          write_dgus_vp(0x4100, (u8*)&bottempmin, 1);
+ 146   5                      }else if(usersettingSP == 2){
+ 147   5                          if(pressmin>0 && pressmax > pressmin){
+ 148   6                              pressmin--;
+ 149   6                          }
+ 150   5                          write_dgus_vp(0x4130, (u8*)&pressmin, 1);
+ 151   5                      }else if(usersettingSP == 3){
+ 152   5                          if(delaymin>1 && delaymax > delaymin){
+ 153   6                              delaymin--;
+ 154   6                          }
+ 155   5                          write_dgus_vp(0x4160, (u8*)&delaymin, 1);
+ 156   5                      }
+ 157   4                  }else if(usersettingEditSP == 1){
+ 158   4                      if(usersettingSP == 0){
+ 159   5                          if(toptempmax > toptempmin){
+ 160   6                              toptempmax--;
+ 161   6                          }
+ 162   5                          write_dgus_vp(0x4080, (u8*)&toptempmax, 1);
+ 163   5                      }else if(usersettingSP == 1){
+ 164   5                          if(bottempmax > bottempmin){
+ 165   6                              bottempmax--;
+ 166   6                          }
+ 167   5                          write_dgus_vp(0x4110, (u8*)&bottempmax, 1);
+ 168   5                      }else if(usersettingSP == 2){
+ 169   5                          if(pressmax > pressmin){
+ 170   6                              pressmax--;
+ 171   6                          }
+ 172   5                          write_dgus_vp(0x4140, (u8*)&pressmax, 1);
+ 173   5                      }else if(usersettingSP == 3){
+ 174   5                          if(delaymax > delaymin){
+ 175   6                              delaymax--;
+ 176   6                          }
+ 177   5                          write_dgus_vp(0x4170, (u8*)&delaymax, 1);
+ 178   5                      }
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 4   
 
- 177   5                      }
- 178   4                  }
- 179   3              }break;
- 180   2              case 1:{
- 181   3                  if(usersettingSelect_plag == 0){
- 182   4                      SetTextColorWhite(0x5133);
- 183   4                      SetTextColorWhite(0x5143);
- 184   4                  }else{
- 185   4                      if(usersettingEditSP == 0){
- 186   5                          SetTextColorYellow(0x5133);
- 187   5                          SetTextColorWhite(0x5143);
- 188   5                      }else if(usersettingEditSP == 1){
- 189   5                          SetTextColorWhite(0x5133);
- 190   5                          SetTextColorYellow(0x5143);
- 191   5                      }
- 192   4                  }
- 193   3              }break;
- 194   2              case 2:{
- 195   3                  if(usersettingSelect_plag == 0){
- 196   4                      SetTextColorWhite(0x5163);
- 197   4                      SetTextColorWhite(0x5173);
- 198   4                  }else{
- 199   4                      if(usersettingEditSP == 0){
- 200   5                          SetTextColorYellow(0x5163);
- 201   5                          SetTextColorWhite(0x5173);
- 202   5                      }else if(usersettingEditSP == 1){
- 203   5                          SetTextColorWhite(0x5163);
- 204   5                          SetTextColorYellow(0x5173);
- 205   5                      }
- 206   4                  }
- 207   3              }break;
- 208   2              case 3:{
- 209   3                  if(usersettingSelect_plag == 0){
- 210   4                      SetTextColorWhite(0x5193);
- 211   4                      SetTextColorWhite(0x5203);
- 212   4                  }else{
- 213   4                      if(usersettingEditSP == 0){
- 214   5                          SetTextColorYellow(0x5193);
- 215   5                          SetTextColorWhite(0x5203);
- 216   5                      }else if(usersettingEditSP == 1){
- 217   5                          SetTextColorWhite(0x5193);
- 218   5                          SetTextColorYellow(0x5203);
- 219   5                      }
- 220   4                  }
- 221   3              }break;
- 222   2          }
- 223   1      }
- 224          
- 225          void adminUserSettingText(u16 state){
- 226   1          switch(state){
- 227   2              case 1:{
- 228   3                  if(usersettingSP==0){
- 229   4                      usersettingSP = 3;
- 230   4                  }else{
- 231   4                      usersettingSP--;
- 232   4                  }
- 233   3              }break;
- 234   2              case 2:{
- 235   3                  if(usersettingSP==3){
- 236   4                      usersettingSP = 0;
- 237   4                  }else{
- 238   4                      usersettingSP++;
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 5   
+ 179   4                  }
+ 180   3              }
+ 181   2              admin_User_Setting_text_color();
+ 182   2          }else if(i == 2){
+ 183   2              if(usersettingSelect_plag == 0){
+ 184   3                  if(usersettingSP == 3){
+ 185   4                      usersettingSP = 0;
+ 186   4                  }else{
+ 187   4                      usersettingSP++;
+ 188   4                  }
+ 189   3              }else {
+ 190   3                  if(usersettingEditSP==0){
+ 191   4                      if(usersettingSP == 0){
+ 192   5                          if(toptempmax > toptempmin){
+ 193   6                              toptempmin++;
+ 194   6                          }
+ 195   5                          write_dgus_vp(0x4070, (u8*)&toptempmin, 1);
+ 196   5                      }else if(usersettingSP == 1){
+ 197   5                          if(bottempmax > bottempmin){
+ 198   6                              bottempmin++;
+ 199   6                          }
+ 200   5                          write_dgus_vp(0x4100, (u8*)&bottempmin, 1);
+ 201   5                      }else if(usersettingSP == 2){
+ 202   5                          if(pressmax > pressmin){
+ 203   6                              pressmin++;
+ 204   6                          }
+ 205   5                          write_dgus_vp(0x4130, (u8*)&pressmin, 1);
+ 206   5                      }else if(usersettingSP == 3){
+ 207   5                          if(delaymax > delaymin){
+ 208   6                              delaymin++;
+ 209   6                          }
+ 210   5                          write_dgus_vp(0x4160, (u8*)&delaymin, 1);
+ 211   5                      }
+ 212   4                  }else if(usersettingEditSP == 1){
+ 213   4                      if(usersettingSP == 0){
+ 214   5                          if(toptempmax < 220 && toptempmax > toptempmin){
+ 215   6                              toptempmax++;
+ 216   6                          }
+ 217   5                          write_dgus_vp(0x4080, (u8*)&toptempmax, 1);
+ 218   5                      }else if(usersettingSP == 1){
+ 219   5                          if(bottempmax < 220 && bottempmax > bottempmin){
+ 220   6                              bottempmax++;
+ 221   6                          }
+ 222   5                          write_dgus_vp(0x4110, (u8*)&bottempmax, 1);
+ 223   5                      }else if(usersettingSP == 2){
+ 224   5                          if(pressmax < 20 && pressmax > pressmin){
+ 225   6                              pressmax++;
+ 226   6                          }
+ 227   5                          write_dgus_vp(0x4140, (u8*)&pressmax, 1);
+ 228   5                      }else if(usersettingSP == 3){
+ 229   5                          if(delaymax < 180 &&delaymax > delaymin){
+ 230   6                              delaymax++;
+ 231   6                          }
+ 232   5                          write_dgus_vp(0x4170, (u8*)&delaymax, 1);
+ 233   5                      }
+ 234   4                  }
+ 235   3              }
+ 236   2              admin_User_Setting_text_color();
+ 237   2          }else if(i == 3){
+ 238   2              if(usersettingSelect_plag == 0){
+ 239   3                  usersettingSelect_plag = 1;
+ 240   3                  admin_User_Setting_text_color();
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 5   
 
- 239   4                  }
- 240   3              }break;
- 241   2          }
- 242   1          switch(usersettingSP){
- 243   2              case 0:{
- 244   3                  SetTextColorYellow(0x5093);
- 245   3                  SetTextColorWhite(0x5123);
- 246   3                  SetTextColorWhite(0x5153);
- 247   3                  SetTextColorWhite(0x5183);
- 248   3              }break;
- 249   2              case 1:{
- 250   3                  SetTextColorWhite(0x5093);
- 251   3                  SetTextColorYellow(0x5123);
- 252   3                  SetTextColorWhite(0x5153);
- 253   3                  SetTextColorWhite(0x5183);
- 254   3              }break;
- 255   2              case 2:{
- 256   3                  SetTextColorWhite(0x5093);
- 257   3                  SetTextColorWhite(0x5123);
- 258   3                  SetTextColorYellow(0x5153);
- 259   3                  SetTextColorWhite(0x5183);
- 260   3              }break;
- 261   2              case 3:{
- 262   3                  SetTextColorWhite(0x5093);
- 263   3                  SetTextColorWhite(0x5123);
- 264   3                  SetTextColorWhite(0x5153);
- 265   3                  SetTextColorYellow(0x5183);
- 266   3              }break;
- 267   2          }
- 268   1      }
- 269          //어드민 io테스트
- 270          void adminIoTestText(u16 state){
- 271   1          switch(state){
- 272   2              case 1:{
- 273   3                  if(IOtestSP ==0){
- 274   4                      IOtestSP = 5;
- 275   4                  }else{
- 276   4                      IOtestSP--;
- 277   4                  }
- 278   3              }break;
- 279   2              case 2:{
- 280   3                  if(IOtestSP==5){
- 281   4                      IOtestSP = 0;
- 282   4                  }else{
- 283   4                      IOtestSP++;
- 284   4                  }
- 285   3              }break;
- 286   2          }
- 287   1      
- 288   1           switch(IOtestSP){
- 289   2              case 0:{
- 290   3                  SetTextColorYellow(0x5213);
- 291   3                  SetTextColorWhite(0x5243);
- 292   3                  SetTextColorWhite(0x5273);
- 293   3                  SetTextColorWhite(0x5303);
- 294   3                  SetTextColorWhite(0x5343);
- 295   3                  SetTextColorWhite(0x5373);
- 296   3              }break;
- 297   2              case 1:{
- 298   3                  SetTextColorWhite(0x5213);
- 299   3                  SetTextColorYellow(0x5243);
- 300   3                  SetTextColorWhite(0x5273);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 6   
+ 241   3              }else {
+ 242   3                  if(usersettingEditSP == 0){
+ 243   4                      usersettingEditSP = 1;
+ 244   4                  }else if(usersettingEditSP == 1){
+ 245   4                      usersettingSelect_plag = 0;
+ 246   4                      usersettingEditSP = 0;
+ 247   4                  }
+ 248   3              }
+ 249   2              
+ 250   2          }           
+ 251   1      }
+ 252          
+ 253          
+ 254          
+ 255          void admin_IO_Test_Function(){
+ 256   1      
+ 257   1      }
+ 258          
+ 259          void admin_text_change(){
+ 260   1          u16 len = 0;
+ 261   1          //어드민 페이지 타이틀
+ 262   1          if(language == 0){
+ 263   2              if(page_number == 27){
+ 264   3                  write_dgus_vp(0x4010, (u8*)&ADMIN, 6);
+ 265   3                  len = 12;
+ 266   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+ 267   3              }else if(page_number == 28){
+ 268   3                  write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+ 269   3                  len = 12;
+ 270   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+ 271   3              }else if(page_number == 29){
+ 272   3                  write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+ 273   3                  len = 12;
+ 274   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+ 275   3              }else if(page_number == 30){
+ 276   3                  write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+ 277   3                  len = 12;
+ 278   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+ 279   3              }else if(page_number == 31){
+ 280   3                  write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+ 281   3                  len = 12;
+ 282   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+ 283   3              }else if(page_number == 32){
+ 284   3                  write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+ 285   3                  len = 12;
+ 286   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+ 287   3              }else if(page_number == 33){
+ 288   3                  write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+ 289   3                  len = 12;
+ 290   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+ 291   3              }else if(page_number == 34){
+ 292   3                  write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+ 293   3                  len = 12;
+ 294   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+ 295   3              }else if(page_number == 28){
+ 296   3                  write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+ 297   3                  len = 12;
+ 298   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+ 299   3              }else if(page_number == 28){
+ 300   3                  write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+ 301   3                  len = 12;
+ 302   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 6   
 
- 301   3                  SetTextColorWhite(0x5303);
- 302   3                  SetTextColorWhite(0x5343);
- 303   3                  SetTextColorWhite(0x5373);
- 304   3              }break;
- 305   2              case 2:{
- 306   3                  SetTextColorWhite(0x5213);
- 307   3                  SetTextColorWhite(0x5243);
- 308   3                  SetTextColorYellow(0x5273);
- 309   3                  SetTextColorWhite(0x5303);
- 310   3                  SetTextColorWhite(0x5343);
- 311   3                  SetTextColorWhite(0x5373);
- 312   3              }break;
- 313   2              case 3:{
- 314   3                  SetTextColorWhite(0x5213);
- 315   3                  SetTextColorWhite(0x5243);
- 316   3                  SetTextColorWhite(0x5273);
- 317   3                  SetTextColorYellow(0x5303);
- 318   3                  SetTextColorWhite(0x5343);
- 319   3                  SetTextColorWhite(0x5373);
- 320   3              }break;
- 321   2              case 4:{
- 322   3                  SetTextColorWhite(0x5213);
- 323   3                  SetTextColorWhite(0x5243);
- 324   3                  SetTextColorWhite(0x5273);
- 325   3                  SetTextColorWhite(0x5303);
- 326   3                  SetTextColorYellow(0x5343);
- 327   3                  SetTextColorWhite(0x5373);
- 328   3              }break;
- 329   2              case 5:{
- 330   3                  SetTextColorWhite(0x5213);
- 331   3                  SetTextColorWhite(0x5243);
- 332   3                  SetTextColorWhite(0x5273);
- 333   3                  SetTextColorWhite(0x5303);
- 334   3                  SetTextColorWhite(0x5343);
- 335   3                  SetTextColorYellow(0x5373);
- 336   3              }break;
- 337   2          }
- 338   1      }
- 339          
- 340          void adminIoTestWork(){
- 341   1          switch(IOtestSP){
- 342   2              case 0:{
- 343   3                  if(IOtestSelect_plag == 1){
- 344   4                      SetTextColorYellow(0x5223);
- 345   4                      SetTextColorWhite(0x5233);
- 346   4                      io=1;
- 347   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 348   4                  }else{
- 349   4                      SetTextColorWhite(0x5223);
- 350   4                      SetTextColorYellow(0x5233);
- 351   4                      io = 0;
- 352   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 353   4                  }
- 354   3              }break;
- 355   2              case 1:{
- 356   3                   if(IOtestSelect_plag == 1){
- 357   4                      SetTextColorYellow(0x5253);
- 358   4                      SetTextColorWhite(0x5263);
- 359   4                      io=2;
- 360   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 361   4                  }else{
- 362   4                      SetTextColorWhite(0x5253);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 7   
+ 303   3              }else if(page_number == 28){
+ 304   3                  write_dgus_vp(0x4010, (u8*)&USER_SETTING_ENG, 6);
+ 305   3                  len = 12;
+ 306   3                  write_dgus_vp(0x5018, (u8*)&len, 1);
+ 307   3              }
+ 308   2          }else if(language == 1){
+ 309   2      
+ 310   2          }else if(language == 2){
+ 311   2      
+ 312   2          }
+ 313   1      
+ 314   1           switch(adminSP){
+ 315   2              case 0:{
+ 316   3                  if(language == 0){
+ 317   4                      write_dgus_vp(0x4020, (u8*)&ENGINEER_MODE_ENG, 13);
+ 318   4                      len = 26;
+ 319   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 320   4      
+ 321   4                      write_dgus_vp(0x4030, (u8*)&USER_SETTING_ENG, 12);
+ 322   4                      len = 24;
+ 323   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
+ 324   4      
+ 325   4                      write_dgus_vp(0x4040, (u8*)&IO_TEST_ENG, 12);
+ 326   4                      len = 14;
+ 327   4                      write_dgus_vp(0x5048, (u8*)&len, 1);
+ 328   4                  }else if(language == 1){
+ 329   4                   
+ 330   4                  }else if(language == 2){
+ 331   4                      write_dgus_vp(0x4010, (u8*)&USER_SETTING_KOR, 5);
+ 332   4                      len = 10;
+ 333   4                      write_dgus_vp(0x5018, (u8*)&len, 1);
+ 334   4      
+ 335   4                      write_dgus_vp(0x4020, (u8*)&CHECK_KOR, 6);
+ 336   4                      len = 12;
+ 337   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 338   4                  }
+ 339   3              }break;
+ 340   2              case 1:{
+ 341   3                  if(language == 0){
+ 342   4                      write_dgus_vp(0x4020, (u8*)&USER_SETTING_ENG, 12);
+ 343   4                      len = 24;
+ 344   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 345   4      
+ 346   4                      write_dgus_vp(0x4030, (u8*)&IO_TEST_ENG, 7);
+ 347   4                      len = 14;
+ 348   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
+ 349   4      
+ 350   4                      write_dgus_vp(0x4040, (u8*)&FACTORY_RESET_ENG, 10);
+ 351   4                      len = 20;
+ 352   4                      write_dgus_vp(0x5048, (u8*)&len, 1);
+ 353   4                  }else if(language == 1){
+ 354   4                      write_dgus_vp(0x4030, (u8*)&USER_SETTING_CHN, 4);
+ 355   4                      len = 8;
+ 356   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
+ 357   4                      write_dgus_vp(0x4400, (u8*)&IO_TEST_CHN, 4);
+ 358   4                      len = 8;
+ 359   4                      write_dgus_vp(0x5408, (u8*)&len, 1);
+ 360   4                  }else if(language == 2){
+ 361   4                      write_dgus_vp(0x4010, (u8*)&USER_SETTING_KOR, 5);
+ 362   4                      len = 10;
+ 363   4                      write_dgus_vp(0x5018, (u8*)&len, 1);
+ 364   4      
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 7   
 
- 363   4                      SetTextColorYellow(0x5263);
- 364   4                      io = 0;
- 365   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 366   4                  }
- 367   3              }break;
- 368   2              case 2:{
- 369   3                   if(IOtestSelect_plag == 1){
- 370   4                      SetTextColorYellow(0x5283);
- 371   4                      SetTextColorWhite(0x5293);
- 372   4                      io=3;
- 373   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 374   4                  }else{
- 375   4                      SetTextColorWhite(0x5283);
- 376   4                      SetTextColorYellow(0x5293);
- 377   4                      io = 0;
- 378   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 379   4                  }
- 380   3              }break;
- 381   2              case 3:{
- 382   3                   if(IOtestSelect_plag == 1){
- 383   4                      SetTextColorYellow(0x5313);
- 384   4                      SetTextColorWhite(0x5323);
- 385   4                      io=4;
- 386   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 387   4                  }else{
- 388   4                      SetTextColorWhite(0x5313);
- 389   4                      SetTextColorYellow(0x5323);
- 390   4                      io = 0;
- 391   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 392   4                  }
- 393   3              }break;
- 394   2              case 4:{
- 395   3                   if(IOtestSelect_plag == 1){
- 396   4                      SetTextColorYellow(0x5353);
- 397   4                      SetTextColorWhite(0x5363);
- 398   4                      io=5;
- 399   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 400   4                  }else{
- 401   4                      SetTextColorWhite(0x5353);
- 402   4                      SetTextColorYellow(0x5363);
- 403   4                      io = 0;
- 404   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 405   4                  }
- 406   3              }break;
- 407   2              case 5:{
- 408   3                   if(IOtestSelect_plag == 1){
- 409   4                      SetTextColorYellow(0x5383);
- 410   4                      SetTextColorWhite(0x5393);
- 411   4                      io=6;
- 412   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 413   4                  }else{
- 414   4                      SetTextColorWhite(0x5383);
- 415   4                      SetTextColorYellow(0x5393);
- 416   4                      io = 0;
- 417   4                      write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
- 418   4                  }
- 419   3              }break;
- 420   2          }
- 421   1      }
- 422          //어드민 초기화
- 423          void adminfactoryResetText(u16 state){
- 424   1           switch(state){
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 8   
+ 365   4                      write_dgus_vp(0x4020, (u8*)&CHECK_KOR, 6);
+ 366   4                      len = 12;
+ 367   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 368   4                  }
+ 369   3              }break;
+ 370   2              case 2:{
+ 371   3                  if(language == 0){
+ 372   4                     write_dgus_vp(0x4020, (u8*)&USER_SETTING_ENG, 12);
+ 373   4                      len = 24;
+ 374   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 375   4      
+ 376   4                      write_dgus_vp(0x4030, (u8*)&IO_TEST_ENG, 7);
+ 377   4                      len = 14;
+ 378   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
+ 379   4      
+ 380   4                      write_dgus_vp(0x4040, (u8*)&FACTORY_RESET_ENG, 10);
+ 381   4                      len = 20;
+ 382   4                      write_dgus_vp(0x5048, (u8*)&len, 1);
+ 383   4                  }
+ 384   3                 
+ 385   3              }break;
+ 386   2              case 3:{
+ 387   3                  if(language == 0){
+ 388   4                     write_dgus_vp(0x4020, (u8*)&IO_TEST_ENG, 7);
+ 389   4                      len = 14;
+ 390   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 391   4      
+ 392   4                      write_dgus_vp(0x4030, (u8*)&FACTORY_RESET_ENG, 10);
+ 393   4                      len = 20;
+ 394   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
+ 395   4      
+ 396   4                      write_dgus_vp(0x4040, (u8*)&LOG_ERROR_ENG, 10);
+ 397   4                      len = 20;
+ 398   4                      write_dgus_vp(0x5048, (u8*)&len, 1);
+ 399   4                  }
+ 400   3              }break;
+ 401   2              case 4:{
+ 402   3                  if(language == 0){
+ 403   4                     write_dgus_vp(0x4020, (u8*)&FACTORY_RESET_ENG, 10);
+ 404   4                      len = 20;
+ 405   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 406   4      
+ 407   4                      write_dgus_vp(0x4030, (u8*)&LOG_ERROR_ENG, 10);
+ 408   4                      len = 20;
+ 409   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
+ 410   4      
+ 411   4                      write_dgus_vp(0x4040, (u8*)&RUN_TIME_ENG, 8);
+ 412   4                      len = 16;
+ 413   4                      write_dgus_vp(0x5048, (u8*)&len, 1);
+ 414   4                  }
+ 415   3              }break;
+ 416   2              case 5:{
+ 417   3                if(language == 0){
+ 418   4                     write_dgus_vp(0x4020, (u8*)&LOG_ERROR_ENG, 10);
+ 419   4                      len = 20;
+ 420   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 421   4      
+ 422   4                      write_dgus_vp(0x4030, (u8*)&RUN_TIME_ENG, 8);
+ 423   4                      len = 16;
+ 424   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
+ 425   4      
+ 426   4                      write_dgus_vp(0x4040, (u8*)&LANGUAGE_ENG, 8);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 8   
 
- 425   2              case 1:{
- 426   3                  if(factoryResetSP ==0){
- 427   4                      factoryResetSP = 1;
- 428   4                  }else{
- 429   4                      factoryResetSP--;
- 430   4                  }
- 431   3              }break;
- 432   2              case 2:{
- 433   3                  if(factoryResetSP==1){
- 434   4                      factoryResetSP = 0;
- 435   4                  }else{
- 436   4                      factoryResetSP++;
- 437   4                  }
- 438   3              }break;
- 439   2          }
- 440   1          if(factoryResetSP == 0){
- 441   2              SetTextColorYellow(0x5793);
- 442   2              SetTextColorWhite(0x5803);
- 443   2          }else{
- 444   2              SetTextColorWhite(0x5793);
- 445   2              SetTextColorYellow(0x5803);
- 446   2          }
- 447   1      }
- 448          //어드민 로그 및 에러
- 449          void adminLogErrorText(u16 state){
- 450   1           switch(state){
- 451   2              case 1:{
- 452   3                  if(LogErrorSP  ==0){
- 453   4                      LogErrorSP  = 1;
- 454   4                  }else{
- 455   4                      LogErrorSP --;
- 456   4                  }
- 457   3              }break;
- 458   2              case 2:{
- 459   3                  if(LogErrorSP ==1){
- 460   4                      LogErrorSP  = 0;
- 461   4                  }else{
- 462   4                      LogErrorSP ++;
- 463   4                  }
- 464   3              }break;
- 465   2          }
- 466   1          if(LogErrorSP  == 0){
- 467   2              SetTextColorYellow(0x5673);
- 468   2              SetTextColorWhite(0x5683);
- 469   2          }else{
- 470   2              SetTextColorWhite(0x5673);
- 471   2              SetTextColorYellow(0x5683);
- 472   2          }
- 473   1      }
- 474          //어드민 언어 변경
- 475          void adminLanguageText(u16 state){
- 476   1            switch(state){
- 477   2              case 1:{
- 478   3                  if(LanguageSP  ==0){
- 479   4                      LanguageSP  = 2;
- 480   4                  }else{
- 481   4                      LanguageSP --;
- 482   4                  }
- 483   3              }break;
- 484   2              case 2:{
- 485   3                  if(LanguageSP == 2){
- 486   4                      LanguageSP  = 0;
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 9   
+ 427   4                      len = 16;
+ 428   4                      write_dgus_vp(0x5048, (u8*)&len, 1);
+ 429   4                  }
+ 430   3              }break;
+ 431   2              case 6:{
+ 432   3                  if(language == 0){
+ 433   4                     write_dgus_vp(0x4020, (u8*)&RUN_TIME_ENG, 8);
+ 434   4                      len = 16;
+ 435   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 436   4      
+ 437   4                      write_dgus_vp(0x4030, (u8*)&LANGUAGE_ENG, 8);
+ 438   4                      len = 16;
+ 439   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
+ 440   4      
+ 441   4                      write_dgus_vp(0x4040, (u8*)&COMPANY_INFO_ENG, 12);
+ 442   4                      len = 24;
+ 443   4                      write_dgus_vp(0x5048, (u8*)&len, 1);
+ 444   4                  }
+ 445   3              }break;
+ 446   2              case 7:{
+ 447   3                  if(language == 0){
+ 448   4                     write_dgus_vp(0x4020, (u8*)&LANGUAGE_ENG, 8);
+ 449   4                      len = 16;
+ 450   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 451   4      
+ 452   4                      write_dgus_vp(0x4030, (u8*)&COMPANY_INFO_ENG, 12);
+ 453   4                      len = 24;
+ 454   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
+ 455   4      
+ 456   4                      write_dgus_vp(0x4040, (u8*)&ENGINEER_MODE_ENG, 13);
+ 457   4                      len = 26;
+ 458   4                      write_dgus_vp(0x5048, (u8*)&len, 1);
+ 459   4                  }
+ 460   3              }break;
+ 461   2              case 8:{
+ 462   3                  if(language == 0){
+ 463   4                     write_dgus_vp(0x4020, (u8*)&COMPANY_INFO_ENG, 12);
+ 464   4                      len = 24;
+ 465   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
+ 466   4      
+ 467   4                      write_dgus_vp(0x4030, (u8*)&ENGINEER_MODE_ENG, 13);
+ 468   4                      len = 26;
+ 469   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
+ 470   4      
+ 471   4                      write_dgus_vp(0x4040, (u8*)&USER_SETTING_ENG, 12);
+ 472   4                      len = 24;
+ 473   4                      write_dgus_vp(0x5048, (u8*)&len, 1);
+ 474   4                  }
+ 475   3              }break;
+ 476   2          }
+ 477   1      }
+ 478          
+ 479          
+ 480          
+ 481          void admin_List(u16 i){
+ 482   1          if (i == 1)
+ 483   1          {
+ 484   2              if(adminSP==0){
+ 485   3                  adminSP = 8;
+ 486   3              }else{
+ 487   3                  adminSP--;
+ 488   3              }
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 9   
 
- 487   4                  }else{
- 488   4                      LanguageSP ++;
- 489   4                  }
- 490   3              }break;
- 491   2          }
- 492   1          if(LanguageSP  == 0){
- 493   2              SetTextColorYellow(0x5553);
- 494   2              SetTextColorWhite(0x5563);
- 495   2              SetTextColorWhite(0x5573);
- 496   2          }else if(LanguageSP  == 1){
- 497   2              SetTextColorWhite(0x5553);
- 498   2              SetTextColorYellow(0x5563);
- 499   2              SetTextColorWhite(0x5573);
- 500   2          }else if(LanguageSP  == 2){
- 501   2              SetTextColorWhite(0x5553);
- 502   2              SetTextColorWhite(0x5563);
- 503   2              SetTextColorYellow(0x5573);
- 504   2          }
- 505   1      }
- 506          
- 507          void admin_language_eng(void){
- 508   1          u16 len = 0;
- 509   1          //어드민 메인리스트
- 510   1          // LANGUAGE_TEXT_VIEW(0x4010, 0x5018, USER_SETTING_KOR);
- 511   1          write_dgus_vp(0x4010, (u8*)&ADMIN, 6);
- 512   1          len = 12;
- 513   1          write_dgus_vp(0x5018, (u8*)&len, 1);
- 514   1      
- 515   1          write_dgus_vp(0x4020, (u8*)&USER_SETTING_ENG, 12);
- 516   1          len = 24;
- 517   1          write_dgus_vp(0x5028, (u8*)&len, 1);
- 518   1      
- 519   1          write_dgus_vp(0x4030, (u8*)&FACTORY_RESET_ENG, 13);
- 520   1          len = 26;
- 521   1          write_dgus_vp(0x5038, (u8*)&len, 1);
- 522   1      
- 523   1          write_dgus_vp(0x4040, (u8*)&LOG_ERROR_ENG, 11);
- 524   1          len = 22;
- 525   1          write_dgus_vp(0x5048, (u8*)&len, 1);
- 526   1      
- 527   1          write_dgus_vp(0x4050, (u8*)&RUN_TIME_ENG, 8);
- 528   1          len = 16;
- 529   1          write_dgus_vp(0x5058, (u8*)&len, 1);
- 530   1      
- 531   1          write_dgus_vp(0x4060, (u8*)&LANGUAGE_ENG, 8);
- 532   1          len = 16;
- 533   1          write_dgus_vp(0x5068, (u8*)&len, 1);
- 534   1      
- 535   1          write_dgus_vp(0x4070, (u8*)&COMPANY_INFO_ENG, 12);
- 536   1          len = 24;
- 537   1          write_dgus_vp(0x5078, (u8*)&len, 1);
- 538   1      
- 539   1          write_dgus_vp(0x4330, (u8*)&ENGINEER_MODE_ENG, 13);
- 540   1          len = 26;
- 541   1          write_dgus_vp(0x5338, (u8*)&len, 1);
- 542   1      
- 543   1          //유저 세팅
- 544   1          write_dgus_vp(0x4080, (u8*)&USER_SETTING_ENG, 12);
- 545   1          len = 24;
- 546   1          write_dgus_vp(0x5088, (u8*)&len, 1);
- 547   1      
- 548   1          write_dgus_vp(0x4090, (u8*)&TOP_TEMP_ENG, 8);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 10  
+ 489   2          }else if(i == 2){
+ 490   2              if(adminSP == 8){
+ 491   3                  adminSP = 0;
+ 492   3              }else{
+ 493   3                  adminSP++;
+ 494   3              }
+ 495   2          }
+ 496   1          admin_text_change(); 
+ 497   1      }
+ 498          //어드민 유저 세팅
+ 499          void adminUserSettingEdit(){
+ 500   1          switch(usersettingSP){
+ 501   2              case 0:{
+ 502   3                  if(usersettingSelect_plag == 0){
+ 503   4                      SetTextColorWhite(0x5103);
+ 504   4                      SetTextColorWhite(0x5113);
+ 505   4                  }else{
+ 506   4                      if(usersettingEditSP == 0){
+ 507   5                          SetTextColorYellow(0x5103);
+ 508   5                          SetTextColorWhite(0x5113);
+ 509   5                      }else if(usersettingEditSP == 1){
+ 510   5                          SetTextColorWhite(0x5103);
+ 511   5                          SetTextColorYellow(0x5113);
+ 512   5                      }
+ 513   4                  }
+ 514   3              }break;
+ 515   2              case 1:{
+ 516   3                  if(usersettingSelect_plag == 0){
+ 517   4                      SetTextColorWhite(0x5133);
+ 518   4                      SetTextColorWhite(0x5143);
+ 519   4                  }else{
+ 520   4                      if(usersettingEditSP == 0){
+ 521   5                          SetTextColorYellow(0x5133);
+ 522   5                          SetTextColorWhite(0x5143);
+ 523   5                      }else if(usersettingEditSP == 1){
+ 524   5                          SetTextColorWhite(0x5133);
+ 525   5                          SetTextColorYellow(0x5143);
+ 526   5                      }
+ 527   4                  }
+ 528   3              }break;
+ 529   2              case 2:{
+ 530   3                  if(usersettingSelect_plag == 0){
+ 531   4                      SetTextColorWhite(0x5163);
+ 532   4                      SetTextColorWhite(0x5173);
+ 533   4                  }else{
+ 534   4                      if(usersettingEditSP == 0){
+ 535   5                          SetTextColorYellow(0x5163);
+ 536   5                          SetTextColorWhite(0x5173);
+ 537   5                      }else if(usersettingEditSP == 1){
+ 538   5                          SetTextColorWhite(0x5163);
+ 539   5                          SetTextColorYellow(0x5173);
+ 540   5                      }
+ 541   4                  }
+ 542   3              }break;
+ 543   2              case 3:{
+ 544   3                  if(usersettingSelect_plag == 0){
+ 545   4                      SetTextColorWhite(0x5193);
+ 546   4                      SetTextColorWhite(0x5203);
+ 547   4                  }else{
+ 548   4                      if(usersettingEditSP == 0){
+ 549   5                          SetTextColorYellow(0x5193);
+ 550   5                          SetTextColorWhite(0x5203);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 10  
 
- 549   1          len = 16;
- 550   1          write_dgus_vp(0x5098, (u8*)&len, 1);
- 551   1      
- 552   1          write_dgus_vp(0x4120, (u8*)&BOTTOM_TEMP_ENG, 11);
- 553   1          len = 22;
- 554   1          write_dgus_vp(0x5128, (u8*)&len, 1);
- 555   1      
- 556   1          write_dgus_vp(0x4150, (u8*)&PRESSURE_ENG, 8);
- 557   1          len = 16;
- 558   1          write_dgus_vp(0x5158, (u8*)&len, 1);
- 559   1      
- 560   1          write_dgus_vp(0x4180, (u8*)&DELAY_TIME_ENG, 10);
- 561   1          len = 20;
- 562   1          write_dgus_vp(0x5188, (u8*)&len, 1);
- 563   1      
- 564   1          //IO 테스트
- 565   1          write_dgus_vp(0x4400, (u8*)&IO_TEST_ENG, 7);
- 566   1          len = 14;
- 567   1          write_dgus_vp(0x5408, (u8*)&len, 1);
- 568   1      
- 569   1          write_dgus_vp(0x4210, (u8*)&TOP_HEATER_ENG, 11);
- 570   1          len = 22;
- 571   1          write_dgus_vp(0x5218, (u8*)&len, 1);
- 572   1      
- 573   1          write_dgus_vp(0x4240, (u8*)&BOTTOM_HEATER_ENG, 13);
- 574   1          len = 26;
- 575   1          write_dgus_vp(0x5248, (u8*)&len, 1);
- 576   1      
- 577   1          write_dgus_vp(0x4270, (u8*)&TOP_FAN_ENG, 7);
- 578   1          len = 14;
- 579   1          write_dgus_vp(0x5278, (u8*)&len, 1);
- 580   1      
- 581   1          write_dgus_vp(0x4300, (u8*)&BOTTOM_FAN_ENG, 10);
- 582   1          len = 20;
- 583   1          write_dgus_vp(0x5308, (u8*)&len, 1);
- 584   1      
- 585   1          write_dgus_vp(0x4340, (u8*)&COMPANY_INFO_ENG, 12);
- 586   1          len = 24;
- 587   1          write_dgus_vp(0x5348, (u8*)&len, 1);
- 588   1      
- 589   1          write_dgus_vp(0x4370, (u8*)&SOLENOID_ENG, 8);
- 590   1          len = 16;
- 591   1          write_dgus_vp(0x5378, (u8*)&len, 1);
- 592   1          
- 593   1          //공장 초기화
- 594   1          write_dgus_vp(0x4760, (u8*)&FACTORY_RESET_ENG, 10);
- 595   1          len = 20;
- 596   1          write_dgus_vp(0x5768, (u8*)&len, 1);
- 597   1      
- 598   1          write_dgus_vp(0x4770, (u8*)&DATA_ENG, 4);
- 599   1          len = 8;
- 600   1          write_dgus_vp(0x5778, (u8*)&len, 1);
- 601   1      
- 602   1          write_dgus_vp(0x4780, (u8*)&INIT_QUESTION_ENG, 11);
- 603   1          len = 22;
- 604   1          write_dgus_vp(0x5788, (u8*)&len, 1);
- 605   1      
- 606   1          write_dgus_vp(0x4790, (u8*)&DELAY_TIME_ENG, 10);
- 607   1          len = 20;
- 608   1          write_dgus_vp(0x5798, (u8*)&len, 1);
- 609   1      
- 610   1          write_dgus_vp(0x4800, (u8*)&DELAY_TIME_ENG, 10);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 11  
+ 551   5                      }else if(usersettingEditSP == 1){
+ 552   5                          SetTextColorWhite(0x5193);
+ 553   5                          SetTextColorYellow(0x5203);
+ 554   5                      }
+ 555   4                  }
+ 556   3              }break;
+ 557   2          }
+ 558   1      }
+ 559          
+ 560          void adminUserSettingText(u16 state){
+ 561   1          switch(state){
+ 562   2              case 1:{
+ 563   3                  if(usersettingSP==0){
+ 564   4                      usersettingSP = 3;
+ 565   4                  }else{
+ 566   4                      usersettingSP--;
+ 567   4                  }
+ 568   3              }break;
+ 569   2              case 2:{
+ 570   3                  if(usersettingSP==3){
+ 571   4                      usersettingSP = 0;
+ 572   4                  }else{
+ 573   4                      usersettingSP++;
+ 574   4                  }
+ 575   3              }break;
+ 576   2          }
+ 577   1          switch(usersettingSP){
+ 578   2              case 0:{
+ 579   3                  SetTextColorYellow(0x5093);
+ 580   3                  SetTextColorWhite(0x5123);
+ 581   3                  SetTextColorWhite(0x5153);
+ 582   3                  SetTextColorWhite(0x5183);
+ 583   3              }break;
+ 584   2              case 1:{
+ 585   3                  SetTextColorWhite(0x5093);
+ 586   3                  SetTextColorYellow(0x5123);
+ 587   3                  SetTextColorWhite(0x5153);
+ 588   3                  SetTextColorWhite(0x5183);
+ 589   3              }break;
+ 590   2              case 2:{
+ 591   3                  SetTextColorWhite(0x5093);
+ 592   3                  SetTextColorWhite(0x5123);
+ 593   3                  SetTextColorYellow(0x5153);
+ 594   3                  SetTextColorWhite(0x5183);
+ 595   3              }break;
+ 596   2              case 3:{
+ 597   3                  SetTextColorWhite(0x5093);
+ 598   3                  SetTextColorWhite(0x5123);
+ 599   3                  SetTextColorWhite(0x5153);
+ 600   3                  SetTextColorYellow(0x5183);
+ 601   3              }break;
+ 602   2          }
+ 603   1      }
+ 604          //어드민 io테스트
+ 605          void adminIoTestText(u16 state){
+ 606   1          switch(state){
+ 607   2              case 1:{
+ 608   3                  if(IOtestSP ==0){
+ 609   4                      IOtestSP = 5;
+ 610   4                  }else{
+ 611   4                      IOtestSP--;
+ 612   4                  }
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 11  
 
- 611   1          len = 20;
- 612   1          write_dgus_vp(0x5808, (u8*)&len, 1);
- 613   1      
- 614   1          //로그 & 에러
- 615   1          write_dgus_vp(0x4650, (u8*)&LOG_ERROR_ENG, 11);
- 616   1          len = 22;
- 617   1          write_dgus_vp(0x5658, (u8*)&len, 1);
- 618   1      
- 619   1          write_dgus_vp(0x4670, (u8*)&ACTIVE_LOG_ENG, 10);
- 620   1          len = 20;
- 621   1          write_dgus_vp(0x5678, (u8*)&len, 1);
+ 613   3              }break;
+ 614   2              case 2:{
+ 615   3                  if(IOtestSP==5){
+ 616   4                      IOtestSP = 0;
+ 617   4                  }else{
+ 618   4                      IOtestSP++;
+ 619   4                  }
+ 620   3              }break;
+ 621   2          }
  622   1      
- 623   1          write_dgus_vp(0x4680, (u8*)&ERROR_LOG_ENG, 9);
- 624   1          len = 18;
- 625   1          write_dgus_vp(0x5688, (u8*)&len, 1);
- 626   1      
- 627   1          //작업 시간
- 628   1          write_dgus_vp(0x4410, (u8*)&RUN_TIME_ENG, 8);
- 629   1          len = 16;
- 630   1          write_dgus_vp(0x5418, (u8*)&len, 1);
- 631   1      
- 632   1          write_dgus_vp(0x4420, (u8*)&ERROR_LOG_ENG, 9);
- 633   1          len = 18;
- 634   1          write_dgus_vp(0x5428, (u8*)&len, 1);
- 635   1      
- 636   1          write_dgus_vp(0x4460, (u8*)&ERROR_LOG_ENG, 9);
- 637   1          len = 18;
- 638   1          write_dgus_vp(0x5468, (u8*)&len, 1);
- 639   1      
- 640   1          write_dgus_vp(0x4500, (u8*)&ERROR_LOG_ENG, 9);
- 641   1          len = 18;
- 642   1          write_dgus_vp(0x5508, (u8*)&len, 1);
- 643   1      
- 644   1          //언어 변경
- 645   1          write_dgus_vp(0x4540, (u8*)&LANGUAGE_ENG, 8);
- 646   1          len = 16;
- 647   1          write_dgus_vp(0x5548, (u8*)&len, 1);
- 648   1      
- 649   1          write_dgus_vp(0x4550, (u8*)&ENGLISH_ENG, 7);
- 650   1          len = 14;
- 651   1          write_dgus_vp(0x5558, (u8*)&len, 1);
- 652   1       
- 653   1          write_dgus_vp(0x4560, (u8*)&CHINESE_ENG, 7);
- 654   1          len = 14;
- 655   1          write_dgus_vp(0x5568, (u8*)&len, 1);
- 656   1      
- 657   1          write_dgus_vp(0x4570, (u8*)&KOREAN_ENG, 6);
- 658   1          len = 12;
- 659   1          write_dgus_vp(0x5578, (u8*)&len, 1);
- 660   1      
- 661   1          //회사 소개
- 662   1          write_dgus_vp(0x4580, (u8*)&COMPANY_INFO_ENG, 12);
- 663   1          len = 24;
- 664   1          write_dgus_vp(0x5588, (u8*)&len, 1);
- 665   1      
- 666   1          write_dgus_vp(0x4590, (u8*)&YONGLI_KOREA_ENG, 12);
- 667   1          len = 24;
- 668   1          write_dgus_vp(0x5598, (u8*)&len, 1);
- 669   1      
- 670   1          write_dgus_vp(0x4600, (u8*)&GYEONGGI_DO_ENG, 11);
- 671   1          len = 22;
- 672   1          write_dgus_vp(0x5608, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 12  
+ 623   1           switch(IOtestSP){
+ 624   2              case 0:{
+ 625   3                  SetTextColorYellow(0x5193);
+ 626   3                  SetTextColorWhite(0x5213);
+ 627   3                  SetTextColorWhite(0x5233);
+ 628   3                  SetTextColorWhite(0x5253);
+ 629   3                  SetTextColorWhite(0x5273);
+ 630   3                  SetTextColorWhite(0x5293);
+ 631   3              }break;
+ 632   2              case 1:{
+ 633   3                  SetTextColorWhite(0x5193);
+ 634   3                  SetTextColorYellow(0x5213);
+ 635   3                  SetTextColorWhite(0x5233);
+ 636   3                  SetTextColorWhite(0x5253);
+ 637   3                  SetTextColorWhite(0x5273);
+ 638   3                  SetTextColorWhite(0x5293);
+ 639   3              }break;
+ 640   2              case 2:{
+ 641   3                  SetTextColorWhite(0x5193);
+ 642   3                  SetTextColorWhite(0x5213);
+ 643   3                  SetTextColorYellow(0x5233);
+ 644   3                  SetTextColorWhite(0x5253);
+ 645   3                  SetTextColorWhite(0x5273);
+ 646   3                  SetTextColorWhite(0x5293);
+ 647   3              }break;
+ 648   2              case 3:{
+ 649   3                  SetTextColorWhite(0x5193);
+ 650   3                  SetTextColorWhite(0x5213);
+ 651   3                  SetTextColorWhite(0x5233);
+ 652   3                  SetTextColorYellow(0x5253);
+ 653   3                  SetTextColorWhite(0x5273);
+ 654   3                  SetTextColorWhite(0x5293);
+ 655   3              }break;
+ 656   2              case 4:{
+ 657   3                  SetTextColorWhite(0x5193);
+ 658   3                  SetTextColorWhite(0x5213);
+ 659   3                  SetTextColorWhite(0x5233);
+ 660   3                  SetTextColorWhite(0x5253);
+ 661   3                  SetTextColorYellow(0x5273);
+ 662   3                  SetTextColorWhite(0x5293);
+ 663   3              }break;
+ 664   2              case 5:{
+ 665   3                  SetTextColorWhite(0x5193);
+ 666   3                  SetTextColorWhite(0x5213);
+ 667   3                  SetTextColorWhite(0x5233);
+ 668   3                  SetTextColorWhite(0x5253);
+ 669   3                  SetTextColorWhite(0x5273);
+ 670   3                  SetTextColorYellow(0x5293);
+ 671   3              }break;
+ 672   2          }
+ 673   1      }
+ 674          
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 12  
 
- 673   1      
- 674   1          write_dgus_vp(0x4610, (u8*)&PAJU_JORI_ENG, 17);
- 675   1          len = 34;
- 676   1          write_dgus_vp(0x5618, (u8*)&len, 1);
- 677   1      
- 678   1          write_dgus_vp(0x4620, (u8*)&DANGJAEBONG_RO_29_ENG, 17);
- 679   1          len = 34;
- 680   1          write_dgus_vp(0x5628, (u8*)&len, 1);
- 681   1      
- 682   1          write_dgus_vp(0x4630, (u8*)&TEL_CHN, 12);
- 683   1          len = 24;
- 684   1          write_dgus_vp(0x5638, (u8*)&len, 1);
- 685   1      
- 686   1          //엔지니어 모드
- 687   1          write_dgus_vp(0x4660, (u8*)&ENGINEER_MODE_CHN, 5);
- 688   1          len = 10;
- 689   1          write_dgus_vp(0x5698, (u8*)&len, 1);
- 690   1      }
- 691          
- 692          void admin_language_chn(void){
- 693   1          u16 len = 0;
- 694   1          //어드민 메인리스트
- 695   1          write_dgus_vp(0x4010, (u8*)&USER_SETTING_CHN, 4);
- 696   1          len = 8;
- 697   1          write_dgus_vp(0x5018, (u8*)&len, 1);
- 698   1      
- 699   1          write_dgus_vp(0x4020, (u8*)&IO_TEST_CHN, 4);
- 700   1          len = 8;
- 701   1          write_dgus_vp(0x5028, (u8*)&len, 1);
- 702   1      
- 703   1          write_dgus_vp(0x4030, (u8*)&FACTORY_RESET_CHN, 5);
- 704   1          len = 10;
- 705   1          write_dgus_vp(0x5038, (u8*)&len, 1);
- 706   1      
- 707   1          write_dgus_vp(0x4040, (u8*)&LOG_ERROR_CHN, 7);
- 708   1          len = 14;
- 709   1          write_dgus_vp(0x5048, (u8*)&len, 1);
- 710   1      
- 711   1          write_dgus_vp(0x4050, (u8*)&RUN_TIME_CHN, 4);
- 712   1          len = 8;
- 713   1          write_dgus_vp(0x5058, (u8*)&len, 1);
- 714   1      
- 715   1          write_dgus_vp(0x4060, (u8*)&LANGUAGE_CHN, 2);
- 716   1          len = 4;
- 717   1          write_dgus_vp(0x5068, (u8*)&len, 1);
- 718   1      
- 719   1          write_dgus_vp(0x4070, (u8*)&COMPANY_INFO_CHN, 4);
- 720   1          len = 8;
- 721   1          write_dgus_vp(0x5078, (u8*)&len, 1);
- 722   1      
- 723   1          write_dgus_vp(0x4330, (u8*)&ENGINEER_MODE_ENG, 5);
- 724   1          len = 10;
- 725   1          write_dgus_vp(0x5338, (u8*)&len, 1);
- 726   1      
- 727   1          //유저 세팅
- 728   1          write_dgus_vp(0x4080, (u8*)&USER_SETTING_CHN, 4);
- 729   1          len = 8;
- 730   1          write_dgus_vp(0x5088, (u8*)&len, 1);
- 731   1      
- 732   1          write_dgus_vp(0x4090, (u8*)&TOP_TEMP_CHN, 4);
- 733   1          len = 8;
- 734   1          write_dgus_vp(0x5098, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 13  
+ 675          // void adminIoTestWork(){
+ 676          //     switch(IOtestSP){
+ 677          //         case 0:{
+ 678          //             if(IOtestSelect_plag == 1){
+ 679          //                 SetTextColorYellow(0x5223);
+ 680          //                 SetTextColorWhite(0x5233);
+ 681          //                 io=1;
+ 682          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 683          //             }else{
+ 684          //                 SetTextColorWhite(0x5223);
+ 685          //                 SetTextColorYellow(0x5233);
+ 686          //                 io = 0;
+ 687          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 688          //             }
+ 689          //         }break;
+ 690          //         case 1:{
+ 691          //              if(IOtestSelect_plag == 1){
+ 692          //                 SetTextColorYellow(0x5253);
+ 693          //                 SetTextColorWhite(0x5263);
+ 694          //                 io=2;
+ 695          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 696          //             }else{
+ 697          //                 SetTextColorWhite(0x5253);
+ 698          //                 SetTextColorYellow(0x5263);
+ 699          //                 io = 0;
+ 700          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 701          //             }
+ 702          //         }break;
+ 703          //         case 2:{
+ 704          //              if(IOtestSelect_plag == 1){
+ 705          //                 SetTextColorYellow(0x5283);
+ 706          //                 SetTextColorWhite(0x5293);
+ 707          //                 io=3;
+ 708          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 709          //             }else{
+ 710          //                 SetTextColorWhite(0x5283);
+ 711          //                 SetTextColorYellow(0x5293);
+ 712          //                 io = 0;
+ 713          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 714          //             }
+ 715          //         }break;
+ 716          //         case 3:{
+ 717          //              if(IOtestSelect_plag == 1){
+ 718          //                 SetTextColorYellow(0x5313);
+ 719          //                 SetTextColorWhite(0x5323);
+ 720          //                 io=4;
+ 721          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 722          //             }else{
+ 723          //                 SetTextColorWhite(0x5313);
+ 724          //                 SetTextColorYellow(0x5323);
+ 725          //                 io = 0;
+ 726          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 727          //             }
+ 728          //         }break;
+ 729          //         case 4:{
+ 730          //              if(IOtestSelect_plag == 1){
+ 731          //                 SetTextColorYellow(0x5353);
+ 732          //                 SetTextColorWhite(0x5363);
+ 733          //                 io=5;
+ 734          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 735          //             }else{
+ 736          //                 SetTextColorWhite(0x5353);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 13  
 
- 735   1      
- 736   1          write_dgus_vp(0x4120, (u8*)&BOTTOM_TEMP_CHN, 4);
- 737   1          len = 8;
- 738   1          write_dgus_vp(0x5128, (u8*)&len, 1);
- 739   1      
- 740   1          write_dgus_vp(0x4150, (u8*)&PRESSURE_CHN, 2);
- 741   1          len = 4;
- 742   1          write_dgus_vp(0x5158, (u8*)&len, 1);
- 743   1      
- 744   1          write_dgus_vp(0x4180, (u8*)&DELAY_TIME_CHN, 4);
- 745   1          len = 8;
- 746   1          write_dgus_vp(0x5188, (u8*)&len, 1);
- 747   1      
- 748   1          //IO 테스트
- 749   1          write_dgus_vp(0x4400, (u8*)&IO_TEST_CHN, 7);
- 750   1          len = 14;
- 751   1          write_dgus_vp(0x5408, (u8*)&len, 1);
- 752   1      
- 753   1          write_dgus_vp(0x4210, (u8*)&TOP_HEATER_CHN, 5);
- 754   1          len = 10;
- 755   1          write_dgus_vp(0x5218, (u8*)&len, 1);
- 756   1      
- 757   1          write_dgus_vp(0x4240, (u8*)&BOTTOM_HEATER_CHN, 5);
- 758   1          len = 10;
- 759   1          write_dgus_vp(0x5248, (u8*)&len, 1);
- 760   1      
- 761   1          write_dgus_vp(0x4270, (u8*)&TOP_FAN_CHN, 4);
- 762   1          len = 8;
- 763   1          write_dgus_vp(0x5278, (u8*)&len, 1);
- 764   1      
- 765   1          write_dgus_vp(0x4300, (u8*)&BOTTOM_FAN_CHN, 4);
- 766   1          len = 8;
- 767   1          write_dgus_vp(0x5308, (u8*)&len, 1);
- 768   1      
- 769   1          write_dgus_vp(0x4340, (u8*)&COMPRESSOR_CHN, 3);
- 770   1          len = 6;
- 771   1          write_dgus_vp(0x5348, (u8*)&len, 1);
- 772   1      
- 773   1          write_dgus_vp(0x4370, (u8*)&SOLENOID_CHN, 3);
- 774   1          len = 6;
- 775   1          write_dgus_vp(0x5378, (u8*)&len, 1);
- 776   1          
- 777   1          //공장 초기화
- 778   1          write_dgus_vp(0x4760, (u8*)&FACTORY_RESET_CHN, 5);
- 779   1          len = 10;
- 780   1          write_dgus_vp(0x5768, (u8*)&len, 1);
- 781   1      
- 782   1          write_dgus_vp(0x4770, (u8*)&DATA_CHN, 2);
- 783   1          len = 4;
- 784   1          write_dgus_vp(0x5778, (u8*)&len, 1);
- 785   1      
- 786   1          write_dgus_vp(0x4780, (u8*)&INIT_QUESTION_CHN, 5);
- 787   1          len = 10;
- 788   1          write_dgus_vp(0x5788, (u8*)&len, 1);
- 789   1      
- 790   1          write_dgus_vp(0x4790, (u8*)&YES_CHN, 2);
- 791   1          len = 4;
- 792   1          write_dgus_vp(0x5798, (u8*)&len, 1);
- 793   1      
- 794   1          write_dgus_vp(0x4800, (u8*)&NO_CHN, 2);
- 795   1          len = 4;
- 796   1          write_dgus_vp(0x5808, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 14  
+ 737          //                 SetTextColorYellow(0x5363);
+ 738          //                 io = 0;
+ 739          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 740          //             }
+ 741          //         }break;
+ 742          //         case 5:{
+ 743          //              if(IOtestSelect_plag == 1){
+ 744          //                 SetTextColorYellow(0x5383);
+ 745          //                 SetTextColorWhite(0x5393);
+ 746          //                 io=6;
+ 747          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 748          //             }else{
+ 749          //                 SetTextColorWhite(0x5383);
+ 750          //                 SetTextColorYellow(0x5393);
+ 751          //                 io = 0;
+ 752          //                 write_dgus_vp(VP_IO_TEST, (u8*)&io, 1); 
+ 753          //             }
+ 754          //         }break;
+ 755          //     }
+ 756          // }
+ 757          //어드민 초기화
+ 758          void adminfactoryResetText(u16 state){
+ 759   1           switch(state){
+ 760   2              case 1:{
+ 761   3                  if(factoryResetSP ==0){
+ 762   4                      factoryResetSP = 1;
+ 763   4                  }else{
+ 764   4                      factoryResetSP--;
+ 765   4                  }
+ 766   3              }break;
+ 767   2              case 2:{
+ 768   3                  if(factoryResetSP==1){
+ 769   4                      factoryResetSP = 0;
+ 770   4                  }else{
+ 771   4                      factoryResetSP++;
+ 772   4                  }
+ 773   3              }break;
+ 774   2              case 3:{
+ 775   3      
+ 776   3              }break;
+ 777   2          }
+ 778   1          if(factoryResetSP == 0){
+ 779   2              SetTextColorYellow(0x5793);
+ 780   2              SetTextColorWhite(0x5803);
+ 781   2          }else{
+ 782   2              SetTextColorWhite(0x5793);
+ 783   2              SetTextColorYellow(0x5803);
+ 784   2          }
+ 785   1      }
+ 786          //어드민 로그 및 에러
+ 787          void adminLogErrorText(u16 state){
+ 788   1           switch(state){
+ 789   2              case 1:{
+ 790   3                  if(LogErrorSP  ==0){
+ 791   4                      LogErrorSP  = 1;
+ 792   4                  }else{
+ 793   4                      LogErrorSP --;
+ 794   4                  }
+ 795   3              }break;
+ 796   2              case 2:{
+ 797   3                  if(LogErrorSP ==1){
+ 798   4                      LogErrorSP  = 0;
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 14  
 
- 797   1      
- 798   1          //로그 & 에러
- 799   1          write_dgus_vp(0x4650, (u8*)&LOG_ERROR_CHN, 7);
- 800   1          len = 14;
- 801   1          write_dgus_vp(0x5658, (u8*)&len, 1);
- 802   1      
- 803   1          write_dgus_vp(0x4670, (u8*)&ACTIVE_LOG_CHN, 4);
- 804   1          len = 8;
- 805   1          write_dgus_vp(0x5678, (u8*)&len, 1);
- 806   1      
- 807   1          write_dgus_vp(0x4680, (u8*)&ERROR_LOG_CHN, 4);
- 808   1          len = 8;
- 809   1          write_dgus_vp(0x5688, (u8*)&len, 1);
- 810   1      
- 811   1          //작업 시간
- 812   1          write_dgus_vp(0x4410, (u8*)&RUN_TIME_CHN, 4);
- 813   1          len = 8;
- 814   1          write_dgus_vp(0x5418, (u8*)&len, 1);
- 815   1      
- 816   1          write_dgus_vp(0x4420, (u8*)&ERROR_LOG_CHN, 2);
- 817   1          len = 4;
- 818   1          write_dgus_vp(0x5428, (u8*)&len, 1);
- 819   1      
- 820   1          write_dgus_vp(0x4460, (u8*)&ERROR_LOG_ENG, 9);
- 821   1          len = 18;
- 822   1          write_dgus_vp(0x5468, (u8*)&len, 1);
- 823   1      
- 824   1          write_dgus_vp(0x4500, (u8*)&ERROR_LOG_ENG, 9);
- 825   1          len = 18;
- 826   1          write_dgus_vp(0x5508, (u8*)&len, 1);
- 827   1      
- 828   1          // 언어
- 829   1          write_dgus_vp(0x4550, (u8*)&ENGLISH_CHN, 2);
- 830   1          len = 4;
- 831   1          write_dgus_vp(0x5558, (u8*)&len, 1);
- 832   1      
- 833   1          write_dgus_vp(0x4560, (u8*)&CHINESE_CHN, 2);
- 834   1          len = 4;
- 835   1          write_dgus_vp(0x5568, (u8*)&len, 1);
- 836   1      
- 837   1          write_dgus_vp(0x4570, (u8*)&KOREAN_CHN, 2);
- 838   1          len = 4;
- 839   1          write_dgus_vp(0x5578, (u8*)&len, 1);
- 840   1      
- 841   1           //회사 소개
- 842   1          write_dgus_vp(0x4580, (u8*)&COMPANY_INFO_CHN, 4);
- 843   1          len = 8;
- 844   1          write_dgus_vp(0x5588, (u8*)&len, 1);
- 845   1      
- 846   1          write_dgus_vp(0x4590, (u8*)&YONGLI_KOREA_ENG, 12);
- 847   1          len = 24;
- 848   1          write_dgus_vp(0x5598, (u8*)&len, 1);
+ 799   4                  }else{
+ 800   4                      LogErrorSP ++;
+ 801   4                  }
+ 802   3              }break;
+ 803   2          }
+ 804   1          if(LogErrorSP  == 0){
+ 805   2              SetTextColorYellow(0x5673);
+ 806   2              SetTextColorWhite(0x5683);
+ 807   2          }else{
+ 808   2              SetTextColorWhite(0x5673);
+ 809   2              SetTextColorYellow(0x5683);
+ 810   2          }
+ 811   1      }
+ 812          //어드민 언어 변경
+ 813          void adminLanguageText(u16 state){
+ 814   1            switch(state){
+ 815   2              case 1:{
+ 816   3                  if(LanguageSP  ==0){
+ 817   4                      LanguageSP  = 2;
+ 818   4                  }else{
+ 819   4                      LanguageSP --;
+ 820   4                  }
+ 821   3              }break;
+ 822   2              case 2:{
+ 823   3                  if(LanguageSP == 2){
+ 824   4                      LanguageSP  = 0;
+ 825   4                  }else{
+ 826   4                      LanguageSP ++;
+ 827   4                  }
+ 828   3              }break;
+ 829   2          }
+ 830   1          if(LanguageSP  == 0){
+ 831   2              SetTextColorYellow(0x5553);
+ 832   2              SetTextColorWhite(0x5563);
+ 833   2              SetTextColorWhite(0x5573);
+ 834   2          }else if(LanguageSP  == 1){
+ 835   2              SetTextColorWhite(0x5553);
+ 836   2              SetTextColorYellow(0x5563);
+ 837   2              SetTextColorWhite(0x5573);
+ 838   2          }else if(LanguageSP  == 2){
+ 839   2              SetTextColorWhite(0x5553);
+ 840   2              SetTextColorWhite(0x5563);
+ 841   2              SetTextColorYellow(0x5573);
+ 842   2          }
+ 843   1      }
+ 844          
+ 845          void admin_language_eng(void){
+ 846   1          u16 len = 0;
+ 847   1          //어드민 메인리스트
+ 848   1          admin_text_change();
  849   1      
- 850   1          write_dgus_vp(0x4600, (u8*)&GYEONGGI_DO_CHN, 3);
- 851   1          len = 6;
- 852   1          write_dgus_vp(0x5608, (u8*)&len, 1);
- 853   1      
- 854   1          write_dgus_vp(0x4610, (u8*)&PAJU_JORI_CHN, 7);
- 855   1          len = 14;
- 856   1          write_dgus_vp(0x5618, (u8*)&len, 1);
- 857   1      
- 858   1          write_dgus_vp(0x4620, (u8*)&ADDRESS_CHN, 7);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 15  
+ 850   1          //유저 세팅
+ 851   1          // write_dgus_vp(0x4080, (u8*)&USER_SETTING_ENG, 12);
+ 852   1          // len = 24;
+ 853   1          // write_dgus_vp(0x5088, (u8*)&len, 1);
+ 854   1      
+ 855   1          write_dgus_vp(0x4060, (u8*)&TOP_TEMP_ENG, 8);
+ 856   1          len = 16;
+ 857   1          write_dgus_vp(0x5068, (u8*)&len, 1);
+ 858   1      
+ 859   1          write_dgus_vp(0x4090, (u8*)&BOTTOM_TEMP_ENG, 11);
+ 860   1          len = 22;
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 15  
 
- 859   1          len = 14;
- 860   1          write_dgus_vp(0x5628, (u8*)&len, 1);
- 861   1      
- 862   1          write_dgus_vp(0x4630, (u8*)&TEL_CHN, 12);
- 863   1          len = 24;
- 864   1          write_dgus_vp(0x5638, (u8*)&len, 1);
- 865   1      
- 866   1          //엔지니어 모드
- 867   1          write_dgus_vp(0x4660, (u8*)&ENGINEER_MODE_ENG, 13);
- 868   1          len = 26;
- 869   1          write_dgus_vp(0x5698, (u8*)&len, 1);
+ 861   1          write_dgus_vp(0x5098, (u8*)&len, 1);
+ 862   1      
+ 863   1          write_dgus_vp(0x4120, (u8*)&PRESSURE_ENG, 8);
+ 864   1          len = 16;
+ 865   1          write_dgus_vp(0x5128, (u8*)&len, 1);
+ 866   1      
+ 867   1          write_dgus_vp(0x4150, (u8*)&DELAY_TIME_ENG, 10);
+ 868   1          len = 20;
+ 869   1          write_dgus_vp(0x5158, (u8*)&len, 1);
  870   1      
- 871   1          // write_dgus_vp(0x5089, (u8*)&KOR_FONT, 1);
- 872   1          // write_dgus_vp(0x5099, (u8*)&KOR_FONT, 1);
- 873   1          // write_dgus_vp(0x5129, (u8*)&KOR_FONT, 1);
- 874   1          // write_dgus_vp(0x5159, (u8*)&KOR_FONT, 1);
- 875   1          // write_dgus_vp(0x5189, (u8*)&KOR_FONT, 1);
- 876   1      
- 877   1          // write_dgus_vp(0x5409, (u8*)&KOR_FONT, 1);
- 878   1          // write_dgus_vp(0x5219, (u8*)&KOR_FONT, 1);
- 879   1          // write_dgus_vp(0x5249, (u8*)&KOR_FONT, 1);
- 880   1          // write_dgus_vp(0x5279, (u8*)&KOR_FONT, 1);
- 881   1          // write_dgus_vp(0x5309, (u8*)&KOR_FONT, 1);
- 882   1          // write_dgus_vp(0x5349, (u8*)&KOR_FONT, 1);
- 883   1          // write_dgus_vp(0x5379, (u8*)&KOR_FONT, 1);
- 884   1      
- 885   1          // write_dgus_vp(0x5769, (u8*)&KOR_FONT, 1);
- 886   1          // write_dgus_vp(0x5779, (u8*)&KOR_FONT, 1);
- 887   1          // write_dgus_vp(0x5789, (u8*)&KOR_FONT, 1);
- 888   1          // write_dgus_vp(0x5799, (u8*)&KOR_FONT, 1);
- 889   1          // write_dgus_vp(0x5809, (u8*)&KOR_FONT, 1);
- 890   1      }
- 891          
- 892          void admin_language_kor(void){
- 893   1          u16 len = 0;
- 894   1          //어드민 메인리스트
- 895   1          write_dgus_vp(0x4010, (u8*)&USER_SETTING_KOR, 5);
- 896   1          len = 10;
- 897   1          write_dgus_vp(0x5018, (u8*)&len, 1);
- 898   1      
- 899   1          write_dgus_vp(0x4020, (u8*)&CHECK_KOR, 6);
- 900   1          len = 12;
- 901   1          write_dgus_vp(0x5028, (u8*)&len, 1);
- 902   1      
- 903   1          write_dgus_vp(0x4030, (u8*)&FACTORY_RESET_KOR, 6);
- 904   1          len = 12;
- 905   1          write_dgus_vp(0x5038, (u8*)&len, 1);
- 906   1      
- 907   1          write_dgus_vp(0x4040, (u8*)&LOG_ERROR_KOR, 7);
- 908   1          len = 14;
- 909   1          write_dgus_vp(0x5048, (u8*)&len, 1);
- 910   1      
- 911   1          write_dgus_vp(0x4050, (u8*)&WORK_TIME_KOR, 5);
- 912   1          len = 10;
- 913   1          write_dgus_vp(0x5058, (u8*)&len, 1);
- 914   1      
- 915   1          write_dgus_vp(0x4060, (u8*)&LANGUAGE_KOR, 2);
- 916   1          len = 4;
- 917   1          write_dgus_vp(0x5068, (u8*)&len, 1);
- 918   1      
- 919   1          write_dgus_vp(0x4070, (u8*)&COMPANY_KOR, 4);
- 920   1          len = 8;
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 16  
+ 871   1          //IO 테스트
+ 872   1          // write_dgus_vp(0x4400, (u8*)&IO_TEST_ENG, 7);
+ 873   1          // len = 14;
+ 874   1          // write_dgus_vp(0x5408, (u8*)&len, 1);
+ 875   1      
+ 876   1          write_dgus_vp(0x4190, (u8*)&TOP_HEATER_ENG, 11);
+ 877   1          len = 22;
+ 878   1          write_dgus_vp(0x5198, (u8*)&len, 1);
+ 879   1      
+ 880   1          write_dgus_vp(0x4210, (u8*)&BOTTOM_HEATER_ENG, 13);
+ 881   1          len = 26;
+ 882   1          write_dgus_vp(0x5218, (u8*)&len, 1);
+ 883   1      
+ 884   1          write_dgus_vp(0x4230, (u8*)&TOP_FAN_ENG, 7);
+ 885   1          len = 14;
+ 886   1          write_dgus_vp(0x5238, (u8*)&len, 1);
+ 887   1      
+ 888   1          write_dgus_vp(0x4250, (u8*)&BOTTOM_FAN_ENG, 10);
+ 889   1          len = 20;
+ 890   1          write_dgus_vp(0x5258, (u8*)&len, 1);
+ 891   1      
+ 892   1          write_dgus_vp(0x4270, (u8*)&COMPANY_INFO_ENG, 12);
+ 893   1          len = 24;
+ 894   1          write_dgus_vp(0x5278, (u8*)&len, 1);
+ 895   1      
+ 896   1          write_dgus_vp(0x4290, (u8*)&SOLENOID_ENG, 8);
+ 897   1          len = 16;
+ 898   1          write_dgus_vp(0x5298, (u8*)&len, 1);
+ 899   1          
+ 900   1          //공장 초기화
+ 901   1          // write_dgus_vp(0x4760, (u8*)&FACTORY_RESET_ENG, 10);
+ 902   1          // len = 20;
+ 903   1          // write_dgus_vp(0x5768, (u8*)&len, 1);
+ 904   1      
+ 905   1          write_dgus_vp(0x4320, (u8*)&DATA_ENG, 4);
+ 906   1          len = 8;
+ 907   1          write_dgus_vp(0x5328, (u8*)&len, 1);
+ 908   1      
+ 909   1          write_dgus_vp(0x4330, (u8*)&INIT_QUESTION_ENG, 11);
+ 910   1          len = 22;
+ 911   1          write_dgus_vp(0x5338, (u8*)&len, 1);
+ 912   1      
+ 913   1          write_dgus_vp(0x4340, (u8*)&DELAY_TIME_ENG, 10);
+ 914   1          len = 20;
+ 915   1          write_dgus_vp(0x5348, (u8*)&len, 1);
+ 916   1      
+ 917   1          write_dgus_vp(0x4350, (u8*)&DELAY_TIME_ENG, 10);
+ 918   1          len = 20;
+ 919   1          write_dgus_vp(0x5358, (u8*)&len, 1);
+ 920   1      
+ 921   1          //로그 & 에러
+ 922   1          // write_dgus_vp(0x4650, (u8*)&LOG_ERROR_ENG, 11);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 16  
 
- 921   1          write_dgus_vp(0x5078, (u8*)&len, 1);
- 922   1      
- 923   1          write_dgus_vp(0x4330, (u8*)&ENGINEER_MODE_KOR, 7);
- 924   1          len = 14;
- 925   1          write_dgus_vp(0x5338, (u8*)&len, 1);
- 926   1      
- 927   1              //유저 세팅
- 928   1          write_dgus_vp(0x4080, (u8*)&USER_SETTING_KOR, 5);
- 929   1          len = 10;
- 930   1          write_dgus_vp(0x5088, (u8*)&len, 1);
- 931   1      
- 932   1          write_dgus_vp(0x4090, (u8*)&TOP_TEMP, 5);
- 933   1          len = 10;
- 934   1          write_dgus_vp(0x5098, (u8*)&len, 1);
- 935   1      
- 936   1          write_dgus_vp(0x4120, (u8*)&BOTTOM_TEMP, 5);
- 937   1          len = 10;
- 938   1          write_dgus_vp(0x5128, (u8*)&len, 1);
- 939   1      
- 940   1          write_dgus_vp(0x4150, (u8*)&PRESSURE, 2);
- 941   1          len = 4;
- 942   1          write_dgus_vp(0x5158, (u8*)&len, 1);
- 943   1      
- 944   1          write_dgus_vp(0x4180, (u8*)&DELAY_TIME, 4);
- 945   1          len = 8;
- 946   1          write_dgus_vp(0x5188, (u8*)&len, 1);
- 947   1      
- 948   1          //IO 테스트
- 949   1          write_dgus_vp(0x4400, (u8*)&CHECK_KOR, 6);
- 950   1          len = 14;
- 951   1          write_dgus_vp(0x5408, (u8*)&len, 1);
- 952   1      
- 953   1          write_dgus_vp(0x4210, (u8*)&TOP_HEATER_KOR, 5);
- 954   1          len = 10;
- 955   1          write_dgus_vp(0x5218, (u8*)&len, 1);
- 956   1      
- 957   1          write_dgus_vp(0x4240, (u8*)&BOTTOM_HEATER_KOR, 5);
- 958   1          len = 10;
- 959   1          write_dgus_vp(0x5248, (u8*)&len, 1);
- 960   1      
- 961   1          write_dgus_vp(0x4270, (u8*)&TOP_FAN_KOR, 4);
- 962   1          len = 8;
- 963   1          write_dgus_vp(0x5278, (u8*)&len, 1);
- 964   1      
- 965   1          write_dgus_vp(0x4300, (u8*)&BOTTOM_FAN_KOR, 4);
- 966   1          len = 8;
- 967   1          write_dgus_vp(0x5308, (u8*)&len, 1);
- 968   1      
- 969   1          write_dgus_vp(0x4340, (u8*)&COMPRESSOR_KOR, 4);
- 970   1          len = 8;
- 971   1          write_dgus_vp(0x5348, (u8*)&len, 1);
+ 923   1          // len = 22;
+ 924   1          // write_dgus_vp(0x5658, (u8*)&len, 1);
+ 925   1      
+ 926   1          write_dgus_vp(0x4370, (u8*)&ACTIVE_LOG_ENG, 10);
+ 927   1          len = 20;
+ 928   1          write_dgus_vp(0x5378, (u8*)&len, 1);
+ 929   1      
+ 930   1          write_dgus_vp(0x4380, (u8*)&ERROR_LOG_ENG, 9);
+ 931   1          len = 18;
+ 932   1          write_dgus_vp(0x5388, (u8*)&len, 1);
+ 933   1      
+ 934   1          //작업 시간
+ 935   1          // write_dgus_vp(0x4420, (u8*)&RUN_TIME_ENG, 8);
+ 936   1          // len = 16;
+ 937   1          // write_dgus_vp(0x5428, (u8*)&len, 1);
+ 938   1      
+ 939   1          write_dgus_vp(0x4420, (u8*)&ERROR_LOG_ENG, 9);
+ 940   1          len = 18;
+ 941   1          write_dgus_vp(0x5428, (u8*)&len, 1);
+ 942   1      
+ 943   1          write_dgus_vp(0x4460, (u8*)&ERROR_LOG_ENG, 9);
+ 944   1          len = 18;
+ 945   1          write_dgus_vp(0x5468, (u8*)&len, 1);
+ 946   1      
+ 947   1          write_dgus_vp(0x4500, (u8*)&ERROR_LOG_ENG, 9);
+ 948   1          len = 18;
+ 949   1          write_dgus_vp(0x5508, (u8*)&len, 1);
+ 950   1      
+ 951   1          //언어 변경
+ 952   1          // write_dgus_vp(0x4540, (u8*)&LANGUAGE_ENG, 8);
+ 953   1          // len = 16;
+ 954   1          // write_dgus_vp(0x5548, (u8*)&len, 1);
+ 955   1      
+ 956   1          write_dgus_vp(0x4550, (u8*)&ENGLISH_ENG, 7);
+ 957   1          len = 14;
+ 958   1          write_dgus_vp(0x5558, (u8*)&len, 1);
+ 959   1       
+ 960   1          write_dgus_vp(0x4560, (u8*)&CHINESE_ENG, 7);
+ 961   1          len = 14;
+ 962   1          write_dgus_vp(0x5568, (u8*)&len, 1);
+ 963   1      
+ 964   1          write_dgus_vp(0x4570, (u8*)&KOREAN_ENG, 6);
+ 965   1          len = 12;
+ 966   1          write_dgus_vp(0x5578, (u8*)&len, 1);
+ 967   1      
+ 968   1          //회사 소개
+ 969   1          // write_dgus_vp(0x4580, (u8*)&COMPANY_INFO_ENG, 12);
+ 970   1          // len = 24;
+ 971   1          // write_dgus_vp(0x5588, (u8*)&len, 1);
  972   1      
- 973   1          write_dgus_vp(0x4370, (u8*)&SOLENOID_KOR, 5);
- 974   1          len = 10;
- 975   1          write_dgus_vp(0x5378, (u8*)&len, 1);
- 976   1          
- 977   1          //공장 초기화
- 978   1          write_dgus_vp(0x4760, (u8*)&FACTORY_RESET_KOR, 6);
- 979   1          len = 12;
- 980   1          write_dgus_vp(0x5768, (u8*)&len, 1);
- 981   1      
- 982   1          write_dgus_vp(0x4770, (u8*)&INIT_QUESTION1, 6);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 17  
+ 973   1          write_dgus_vp(0x4590, (u8*)&YONGLI_KOREA_ENG, 12);
+ 974   1          len = 24;
+ 975   1          write_dgus_vp(0x5598, (u8*)&len, 1);
+ 976   1      
+ 977   1          write_dgus_vp(0x4600, (u8*)&GYEONGGI_DO_ENG, 11);
+ 978   1          len = 22;
+ 979   1          write_dgus_vp(0x5608, (u8*)&len, 1);
+ 980   1      
+ 981   1          write_dgus_vp(0x4610, (u8*)&PAJU_JORI_ENG, 17);
+ 982   1          len = 34;
+ 983   1          write_dgus_vp(0x5618, (u8*)&len, 1);
+ 984   1      
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 17  
 
- 983   1          len = 12;
- 984   1          write_dgus_vp(0x5778, (u8*)&len, 1);
- 985   1      
- 986   1          write_dgus_vp(0x4780, (u8*)&INIT_QUESTION2, 9);
- 987   1          len = 18;
- 988   1          write_dgus_vp(0x5788, (u8*)&len, 1);
- 989   1      
- 990   1          write_dgus_vp(0x4790, (u8*)&OK_KOR, 2);
- 991   1          len = 4;
- 992   1          write_dgus_vp(0x5798, (u8*)&len, 1);
- 993   1      
- 994   1          write_dgus_vp(0x4800, (u8*)&CANCEL_KOR, 2);
- 995   1          len = 4;
- 996   1          write_dgus_vp(0x5808, (u8*)&len, 1);
- 997   1      
- 998   1          //로그 & 에러
- 999   1          write_dgus_vp(0x4650, (u8*)&LOG_ERROR_KOR, 7);
-1000   1          len = 14;
-1001   1          write_dgus_vp(0x5658, (u8*)&len, 1);
-1002   1      
-1003   1          write_dgus_vp(0x4670, (u8*)&ACTIVE_LOG_CHN, 5);
-1004   1          len = 10;
-1005   1          write_dgus_vp(0x5678, (u8*)&len, 1);
-1006   1      
-1007   1          write_dgus_vp(0x4680, (u8*)&ERROR_LOG_CHN, 5);
-1008   1          len = 10;
-1009   1          write_dgus_vp(0x5688, (u8*)&len, 1);
-1010   1      
-1011   1          //작업 시간
-1012   1          write_dgus_vp(0x4410, (u8*)&WORK_TIME_KOR, 5);
-1013   1          len = 10;
-1014   1          write_dgus_vp(0x5418, (u8*)&len, 1);
-1015   1      
-1016   1          write_dgus_vp(0x4420, (u8*)&HEATING_TIME_KOR, 4);
-1017   1          len = 8;
-1018   1          write_dgus_vp(0x5428, (u8*)&len, 1);
-1019   1      
-1020   1          write_dgus_vp(0x4460, (u8*)&FAN_KOR, 1);
-1021   1          len = 2;
-1022   1          write_dgus_vp(0x5468, (u8*)&len, 1);
-1023   1      
-1024   1          write_dgus_vp(0x4500, (u8*)&COMPRESSOR_KOR, 9);
-1025   1          len = 18;
-1026   1          write_dgus_vp(0x5508, (u8*)&len, 1);
-1027   1          
-1028   1          // 언어 변경
-1029   1          write_dgus_vp(0x4550, (u8*)&ENGLISH_KOR, 2);
-1030   1          len = 4;
-1031   1          write_dgus_vp(0x5558, (u8*)&len, 1);
-1032   1          write_dgus_vp(0x4560, (u8*)&CHINESE_KOR, 3);
-1033   1          len = 6;
-1034   1          write_dgus_vp(0x5568, (u8*)&len, 1);
-1035   1          write_dgus_vp(0x4570, (u8*)&KOREAN_KOR, 3);
-1036   1          write_dgus_vp(0x5578, (u8*)&len, 1);
-1037   1      
-1038   1          //회사 소개
-1039   1          write_dgus_vp(0x4580, (u8*)&COMPANY_KOR, 4);
+ 985   1          write_dgus_vp(0x4620, (u8*)&DANGJAEBONG_RO_29_ENG, 17);
+ 986   1          len = 34;
+ 987   1          write_dgus_vp(0x5628, (u8*)&len, 1);
+ 988   1      
+ 989   1          write_dgus_vp(0x4630, (u8*)&TEL_CHN, 12);
+ 990   1          len = 24;
+ 991   1          write_dgus_vp(0x5638, (u8*)&len, 1);
+ 992   1      
+ 993   1          //엔지니어 모드
+ 994   1          write_dgus_vp(0x4660, (u8*)&ENGINEER_MODE_CHN, 5);
+ 995   1          len = 10;
+ 996   1          write_dgus_vp(0x5698, (u8*)&len, 1);
+ 997   1      }
+ 998          
+ 999          void admin_language_chn(void){
+1000   1          u16 len = 0;
+1001   1          //어드민 메인리스트
+1002   1          // write_dgus_vp(0x4010, (u8*)&USER_SETTING_CHN, 4);
+1003   1          // len = 8;
+1004   1          // write_dgus_vp(0x5018, (u8*)&len, 1);
+1005   1      
+1006   1          // write_dgus_vp(0x4020, (u8*)&IO_TEST_CHN, 4);
+1007   1          // len = 8;
+1008   1          // write_dgus_vp(0x5028, (u8*)&len, 1);
+1009   1      
+1010   1          // write_dgus_vp(0x4030, (u8*)&FACTORY_RESET_CHN, 5);
+1011   1          // len = 10;
+1012   1          // write_dgus_vp(0x5038, (u8*)&len, 1);
+1013   1      
+1014   1          // write_dgus_vp(0x4040, (u8*)&LOG_ERROR_CHN, 7);
+1015   1          // len = 14;
+1016   1          // write_dgus_vp(0x5048, (u8*)&len, 1);
+1017   1      
+1018   1          // write_dgus_vp(0x4050, (u8*)&RUN_TIME_CHN, 4);
+1019   1          // len = 8;
+1020   1          // write_dgus_vp(0x5058, (u8*)&len, 1);
+1021   1      
+1022   1          // write_dgus_vp(0x4060, (u8*)&LANGUAGE_CHN, 2);
+1023   1          // len = 4;
+1024   1          // write_dgus_vp(0x5068, (u8*)&len, 1);
+1025   1      
+1026   1          // write_dgus_vp(0x4070, (u8*)&COMPANY_INFO_CHN, 4);
+1027   1          // len = 8;
+1028   1          // write_dgus_vp(0x5078, (u8*)&len, 1);
+1029   1      
+1030   1          // write_dgus_vp(0x4330, (u8*)&ENGINEER_MODE_ENG, 5);
+1031   1          // len = 10;
+1032   1          // write_dgus_vp(0x5338, (u8*)&len, 1);
+1033   1      
+1034   1          //유저 세팅
+1035   1          // write_dgus_vp(0x4080, (u8*)&USER_SETTING_CHN, 4);
+1036   1          // len = 8;
+1037   1          // write_dgus_vp(0x5088, (u8*)&len, 1);
+1038   1      
+1039   1          write_dgus_vp(0x4060, (u8*)&TOP_TEMP_CHN, 4);
 1040   1          len = 8;
-1041   1          write_dgus_vp(0x5588, (u8*)&len, 1);
+1041   1          write_dgus_vp(0x5068, (u8*)&len, 1);
 1042   1      
-1043   1          write_dgus_vp(0x4590, (u8*)&YONGLI_KOREA_KOR, 5);
-1044   1          len = 24;
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 18  
-
-1045   1          write_dgus_vp(0x5598, (u8*)&len, 1);
+1043   1          write_dgus_vp(0x4090, (u8*)&BOTTOM_TEMP_CHN, 4);
+1044   1          len = 8;
+1045   1          write_dgus_vp(0x5098, (u8*)&len, 1);
 1046   1      
-1047   1          write_dgus_vp(0x4600, (u8*)&GYEONGGI_DO_KOR, 3);
-1048   1          len = 6;
-1049   1          write_dgus_vp(0x5608, (u8*)&len, 1);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 18  
+
+1047   1          write_dgus_vp(0x4120, (u8*)&PRESSURE_CHN, 2);
+1048   1          len = 4;
+1049   1          write_dgus_vp(0x5128, (u8*)&len, 1);
 1050   1      
-1051   1          write_dgus_vp(0x4610, (u8*)&PAJU_JORI_EUP_KOR, 7);
-1052   1          len = 14;
-1053   1          write_dgus_vp(0x5618, (u8*)&len, 1);
+1051   1          write_dgus_vp(0x4150, (u8*)&DELAY_TIME_CHN, 4);
+1052   1          len = 8;
+1053   1          write_dgus_vp(0x5158, (u8*)&len, 1);
 1054   1      
-1055   1          write_dgus_vp(0x4620, (u8*)&DANGJAEBONG_RO_29_KOR, 7);
-1056   1          len = 14;
-1057   1          write_dgus_vp(0x5628, (u8*)&len, 1);
-1058   1      
-1059   1          write_dgus_vp(0x4630, (u8*)&TEL_KOR, 12);
-1060   1          len = 24;
-1061   1          write_dgus_vp(0x5638, (u8*)&len, 1);
-1062   1      
-1063   1          //엔지니어 모드
-1064   1          write_dgus_vp(0x4660, (u8*)&ENGINEER_MODE_KOR, 7);
-1065   1          len = 14;
-1066   1          write_dgus_vp(0x5698, (u8*)&len, 1);
+1055   1          //IO 테스트
+1056   1          // write_dgus_vp(0x4400, (u8*)&IO_TEST_CHN, 7);
+1057   1          // len = 14;
+1058   1          // write_dgus_vp(0x5408, (u8*)&len, 1);
+1059   1      
+1060   1          write_dgus_vp(0x4190, (u8*)&TOP_HEATER_CHN, 5);
+1061   1          len = 10;
+1062   1          write_dgus_vp(0x5198, (u8*)&len, 1);
+1063   1      
+1064   1          write_dgus_vp(0x4210, (u8*)&BOTTOM_HEATER_CHN, 5);
+1065   1          len = 10;
+1066   1          write_dgus_vp(0x5218, (u8*)&len, 1);
 1067   1      
-1068   1          // write_dgus_vp(0x4550, (u8*)&ENGLISH_CHN, 2);
-1069   1          // write_dgus_vp(0x5558, (u8*)&len2, 1);
-1070   1          // write_dgus_vp(0x4560, (u8*)&CHINESE_CHN, 2);
-1071   1          // write_dgus_vp(0x5568, (u8*)&len2, 1);
-1072   1          // write_dgus_vp(0x4570, (u8*)&KOREAN_CHN, 2);
-1073   1          // write_dgus_vp(0x5578, (u8*)&len2, 1);
-1074   1      
-1075   1          // write_dgus_vp(0x5089, (u8*)&KOR_FONT, 1);
-1076   1          // write_dgus_vp(0x5099, (u8*)&KOR_FONT, 1);
-1077   1          // write_dgus_vp(0x5129, (u8*)&KOR_FONT, 1);
-1078   1          // write_dgus_vp(0x5159, (u8*)&KOR_FONT, 1);
-1079   1          // write_dgus_vp(0x5189, (u8*)&KOR_FONT, 1);
-1080   1      
-1081   1          // write_dgus_vp(0x5409, (u8*)&KOR_FONT, 1);
-1082   1          // write_dgus_vp(0x5219, (u8*)&KOR_FONT, 1);
-1083   1          // write_dgus_vp(0x5249, (u8*)&KOR_FONT, 1);
-1084   1          // write_dgus_vp(0x5279, (u8*)&KOR_FONT, 1);
-1085   1          // write_dgus_vp(0x5309, (u8*)&KOR_FONT, 1);
-1086   1          // write_dgus_vp(0x5349, (u8*)&KOR_FONT, 1);
-1087   1          // write_dgus_vp(0x5379, (u8*)&KOR_FONT, 1);
+1068   1          write_dgus_vp(0x4230, (u8*)&TOP_FAN_CHN, 4);
+1069   1          len = 8;
+1070   1          write_dgus_vp(0x5238, (u8*)&len, 1);
+1071   1      
+1072   1          write_dgus_vp(0x4250, (u8*)&BOTTOM_FAN_CHN, 4);
+1073   1          len = 8;
+1074   1          write_dgus_vp(0x5258, (u8*)&len, 1);
+1075   1      
+1076   1          write_dgus_vp(0x4270, (u8*)&COMPRESSOR_CHN, 3);
+1077   1          len = 6;
+1078   1          write_dgus_vp(0x5278, (u8*)&len, 1);
+1079   1      
+1080   1          write_dgus_vp(0x4290, (u8*)&SOLENOID_CHN, 3);
+1081   1          len = 6;
+1082   1          write_dgus_vp(0x5298, (u8*)&len, 1);
+1083   1          
+1084   1          //공장 초기화
+1085   1          // write_dgus_vp(0x4760, (u8*)&FACTORY_RESET_CHN, 5);
+1086   1          // len = 10;
+1087   1          // write_dgus_vp(0x5768, (u8*)&len, 1);
 1088   1      
-1089   1          // write_dgus_vp(0x5769, (u8*)&KOR_FONT, 1);
-1090   1          // write_dgus_vp(0x5779, (u8*)&KOR_FONT, 1);
-1091   1          // write_dgus_vp(0x5789, (u8*)&KOR_FONT, 1);
-1092   1          // write_dgus_vp(0x5799, (u8*)&KOR_FONT, 1);
-1093   1          // write_dgus_vp(0x5809, (u8*)&KOR_FONT, 1);
-1094   1      }
-1095          
-1096          //어드민 엔지니어 모드
-1097          void EngineermodTextChange(){
-1098   1          switch (EngineerSP)
-1099   1          {
-1100   2          case 0:{
-1101   3              SetTextColorYellow(0x5703);
-1102   3              SetTextColorWhite(0x5713);
-1103   3              SetTextColorWhite(0x5723);
-1104   3              SetTextColorWhite(0x5733);
-1105   3              SetTextColorWhite(0x5743);
-1106   3              SetTextColorWhite(0x5753);
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 19  
+1089   1          write_dgus_vp(0x4320, (u8*)&DATA_CHN, 2);
+1090   1          len = 4;
+1091   1          write_dgus_vp(0x5328, (u8*)&len, 1);
+1092   1      
+1093   1          write_dgus_vp(0x4330, (u8*)&INIT_QUESTION_CHN, 5);
+1094   1          len = 10;
+1095   1          write_dgus_vp(0x5338, (u8*)&len, 1);
+1096   1      
+1097   1          write_dgus_vp(0x4340, (u8*)&YES_CHN, 2);
+1098   1          len = 4;
+1099   1          write_dgus_vp(0x5348, (u8*)&len, 1);
+1100   1      
+1101   1          write_dgus_vp(0x4350, (u8*)&NO_CHN, 2);
+1102   1          len = 4;
+1103   1          write_dgus_vp(0x5358, (u8*)&len, 1);
+1104   1      
+1105   1          //로그 & 에러
+1106   1          // write_dgus_vp(0x4650, (u8*)&LOG_ERROR_CHN, 7);
+1107   1          // len = 14;
+1108   1          // write_dgus_vp(0x5658, (u8*)&len, 1);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 19  
 
-1107   3          }break;
-1108   2          case 1:{
-1109   3              SetTextColorWhite(0x5703);
-1110   3              SetTextColorYellow(0x5713);
-1111   3              SetTextColorWhite(0x5723);
-1112   3              SetTextColorWhite(0x5733);
-1113   3              SetTextColorWhite(0x5743);
-1114   3              SetTextColorWhite(0x5753);
-1115   3          }break;
-1116   2          case 2:{
-1117   3              SetTextColorWhite(0x5703);
-1118   3              SetTextColorWhite(0x5713);
-1119   3              SetTextColorYellow(0x5723);
-1120   3              SetTextColorWhite(0x5733);
-1121   3              SetTextColorWhite(0x5743);
-1122   3              SetTextColorWhite(0x5753);
-1123   3          }break;
-1124   2          case 3:{
-1125   3              SetTextColorWhite(0x5703);
-1126   3              SetTextColorWhite(0x5713);
-1127   3              SetTextColorWhite(0x5723);
-1128   3              SetTextColorYellow(0x5733);
-1129   3              SetTextColorWhite(0x5743);
-1130   3              SetTextColorWhite(0x5753);
-1131   3          }break;
-1132   2          case 4:{
-1133   3              SetTextColorWhite(0x5703);
-1134   3              SetTextColorWhite(0x5713);
-1135   3              SetTextColorWhite(0x5723);
-1136   3              SetTextColorWhite(0x5733);
-1137   3              SetTextColorYellow(0x5743);
-1138   3              SetTextColorWhite(0x5753);
-1139   3          }break;
-1140   2          case 5:{
-1141   3              SetTextColorWhite(0x5703);
-1142   3              SetTextColorWhite(0x5713);
-1143   3              SetTextColorWhite(0x5723);
-1144   3              SetTextColorWhite(0x5733);
-1145   3              SetTextColorWhite(0x5743);
-1146   3              SetTextColorYellow(0x5753);
-1147   3          }break;
-1148   2          }
-1149   1      }
-1150          
-1151          void admin_page_change(){
-1152   1          switch(adminSP){
-1153   2              case 0:{
-1154   3                  SetTextColorYellow(0x5093);
-1155   3                  SetTextColorWhite(0x5123);
-1156   3                  SetTextColorWhite(0x5153);
-1157   3                  SetTextColorWhite(0x5183);
-1158   3                  Page_Change_UI(adminUserSetting);
-1159   3              }break;
-1160   2              case 1:{
-1161   3                  SetTextColorYellow(0x5213);
-1162   3                  SetTextColorWhite(0x5243);
-1163   3                  SetTextColorWhite(0x5273);
-1164   3                  SetTextColorWhite(0x5303);
-1165   3                  SetTextColorWhite(0x5343);
-1166   3                  SetTextColorWhite(0x5373);
-1167   3                  Page_Change_UI(adminIOTest);
-1168   3              }break;
-C51 COMPILER V9.56.0.0   ADMIN                                                             06/29/2026 16:35:22 PAGE 20  
+1109   1      
+1110   1          write_dgus_vp(0x4370, (u8*)&ACTIVE_LOG_CHN, 4);
+1111   1          len = 8;
+1112   1          write_dgus_vp(0x5378, (u8*)&len, 1);
+1113   1      
+1114   1          write_dgus_vp(0x4380, (u8*)&ERROR_LOG_CHN, 4);
+1115   1          len = 8;
+1116   1          write_dgus_vp(0x5388, (u8*)&len, 1);
+1117   1      
+1118   1          //작업 시간
+1119   1          // write_dgus_vp(0x4410, (u8*)&RUN_TIME_CHN, 4);
+1120   1          // len = 8;
+1121   1          // write_dgus_vp(0x5418, (u8*)&len, 1);
+1122   1      
+1123   1          write_dgus_vp(0x4420, (u8*)&ERROR_LOG_CHN, 2);
+1124   1          len = 4;
+1125   1          write_dgus_vp(0x5428, (u8*)&len, 1);
+1126   1      
+1127   1          write_dgus_vp(0x4460, (u8*)&ERROR_LOG_ENG, 9);
+1128   1          len = 18;
+1129   1          write_dgus_vp(0x5468, (u8*)&len, 1);
+1130   1      
+1131   1          write_dgus_vp(0x4500, (u8*)&ERROR_LOG_ENG, 9);
+1132   1          len = 18;
+1133   1          write_dgus_vp(0x5508, (u8*)&len, 1);
+1134   1      
+1135   1          // 언어
+1136   1          write_dgus_vp(0x4550, (u8*)&ENGLISH_CHN, 2);
+1137   1          len = 4;
+1138   1          write_dgus_vp(0x5558, (u8*)&len, 1);
+1139   1      
+1140   1          write_dgus_vp(0x4560, (u8*)&CHINESE_CHN, 2);
+1141   1          len = 4;
+1142   1          write_dgus_vp(0x5568, (u8*)&len, 1);
+1143   1      
+1144   1          write_dgus_vp(0x4570, (u8*)&KOREAN_CHN, 2);
+1145   1          len = 4;
+1146   1          write_dgus_vp(0x5578, (u8*)&len, 1);
+1147   1      
+1148   1           //회사 소개
+1149   1          // write_dgus_vp(0x4580, (u8*)&COMPANY_INFO_CHN, 4);
+1150   1          // len = 8;
+1151   1          // write_dgus_vp(0x5588, (u8*)&len, 1);
+1152   1      
+1153   1          write_dgus_vp(0x4590, (u8*)&YONGLI_KOREA_ENG, 12);
+1154   1          len = 24;
+1155   1          write_dgus_vp(0x5598, (u8*)&len, 1);
+1156   1      
+1157   1          write_dgus_vp(0x4600, (u8*)&GYEONGGI_DO_CHN, 3);
+1158   1          len = 6;
+1159   1          write_dgus_vp(0x5608, (u8*)&len, 1);
+1160   1      
+1161   1          write_dgus_vp(0x4610, (u8*)&PAJU_JORI_CHN, 7);
+1162   1          len = 14;
+1163   1          write_dgus_vp(0x5618, (u8*)&len, 1);
+1164   1      
+1165   1          write_dgus_vp(0x4620, (u8*)&ADDRESS_CHN, 7);
+1166   1          len = 14;
+1167   1          write_dgus_vp(0x5628, (u8*)&len, 1);
+1168   1      
+1169   1          write_dgus_vp(0x4630, (u8*)&TEL_CHN, 12);
+1170   1          len = 24;
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 20  
 
-1169   2              case 2:{
-1170   3                  SetTextColorYellow(0x5793);
-1171   3                  SetTextColorWhite(0x5803);
-1172   3                  Page_Change_UI(adminFactoryResetNotice);
-1173   3              }break;
-1174   2              case 3:{
-1175   3                  SetTextColorYellow(0x5673);
-1176   3                  SetTextColorWhite(0x5683);
-1177   3                  Page_Change_UI(adminLogError);
-1178   3              }break;
-1179   2              case 4:{
-1180   3                  Page_Change_UI(adminMaintenance);
-1181   3              }break;
-1182   2              case 5:{
-1183   3                  SetTextColorYellow(0x5553);
-1184   3                  SetTextColorWhite(0x5563);
-1185   3                  SetTextColorWhite(0x5573);
-1186   3                  Page_Change_UI(adminLanguage);
-1187   3              }break;
-1188   2              case 6:{
-1189   3                  Page_Change_UI(adminCompany);
-1190   3              }break;
-1191   2              case 7:{
-1192   3                  Page_Change_UI(adminEngineermod);
-1193   3                  EngineermodTextChange();
-1194   3              }break;
-1195   2          }
-1196   1      
+1171   1          write_dgus_vp(0x5638, (u8*)&len, 1);
+1172   1      
+1173   1          //엔지니어 모드
+1174   1          write_dgus_vp(0x4660, (u8*)&ENGINEER_MODE_ENG, 13);
+1175   1          len = 26;
+1176   1          write_dgus_vp(0x5698, (u8*)&len, 1);
+1177   1      
+1178   1          // write_dgus_vp(0x5089, (u8*)&KOR_FONT, 1);
+1179   1          // write_dgus_vp(0x5099, (u8*)&KOR_FONT, 1);
+1180   1          // write_dgus_vp(0x5129, (u8*)&KOR_FONT, 1);
+1181   1          // write_dgus_vp(0x5159, (u8*)&KOR_FONT, 1);
+1182   1          // write_dgus_vp(0x5189, (u8*)&KOR_FONT, 1);
+1183   1      
+1184   1          // write_dgus_vp(0x5409, (u8*)&KOR_FONT, 1);
+1185   1          // write_dgus_vp(0x5219, (u8*)&KOR_FONT, 1);
+1186   1          // write_dgus_vp(0x5249, (u8*)&KOR_FONT, 1);
+1187   1          // write_dgus_vp(0x5279, (u8*)&KOR_FONT, 1);
+1188   1          // write_dgus_vp(0x5309, (u8*)&KOR_FONT, 1);
+1189   1          // write_dgus_vp(0x5349, (u8*)&KOR_FONT, 1);
+1190   1          // write_dgus_vp(0x5379, (u8*)&KOR_FONT, 1);
+1191   1      
+1192   1          // write_dgus_vp(0x5769, (u8*)&KOR_FONT, 1);
+1193   1          // write_dgus_vp(0x5779, (u8*)&KOR_FONT, 1);
+1194   1          // write_dgus_vp(0x5789, (u8*)&KOR_FONT, 1);
+1195   1          // write_dgus_vp(0x5799, (u8*)&KOR_FONT, 1);
+1196   1          // write_dgus_vp(0x5809, (u8*)&KOR_FONT, 1);
 1197   1      }
 1198          
-1199          void admininit(){
-1200   1          adminSP = 0;
-1201   1          usersettingSP = 0;
-1202   1          usersettingSelect_plag = 0;
-1203   1          usersettingEditSP = 0;
-1204   1          IOtestSP = 0;
-1205   1          factoryReset_plag = 0;
-1206   1          factoryResetSP = 0;
-1207   1          LogErrorSP = 0;
-1208   1          maintenance_plag = 0;
-1209   1          LanguageSP = 0;
-1210   1          company_plag = 0;
-1211   1          EngineerSP = 0;
-1212   1      }
+1199          void admin_language_kor(void){
+1200   1          u16 len = 0;
+1201   1          //어드민 메인리스트
+1202   1          // write_dgus_vp(0x4010, (u8*)&USER_SETTING_KOR, 5);
+1203   1          // len = 10;
+1204   1          // write_dgus_vp(0x5018, (u8*)&len, 1);
+1205   1      
+1206   1          // write_dgus_vp(0x4020, (u8*)&CHECK_KOR, 6);
+1207   1          // len = 12;
+1208   1          // write_dgus_vp(0x5028, (u8*)&len, 1);
+1209   1      
+1210   1          // write_dgus_vp(0x4030, (u8*)&FACTORY_RESET_KOR, 6);
+1211   1          // len = 12;
+1212   1          // write_dgus_vp(0x5038, (u8*)&len, 1);
+1213   1      
+1214   1          // write_dgus_vp(0x4040, (u8*)&LOG_ERROR_KOR, 7);
+1215   1          // len = 14;
+1216   1          // write_dgus_vp(0x5048, (u8*)&len, 1);
+1217   1      
+1218   1          // write_dgus_vp(0x4050, (u8*)&WORK_TIME_KOR, 5);
+1219   1          // len = 10;
+1220   1          // write_dgus_vp(0x5058, (u8*)&len, 1);
+1221   1      
+1222   1          // write_dgus_vp(0x4060, (u8*)&LANGUAGE_KOR, 2);
+1223   1          // len = 4;
+1224   1          // write_dgus_vp(0x5068, (u8*)&len, 1);
+1225   1      
+1226   1          // write_dgus_vp(0x4070, (u8*)&COMPANY_KOR, 4);
+1227   1          // len = 8;
+1228   1          // write_dgus_vp(0x5078, (u8*)&len, 1);
+1229   1      
+1230   1          // write_dgus_vp(0x4330, (u8*)&ENGINEER_MODE_KOR, 7);
+1231   1          // len = 14;
+1232   1          // write_dgus_vp(0x5338, (u8*)&len, 1);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 21  
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)
+1233   1      
+1234   1              //유저 세팅
+1235   1          write_dgus_vp(0x4060, (u8*)&USER_SETTING_KOR, 5);
+1236   1          len = 10;
+1237   1          write_dgus_vp(0x5068, (u8*)&len, 1);
+1238   1      
+1239   1          write_dgus_vp(0x4090, (u8*)&TOP_TEMP, 5);
+1240   1          len = 10;
+1241   1          write_dgus_vp(0x5098, (u8*)&len, 1);
+1242   1      
+1243   1          write_dgus_vp(0x4120, (u8*)&BOTTOM_TEMP, 5);
+1244   1          len = 10;
+1245   1          write_dgus_vp(0x5128, (u8*)&len, 1);
+1246   1      
+1247   1          write_dgus_vp(0x4120, (u8*)&PRESSURE, 2);
+1248   1          len = 4;
+1249   1          write_dgus_vp(0x5158, (u8*)&len, 1);
+1250   1      
+1251   1          write_dgus_vp(0x4180, (u8*)&DELAY_TIME, 4);
+1252   1          len = 8;
+1253   1          write_dgus_vp(0x5188, (u8*)&len, 1);
+1254   1      
+1255   1          //IO 테스트
+1256   1          write_dgus_vp(0x4400, (u8*)&CHECK_KOR, 6);
+1257   1          len = 14;
+1258   1          write_dgus_vp(0x5408, (u8*)&len, 1);
+1259   1      
+1260   1          write_dgus_vp(0x4210, (u8*)&TOP_HEATER_KOR, 5);
+1261   1          len = 10;
+1262   1          write_dgus_vp(0x5218, (u8*)&len, 1);
+1263   1      
+1264   1          write_dgus_vp(0x4240, (u8*)&BOTTOM_HEATER_KOR, 5);
+1265   1          len = 10;
+1266   1          write_dgus_vp(0x5248, (u8*)&len, 1);
+1267   1      
+1268   1          write_dgus_vp(0x4270, (u8*)&TOP_FAN_KOR, 4);
+1269   1          len = 8;
+1270   1          write_dgus_vp(0x5278, (u8*)&len, 1);
+1271   1      
+1272   1          write_dgus_vp(0x4300, (u8*)&BOTTOM_FAN_KOR, 4);
+1273   1          len = 8;
+1274   1          write_dgus_vp(0x5308, (u8*)&len, 1);
+1275   1      
+1276   1          write_dgus_vp(0x4340, (u8*)&COMPRESSOR_KOR, 4);
+1277   1          len = 8;
+1278   1          write_dgus_vp(0x5348, (u8*)&len, 1);
+1279   1      
+1280   1          write_dgus_vp(0x4370, (u8*)&SOLENOID_KOR, 5);
+1281   1          len = 10;
+1282   1          write_dgus_vp(0x5378, (u8*)&len, 1);
+1283   1          
+1284   1          //공장 초기화
+1285   1          write_dgus_vp(0x4760, (u8*)&FACTORY_RESET_KOR, 6);
+1286   1          len = 12;
+1287   1          write_dgus_vp(0x5768, (u8*)&len, 1);
+1288   1      
+1289   1          write_dgus_vp(0x4770, (u8*)&INIT_QUESTION1, 6);
+1290   1          len = 12;
+1291   1          write_dgus_vp(0x5778, (u8*)&len, 1);
+1292   1      
+1293   1          write_dgus_vp(0x4780, (u8*)&INIT_QUESTION2, 9);
+1294   1          len = 18;
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 22  
+
+1295   1          write_dgus_vp(0x5788, (u8*)&len, 1);
+1296   1      
+1297   1          write_dgus_vp(0x4790, (u8*)&OK_KOR, 2);
+1298   1          len = 4;
+1299   1          write_dgus_vp(0x5798, (u8*)&len, 1);
+1300   1      
+1301   1          write_dgus_vp(0x4800, (u8*)&CANCEL_KOR, 2);
+1302   1          len = 4;
+1303   1          write_dgus_vp(0x5808, (u8*)&len, 1);
+1304   1      
+1305   1          //로그 & 에러
+1306   1          write_dgus_vp(0x4650, (u8*)&LOG_ERROR_KOR, 7);
+1307   1          len = 14;
+1308   1          write_dgus_vp(0x5658, (u8*)&len, 1);
+1309   1      
+1310   1          write_dgus_vp(0x4670, (u8*)&ACTIVE_LOG_CHN, 5);
+1311   1          len = 10;
+1312   1          write_dgus_vp(0x5678, (u8*)&len, 1);
+1313   1      
+1314   1          write_dgus_vp(0x4680, (u8*)&ERROR_LOG_CHN, 5);
+1315   1          len = 10;
+1316   1          write_dgus_vp(0x5688, (u8*)&len, 1);
+1317   1      
+1318   1          //작업 시간
+1319   1          write_dgus_vp(0x4410, (u8*)&WORK_TIME_KOR, 5);
+1320   1          len = 10;
+1321   1          write_dgus_vp(0x5418, (u8*)&len, 1);
+1322   1      
+1323   1          write_dgus_vp(0x4420, (u8*)&HEATING_TIME_KOR, 4);
+1324   1          len = 8;
+1325   1          write_dgus_vp(0x5428, (u8*)&len, 1);
+1326   1      
+1327   1          write_dgus_vp(0x4460, (u8*)&FAN_KOR, 1);
+1328   1          len = 2;
+1329   1          write_dgus_vp(0x5468, (u8*)&len, 1);
+1330   1      
+1331   1          write_dgus_vp(0x4500, (u8*)&COMPRESSOR_KOR, 9);
+1332   1          len = 18;
+1333   1          write_dgus_vp(0x5508, (u8*)&len, 1);
+1334   1          
+1335   1          // 언어 변경
+1336   1          write_dgus_vp(0x4550, (u8*)&ENGLISH_KOR, 2);
+1337   1          len = 4;
+1338   1          write_dgus_vp(0x5558, (u8*)&len, 1);
+1339   1          write_dgus_vp(0x4560, (u8*)&CHINESE_KOR, 3);
+1340   1          len = 6;
+1341   1          write_dgus_vp(0x5568, (u8*)&len, 1);
+1342   1          write_dgus_vp(0x4570, (u8*)&KOREAN_KOR, 3);
+1343   1          write_dgus_vp(0x5578, (u8*)&len, 1);
+1344   1      
+1345   1          //회사 소개
+1346   1          write_dgus_vp(0x4580, (u8*)&COMPANY_KOR, 4);
+1347   1          len = 8;
+1348   1          write_dgus_vp(0x5588, (u8*)&len, 1);
+1349   1      
+1350   1          write_dgus_vp(0x4590, (u8*)&YONGLI_KOREA_KOR, 5);
+1351   1          len = 24;
+1352   1          write_dgus_vp(0x5598, (u8*)&len, 1);
+1353   1      
+1354   1          write_dgus_vp(0x4600, (u8*)&GYEONGGI_DO_KOR, 3);
+1355   1          len = 6;
+1356   1          write_dgus_vp(0x5608, (u8*)&len, 1);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 23  
+
+1357   1      
+1358   1          write_dgus_vp(0x4610, (u8*)&PAJU_JORI_EUP_KOR, 7);
+1359   1          len = 14;
+1360   1          write_dgus_vp(0x5618, (u8*)&len, 1);
+1361   1      
+1362   1          write_dgus_vp(0x4620, (u8*)&DANGJAEBONG_RO_29_KOR, 7);
+1363   1          len = 14;
+1364   1          write_dgus_vp(0x5628, (u8*)&len, 1);
+1365   1      
+1366   1          write_dgus_vp(0x4630, (u8*)&TEL_KOR, 12);
+1367   1          len = 24;
+1368   1          write_dgus_vp(0x5638, (u8*)&len, 1);
+1369   1      
+1370   1          //엔지니어 모드
+1371   1          write_dgus_vp(0x4660, (u8*)&ENGINEER_MODE_KOR, 7);
+1372   1          len = 14;
+1373   1          write_dgus_vp(0x5698, (u8*)&len, 1);
+1374   1      
+1375   1          // write_dgus_vp(0x4550, (u8*)&ENGLISH_CHN, 2);
+1376   1          // write_dgus_vp(0x5558, (u8*)&len2, 1);
+1377   1          // write_dgus_vp(0x4560, (u8*)&CHINESE_CHN, 2);
+1378   1          // write_dgus_vp(0x5568, (u8*)&len2, 1);
+1379   1          // write_dgus_vp(0x4570, (u8*)&KOREAN_CHN, 2);
+1380   1          // write_dgus_vp(0x5578, (u8*)&len2, 1);
+1381   1      
+1382   1          // write_dgus_vp(0x5089, (u8*)&KOR_FONT, 1);
+1383   1          // write_dgus_vp(0x5099, (u8*)&KOR_FONT, 1);
+1384   1          // write_dgus_vp(0x5129, (u8*)&KOR_FONT, 1);
+1385   1          // write_dgus_vp(0x5159, (u8*)&KOR_FONT, 1);
+1386   1          // write_dgus_vp(0x5189, (u8*)&KOR_FONT, 1);
+1387   1      
+1388   1          // write_dgus_vp(0x5409, (u8*)&KOR_FONT, 1);
+1389   1          // write_dgus_vp(0x5219, (u8*)&KOR_FONT, 1);
+1390   1          // write_dgus_vp(0x5249, (u8*)&KOR_FONT, 1);
+1391   1          // write_dgus_vp(0x5279, (u8*)&KOR_FONT, 1);
+1392   1          // write_dgus_vp(0x5309, (u8*)&KOR_FONT, 1);
+1393   1          // write_dgus_vp(0x5349, (u8*)&KOR_FONT, 1);
+1394   1          // write_dgus_vp(0x5379, (u8*)&KOR_FONT, 1);
+1395   1      
+1396   1          // write_dgus_vp(0x5769, (u8*)&KOR_FONT, 1);
+1397   1          // write_dgus_vp(0x5779, (u8*)&KOR_FONT, 1);
+1398   1          // write_dgus_vp(0x5789, (u8*)&KOR_FONT, 1);
+1399   1          // write_dgus_vp(0x5799, (u8*)&KOR_FONT, 1);
+1400   1          // write_dgus_vp(0x5809, (u8*)&KOR_FONT, 1);
+1401   1      }
+1402          
+1403          //어드민 엔지니어 모드
+1404          // void EngineermodTextChange(u16 state){
+1405          //     EngineerSP++;
+1406          //     switch (EngineerSP)
+1407          //     {
+1408          //     case 0:{
+1409          //         SetTextColorYellow(0x5653);
+1410          //         SetTextColorWhite(0x5663);
+1411          //         SetTextColorWhite(0x5673);
+1412          //         SetTextColorWhite(0x5683);
+1413          //         SetTextColorWhite(0x5693);
+1414          //         SetTextColorWhite(0x5703);
+1415          //     }break;
+1416          //     case 1:{
+1417          //         SetTextColorWhite(0x5653);
+1418          //         SetTextColorYellow(0x5663);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 24  
+
+1419          //         SetTextColorWhite(0x5673);
+1420          //         SetTextColorWhite(0x5683);
+1421          //         SetTextColorWhite(0x5693);
+1422          //         SetTextColorWhite(0x5703);
+1423          //     }break;
+1424          //     case 2:{
+1425          //         SetTextColorWhite(0x5653);
+1426          //         SetTextColorWhite(0x5663);
+1427          //         SetTextColorYellow(0x5673);
+1428          //         SetTextColorWhite(0x5683);
+1429          //         SetTextColorWhite(0x5693);
+1430          //         SetTextColorWhite(0x5703);
+1431          //     }break;
+1432          //     case 3:{
+1433          //         SetTextColorWhite(0x5653);
+1434          //         SetTextColorWhite(0x5663);
+1435          //         SetTextColorWhite(0x5673);
+1436          //         SetTextColorYellow(0x5683);
+1437          //         SetTextColorWhite(0x5693);
+1438          //         SetTextColorWhite(0x5703);
+1439          //     }break;
+1440          //     case 4:{
+1441          //         SetTextColorWhite(0x5653);
+1442          //         SetTextColorWhite(0x5663);
+1443          //         SetTextColorWhite(0x5673);
+1444          //         SetTextColorWhite(0x5683);
+1445          //         SetTextColorYellow(0x5693);
+1446          //         SetTextColorWhite(0x5703);
+1447          //     }break;
+1448          //     case 5:{
+1449          //         SetTextColorWhite(0x5653);
+1450          //         SetTextColorWhite(0x5663);
+1451          //         SetTextColorWhite(0x5673);
+1452          //         SetTextColorWhite(0x5683);
+1453          //         SetTextColorWhite(0x5693);
+1454          //         SetTextColorYellow(0x5703);
+1455          //     }break;
+1456          //     }
+1457          // }
+1458          
+1459          // void admin_page_change(){
+1460          //     switch(adminSP){
+1461          //         case 0:{
+1462          //             SetTextColorYellow(0x5093);
+1463          //             SetTextColorWhite(0x5123);
+1464          //             SetTextColorWhite(0x5153);
+1465          //             SetTextColorWhite(0x5183);
+1466          //             Page_Change_UI(adminUserSetting);
+1467          //         }break;
+1468          //         case 1:{
+1469          //             SetTextColorYellow(0x5213);
+1470          //             SetTextColorWhite(0x5243);
+1471          //             SetTextColorWhite(0x5273);
+1472          //             SetTextColorWhite(0x5303);
+1473          //             SetTextColorWhite(0x5343);
+1474          //             SetTextColorWhite(0x5373);
+1475          //             Page_Change_UI(adminIOTest);
+1476          //         }break;
+1477          //         case 2:{
+1478          //             SetTextColorYellow(0x5793);
+1479          //             SetTextColorWhite(0x5803);
+1480          //             Page_Change_UI(adminFactoryResetNotice);
+C51 COMPILER V9.56.0.0   ADMIN                                                             06/30/2026 10:42:14 PAGE 25  
+
+1481          //         }break;
+1482          //         case 3:{
+1483          //             SetTextColorYellow(0x5673);
+1484          //             SetTextColorWhite(0x5683);
+1485          //             Page_Change_UI(adminLogError);
+1486          //         }break;
+1487          //         case 4:{
+1488          //             Page_Change_UI(adminMaintenance);
+1489          //         }break;
+1490          //         case 5:{
+1491          //             SetTextColorYellow(0x5553);
+1492          //             SetTextColorWhite(0x5563);
+1493          //             SetTextColorWhite(0x5573);
+1494          //             Page_Change_UI(adminLanguage);
+1495          //         }break;
+1496          //         case 6:{
+1497          //             Page_Change_UI(adminCompany);
+1498          //         }break;
+1499          //         case 7:{
+1500          //             Page_Change_UI(adminEngineermod);
+1501          //             EngineermodTextChange();
+1502          //         }break;
+1503          //     }
+1504          
+1505          // }
+1506          
+1507          void admininit(){
+1508   1          adminSP = 0;
+1509   1          usersettingSP = 0;
+1510   1          usersettingSelect_plag = 0;
+1511   1          usersettingEditSP = 0;
+1512   1          IOtestSP = 0;
+1513   1          factoryReset_plag = 0;
+1514   1          factoryResetSP = 0;
+1515   1          LogErrorSP = 0;
+1516   1          maintenance_plag = 0;
+1517   1          LanguageSP = 0;
+1518   1          company_plag = 0;
+1519   1          EngineerSP = 0;
+1520   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   9455    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     45      10
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

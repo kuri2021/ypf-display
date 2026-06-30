@@ -1,7 +1,7 @@
-#ifndef __LANGUAGE_H__
-#define __LANGUAGE_H__
+#ifndef __ADMIN_H__
+#define __ADMIN_H__
 
-typedef unsigned short u16;
+// typedef unsigned short u16;
 
 void admin_User_Setting_Function(u16 i);
 void admin_List(u16 i);
@@ -18,7 +18,16 @@ void admin_language_kor(void);
 void EngineermodTextChange(void);
 void admin_page_change(void);
 void admininit(void);
+void Page_Change_UI(u8 i);
 
+extern u8 adminSP;
+extern u8 EngineerSP;
+extern u16 EngineerPw1;
+extern u16 EngineerPw2;
+extern u16 EngineerPw3;
+extern u16 EngineerPw4;
+extern u16 EngineerPw5;
+extern u16 EngineerPw6;
 extern u16 toptempmin;
 extern u16 toptempmax;
 extern u16 bottempmin;

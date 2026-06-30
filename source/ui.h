@@ -3,7 +3,7 @@
 #include "sys.h"
 
 
-void Init(void);
+void Picture1213_Init(void);
 void Page_Change_Handler(u8 n);
 void encoder_page_change(u16 state);
 void SecCnt_TickTask(void);

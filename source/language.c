@@ -1,5 +1,6 @@
 #include "sys.h"
 #include "language.h"
+#include "admin.h"
 //한국어
 
 //어드민 리스트

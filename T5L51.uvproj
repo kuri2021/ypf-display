@@ -418,6 +418,21 @@
               <FileType>1</FileType>
               <FilePath>.\source\history.c</FilePath>
             </File>
+            <File>
+              <FileName>admin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\source\admin.c</FilePath>
+            </File>
+            <File>
+              <FileName>color.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\source\color.c</FilePath>
+            </File>
+            <File>
+              <FileName>language.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\source\language.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

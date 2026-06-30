@@ -14,10 +14,10 @@ extern const u16 COMPANY_KOR[];
 extern const u16 ENGINEER_MODE_KOR[];
 
 // 유저 세팅
-extern const u16 TOP_TEMP[];
-extern const u16 BOTTOM_TEMP[];
-extern const u16 PRESSURE[];
-extern const u16 DELAY_TIME[];
+extern const u16 TOP_TEMP_KOR[];
+extern const u16 BOTTOM_TEMP_KOR[];
+extern const u16 PRESSURE_KOR[];
+extern const u16 DELAY_TIME_KOR[];
 
 // IO 테스트
 extern const u16 TOP_HEATER_KOR[];
@@ -34,8 +34,8 @@ extern const u16 OK_KOR[];
 extern const u16 CANCEL_KOR[];
 
 // 로그
-extern const u16 ACTIVE_LOG[];
-extern const u16 ERROR_LOG[];
+extern const u16 ACTIVE_LOG_KOR[];
+extern const u16 ERROR_LOG_KOR[];
 
 // 기타
 extern const u16 HEATING_TIME_KOR[];
@@ -58,7 +58,7 @@ extern const u16 ADMIN[];
 
 extern const u16 USER_SETTING_ENG[];
 extern const u16 IO_TEST_ENG[];
-extern const u16 FACTORY_RESET_ENG[];
+extern const u16 DATA_INIT_ENG[];
 extern const u16 LOG_ERROR_ENG[];
 extern const u16 RUN_TIME_ENG[];
 extern const u16 LANGUAGE_ENG[];
@@ -66,14 +66,14 @@ extern const u16 COMPANY_INFO_ENG[];
 extern const u16 ENGINEER_MODE_ENG[];
 
 extern const u16 TOP_TEMP_ENG[];
-extern const u16 BOTTOM_TEMP_ENG[];
+extern const u16 BOT_TEMP_ENG[];
 extern const u16 PRESSURE_ENG[];
 extern const u16 DELAY_TIME_ENG[];
 
 extern const u16 TOP_HEATER_ENG[];
-extern const u16 BOTTOM_HEATER_ENG[];
+extern const u16 BOT_HEATER_ENG[];
 extern const u16 TOP_FAN_ENG[];
-extern const u16 BOTTOM_FAN_ENG[];
+extern const u16 BOT_FAN_ENG[];
 extern const u16 COMPRESSOR_ENG[];
 extern const u16 SOLENOID_ENG[];
 
@@ -84,6 +84,9 @@ extern const u16 NO_ENG[];
 
 extern const u16 ACTIVE_LOG_ENG[];
 extern const u16 ERROR_LOG_ENG[];
+
+extern const u16 HEATING_TIME_ENG[];
+extern const u16 FAN_ENG[];
 
 extern const u16 ENGLISH_ENG[];
 extern const u16 CHINESE_ENG[];

@@ -40,7 +40,7 @@ void main()
     SetPinIn(2, 0);
     StartTimer(0, 60000);
     StartTimer(1, 500);                                                     
-    Init();
+    Pro8283Init();
     DEBUGINIT();
     EA = 1;
     Page_Change_Handler(page_number); // �ϵ���ʾ����

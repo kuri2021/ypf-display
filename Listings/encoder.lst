@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   ENCODER                                                           06/26/2026 14:08:00 PAGE 1   
+C51 COMPILER V9.56.0.0   ENCODER                                                           06/30/2026 10:00:47 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE ENCODER
@@ -62,7 +62,7 @@ line level    source
   52   3                  if(y>=2000)
   53   3                  {
   54   4                      Encoder_flag=4;
-C51 COMPILER V9.56.0.0   ENCODER                                                           06/26/2026 14:08:00 PAGE 2   
+C51 COMPILER V9.56.0.0   ENCODER                                                           06/30/2026 10:00:47 PAGE 2   
 
   55   4                      break;
   56   4                  }
@@ -126,7 +126,7 @@ line level    source
  114   3            F_Encoder_Check = 0 ; //清除标志位
  115   3            if(rEncoder_Code ==0x42)   //顺时针转动了 0x24为逆时针   0x42为顺时针？？？
  116   3            {
-C51 COMPILER V9.56.0.0   ENCODER                                                           06/26/2026 14:08:00 PAGE 3   
+C51 COMPILER V9.56.0.0   ENCODER                                                           06/30/2026 10:00:47 PAGE 3   
 
  117   4              Encoder_flag = 1;
  118   4            }
@@ -190,7 +190,7 @@ line level    source
  176   2              return 4;
  177   2          }
  178   1        return 0;
-C51 COMPILER V9.56.0.0   ENCODER                                                           06/26/2026 14:08:00 PAGE 4   
+C51 COMPILER V9.56.0.0   ENCODER                                                           06/30/2026 10:00:47 PAGE 4   
 
  179   1      }
 *** WARNING C280 IN LINE 26 OF lib\encoder.c: 'x': unreferenced local variable

@@ -66,8 +66,6 @@ static void ChangeImage(u16 vp_addr, u16 index);
 #define VP_SET_LIMT_DELAY_MIN          0x4190  // 지연시간 최저값
 #define VP_SET_LIMT_DELAY_MAX          0x4200  // 지연시간 최대값
 
-#define VP_IO_TEST 0x8210  // io테스트 주소
-
 
 #define VP_ELAPSED_TIME 0x8114 // 유지 경과 시간
 
@@ -168,7 +166,7 @@ static u8 adminEngineermodS = 38;
 
 static u16 language = 0;
 
-static u16 pw = 123456;
+
 static u16 inputpw = 0;
 // 0 - 영어, 1 - 중국어, 2 - 한국어
 void check_Start(u16 addr, u16 velue){
@@ -519,12 +517,12 @@ void admin_page_change(){
         }break;
         case 2:{
             SetTextColorYellow(0x5343);
-            SetTextColorWhite(0x5383);
+            SetTextColorWhite(0x5353);
             Page_Change_UI(adminFactoryResetNotice);
         }break;
         case 3:{
             SetTextColorYellow(0x5373);
-            SetTextColorWhite(0x5683);
+            SetTextColorWhite(0x5383);
             Page_Change_UI(adminLogError);
         }break;
         case 4:{
@@ -540,8 +538,13 @@ void admin_page_change(){
             Page_Change_UI(adminCompany);
         }break;
         case 7:{
+            SetTextColorYellow(0x5593);
+            SetTextColorWhite(0x5603);
+            SetTextColorWhite(0x5613);
+            SetTextColorWhite(0x5623);
+            SetTextColorWhite(0x5633);
+            SetTextColorWhite(0x5643);
             Page_Change_UI(adminEngineermod);
-            EngineermodTextChange();
         }break;
     }
 
@@ -656,21 +659,46 @@ void Picture1213_Init(void) {
     TT10   = (result / 10) % 10;
     TT1     = result % 10;
 
+    write_dgus_vp(0X2000, (u8*)&TT100, 1);
+    write_dgus_vp(0x2010, (u8*)&TT10,     1);
+    write_dgus_vp(0x2030, (u8*)&TT1,     1);
+    write_dgus_vp(0X2150, (u8*)&TT100, 1);
+    write_dgus_vp(0x2160, (u8*)&TT10,     1);
+    write_dgus_vp(0x2170, (u8*)&TT1,     1);
+
     read_dgus_vp(VP_SET_TB, (u8*)&result, 1);
     BT100 = result / 100;
     BT10   = (result / 10) % 10;
     BT1     = result % 10;
 
+    write_dgus_vp(0x2060, (u8*)&BT100, 1);
+    write_dgus_vp(0x2070, (u8*)&BT10,     1);
+    write_dgus_vp(0x2080, (u8*)&BT1 ,     1);
+    write_dgus_vp(0x2260, (u8*)&BT100, 1);
+    write_dgus_vp(0x2270, (u8*)&BT10,     1);
+    write_dgus_vp(0x2280, (u8*)&BT1 ,     1);
+
     read_dgus_vp(VP_SET_H, (u8*)&time_result, 1); 
     ShowMMSS(time_result);  
+    min = result / 60;
+    second = result % 60;
+    write_dgus_vp(0x2110, (u8*)&min,    2);
+    write_dgus_vp(0x2120, (u8*)&second ,     2);
+    write_dgus_vp(0x2370, (u8*)&min,    2);
+    write_dgus_vp(0x2380, (u8*)&second ,     2);
 
     read_dgus_vp(VP_SET_CHTT, (u8*)&result, 1);
     TC10   = (result / 10) % 10;
     TC1     = result % 10;
+    write_dgus_vp(0x2190, (u8*)&TC10,    2);
+    write_dgus_vp(0x2200, (u8*)&TC1 ,     2);
+
 
     read_dgus_vp(VP_SET_CHTB, (u8*)&result, 1);
     BC10   = (result / 10) % 10;
     BC1     = result % 10;
+    write_dgus_vp(0x2300, (u8*)&TC10,    2);
+    write_dgus_vp(0x2310, (u8*)&TC1 ,     2);
 
     SetTextColorWhite(0x9273);
 }
@@ -1275,7 +1303,7 @@ void encoder_page_change(u16 state)
                 }else if(page_number == adminLanguage){
                     adminLanguageText(state);
                 }else if(page_number == adminEngineermod){
-
+                    EngineermodWork(state);
                 }
             }
             enc_busy = 1;
@@ -1758,57 +1786,7 @@ void encoder_page_change(u16 state)
                 }else if(page_number == adminLanguage){
                     adminLanguageText(state);
                 }else if(page_number == adminEngineermod){
-                    // 특수 기믹을 넣어야하여 넣지 않음
-                    switch (EngineerSP){
-                    case 0:{
-                        if(EngineerPw1==9){
-                            EngineerPw1 = 0;
-                        }else{
-                            EngineerPw1++;
-                        }
-                        write_dgus_vp(0x4700, (u8*)&EngineerPw1 , 1);
-                    }break;
-                    case 1:{
-                         if(EngineerPw2==9){
-                            EngineerPw2 = 0;
-                        }else{
-                            EngineerPw2++;
-                        }
-                        write_dgus_vp(0x4710, (u8*)&EngineerPw2 , 1);
-                    }break;
-                    case 2:{
-                         if(EngineerPw3==9){
-                            EngineerPw3 = 0;
-                        }else{
-                            EngineerPw3++;
-                        }
-                        write_dgus_vp(0x4720, (u8*)&EngineerPw3 , 1);
-                    }break;
-                    case 3:{
-                         if(EngineerPw4==9){
-                            EngineerPw4 = 0;
-                        }else{
-                            EngineerPw4++;
-                        }
-                        write_dgus_vp(0x4730, (u8*)&EngineerPw4 , 1);
-                    }break;
-                    case 4:{
-                         if(EngineerPw5==9){
-                            EngineerPw5 = 0;
-                        }else{
-                            EngineerPw5++;
-                        }
-                        write_dgus_vp(0x4740, (u8*)&EngineerPw5 , 1);
-                    }break;
-                    case 5:{
-                        if(EngineerPw6==9){
-                            EngineerPw6 = 0;
-                        }else{
-                            EngineerPw6++;
-                        }
-                        write_dgus_vp(0x4750, (u8*)&EngineerPw6 , 1);
-                    }break;
-                    }
+                    EngineermodWork(state);
                 }
             }
             enc_busy = 1;
@@ -1946,12 +1924,6 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(botHeating);
                 }else if(page_number == main4){
                     settingflag = 1;
-                    read_dgus_vp(VP_SET_H, (u8*)&result,    1);
-                    min = result / 60;
-                    second = result % 60;
-                    write_dgus_vp(0x2110, (u8*)&min,    1);
-                    write_dgus_vp(0x2130, (u8*)&second, 1);
-                    Page_Change_Handler(page_number);
                     SetTextColorBlue(0x1373);
                     SetTextColorBlack(0x1383);
                     ChangeImage(0x2390, 0);
@@ -1959,7 +1931,7 @@ void encoder_page_change(u16 state)
                 }else if(page_number == main5){
                     settingflag = 1;
                     read_dgus_vp(VP_SET_P, (u8*)&press, 1);
-                    write_dgus_vp(0x2920, (u8*)&press, 1);
+                    write_dgus_vp(0x2400, (u8*)&press, 1);
                     SetTextColorBlue(0x1403);
                     ChangeImage(0x2410, 0);
                     Page_Change_UI(pressureS);
@@ -2035,9 +2007,13 @@ void encoder_page_change(u16 state)
                 }else if(page_number == adminList){
                     admin_page_change();
                 }else if(page_number == adminUserSetting){
-                    adminUserSettingEdit();
+                    admin_User_Setting_Function(state);
+                }else if(page_number == adminIOTest){
+                    adminIoTestWork();
                 }else if(page_number == adminFactoryResetNotice){
                     adminfactoryResetText(state);
+                }else if(page_number == adminLogError){
+                    adminLogErrorText(state);
                 }else if(page_number == adminMaintenance){
                     Page_Change_UI(main7);
                 }else if(page_number == adminLanguage){
@@ -2045,7 +2021,7 @@ void encoder_page_change(u16 state)
                 }else if(page_number == adminCompany){
                     Page_Change_UI(main7);
                 }else if(page_number == adminEngineermod){
-                    settingflag = 1;
+                    EngineermodWork(state);
                 }
             }
         } break;
@@ -2059,18 +2035,10 @@ void encoder_page_change(u16 state)
                page_number == adminLanguage||
                page_number == adminCompany||
                page_number == adminEngineermod){
-                // admininit();
-                // settingflag = 0;
-                // if(page_number == adminList){
-                //     admin_plag = 0;
-                //     Page_Change_UI(main7);
-                // }else{
-                //     Page_Change_UI(adminList);
-                // }
-
                 Page_Change_UI(adminList);
-            }else 
-            if (page_number == quickSetting) {
+            }else if(page_number == adminList){
+                Page_Change_UI(main7);
+            }else if (page_number == quickSetting) {
                 if(settingflag == 0){
                 quickSettingflag = 0; 
                  settingflag = 0; 

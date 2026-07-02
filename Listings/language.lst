@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          06/30/2026 15:15:18 PAGE 1   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          07/02/2026 17:57:26 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE LANGUAGE
@@ -62,7 +62,7 @@ line level    source
   51          const u16 DANGJAEBONG_RO_29_KOR[] = {0xB2F9,0xC7AC,0xBD09,0xB85C,0x0020,0x0032,0x0039}; // 당재봉로 29
   52          const u16 TEL_KOR[] = {0x0030,0x0033,0x0031,0x002D,0x0039,0x0035,0x0033,0x002D,0x0034,0x0030,0x0036,0x0033
              -}; // 031-953-4063
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          06/30/2026 15:15:18 PAGE 2   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          07/02/2026 17:57:26 PAGE 2   
 
   53          
   54          //영어
@@ -126,7 +126,7 @@ line level    source
  103              0x0054, // T
  104              0x0069, // i
  105              0x006D, // m
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          06/30/2026 15:15:18 PAGE 3   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          07/02/2026 17:57:26 PAGE 3   
 
  106              0x0065  // e
  107          };
@@ -190,17 +190,20 @@ line level    source
              -�邑
  160          const u16 ADDRESS_CHN[]         = {0x5802,0x624D,0x5CF0,0x8DEF,0x0020,0x0032,0x0039};   // 堂才峰路 29
  161          const u16 TEL_CHN[]             = {0x0030,0x0033,0x0031,0x002D,0x0039,0x0035,0x0033,0x002D,0x0034,0x0030,0
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          06/30/2026 15:15:18 PAGE 4   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          07/02/2026 17:57:26 PAGE 4   
 
              -x0036,0x0033}; // 031-953-4063
  162          
- 163          
+ 163          const u16 ON_TEXT[] = {0x004F,0x004E};
+ 164          const u16 OFF_TEXT[] = {0x004F, 0x0046, 0x0046};
+ 165          
+ 166          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   ----    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   1206    ----
+   XDATA SIZE       =   1216    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

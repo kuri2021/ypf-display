@@ -139,6 +139,8 @@ extern const u16 PAJU_JORI_CHN[];
 extern const u16 ADDRESS_CHN[];
 extern const u16 TEL_CHN[];
 
+extern const u16 ON_TEXT[];
+extern const u16 OFF_TEXT[];
 
 
 #endif

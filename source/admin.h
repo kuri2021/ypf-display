@@ -17,8 +17,10 @@ void admin_language_chn(void);
 void admin_language_kor(void);
 void EngineermodTextChange(void);
 void admin_page_change(void);
+void EngineermodWork(u16 state);
 void admininit(void);
 void Page_Change_UI(u8 i);
+void admin_List_text_change(void);
 
 extern u8 adminSP;
 extern u8 EngineerSP;

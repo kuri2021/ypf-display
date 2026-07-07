@@ -2041,10 +2041,10 @@ void encoder_page_change(u16 state)
             }else if (page_number == quickSetting) {
                 if(settingflag == 0){
                 quickSettingflag = 0; 
-                 settingflag = 0; 
-                 quickSettingS = 0; 
-                 Page_Change_UI(main1);
-                 quickSettingInIt();
+                settingflag = 0; 
+                quickSettingS = 0; 
+                Page_Change_UI(main1);
+                quickSettingInIt();
                 }
             }
             ui_poll_enable = 0;

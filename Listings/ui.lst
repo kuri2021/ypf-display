@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 1   
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE UI
@@ -62,7 +62,7 @@ line level    source
   52          #define VP_SET_TB         0x8102  // 하 히터 온도 설정
   53          #define VP_SET_P          0x8104  // 목표압력 설정
   54          #define VP_SET_H          0x8106  // 유지시간 설정
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 2   
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 2   
 
   55          #define VP_SET_CHTT       0x8108  // 상 냉각온도 설정
   56          #define VP_SET_CHTB       0x810A  // 하 냉각온도 설정
@@ -126,7 +126,7 @@ line level    source
  113          static u16 legacy_value = 0;
  114          static u16 recoll_value = 0;
  115          static u16 check_addr;
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 3   
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 3   
 
  116          static u16 check_count = 0;
  117          
@@ -190,7 +190,7 @@ line level    source
  175   1          check_active = 1;
  176   1          write_dgus_vp(check_addr, (u8*)&legacy_value, 1);
  177   1          StartTimer(TMR_6, CHECK_TIME); 
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 4   
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 4   
 
  178   1      }
  179          
@@ -254,7 +254,7 @@ line level    source
  237   2              case 3:{
  238   3                   switch(select_position){
  239   4                      case 0:{
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 5   
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 5   
 
  240   5                             SetTextColorYellow(0x1063);
  241   5                          SetTextColorYellow(0x1073);
@@ -318,7 +318,7 @@ line level    source
  299   4                  }
  300   3                  if (count == 3) {
  301   4                      ChangeImage(0x2180, 1);
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 6   
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 6   
 
  302   4                  } else {
  303   4                      ChangeImage(0x2180, 0);
@@ -382,7 +382,7 @@ line level    source
  361   4                      SetTextColorBlack(0x1263);
  362   4                      SetTextColorBlue(0x1233);
  363   4                      SetTextColorBlack(0x1243);
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 7   
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 7   
 
  364   4                  } else if (count == 2) {
  365   4                       SetTextColorBlue(0x1263);
@@ -446,7 +446,7 @@ line level    source
  423   3              } break;
  424   2      
  425   2              case 22: {
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 8   
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 8   
 
  426   3                  if (count == 0) {
  427   4                      SetTextColorBlue(0x1373);
@@ -510,7 +510,7 @@ line level    source
  485          
  486          void Page_Change_Handler(u8 n) {
  487   1          // if(!APP_ACK) return;   // 준비 전엔 그냥 무시
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 9   
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 9   
 
  488   1          page_set[0] = 0x5A;
  489   1          page_set[1] = 0x01;
@@ -574,7 +574,7 @@ line level    source
  547   3                  Page_Change_UI(adminEngineermod);
  548   3              }break;
  549   2          }
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 10  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 10  
 
  550   1      
  551   1      }
@@ -638,7 +638,7 @@ line level    source
  609          static void ShowMMSS2(u16 t) { 
  610   1          u16 m = t / 60; 
  611   1          u16 s = t % 60; 
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 11  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 11  
 
  612   1          write_dgus_vp(0x3100, (u8*)&m, 1); 
  613   1          write_dgus_vp(0x3200, (u8*)&s, 1); 
@@ -702,7 +702,7 @@ line level    source
  671   1          BT10   = (result / 10) % 10;
  672   1          BT1     = result % 10;
  673   1      
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 12  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 12  
 
  674   1          write_dgus_vp(0x2060, (u8*)&BT100, 1);
  675   1          write_dgus_vp(0x2070, (u8*)&BT10,     1);
@@ -766,7 +766,7 @@ line level    source
  732   1      
  733   1          if ((state == 1 || state == 2) && enc_busy) {
  734   2              return;
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 13  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 13  
 
  735   2          }
  736   1          read_dgus_vp(VP_FLAGS, (u8*)&flags, 1);
@@ -830,7 +830,7 @@ line level    source
  794   2                  quickSettingflag = 0;
  795   2                  select_flag=0;
  796   2                  select_position = 0;
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 14  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 14  
 
  797   2                  settingflag = 0;
  798   2                  quickSettingS = 0;
@@ -894,7 +894,7 @@ line level    source
  856   7                                      }
  857   6                                    
  858   6                                  } else if (select_position == 1) {
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 15  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 15  
 
  859   6                                      keep = TT10;
  860   6                                      if (TT10 == 0) {
@@ -958,7 +958,7 @@ line level    source
  918   5                      }else if(page_number == topFrameS){
  919   5                             if (select_position == 0) {
  920   6                                      keep = hundred_velue;
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 16  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 16  
 
  921   6                                      if (hundred_velue == 0) {
  922   7                                          hundred_velue = 2;
@@ -1022,7 +1022,7 @@ line level    source
  980   7                                      }
  981   6                                  } else if (select_position == 1) {
  982   6                                      keep = BT10;
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 17  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 17  
 
  983   6                                      if (BT10 == 0 ) {
  984   7                                          BT10 = 9;
@@ -1086,7 +1086,7 @@ line level    source
 1042   5                          if (select_position == 0) {
 1043   6                                      keep = hundred_velue;
 1044   6                                      if (hundred_velue == 2) {
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 18  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 18  
 
 1045   7                                          hundred_velue = 0;
 1046   7                                      } else {
@@ -1150,7 +1150,7 @@ line level    source
 1104   7                                      }else{
 1105   7                                          min = keep;
 1106   7                                          write_dgus_vp(0x2370, (u8*)&min, 1);
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 19  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 19  
 
 1107   7                                      }
 1108   6                                  } else if (select_position == 1) {
@@ -1214,7 +1214,7 @@ line level    source
 1166   7                                      if (result <= toptempmax && result >= toptempmin) {
 1167   8                                          write_dgus_vp(0x2000, (u8*)&TT100, 1);
 1168   8                                      } else {
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 20  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 20  
 
 1169   8                                          TT100 = keep;
 1170   8                                          write_dgus_vp(0x2000, (u8*)&TT100, 1);
@@ -1278,7 +1278,7 @@ line level    source
 1228   9                                      }else{
 1229   9                                          min = 60;
 1230   9                                      }
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 21  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 21  
 
 1231   8                                      } else {
 1232   8                                          min--;
@@ -1342,7 +1342,7 @@ line level    source
 1289   6                          }else {
 1290   6                              page_number--;
 1291   6                              Page_Change_UI(page_number);
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 22  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 22  
 
 1292   6                          }
 1293   5                      }else if(page_number == adminList){
@@ -1406,7 +1406,7 @@ line level    source
 1351   7                                      }
 1352   6                                      result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
 1353   6                                      if (result <= toptempmax && result >= toptempmin) {
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 23  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 23  
 
 1354   7                                          write_dgus_vp(0x2150, (u8*)&TT100, 1);
 1355   7                                      } else {
@@ -1470,7 +1470,7 @@ line level    source
 1413   7                                      }
 1414   6                                      result = (u16)(hundred_velue * 100 + ten_velue * 10 + one_velue);
 1415   6                                      if (result <= 50 && result > 0) {
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 24  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 24  
 
 1416   7                                          tens[2] = ten_velue;
 1417   7                                          write_dgus_vp(0x2210, (u8*)&ten_velue, 1);
@@ -1534,7 +1534,7 @@ line level    source
 1475   6                                      result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
 1476   6                                      if (result <= bottempmax && result >= bottempmin) {
 1477   7                                          write_dgus_vp(0x2260, (u8*)&BT100, 1);
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 25  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 25  
 
 1478   7                                      } else {
 1479   7                                          BT100 = keep;
@@ -1598,7 +1598,7 @@ line level    source
 1537   7                                      } else {
 1538   7                                          ten_velue++;
 1539   7                                      }
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 26  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 26  
 
 1540   6                                      result = (u16)(hundred_velue * 100 + ten_velue * 10 + one_velue);
 1541   6                                      if (result <= 50 && result > 0) {
@@ -1662,7 +1662,7 @@ line level    source
 1599   7                                          write_dgus_vp(0x2380, (u8*)&second, 1);
 1600   7                                      }
 1601   6                              }
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 27  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 27  
 
 1602   5                      }else if(page_number == pressureS){
 1603   5                          if (press < pressmax) {
@@ -1726,7 +1726,7 @@ line level    source
 1661   8                                          BT1++;
 1662   8                                      } else {
 1663   8                                          BT1 = 0;
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 28  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 28  
 
 1664   8                                      }
 1665   7                                      result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
@@ -1790,7 +1790,7 @@ line level    source
 1723   7                                      keep = second;
 1724   7                                      if (second == 59) {
 1725   8                                          second = 0;
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 29  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 29  
 
 1726   8                                      } else {
 1727   8                                          second++;
@@ -1854,7 +1854,7 @@ line level    source
 1785   5                          //저장된 값만 보여줌
 1786   5                      }else if(page_number == adminLanguage){
 1787   5                          adminLanguageText(state);
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 30  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 30  
 
 1788   5                      }else if(page_number == adminEngineermod){
 1789   5                          EngineermodWork(state);
@@ -1918,7 +1918,7 @@ line level    source
 1847   6                              result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
 1848   6                              check_Start(VP_SET_TT,result);
 1849   6                              Page_Change_UI(topHeating);
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 31  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 31  
 
 1850   6                          }else if(page_number == topCoolingS && select_position == 3){
 1851   6                              settingflag     = 0;
@@ -1982,7 +1982,7 @@ line level    source
 1909   5                              write_dgus_vp(0x2050, (u8*)&press,    2);
 1910   5      
 1911   5                              result = 0;
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 32  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 32  
 
 1912   5                              quickSettingS = 1;
 1913   5                              Page21Functioning(quickSettingS);
@@ -2046,7 +2046,7 @@ line level    source
 1971   5                          write_dgus_vp(0x2200, (u8*)&TC1,     1);
 1972   5                          select_num(page_number, 0);
 1973   5                          ChangeImage(0x2210, 0);
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 33  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 33  
 
 1974   5                          Page_Change_UI(topCoolingS);
 1975   5                      }else if(page_number == topFrame){
@@ -2110,7 +2110,7 @@ line level    source
 2033   3                     page_number == adminLogError||
 2034   3                     page_number == adminMaintenance||
 2035   3                     page_number == adminLanguage||
-C51 COMPILER V9.56.0.0   UI                                                                07/02/2026 17:57:24 PAGE 34  
+C51 COMPILER V9.56.0.0   UI                                                                07/07/2026 16:53:49 PAGE 34  
 
 2036   3                     page_number == adminCompany||
 2037   3                     page_number == adminEngineermod){
@@ -2120,10 +2120,10 @@ line level    source
 2041   4                  }else if (page_number == quickSetting) {
 2042   4                      if(settingflag == 0){
 2043   5                      quickSettingflag = 0; 
-2044   5                       settingflag = 0; 
-2045   5                       quickSettingS = 0; 
-2046   5                       Page_Change_UI(main1);
-2047   5                       quickSettingInIt();
+2044   5                      settingflag = 0; 
+2045   5                      quickSettingS = 0; 
+2046   5                      Page_Change_UI(main1);
+2047   5                      quickSettingInIt();
 2048   5                      }
 2049   4                  }
 2050   3                  ui_poll_enable = 0;

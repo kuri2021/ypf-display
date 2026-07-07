@@ -72,147 +72,6 @@ u16 delaymax = 3600;
 //어드민 리스트
 void admin_List_text_change(){
     u16 len = 0;
-    //어드민 페이지 타이틀
-    if(language == 0){//영어
-        if(page_number == 27){
-            write_dgus_vp(0x4010, (u8*)&ADMIN, 6);
-            len = 12;
-            write_dgus_vp(0x5018, (u8*)&len, 1);
-        }else if(page_number == 28){
-            write_dgus_vp(0x4050, (u8*)&USER_SETTING_ENG, 6);
-            len = 12;
-            write_dgus_vp(0x5058, (u8*)&len, 1);
-        }else if(page_number == 29){
-            write_dgus_vp(0x4180, (u8*)&IO_TEST_ENG, 7);
-            len = 14;
-            write_dgus_vp(0x5180, (u8*)&len, 1);
-        }else if(page_number == 30){
-            write_dgus_vp(0x4310, (u8*)&DATA_INIT_ENG, 9);
-            len = 18;
-            write_dgus_vp(0x5318, (u8*)&len, 1);
-        }else if(page_number == 31){
-            write_dgus_vp(0x4360, (u8*)&LOG_ERROR_ENG, 11);
-            len = 22;
-            write_dgus_vp(0x5368, (u8*)&len, 1);
-        }else if(page_number == 32){
-            write_dgus_vp(0x4390, (u8*)&LOG_ERROR_ENG, 11);
-            len = 22;
-            write_dgus_vp(0x5398, (u8*)&len, 1);
-        }else if(page_number == 33){
-            write_dgus_vp(0x4400, (u8*)&LOG_ERROR_ENG, 11);
-            len = 22;
-            write_dgus_vp(0x5408, (u8*)&len, 1);
-        }else if(page_number == 34){
-            write_dgus_vp(0x4410, (u8*)&RUN_TIME_ENG, 8);
-            len = 16;
-            write_dgus_vp(0x5418, (u8*)&len, 1);
-        }else if(page_number == 35){
-            write_dgus_vp(0x4540, (u8*)&LANGUAGE_ENG, 8);
-            len = 16;
-            write_dgus_vp(0x5548, (u8*)&len, 1);
-        }else if(page_number == 36){
-            write_dgus_vp(0x4580, (u8*)&ENGINEER_MODE_ENG, 13);
-            len = 26;
-            write_dgus_vp(0x5588, (u8*)&len, 1);
-        }else if(page_number == 37){
-            write_dgus_vp(0x4650, (u8*)&ENGINEER_MODE_ENG, 13);
-            len = 26;
-            write_dgus_vp(0x5658, (u8*)&len, 1);
-        }
-    }else if(language == 1){//중국어
-        if(page_number == 27){
-            write_dgus_vp(0x4010, (u8*)&ADMIN, 6);
-            len = 12;
-            write_dgus_vp(0x5018, (u8*)&len, 1);
-        }else if(page_number == 28){
-            write_dgus_vp(0x4050, (u8*)&USER_SETTING_ENG, 6);
-            len = 12;
-            write_dgus_vp(0x5058, (u8*)&len, 1);
-        }else if(page_number == 29){
-            write_dgus_vp(0x4180, (u8*)&IO_TEST_ENG, 7);
-            len = 14;
-            write_dgus_vp(0x5180, (u8*)&len, 1);
-        }else if(page_number == 30){
-            write_dgus_vp(0x4310, (u8*)&DATA_INIT_ENG, 9);
-            len = 18;
-            write_dgus_vp(0x5318, (u8*)&len, 1);
-        }else if(page_number == 31){
-            write_dgus_vp(0x4360, (u8*)&LOG_ERROR_ENG, 11);
-            len = 22;
-            write_dgus_vp(0x5368, (u8*)&len, 1);
-        }else if(page_number == 32){
-            write_dgus_vp(0x4390, (u8*)&LOG_ERROR_ENG, 11);
-            len = 22;
-            write_dgus_vp(0x5398, (u8*)&len, 1);
-        }else if(page_number == 33){
-            write_dgus_vp(0x4400, (u8*)&LOG_ERROR_ENG, 11);
-            len = 22;
-            write_dgus_vp(0x5408, (u8*)&len, 1);
-        }else if(page_number == 34){
-            write_dgus_vp(0x4410, (u8*)&RUN_TIME_ENG, 8);
-            len = 16;
-            write_dgus_vp(0x5418, (u8*)&len, 1);
-        }else if(page_number == 35){
-            write_dgus_vp(0x4540, (u8*)&LANGUAGE_ENG, 8);
-            len = 16;
-            write_dgus_vp(0x5548, (u8*)&len, 1);
-        }else if(page_number == 36){
-            write_dgus_vp(0x4580, (u8*)&ENGINEER_MODE_ENG, 13);
-            len = 26;
-            write_dgus_vp(0x5588, (u8*)&len, 1);
-        }else if(page_number == 37){
-            write_dgus_vp(0x4650, (u8*)&ENGINEER_MODE_ENG, 13);
-            len = 26;
-            write_dgus_vp(0x5658, (u8*)&len, 1);
-        }
-    }else if(language == 2){//한국어
-        if(page_number == 27){
-            write_dgus_vp(0x4010, (u8*)&ADMIN, 6);
-            len = 12;
-            write_dgus_vp(0x5018, (u8*)&len, 1);
-        }else if(page_number == 28){
-            write_dgus_vp(0x4050, (u8*)&USER_SETTING_ENG, 6);
-            len = 12;
-            write_dgus_vp(0x5058, (u8*)&len, 1);
-        }else if(page_number == 29){
-            write_dgus_vp(0x4180, (u8*)&IO_TEST_ENG, 7);
-            len = 14;
-            write_dgus_vp(0x5180, (u8*)&len, 1);
-        }else if(page_number == 30){
-            write_dgus_vp(0x4310, (u8*)&DATA_INIT_ENG, 9);
-            len = 18;
-            write_dgus_vp(0x5318, (u8*)&len, 1);
-        }else if(page_number == 31){
-            write_dgus_vp(0x4360, (u8*)&LOG_ERROR_ENG, 11);
-            len = 22;
-            write_dgus_vp(0x5368, (u8*)&len, 1);
-        }else if(page_number == 32){
-            write_dgus_vp(0x4390, (u8*)&LOG_ERROR_ENG, 11);
-            len = 22;
-            write_dgus_vp(0x5398, (u8*)&len, 1);
-        }else if(page_number == 33){
-            write_dgus_vp(0x4400, (u8*)&LOG_ERROR_ENG, 11);
-            len = 22;
-            write_dgus_vp(0x5408, (u8*)&len, 1);
-        }else if(page_number == 34){
-            write_dgus_vp(0x4410, (u8*)&RUN_TIME_ENG, 8);
-            len = 16;
-            write_dgus_vp(0x5418, (u8*)&len, 1);
-        }else if(page_number == 35){
-            write_dgus_vp(0x4540, (u8*)&LANGUAGE_ENG, 8);
-            len = 16;
-            write_dgus_vp(0x5548, (u8*)&len, 1);
-        }else if(page_number == 36){
-            write_dgus_vp(0x4580, (u8*)&ENGINEER_MODE_ENG, 13);
-            len = 26;
-            write_dgus_vp(0x5588, (u8*)&len, 1);
-        }else if(page_number == 37){
-            write_dgus_vp(0x4650, (u8*)&ENGINEER_MODE_ENG, 13);
-            len = 26;
-            write_dgus_vp(0x5658, (u8*)&len, 1);
-        }
-    }
-
      switch(adminSP){
         case 0:{
             if(language == 0){
@@ -1419,6 +1278,14 @@ void admin_language_eng(void){
     write_dgus_vp(0x4690, (u8*)&TEL_CHN, 12);
     len = 24;
     write_dgus_vp(0x5698, (u8*)&len, 1);
+
+    write_dgus_vp(0x4700, (u8*)&SENSOR_CAL_ENG, 18);
+    len = 36;
+    write_dgus_vp(0x5708, (u8*)&len, 1);
+
+    write_dgus_vp(0x4720, (u8*)&PRESSURE_CAL_ENG, 20);
+    len = 40;
+    write_dgus_vp(0x5728, (u8*)&len, 1);
 }
 
 void admin_language_chn(void){
@@ -1555,6 +1422,14 @@ void admin_language_chn(void){
     write_dgus_vp(0x4690, (u8*)&TEL_CHN, 12);
     len = 24;
     write_dgus_vp(0x5698, (u8*)&len, 1);
+
+    write_dgus_vp(0x4700, (u8*)&SENSOR_CAL_ENG, 5);
+    len = 10;
+    write_dgus_vp(0x5708, (u8*)&len, 1);
+
+    write_dgus_vp(0x4720, (u8*)&PRESSURE_CAL_ENG, 4);
+    len = 8;
+    write_dgus_vp(0x5728, (u8*)&len, 1);
 }
 
 void admin_language_kor(void){
@@ -1680,6 +1555,14 @@ void admin_language_kor(void){
     write_dgus_vp(0x4690, (u8*)&TEL_CHN, 12);
     len = 24;
     write_dgus_vp(0x5698, (u8*)&len, 1);
+
+    write_dgus_vp(0x4700, (u8*)&SENSOR_CAL_ENG, 4);
+    len = 8;
+    write_dgus_vp(0x5708, (u8*)&len, 1);
+
+    write_dgus_vp(0x4720, (u8*)&PRESSURE_CAL_ENG, 4);
+    len = 8;
+    write_dgus_vp(0x5728, (u8*)&len, 1);
 
     // //엔지니어 모드
     // write_dgus_vp(0x4660, (u8*)&ENGINEER_MODE_KOR, 7);
@@ -1932,6 +1815,77 @@ void EngineermodWork(u16 state){
         break;
     }
 }
+
+static u16 EngineermodS_flag = 0;
+static u16 EngineermodS_Select_flag = 0;
+static u16 sensor_result = 100;
+static u16 press_result = 100;
+
+void EngineermodSText(){
+    if(EngineermodS_flag == 0){
+        if(EngineermodS_Select_flag == 0){
+            SetTextColorYellow(0x5633);
+            SetTextColorWhite(0x5713);
+            SetTextColorWhite(0x5723);
+            SetTextColorWhite(0x5733);
+        }else{
+            SetTextColorYellow(0x5633);
+            SetTextColorYellow(0x5713);
+            SetTextColorWhite(0x5723);
+            SetTextColorWhite(0x5733);
+        }
+    }else{
+        if(EngineermodS_Select_flag == 0){
+            SetTextColorWhite(0x5633);
+            SetTextColorWhite(0x5713);
+            SetTextColorYellow(0x5723);
+            SetTextColorWhite(0x5733);
+        }else{
+            SetTextColorWhite(0x5633);
+            SetTextColorWhite(0x5713);
+            SetTextColorYellow(0x5723);
+            SetTextColorYellow(0x5733);
+        }
+    }
+
+}
+
+
+void EngineermodSWork(u16 state){
+    if(state == 1 || state == 2){
+        if(EngineermodS_Select_flag == 0){
+            if(EngineermodS_flag == 0){
+                EngineermodS_flag = 1;
+            }else{
+                EngineermodS_flag = 0;
+            }
+        }else{
+            if(EngineermodS_flag == 0){
+                if(state == 1 && sensor_result<120 && sensor_result >80){
+                    sensor_result--;
+                }else if(state == 2 && sensor_result<120 && sensor_result >80){
+                    sensor_result++;
+                }
+            }else{
+                if(state == 1 && press_result<120 && press_result >80){
+                    press_result--;
+                }else if(state == 2 && press_result<120 && press_result >80){
+                    press_result++;
+                }
+            }
+        }
+        write_dgus_vp(0x4700, (u8*)& sensor_result, 1);
+        write_dgus_vp(0x4730, (u8*)& press_result, 1);
+    }else if(state == 3){
+        if(EngineermodS_Select_flag == 0){
+            EngineermodS_Select_flag = 1;
+        }else{
+            EngineermodS_Select_flag = 0;
+        }
+    }
+    EngineermodSText();
+}
+
 
 void admininit(){
     adminSP = 0;

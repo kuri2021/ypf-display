@@ -51,6 +51,8 @@ extern const u16 PAJU_JORI_EUP_KOR[];
 extern const u16 DANGJAEBONG_RO_29_KOR[];
 extern const u16 TEL_KOR[];
 
+extern const u16 SENSOR_CAL_KOR[];
+extern const u16 PRESSURE_CAL_KOR[];
 
 /* 영어 */
 
@@ -98,6 +100,8 @@ extern const u16 PAJU_JORI_ENG[];
 extern const u16 DANGJAEBONG_RO_29_ENG[];
 extern const u16 ADDRESS_ENG[];
 
+extern const u16 SENSOR_CAL_ENG[];
+extern const u16 PRESSURE_CAL_ENG[];
 
 /* 중국어 */
 
@@ -142,5 +146,7 @@ extern const u16 TEL_CHN[];
 extern const u16 ON_TEXT[];
 extern const u16 OFF_TEXT[];
 
+extern const u16 SENSOR_CAL_CHN[];
+extern const u16 PRESSURE_CAL_CHN[];
 
 #endif

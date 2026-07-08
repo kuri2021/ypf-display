@@ -505,6 +505,14 @@ void admin_page_change(){
             SetTextColorWhite(0x5123);
             SetTextColorWhite(0x5153);
             Page_Change_UI(adminUserSetting);
+            write_dgus_vp(0x4070, (u8*)&toptempmin, 1); 
+            write_dgus_vp(0x4080, (u8*)&toptempmax, 1); 
+            write_dgus_vp(0x4100, (u8*)&bottempmin, 1); 
+            write_dgus_vp(0x4110, (u8*)&bottempmax, 1); 
+            write_dgus_vp(0x4130, (u8*)&pressmin, 1); 
+            write_dgus_vp(0x4140, (u8*)&pressmax, 1); 
+            write_dgus_vp(0x4160, (u8*)&delaymin, 1); 
+            write_dgus_vp(0x4170, (u8*)&delaymax, 1); 
         }break;
         case 1:{
             SetTextColorYellow(0x5193);
@@ -1304,6 +1312,8 @@ void encoder_page_change(u16 state)
                     adminLanguageText(state);
                 }else if(page_number == adminEngineermod){
                     EngineermodWork(state);
+                }else if(page_number == adminEngineermodS){
+                    EngineermodSWork(state);
                 }
             }
             enc_busy = 1;
@@ -1787,6 +1797,8 @@ void encoder_page_change(u16 state)
                     adminLanguageText(state);
                 }else if(page_number == adminEngineermod){
                     EngineermodWork(state);
+                }else if(page_number == adminEngineermodS){
+                    EngineermodSWork(state);
                 }
             }
             enc_busy = 1;
@@ -2022,6 +2034,14 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(main7);
                 }else if(page_number == adminEngineermod){
                     EngineermodWork(state);
+                    write_dgus_vp(0x4590, (u8*)&EngineerPw1, 1);
+                    write_dgus_vp(0x4600, (u8*)&EngineerPw2, 1);
+                    write_dgus_vp(0x4610, (u8*)&EngineerPw3, 1);
+                    write_dgus_vp(0x4620, (u8*)&EngineerPw4, 1);
+                    write_dgus_vp(0x4630, (u8*)&EngineerPw5, 1);
+                    write_dgus_vp(0x4640, (u8*)&EngineerPw6, 1);
+                }else if(page_number == adminEngineermodS){
+                    EngineermodSWork(state);
                 }
             }
         } break;

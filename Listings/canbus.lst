@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   CANBUS                                                            07/07/2026 16:53:52 PAGE 1   
+C51 COMPILER V9.56.0.0   CANBUS                                                            07/08/2026 17:47:01 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE CANBUS
@@ -62,7 +62,7 @@ line level    source
   52   1          DATA3 = 0;
   53   1          DATA2 = 0;
   54   1          DATA1 = 0;
-C51 COMPILER V9.56.0.0   CANBUS                                                            07/07/2026 16:53:52 PAGE 2   
+C51 COMPILER V9.56.0.0   CANBUS                                                            07/08/2026 17:47:01 PAGE 2   
 
   55   1          DATA0 = 0; // 配置验收寄存器ACR
   56   1          APP_EN = 1;
@@ -126,7 +126,7 @@ line level    source
  114   1          APP_EN = 1;
  115   1          while (APP_EN)
  116   1              ; // 写入发送数据前4字节
-C51 COMPILER V9.56.0.0   CANBUS                                                            07/07/2026 16:53:52 PAGE 3   
+C51 COMPILER V9.56.0.0   CANBUS                                                            07/08/2026 17:47:01 PAGE 3   
 
  117   1          DATA3 = CanData.BusTXbuf[CanData.CanTxTail].candata[4];
  118   1          DATA2 = CanData.BusTXbuf[CanData.CanTxTail].candata[5];
@@ -190,7 +190,7 @@ line level    source
  176   1          if (status & 0x80) // 扩展帧
  177   1          {
  178   2              idtmp = ID << 3;
-C51 COMPILER V9.56.0.0   CANBUS                                                            07/07/2026 16:53:52 PAGE 4   
+C51 COMPILER V9.56.0.0   CANBUS                                                            07/08/2026 17:47:01 PAGE 4   
 
  179   2          }
  180   1          else
@@ -254,7 +254,7 @@ line level    source
  238          //  // u16 i,j,k,l;
  239          //  // u16 wend,shengyscH,shengyscM;
  240          //  // u32 zongdiany,zongdl ;
-C51 COMPILER V9.56.0.0   CANBUS                                                            07/07/2026 16:53:52 PAGE 5   
+C51 COMPILER V9.56.0.0   CANBUS                                                            07/08/2026 17:47:01 PAGE 5   
 
  241          //  if (CanData.CanRxHead != CanData.CanRxTail)
  242          //  {
@@ -318,7 +318,7 @@ line level    source
  300   2              CanData.BusRXbuf[CanData.CanRxHead].ID <<= 8;
  301   2              CanData.BusRXbuf[CanData.CanRxHead].ID |= DATA1;
  302   2              CanData.BusRXbuf[CanData.CanRxHead].ID <<= 8;
-C51 COMPILER V9.56.0.0   CANBUS                                                            07/07/2026 16:53:52 PAGE 6   
+C51 COMPILER V9.56.0.0   CANBUS                                                            07/08/2026 17:47:01 PAGE 6   
 
  303   2              CanData.BusRXbuf[CanData.CanRxHead].ID |= DATA0;
  304   2              CanData.BusRXbuf[CanData.CanRxHead].ID = CanData.BusRXbuf[CanData.CanRxHead].ID >> 3;
@@ -382,7 +382,7 @@ line level    source
  362          // void CANTx(void)
  363          // {
  364          //  u32 tmp32;
-C51 COMPILER V9.56.0.0   CANBUS                                                            07/07/2026 16:53:52 PAGE 7   
+C51 COMPILER V9.56.0.0   CANBUS                                                            07/08/2026 17:47:01 PAGE 7   
 
  365          //  if((0==CanData.CanTxFlag)&&(CanData.CanTxTail != CanData.CanTxFlag))
  366          //  {

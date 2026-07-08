@@ -5,7 +5,7 @@
 /* 한국어 */
 // 어드민 리스트
 extern const u16 USER_SETTING_KOR[];
-extern const u16 CHECK_KOR[];
+extern const u16 INPUT_OUTPUT_TEST_KOR[];
 extern const u16 FACTORY_RESET_KOR[];
 extern const u16 LOG_ERROR_KOR[];
 extern const u16 WORK_TIME_KOR[];
@@ -40,6 +40,7 @@ extern const u16 ERROR_LOG_KOR[];
 // 기타
 extern const u16 HEATING_TIME_KOR[];
 extern const u16 FAN_KOR[];
+extern const u16 PUMP_KOR[];
 
 extern const u16 ENGLISH_KOR[];
 extern const u16 CHINESE_KOR[];
@@ -49,7 +50,7 @@ extern const u16 YONGLI_KOREA_KOR[];
 extern const u16 GYEONGGI_DO_KOR[];
 extern const u16 PAJU_JORI_EUP_KOR[];
 extern const u16 DANGJAEBONG_RO_29_KOR[];
-extern const u16 TEL_KOR[];
+extern const u16 NUM_29[];
 
 extern const u16 SENSOR_CAL_KOR[];
 extern const u16 PRESSURE_CAL_KOR[];
@@ -141,7 +142,7 @@ extern const u16 KOREAN_CHN[];
 extern const u16 GYEONGGI_DO_CHN[];
 extern const u16 PAJU_JORI_CHN[];
 extern const u16 ADDRESS_CHN[];
-extern const u16 TEL_CHN[];
+extern const u16 TEL[];
 
 extern const u16 ON_TEXT[];
 extern const u16 OFF_TEXT[];

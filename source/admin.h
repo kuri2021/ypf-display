@@ -21,6 +21,7 @@ void EngineermodWork(u16 state);
 void admininit(void);
 void Page_Change_UI(u8 i);
 void admin_List_text_change(void);
+void EngineermodSWork(u16 state);
 
 extern u8 adminSP;
 extern u8 EngineerSP;
@@ -38,5 +39,7 @@ extern u16 pressmin;
 extern u16 pressmax;
 extern u16 delaymin;
 extern u16 delaymax;
+extern u16 sensor_result;
+extern u16 press_result;
 
 #endif

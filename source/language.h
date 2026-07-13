@@ -3,6 +3,10 @@
 
 
 /* 한국어 */
+extern const u16 TOP_KOR[];
+extern const u16 BOT_KOR[];
+extern const u16 TIME_KOR[];
+
 // 어드민 리스트
 extern const u16 USER_SETTING_KOR[];
 extern const u16 INPUT_OUTPUT_TEST_KOR[];
@@ -56,6 +60,9 @@ extern const u16 SENSOR_CAL_KOR[];
 extern const u16 PRESSURE_CAL_KOR[];
 
 /* 영어 */
+extern const u16 TOP_ENG[];
+extern const u16 BOT_ENG[];
+extern const u16 TIME_ENG[];
 
 extern const u16 ADMIN[];
 
@@ -88,7 +95,8 @@ extern const u16 NO_ENG[];
 extern const u16 ACTIVE_LOG_ENG[];
 extern const u16 ERROR_LOG_ENG[];
 
-extern const u16 HEATING_TIME_ENG[];
+extern const u16 HEATING_ENG[];
+extern const u16 PUMP_ENG[];
 extern const u16 FAN_ENG[];
 
 extern const u16 ENGLISH_ENG[];
@@ -149,5 +157,8 @@ extern const u16 OFF_TEXT[];
 
 extern const u16 SENSOR_CAL_CHN[];
 extern const u16 PRESSURE_CAL_CHN[];
+
+extern const u16 EXIT_ENG[];
+extern const u16 EXIT_KOR[];
 
 #endif

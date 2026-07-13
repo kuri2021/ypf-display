@@ -23,6 +23,7 @@ void Page_Change_UI(u8 i);
 void admin_List_text_change(void);
 void EngineermodSWork(u16 state);
 
+extern u8 LogErrorSP;
 extern u8 adminSP;
 extern u8 EngineerSP;
 extern u16 EngineerPw1;
@@ -41,5 +42,29 @@ extern u16 delaymin;
 extern u16 delaymax;
 extern u16 sensor_result;
 extern u16 press_result;
+extern u16 temp_H;
+extern u16 temp_M;
+extern u16 temp_S;
 
+extern u16 pump_H;
+extern u16 pump_M;
+extern u16 pump_S;
+
+extern u16 fan_H;
+extern u16 fan_M;
+extern u16 fan_S;
+extern u8 usersettingSP;
+extern u8 usersettingSelect_plag;
+extern u8 usersettingEditSP;
+
+extern u8 factoryReset_plag;
+extern u8 factoryResetSP;
+
+extern u8 LanguageSP;
+
+extern u8 IOtestSP;
+extern u8 IOtestSelect_plag;
+
+extern u16 EngineermodS_flag;
+extern u16 EngineermodS_Select_flag;
 #endif

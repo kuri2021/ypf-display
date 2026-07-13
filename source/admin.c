@@ -16,42 +16,24 @@
 #define VP_IO_TEST 0x8210  // io테스트 주소
 
 const u16 SP_ENG_FONTID = 0x0010;
-const u16 SP_ENG_FONTSIZE = 0x1112;
+const u16 SP_ENG_FONTSIZE = 0x1A19;
 const u16 SP_KOR_FONTID = 0x0011;
 const u16 SP_KOR_FONTSIZE = 0x1F1F;
 
 static u16 language = 0;
 
 u8 adminSP = 0;
-static u8 admin_plag = 0;
 
-static u8 usersettingSP = 0;
-static u8 usersettingSelect_plag = 0;
-static u8 usersettingEditSP = 0;
-
-static u8 IOtestSP = 0;
-static u8 IOtestSelect_plag = 0;
-
-static u8 factoryReset_plag = 0;
-static u8 factoryResetSP = 0;
-
-static u8 LogErrorSP = 0;
-
-static u8 maintenance_plag = 0;
-
-static u8 LanguageSP = 0;
-
-static u8 company_plag = 0;
+u8 LogErrorSP = 0;
 
 u8 EngineerSP = 0;
 u16 EngineerPw1 = 0,EngineerPw2 = 0,EngineerPw3 = 0,EngineerPw4 = 0,EngineerPw5 = 0,EngineerPw6 = 0;
 
-static u8 io; 
 static u16 pw = 123456;
 
 u16 topTempDefault = 160;
 u16 botTempDefault = 160;
-u16 pressuTempDefault = 160;
+u16 pressuDefault = 15;
 u16 topCoolingDefault = 60;
 u16 botCoolingDefault = 60;
 u16 delayDefault = 90;
@@ -67,20 +49,47 @@ u16 delaymax = 3600;
 u16 sensor_result = 100;
 u16 press_result = 100;
 
+u16 temp_H = 0;
+u16 temp_M = 0;
+u16 temp_S = 0;
+
+u16 pump_H = 0;
+u16 pump_M = 0;
+u16 pump_S = 0;
+
+u16 fan_H = 0;
+u16 fan_M = 0;
+u16 fan_S = 0;
+
+u8 usersettingSP = 0;
+u8 usersettingSelect_plag = 0;
+u8 usersettingEditSP = 0;
+
+u8 factoryReset_plag = 0;
+u8 factoryResetSP = 0;
+
+u8 LanguageSP = 0;
+
+u8 IOtestSP = 0;
+u8 IOtestSelect_plag = 0;
+
+u16 EngineermodS_flag = 0;
+u16 EngineermodS_Select_flag = 0;
+
 //어드민 리스트
 void admin_List_text_change(){
     u16 len = 0;
      switch(adminSP){
         case 0:{
             if(language == 0){
-                write_dgus_vp(0x4020, (u8*)&ENGINEER_MODE_ENG, 13);
-                len = 26;
+                write_dgus_vp(0x4020, (u8*)&EXIT_ENG, 4);
+                len = 8;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
                 write_dgus_vp(0x5029, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x502A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-                write_dgus_vp(0x4030, (u8*)&USER_SETTING_ENG, 12);
-                len = 24;
+                write_dgus_vp(0x4030, (u8*)&USER_SETTING_ENG, 8);
+                len = 16;
                 write_dgus_vp(0x5038, (u8*)&len, 1);
                 write_dgus_vp(0x5039, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x503A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -91,8 +100,8 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
             }else if(language == 1){
-                write_dgus_vp(0x4020, (u8*)&ENGINEER_MODE_KOR, 7);
-                len = 14;
+                write_dgus_vp(0x4020, (u8*)&EXIT_KOR, 2);
+                len = 4;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
                 write_dgus_vp(0x5029, (u8*)&SP_KOR_FONTID, 1);
                 write_dgus_vp(0x502A, (u8*)&SP_KOR_FONTSIZE, 1);
@@ -112,8 +121,8 @@ void admin_List_text_change(){
         }break;
         case 1:{
             if(language == 0){
-                write_dgus_vp(0x4020, (u8*)&USER_SETTING_ENG, 12);
-                len = 24;
+                write_dgus_vp(0x4020, (u8*)&USER_SETTING_ENG, 8);
+                len = 16;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
                 write_dgus_vp(0x5029, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x502A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -280,8 +289,8 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5039, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x503A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-                write_dgus_vp(0x4040, (u8*)&COMPANY_INFO_ENG, 12);
-                len = 24;
+                write_dgus_vp(0x4040, (u8*)&COMPANY_INFO_ENG, 9);
+                len = 18;
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -313,14 +322,14 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5029, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x502A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-                write_dgus_vp(0x4030, (u8*)&COMPANY_INFO_ENG, 12);
-                len = 24;
+                write_dgus_vp(0x4030, (u8*)&COMPANY_INFO_ENG, 9);
+                len = 18;
                 write_dgus_vp(0x5038, (u8*)&len, 1);
                 write_dgus_vp(0x5039, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x503A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-                write_dgus_vp(0x4040, (u8*)&ENGINEER_MODE_ENG, 13);
-                len = 26;
+                write_dgus_vp(0x4040, (u8*)&ENGINEER_MODE_ENG, 8);
+                len = 16;
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -346,20 +355,20 @@ void admin_List_text_change(){
         }break;
         case 7:{
             if(language == 0){
-               write_dgus_vp(0x4020, (u8*)&COMPANY_INFO_ENG, 12);
-                len = 24;
+               write_dgus_vp(0x4020, (u8*)&COMPANY_INFO_ENG, 9);
+                len = 18;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
                 write_dgus_vp(0x5029, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x502A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-                write_dgus_vp(0x4030, (u8*)&ENGINEER_MODE_ENG, 13);
-                len = 26;
+                write_dgus_vp(0x4030, (u8*)&ENGINEER_MODE_ENG, 8);
+                len = 16;
                 write_dgus_vp(0x5038, (u8*)&len, 1);
                 write_dgus_vp(0x5039, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x503A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-                write_dgus_vp(0x4040, (u8*)&USER_SETTING_ENG, 12);
-                len = 24;
+                write_dgus_vp(0x4040, (u8*)&EXIT_ENG, 4);
+                len = 8;
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -372,6 +381,46 @@ void admin_List_text_change(){
 
                 write_dgus_vp(0x4030, (u8*)&ENGINEER_MODE_KOR, 7);
                 len = 14;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+                write_dgus_vp(0x5039, (u8*)&SP_KOR_FONTID, 1);
+                write_dgus_vp(0x503A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                write_dgus_vp(0x4040, (u8*)&EXIT_KOR, 2);
+                len = 4;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+                write_dgus_vp(0x5049, (u8*)&SP_KOR_FONTID, 1);
+                write_dgus_vp(0x504A, (u8*)&SP_KOR_FONTSIZE, 1);
+            }
+        }break;
+
+         case 8:{
+            if(language == 0){
+               write_dgus_vp(0x4020, (u8*)&ENGINEER_MODE_ENG, 8);
+                len = 16;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+                write_dgus_vp(0x5029, (u8*)&SP_ENG_FONTID, 1);
+                write_dgus_vp(0x502A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                write_dgus_vp(0x4030, (u8*)&EXIT_ENG, 4);
+                len = 8;
+                write_dgus_vp(0x5038, (u8*)&len, 1);
+                write_dgus_vp(0x5039, (u8*)&SP_ENG_FONTID, 1);
+                write_dgus_vp(0x503A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                write_dgus_vp(0x4040, (u8*)&USER_SETTING_ENG, 8);
+                len = 16;
+                write_dgus_vp(0x5048, (u8*)&len, 1);
+                write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
+                write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
+            }else if(language == 1){
+                write_dgus_vp(0x4020, (u8*)&ENGINEER_MODE_KOR, 7);
+                len = 14;
+                write_dgus_vp(0x5028, (u8*)&len, 1);
+                write_dgus_vp(0x5029, (u8*)&SP_KOR_FONTID, 1);
+                write_dgus_vp(0x502A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                write_dgus_vp(0x4030, (u8*)&EXIT_KOR, 2);
+                len = 4;
                 write_dgus_vp(0x5038, (u8*)&len, 1);
                 write_dgus_vp(0x5039, (u8*)&SP_KOR_FONTID, 1);
                 write_dgus_vp(0x503A, (u8*)&SP_KOR_FONTSIZE, 1);
@@ -390,12 +439,12 @@ void admin_List(u16 i){
     if (i == 1)
     {
         if(adminSP==0){
-            adminSP = 7;
+            adminSP = 8;
         }else{
             adminSP--;
         }
     }else if(i == 2){
-        if(adminSP == 7){
+        if(adminSP == 8){
             adminSP = 0;
         }else{
             adminSP++;
@@ -1003,10 +1052,11 @@ void adminfactoryResetText(u16 state){
         }else if(factoryResetSP == 1){
             write_dgus_vp(VP_SET_TT, (u8*)&topTempDefault, 1);
             write_dgus_vp(VP_SET_TB, (u8*)&botTempDefault, 1);
-            write_dgus_vp(VP_SET_P, (u8*)&pressuTempDefault, 1);
+            write_dgus_vp(VP_SET_P, (u8*)&pressuDefault, 1);
             write_dgus_vp(VP_SET_CHTT, (u8*)&topCoolingDefault, 1);
             write_dgus_vp(VP_SET_CHTB, (u8*)&botCoolingDefault, 1);
             write_dgus_vp(VP_SET_H, (u8*)&delayDefault, 1);
+            Picture1213_Init();
             page_number = 27;
             Page_Change_Handler(page_number);
         }
@@ -1017,13 +1067,18 @@ void adminfactoryResetText(u16 state){
 //어드민 로그 및 에러
 void adminLogErrorText(u16 state){
     if(state == 1 || state == 2){
-    if(LogErrorSP  == 0){
-        SetTextColorYellow(0x5373);
-        SetTextColorWhite(0x5383);
-    }else{
-        SetTextColorWhite(0x5373);
-        SetTextColorYellow(0x5383);
-    }
+        if(LogErrorSP == 0){
+            LogErrorSP = 1;
+        }else if(LogErrorSP == 1){
+            LogErrorSP = 0;
+        }
+        if(LogErrorSP  == 0){
+            SetTextColorYellow(0x5373);
+            SetTextColorWhite(0x5383);
+        }else{
+            SetTextColorWhite(0x5373);
+            SetTextColorYellow(0x5383);
+        }
     }else if(state == 3){
         if(LogErrorSP  == 0){
             page_number = 32;
@@ -1066,15 +1121,34 @@ void admin_language_eng(void){
     u16 len = 0;
     //어드민 메인리스트
     admin_List_text_change();
+    write_dgus_vp(0x2420, (u8*)&TOP_ENG, 3);
+    len = 6;
+    write_dgus_vp(0x1428, (u8*)&len, 1);
+    write_dgus_vp(0x1429, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x142A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4060, (u8*)&TOP_TEMP_ENG, 8);
-    len = 16;
+    write_dgus_vp(0x2430, (u8*)&BOT_ENG, 3);
+    len = 6;
+    write_dgus_vp(0x1438, (u8*)&len, 1);
+    write_dgus_vp(0x1439, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x143A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+    write_dgus_vp(0x2100, (u8*)&TIME_ENG, 4);
+    len = 8;
+    write_dgus_vp(0x1108, (u8*)&len, 1);
+    write_dgus_vp(0x1109, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x110A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+
+
+    write_dgus_vp(0x4060, (u8*)&TOP_TEMP_ENG, 6);
+    len = 12;
     write_dgus_vp(0x5068, (u8*)&len, 1);
     write_dgus_vp(0x5069, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x506A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4090, (u8*)&BOT_TEMP_ENG, 8);
-    len = 16;
+    write_dgus_vp(0x4090, (u8*)&BOT_TEMP_ENG, 6);
+    len = 12;
     write_dgus_vp(0x5098, (u8*)&len, 1);
     write_dgus_vp(0x5099, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x509A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1091,8 +1165,8 @@ void admin_language_eng(void){
     write_dgus_vp(0x5159, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x515A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4190, (u8*)&TOP_HEATER_ENG, 10);
-    len = 20;
+    write_dgus_vp(0x4190, (u8*)&TOP_HEATER_ENG, 8);
+    len = 16;
     write_dgus_vp(0x5198, (u8*)&len, 1);
     write_dgus_vp(0x5199, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x519A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1103,8 +1177,8 @@ void admin_language_eng(void){
     write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4210, (u8*)&BOT_HEATER_ENG, 10);
-    len = 20;
+    write_dgus_vp(0x4210, (u8*)&BOT_HEATER_ENG, 8);
+    len = 16;
     write_dgus_vp(0x5218, (u8*)&len, 1);
     write_dgus_vp(0x5219, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x521A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1139,8 +1213,8 @@ void admin_language_eng(void){
     write_dgus_vp(0x5269, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x526A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4270, (u8*)&COMPRESSOR_ENG, 10);
-    len = 20;
+    write_dgus_vp(0x4270, (u8*)&PUMP_ENG, 4);
+    len = 8;
     write_dgus_vp(0x5278, (u8*)&len, 1);
     write_dgus_vp(0x5279, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x527A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1151,8 +1225,8 @@ void admin_language_eng(void){
     write_dgus_vp(0x5289, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x528A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4290, (u8*)&SOLENOID_ENG, 8);
-    len = 16;
+    write_dgus_vp(0x4290, (u8*)&SOLENOID_ENG, 3);
+    len = 6;
     write_dgus_vp(0x5298, (u8*)&len, 1);
     write_dgus_vp(0x5299, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x529A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1206,14 +1280,14 @@ void admin_language_eng(void){
     write_dgus_vp(0x5419, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x541A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4420, (u8*)&HEATING_TIME_ENG, 7);
-    len = 14;
+    write_dgus_vp(0x4420, (u8*)&HEATING_ENG, 4);
+    len = 8;
     write_dgus_vp(0x5428, (u8*)&len, 1);
     write_dgus_vp(0x5429, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x542A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4460, (u8*)&COMPRESSOR_ENG, 10);
-    len = 20;
+    write_dgus_vp(0x4460, (u8*)&PUMP_ENG, 4);
+    len = 8;
     write_dgus_vp(0x5468, (u8*)&len, 1);
     write_dgus_vp(0x5469, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x546A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1273,14 +1347,14 @@ void admin_language_eng(void){
     write_dgus_vp(0x5319, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x531A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4690, (u8*)&SENSOR_CAL_ENG, 10);
-    len = 20;
+    write_dgus_vp(0x4690, (u8*)&SENSOR_CAL_ENG, 9);
+    len = 18;
     write_dgus_vp(0x5698, (u8*)&len, 1);
     write_dgus_vp(0x5699, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x569A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4710, (u8*)&PRESSURE_CAL_ENG, 11);
-    len = 22;
+    write_dgus_vp(0x4710, (u8*)&PRESSURE_CAL_ENG, 9);
+    len = 18;
     write_dgus_vp(0x5718, (u8*)&len, 1);
     write_dgus_vp(0x5719, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x571A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1289,6 +1363,25 @@ void admin_language_eng(void){
 void admin_language_kor(void){
     u16 len = 0;
     admin_List_text_change();
+
+    write_dgus_vp(0x2420, (u8*)&TOP_KOR, 2);
+    len = 4;
+    write_dgus_vp(0x1428, (u8*)&len, 1);
+    write_dgus_vp(0x1429, (u8*)&SP_KOR_FONTID, 1);
+    write_dgus_vp(0x142A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+    write_dgus_vp(0x2430, (u8*)&BOT_KOR, 2);
+    len = 4;
+    write_dgus_vp(0x1438, (u8*)&len, 1);
+    write_dgus_vp(0x1439, (u8*)&SP_KOR_FONTID, 1);
+    write_dgus_vp(0x143A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+    write_dgus_vp(0x2100, (u8*)&TIME_KOR, 4);
+    len = 8;
+    write_dgus_vp(0x1108, (u8*)&len, 1);
+    write_dgus_vp(0x1109, (u8*)&SP_KOR_FONTID, 1);
+    write_dgus_vp(0x110A, (u8*)&SP_KOR_FONTSIZE, 1);
+
     //유저 세팅
     write_dgus_vp(0x4060, (u8*)&TOP_TEMP_KOR, 5);
     len = 10;
@@ -1401,14 +1494,14 @@ void admin_language_kor(void){
     write_dgus_vp(0x5429, (u8*)&SP_KOR_FONTID, 1);
     write_dgus_vp(0x542A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-    write_dgus_vp(0x4460, (u8*)&FAN_KOR, 1);
-    len = 2;
+    write_dgus_vp(0x4460, (u8*)&PUMP_KOR, 2);
+    len = 4;
     write_dgus_vp(0x5468, (u8*)&len, 1);
     write_dgus_vp(0x5469, (u8*)&SP_KOR_FONTID, 1);
     write_dgus_vp(0x546A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-    write_dgus_vp(0x4500, (u8*)&PUMP_KOR, 2);
-    len = 4;
+    write_dgus_vp(0x4500, (u8*)&FAN_KOR, 1);
+    len = 2;
     write_dgus_vp(0x5508, (u8*)&len, 1);
     write_dgus_vp(0x5509, (u8*)&SP_KOR_FONTID, 1);
     write_dgus_vp(0x550A, (u8*)&SP_KOR_FONTSIZE, 1);
@@ -1691,7 +1784,7 @@ void EngineermodWork(u16 state){
                 write_dgus_vp(0x4630, (u8*)&EngineerPw5 , 1);
                 write_dgus_vp(0x4640, (u8*)&EngineerPw6 , 1);
                 EngineerSP = 0;
-                SetTextColorRed(0x5593);
+                SetTextColorYellow(0x5593);
                 SetTextColorRed(0x5603);
                 SetTextColorRed(0x5613);
                 SetTextColorRed(0x5623);
@@ -1705,9 +1798,6 @@ void EngineermodWork(u16 state){
         break;
     }
 }
-
-static u16 EngineermodS_flag = 0;
-static u16 EngineermodS_Select_flag = 0;
 
 void EngineermodSText(){
     if(EngineermodS_flag == 0){
@@ -1750,10 +1840,10 @@ void EngineermodSWork(u16 state){
         }else if(EngineermodS_Select_flag == 1){
             if(EngineermodS_flag == 0 && sensor_result > 0){
                 sensor_result--;
-                write_dgus_vp(0x4690, (u8*)&sensor_result, 1);
+                write_dgus_vp(0x4700, (u8*)&sensor_result, 1);
             }else if(EngineermodS_flag == 1 && press_result > 0){
                 press_result--;
-                write_dgus_vp(0x4710, (u8*)&press_result, 1);
+                write_dgus_vp(0x4720, (u8*)&press_result, 1);
             }
         }
     }break;
@@ -1770,10 +1860,10 @@ void EngineermodSWork(u16 state){
         }else if(EngineermodS_Select_flag == 1){
             if(EngineermodS_flag == 0 && sensor_result < 120){
                 sensor_result++;
-                write_dgus_vp(0x4690, (u8*)&sensor_result, 1);
+                write_dgus_vp(0x4700, (u8*)&sensor_result, 1);
             }else if(EngineermodS_flag == 1 && press_result < 120){
                 press_result++;
-                write_dgus_vp(0x4710, (u8*)&press_result, 1);
+                write_dgus_vp(0x4720, (u8*)&press_result, 1);
             }
         }
     }break;
@@ -1801,8 +1891,6 @@ void admininit(){
     factoryReset_plag = 0;
     factoryResetSP = 0;
     LogErrorSP = 0;
-    maintenance_plag = 0;
     LanguageSP = 0;
-    company_plag = 0;
     EngineerSP = 0;
 }

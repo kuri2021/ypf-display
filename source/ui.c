@@ -87,8 +87,8 @@ static u8 read500_enable = 0;
 u8 xdata page_set[4] = {0};
 u8 xdata txt_off[6] = {0};
 
-u16 Page[39] = {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,29,30,31,32,33,34,35,36,37,38
+u16 Page[55] = {
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,29,30,31,32,33,34,35,36,37,38,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56
 };
 
 static u16 start_flag = 0;
@@ -116,29 +116,29 @@ static u16 check_addr;
 static u16 check_count = 0;
 
 static u8 loding = 0;
-static u8 main1 = 1;
-static u8 main2 = 2;
-static u8 main3 = 3;
-static u8 main4 = 4;
-static u8 main5 = 5;
-static u8 main6 = 6;
-static u8 main7 = 7;
-static u8 quickSetting= 8;
-static u8 topHeating = 9;
-static u8 topCooling = 10;
+static u8 main1[2] = {1, 40};
+static u8 main2[2] = {2, 41};
+static u8 main3[2] = {3, 42};
+static u8 main4[2] = {4, 43};
+static u8 main5[2] = {5, 44};
+static u8 main6[2] = {6, 45};
+static u8 main7[2] = {7, 46};
+static u8 quickSetting = 8 ;
+static u8 topHeating[2] = {9, 47};
+static u8 topCooling[2] = {10, 49};
 static u8 topFrame = 11;
-static u8 botHeating = 12;
-static u8 botCooling = 13;
+static u8 botHeating[2] = {12, 48};
+static u8 botCooling[2] = {13, 50};
 static u8 botFrame = 14;
 static u8 exit = 15;
-static u8 topHeatingS = 16;
-static u8 topCoolingS = 17;
+static u8 topHeatingS[2] = {16, 51};
+static u8 topCoolingS[2] = {17, 53};
 static u8 topFrameS = 18;
-static u8 botHeatingS = 19;
-static u8 botCoolingS = 20;
+static u8 botHeatingS[2] = {19, 52};
+static u8 botCoolingS[2] = {20, 54};
 static u8 botFrameS = 21;
-static u8 delayS = 22;
-static u8 pressureS = 23;
+static u8 delayS[2] = {22, 55};
+static u8 pressureS[2] = {23, 56};
 static u8 workPageN = 24;
 static u8 workPageH = 25;
 static u8 workPageC = 26;

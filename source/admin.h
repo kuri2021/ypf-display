@@ -67,4 +67,6 @@ extern u8 IOtestSelect_plag;
 
 extern u16 EngineermodS_flag;
 extern u16 EngineermodS_Select_flag;
+
+extern u16 language;
 #endif

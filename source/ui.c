@@ -1268,7 +1268,7 @@ void encoder_page_change(u16 state)
                 if(page_number > 1 && page_number <=7){
                     page_number--;
                     Page_Change_Handler(page_number);
-                }else if (page_number == main1) {
+                }else if (page_number == main1[]) {
                     page_number = main7;
                     Page_Change_Handler(page_number);
                 } else if (topSelectflag == 1) {

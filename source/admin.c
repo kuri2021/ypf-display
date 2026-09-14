@@ -20,7 +20,7 @@ const u16 SP_ENG_FONTSIZE = 0x1A19;
 const u16 SP_KOR_FONTID = 0x0011;
 const u16 SP_KOR_FONTSIZE = 0x1F1F;
 
-static u16 language = 0;
+u16 language = 0;
 
 u8 adminSP = 0;
 

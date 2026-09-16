@@ -69,4 +69,7 @@ extern u16 EngineermodS_flag;
 extern u16 EngineermodS_Select_flag;
 
 extern u16 language;
+
+extern u16 userSet[];
+extern u16 IO[];
 #endif

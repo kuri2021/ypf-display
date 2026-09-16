@@ -76,6 +76,9 @@ u8 IOtestSelect_plag = 0;
 u16 EngineermodS_flag = 0;
 u16 EngineermodS_Select_flag = 0;
 
+u16 userSet[] = {0,0,0,0,0,0,0,0};
+u16 IO[] = {0,0,0,0,0,0};
+
 //어드민 리스트
 void admin_List_text_change(){
     u16 len = 0;

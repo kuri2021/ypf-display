@@ -70,6 +70,10 @@ static void ChangeImage(u16 vp_addr, u16 index);
 #define VP_ELAPSED_TIME 0x8114 // 유지 경과 시간
 
 
+#define VP_USERSETTING 0x8200 // 유저세팅
+#define VP_IO 0x8300 // 유저세팅
+
+
 #define SP_TXT_TT 0x5000
 #define SP_TXT_TB 0x5002
 

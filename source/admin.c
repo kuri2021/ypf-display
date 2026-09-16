@@ -15,9 +15,9 @@
 
 #define VP_IO_TEST 0x8210  // io테스트 주소
 
-const u16 SP_ENG_FONTID = 0x0010;
+const u16 SP_ENG_FONTID = 0x000F;
 const u16 SP_ENG_FONTSIZE = 0x1A19;
-const u16 SP_KOR_FONTID = 0x0011;
+const u16 SP_KOR_FONTID = 0x0010;
 const u16 SP_KOR_FONTSIZE = 0x1F1F;
 
 u16 language = 0;
@@ -523,7 +523,6 @@ void admin_User_Setting_text_color(){
             SetTextColorWhite(0x5173);
         }
     }
-   
 }
 
 void admin_User_Setting_Function(u16 i){

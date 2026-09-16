@@ -88,7 +88,7 @@ u8 xdata page_set[4] = {0};
 u8 xdata txt_off[6] = {0};
 
 u16 Page[] = {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,29,30,31,32,33,34,35,36,37,38,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56
 };
 
 static u16 start_flag = 0;
@@ -125,16 +125,16 @@ static u8 main6[2] = {6, 45};
 static u8 main7[2] = {7, 46};
 static u8 quickSetting = 8 ;
 static u8 topHeating[2] = {9, 47};
-static u8 topCooling[2] = {10, 49};
+static u8 topCooling[2] = {10, 48};
 static u8 topFrame = 11;
-static u8 botHeating[2] = {12, 48};
+static u8 botHeating[2] = {12, 49};
 static u8 botCooling[2] = {13, 50};
 static u8 botFrame = 14;
 static u8 exit = 15;
 static u8 topHeatingS[2] = {16, 51};
-static u8 topCoolingS[2] = {17, 53};
+static u8 topCoolingS[2] = {17, 52};
 static u8 topFrameS = 18;
-static u8 botHeatingS[2] = {19, 52};
+static u8 botHeatingS[2] = {19, 53};
 static u8 botCoolingS[2] = {20, 54};
 static u8 botFrameS = 21;
 static u8 delayS[2] = {22, 55};
@@ -293,7 +293,52 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
             }
         } break;
 
+        case 51:{
+            if (count == 0) {
+                SetTextColorBlack(0x1153);
+                SetTextColorBlack(0x1163);
+                SetTextColorBlue(0x1173);
+            } else if (count == 1) {
+                SetTextColorBlack(0x1153);
+                SetTextColorBlue(0x1163);
+                SetTextColorBlack(0x1173);
+            } else if (count == 2) {
+                   SetTextColorBlue(0x1153);
+                SetTextColorBlack(0x1163);
+                SetTextColorBlack(0x1173);
+            } else {
+                SetTextColorBlack(0x1153);
+                SetTextColorBlack(0x1163);
+                SetTextColorBlack(0x1173);
+            }
+            if (count == 3) {
+                ChangeImage(0x2180, 1);
+            } else {
+                ChangeImage(0x2180, 0);
+            }
+        }break;
+
         case 17: {
+            if (count == 0) {
+                SetTextColorBlack(0x1193);
+                SetTextColorBlue(0x1203);
+                
+            } else if (count == 1) {
+                SetTextColorBlue(0x1193);
+                SetTextColorBlack(0x1203);
+            }else if (count == 2) {
+                SetTextColorBlack(0x1193);
+                SetTextColorBlack(0x1203);
+            }
+
+            if (count == 2) {
+                ChangeImage(0x2210, 1);
+            } else {
+                ChangeImage(0x2210, 0);
+            }
+        } break;
+
+        case 52: {
             if (count == 0) {
                 SetTextColorBlack(0x1193);
                 SetTextColorBlue(0x1203);
@@ -366,7 +411,51 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
             }
         } break;
 
+        case 53: {
+            if (count == 0) {
+                SetTextColorBlack(0x1263);
+                SetTextColorBlack(0x1273);
+                SetTextColorBlue(0x1283);
+            } else if (count == 1) {
+                SetTextColorBlack(0x1263);
+                SetTextColorBlue(0x1273);
+                SetTextColorBlack(0x1283);
+            } else if (count == 2) {
+                SetTextColorBlue(0x1263);
+                SetTextColorBlack(0x1273);
+                SetTextColorBlack(0x1283);
+            } else {
+                SetTextColorBlack(0x1263);
+                SetTextColorBlack(0x1273);
+                SetTextColorBlack(0x1283);
+            }
+
+            if (count == 3) {
+                ChangeImage(0x2290, 1);
+            } else {
+                ChangeImage(0x2290, 0);
+            }
+        } break;
+
         case 20: {
+            if (count == 0) {
+                SetTextColorBlack(0x1303);
+                SetTextColorBlue(0x1313);
+            } else if (count == 1) {
+                SetTextColorBlue(0x1303);
+                SetTextColorBlack(0x1313);
+            } else if (count == 2) {    
+                SetTextColorBlack(0x1303);
+                SetTextColorBlack(0x1313);
+            }
+            if (count == 2) {
+                ChangeImage(0x2320, 1);
+            } else {
+                ChangeImage(0x2320, 0);
+            }
+        } break;
+
+        case 54: {
             if (count == 0) {
                 SetTextColorBlack(0x1303);
                 SetTextColorBlue(0x1313);
@@ -429,7 +518,37 @@ void select_num(u16 page, u16 count) { // 텍스트 색 설정
             }
         } break;
 
+        case 55: {
+            if (count == 0) {
+                SetTextColorBlue(0x1373);
+                SetTextColorBlack(0x1383);
+            } else if (count == 1) {
+                SetTextColorBlack(0x1373);
+                SetTextColorBlue(0x1383);
+            } else {
+                SetTextColorBlack(0x1373);
+                SetTextColorBlack(0x1383);
+            }
+
+            if (count == 2) {
+                ChangeImage(0x2390, 1);
+            } else {
+                ChangeImage(0x2390, 0);
+            }
+        } break;
+
+
         case 23: {
+            if (count == 1) {
+                SetTextColorBlack(0x1403);
+                ChangeImage(0x2410, 1);
+            } else {
+                SetTextColorBlue(0x1403);
+                ChangeImage(0x2410, 0);
+            }
+        } break;
+
+        case 56: {
             if (count == 1) {
                 SetTextColorBlack(0x1403);
                 ChangeImage(0x2410, 1);
@@ -1108,10 +1227,10 @@ void encoder_page_change(u16 state)
                                 }
                                 result = (u16)(min * 60 + second);
                                  if(result<= delaymax && result > delaymin){
-                                    write_dgus_vp(0x2280, (u8*)&second, 1);
+                                    write_dgus_vp(0x2380, (u8*)&second, 1);
                                 }else{
                                     second = keep;
-                                    write_dgus_vp(0x2280, (u8*)&second, 1);
+                                    write_dgus_vp(0x2380, (u8*)&second, 1);
                                 }
                             }
                 }else if(page_number == pressureS[language]){
@@ -1262,7 +1381,7 @@ void encoder_page_change(u16 state)
                     Page21Functioning(quickSettingS);
                 }
             } else {  // 페이지 전환(역방향)
-                if(page_number > 1 && page_number <=7){
+                if(page_number > main1[language] && page_number <=main7[language]){
                     page_number--;
                     Page_Change_Handler(page_number);
                 }else if (page_number == main1[language]) {
@@ -1927,7 +2046,7 @@ void encoder_page_change(u16 state)
                     topSelectflag   = 1;
                     page_number = topHeating[language];
                     Page_Change_Handler(page_number);
-                }else if(page_number == main3){
+                }else if(page_number == main3[language]){
                     botSelectflag = 1;
                     Page_Change_UI(botHeating[language]);
                 }else if(page_number == main4[language]){

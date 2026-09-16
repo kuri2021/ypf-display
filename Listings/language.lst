@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/14/2026 17:02:36 PAGE 1   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/16/2026 11:30:09 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE LANGUAGE
@@ -62,7 +62,7 @@ line level    source
   50          // const u16 PAJU_JORI_EUP_KOR[] = {0xD30C,0xC8FC,0xC2DC,0x0020,0xC870,0xB9AC,0xC74D}; // 파주시 조리
              -읍
   51          // const u16 DANGJAEBONG_RO_29_KOR[] = {0xB2F9,0xC7AC,0xBD09,0xB85C,0x0020,0x0032,0x0039}; // 당재봉로
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/14/2026 17:02:36 PAGE 2   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/16/2026 11:30:09 PAGE 2   
 
              - 29
   52          // const u16 TEL_KOR[] = {0x0030,0x0033,0x0031,0x002D,0x0039,0x0035,0x0033,0x002D,0x0034,0x0030,0x0036,0x0
@@ -126,7 +126,7 @@ line level    source
   99          // 작동 시간
  100          const u16 HEATING_TIME_KOR[] = {0x2B88, 0x2530}; // 가열시간
  101          const u16 FAN_KOR[] = {0x272C}; // 팬
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/14/2026 17:02:36 PAGE 3   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/16/2026 11:30:09 PAGE 3   
 
  102          const u16 PUMP_KOR[] = {0x278C, 0x2904}; // 펌프
  103          
@@ -190,7 +190,7 @@ line level    source
  156          //로그 & 에러
  157          const u16 ACTIVE_LOG_ENG[] = {0x0041,0x0043,0x0054,0x0049,0x0056,0x0045,0x0020,0x004C,0x004F,0x0047};// Ac
              -tive Log
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/14/2026 17:02:36 PAGE 4   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/16/2026 11:30:09 PAGE 4   
 
  158          const u16 ERROR_LOG_ENG[] = {0x0045,0x0052,0x0052,0x004F,0x0052,0x0020,0x004C,0x004F,0x0047};// Error Log
  159          
@@ -254,7 +254,7 @@ line level    source
  212          //언어 변경
  213          const u16 ENGLISH_CHN[]         = {0x82F1,0x8BED};                                       // 英语
  214          const u16 CHINESE_CHN[]         = {0x4E2D,0x6587};                                       // 中文
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/14/2026 17:02:36 PAGE 5   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/16/2026 11:30:09 PAGE 5   
 
  215          const u16 KOREAN_CHN[]          = {0x97E9,0x8BED};                                       // 韩语
  216          //회사 소개

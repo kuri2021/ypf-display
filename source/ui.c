@@ -78,7 +78,12 @@ static void ChangeImage(u16 vp_addr, u16 index);
 #define VP_USERSETTING_PRES_MIN 0x4130 // 유저세팅 8개
 #define VP_USERSETTING_DELAY_MAX 0x4170 // 유저세팅 8개
 #define VP_USERSETTING_DELAY_MIN 0x4160 // 유저세팅 8개
-#define VP_IO 0x8300 // IO 6개
+#define VP_IO_1 0x8300 // IO 6개
+#define VP_IO_2 0x8302 // IO 6개
+#define VP_IO_3 0x8304 // IO 6개
+#define VP_IO_4 0x8306 // IO 6개
+#define VP_IO_5 0x8308 // IO 6개
+#define VP_IO_6 0x830A // IO 6개
 #define VP_ENGINEERMODE_SENSER 0X4700 // 엔지니어모드 센서 보정
 #define VP_ENGINEERMODE_PRES 0X4720 // 엔지니어모드 최대 압력
 

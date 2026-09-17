@@ -70,8 +70,17 @@ static void ChangeImage(u16 vp_addr, u16 index);
 #define VP_ELAPSED_TIME 0x8114 // 유지 경과 시간
 
 
-#define VP_USERSETTING 0x8200 // 유저세팅
-#define VP_IO 0x8300 // 유저세팅
+#define VP_USERSETTING_TOP_TEMP_MAX 0x4080 // 유저세팅 8개
+#define VP_USERSETTING_TOP_TEMP_MIN 0x4070 // 유저세팅 8개
+#define VP_USERSETTING_BOT_TEMP_MAX 0x4110 // 유저세팅 8개
+#define VP_USERSETTING_BOT_TEMP_MIN 0x4100 // 유저세팅 8개
+#define VP_USERSETTING_PRES_MAX 0x4140 // 유저세팅 8개
+#define VP_USERSETTING_PRES_MIN 0x4130 // 유저세팅 8개
+#define VP_USERSETTING_DELAY_MAX 0x4170 // 유저세팅 8개
+#define VP_USERSETTING_DELAY_MIN 0x4160 // 유저세팅 8개
+#define VP_IO 0x8300 // IO 6개
+#define VP_ENGINEERMODE_SENSER 0X4700 // 엔지니어모드 센서 보정
+#define VP_ENGINEERMODE_PRES 0X4720 // 엔지니어모드 최대 압력
 
 
 #define SP_TXT_TT 0x5000
@@ -103,6 +112,8 @@ static u16 error_flag = 0;
 static u16 hundreds[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 static u16 tens[8]     = { 0, 0, 0, 0, 0, 0, 0, 0 };
 static u16 ones[8]     = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+static u16 IOSet[] = {0,0,0,0,0,0};
 
 static u16 TT100, TT10 , TT1 ;
 static u16 TC10 = 0, TC1 = 0;
@@ -765,7 +776,7 @@ void SecCnt_TickTask(void) {
     } 
 }
 
-void Picture1213_Init(void) {
+void data_set_Init(void) {
     u16 result = 0;
 
     read_dgus_vp(VP_SET_P, (u8*)&press, 1);
@@ -818,6 +829,17 @@ void Picture1213_Init(void) {
     write_dgus_vp(0x2310, (u8*)&TC1 ,     2);
 
     SetTextColorWhite(0x9273);
+
+    // read_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&toptempmax, 1);
+    // read_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&toptempmin, 1);
+    // read_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX, (u8*)&bottempmax, 1);
+    // read_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN, (u8*)&bottempmin, 1);
+    // read_dgus_vp(VP_USERSETTING_PRES_MAX, (u8*)&pressmax, 1);
+    // read_dgus_vp(VP_USERSETTING_PRES_MIN, (u8*)&pressmin, 1);
+    // read_dgus_vp(VP_USERSETTING_DELAY_MAX, (u8*)&delaymax, 1);
+    // read_dgus_vp(VP_USERSETTING_DELAY_MIN, (u8*)&delaymin, 1);
+    // read_dgus_vp(VP_IO, (u8*)&result, 2);
+    // read_dgus_vp(VP_ENGINEERMODE, (u8*)&result, 2);
 }
 
 void encoder_page_change(u16 state)

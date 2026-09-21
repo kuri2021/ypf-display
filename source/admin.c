@@ -15,6 +15,13 @@
 
 #define VP_IO_TEST 0x8210  // io테스트 주소
 
+#define VP_IO_1 0x8300 // IO 6개
+#define VP_IO_2 0x8302 // IO 6개
+#define VP_IO_3 0x8304 // IO 6개
+#define VP_IO_4 0x8306 // IO 6개
+#define VP_IO_5 0x8308 // IO 6개
+#define VP_IO_6 0x830A // IO 6개
+
 const u16 SP_ENG_FONTID = 0x000F;
 const u16 SP_ENG_FONTSIZE = 0x1A19;
 const u16 SP_KOR_FONTID = 0x0010;
@@ -529,6 +536,7 @@ void admin_User_Setting_text_color(){
 }
 
 void admin_User_Setting_Function(u16 i){
+    u16 result;
     if(i == 0){
         usersettingSP = 0;
         usersettingSelect_plag = 0;
@@ -542,44 +550,57 @@ void admin_User_Setting_Function(u16 i){
         }else{
             if(usersettingEditSP==0){
                 if(usersettingSP == 0){
-                    if(toptempmin>1 && toptempmax > toptempmin){
+                    // u16 result;
+                    read_dgus_vp(VP_SET_TT, (u8*)&result,1);
+                    if(toptempmin>1 && toptempmax > toptempmin && result>toptempmin){
                         toptempmin--;
                     }
                     write_dgus_vp(0x4070, (u8*)&toptempmin, 1);
                 }else if(usersettingSP == 1){
-                    if(bottempmin>1 && bottempmax > bottempmin){
+                    // u16 result;
+                    read_dgus_vp(VP_SET_TB, (u8*)&result,1);
+                    if(bottempmin>1 && bottempmax > bottempmin && VP_SET_TB>bottempmin){
                         bottempmin--;
                     }
                     write_dgus_vp(0x4100, (u8*)&bottempmin, 1);
                 }else if(usersettingSP == 2){
-                    if(pressmin>0 && pressmax > pressmin){
+                    // u16 result;
+                    read_dgus_vp(VP_SET_P, (u8*)&result,1);
+                    if(pressmin>0 && pressmax > pressmin &&VP_SET_P>pressmin){
                         pressmin--;
                     }
                     write_dgus_vp(0x4130, (u8*)&pressmin, 1);
                 }else if(usersettingSP == 3){
-                    if(delaymin>1 && delaymax > delaymin){
+                    // u16 result;
+                    read_dgus_vp(VP_SET_H, (u8*)&result,1);
+                    if(delaymin>1 && delaymax > delaymin&&result>delaymin){
                         delaymin--;
                     }
                     write_dgus_vp(0x4160, (u8*)&delaymin, 1);
                 }
             }else if(usersettingEditSP == 1){
                 if(usersettingSP == 0){
-                    if(toptempmax > toptempmin){
+                    // u16 result;
+                    read_dgus_vp(VP_SET_TT, (u8*)&result,1);
+                    if(toptempmax > toptempmin&& result<toptempmax){
                         toptempmax--;
                     }
                     write_dgus_vp(0x4080, (u8*)&toptempmax, 1);
                 }else if(usersettingSP == 1){
-                    if(bottempmax > bottempmin){
+                    read_dgus_vp(VP_SET_TB, (u8*)&result,1);
+                    if(bottempmax > bottempmin && result<bottempmax){
                         bottempmax--;
                     }
                     write_dgus_vp(0x4110, (u8*)&bottempmax, 1);
                 }else if(usersettingSP == 2){
-                    if(pressmax > pressmin){
+                    read_dgus_vp(VP_SET_P, (u8*)&result,1);
+                    if(pressmax > pressmin && result < pressmax){
                         pressmax--;
                     }
                     write_dgus_vp(0x4140, (u8*)&pressmax, 1);
                 }else if(usersettingSP == 3){
-                    if(delaymax > delaymin){
+                    read_dgus_vp(VP_SET_H, (u8*)&result,1);
+                    if(delaymax > delaymin && result<delaymax){
                         delaymax--;
                     }
                     write_dgus_vp(0x4170, (u8*)&delaymax, 1);
@@ -597,44 +618,52 @@ void admin_User_Setting_Function(u16 i){
         }else {
             if(usersettingEditSP==0){
                 if(usersettingSP == 0){
-                    if(toptempmax > toptempmin){
+                    read_dgus_vp(VP_SET_TT, (u8*)&result,1);
+                    if(toptempmax > toptempmin && result>toptempmin){
                         toptempmin++;
                     }
                     write_dgus_vp(0x4070, (u8*)&toptempmin, 1);
                 }else if(usersettingSP == 1){
-                    if(bottempmax > bottempmin){
+                    read_dgus_vp(VP_SET_TB, (u8*)&result,1);
+                    if(bottempmax > bottempmin && result>bottempmin){
                         bottempmin++;
                     }
                     write_dgus_vp(0x4100, (u8*)&bottempmin, 1);
                 }else if(usersettingSP == 2){
-                    if(pressmax > pressmin){
+                    read_dgus_vp(VP_SET_P, (u8*)&result,1);
+                    if(pressmax > pressmin && result>pressmin){
                         pressmin++;
                     }
                     write_dgus_vp(0x4130, (u8*)&pressmin, 1);
                 }else if(usersettingSP == 3){
-                    if(delaymax > delaymin){
+                    read_dgus_vp(VP_SET_H, (u8*)&result,1);
+                    if(delaymax > delaymin && result>delaymin){
                         delaymin++;
                     }
                     write_dgus_vp(0x4160, (u8*)&delaymin, 1);
                 }
             }else if(usersettingEditSP == 1){
                 if(usersettingSP == 0){
-                    if(toptempmax < 220 && toptempmax > toptempmin){
+                    read_dgus_vp(VP_SET_TT, (u8*)&result,1);
+                    if(toptempmax < 220 && toptempmax > toptempmin && result<toptempmax){
                         toptempmax++;
                     }
                     write_dgus_vp(0x4080, (u8*)&toptempmax, 1);
                 }else if(usersettingSP == 1){
-                    if(bottempmax < 220 && bottempmax > bottempmin){
+                    read_dgus_vp(VP_SET_TB, (u8*)&result,1);
+                    if(bottempmax < 220 && bottempmax > bottempmin && result<bottempmax){
                         bottempmax++;
                     }
                     write_dgus_vp(0x4110, (u8*)&bottempmax, 1);
                 }else if(usersettingSP == 2){
-                    if(pressmax < 20 && pressmax > pressmin){
+                    read_dgus_vp(VP_SET_P, (u8*)&result,1);
+                    if(pressmax < 20 && pressmax > pressmin&& result<pressmax){
                         pressmax++;
                     }
                     write_dgus_vp(0x4140, (u8*)&pressmax, 1);
                 }else if(usersettingSP == 3){
-                    if(delaymax < 180 &&delaymax > delaymin){
+                    read_dgus_vp(VP_SET_H, (u8*)&result,1);
+                    if(delaymax < 180 &&delaymax > delaymin && result<delaymax){
                         delaymax++;
                     }
                     write_dgus_vp(0x4170, (u8*)&delaymax, 1);
@@ -840,9 +869,10 @@ void adminIoTestText(u16 state){
 void adminIoTestWork(void){
     u16 default_result = 10;
     u16 len = 0;
+    u16 on = 1;
+    u16 off = 0;
     if(IOtestSelect_plag == 0){
         IOtestSelect_plag = 1;
-        write_dgus_vp(VP_IO_TEST, (u8*)&IOtestSP, 1);
         switch (IOtestSP){
         case 0:{
             write_dgus_vp(0x4200, (u8*)&ON_TEXT, 2);
@@ -868,6 +898,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
+            write_dgus_vp(VP_IO_1, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 1:{
@@ -894,6 +930,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 2:{
@@ -920,6 +962,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 3:{
@@ -946,6 +994,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 4:{
@@ -972,6 +1026,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 5:{
@@ -998,6 +1058,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&ON_TEXT, 2);
             len = 4;
             write_dgus_vp(0x5308, (u8*)&len, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&on, 1);
         }break;
         
         default:
@@ -1029,6 +1095,13 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
+            write_dgus_vp(0x5308, (u8*)&len, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
     }
 }
 
@@ -1049,7 +1122,11 @@ void adminfactoryResetText(u16 state){
         }
     }else if(state == 3){
         if(factoryResetSP == 0){
-            page_number = 27;
+            if(language == 0){
+                page_number = 27;
+            }else{
+                page_number = 57;
+            }
             Page_Change_Handler(page_number);
         }else if(factoryResetSP == 1){
             write_dgus_vp(VP_SET_TT, (u8*)&topTempDefault, 1);
@@ -1058,8 +1135,12 @@ void adminfactoryResetText(u16 state){
             write_dgus_vp(VP_SET_CHTT, (u8*)&topCoolingDefault, 1);
             write_dgus_vp(VP_SET_CHTB, (u8*)&botCoolingDefault, 1);
             write_dgus_vp(VP_SET_H, (u8*)&delayDefault, 1);
-            Picture1213_Init();
-            page_number = 27;
+            data_set_Init();
+            if(language == 0){
+                page_number = 27;
+            }else{
+                page_number = 57;
+            }
             Page_Change_Handler(page_number);
         }
     }
@@ -1083,10 +1164,18 @@ void adminLogErrorText(u16 state){
         }
     }else if(state == 3){
         if(LogErrorSP  == 0){
-            page_number = 32;
+            if (language == 0){
+                page_number = 32;
+            }else{
+                page_number = 62;
+            }
             Page_Change_Handler(page_number);
         }else{
-            page_number = 33;
+            if (language == 0){
+                page_number = 33;
+            }else{
+                page_number = 63;
+            }
             Page_Change_Handler(page_number);
         }
     }
@@ -1104,9 +1193,11 @@ void adminLanguageText(u16 state){
         if(LanguageSP == 0){
             language = 0;
             admin_language_eng();
+            Page_Change_UI(35);
         }else if(LanguageSP == 1){
             language = 1;
             admin_language_kor();
+            Page_Change_UI(65);
         }
     }
     
@@ -1167,8 +1258,8 @@ void admin_language_eng(void){
     write_dgus_vp(0x5159, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x515A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4190, (u8*)&TOP_HEATER_ENG, 8);
-    len = 16;
+    write_dgus_vp(0x4190, (u8*)&TOP_HEATER_ENG, 5);
+    len = 10;
     write_dgus_vp(0x5198, (u8*)&len, 1);
     write_dgus_vp(0x5199, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x519A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1179,8 +1270,8 @@ void admin_language_eng(void){
     write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4210, (u8*)&BOT_HEATER_ENG, 8);
-    len = 16;
+    write_dgus_vp(0x4210, (u8*)&BOT_HEATER_ENG, 5);
+    len = 10;
     write_dgus_vp(0x5218, (u8*)&len, 1);
     write_dgus_vp(0x5219, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x521A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1191,8 +1282,8 @@ void admin_language_eng(void){
     write_dgus_vp(0x5229, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x522A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4230, (u8*)&TOP_FAN_ENG, 7);
-    len = 14;
+    write_dgus_vp(0x4230, (u8*)&TOP_FAN_ENG, 5);
+    len = 10;
     write_dgus_vp(0x5238, (u8*)&len, 1);
     write_dgus_vp(0x5239, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x523A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1203,8 +1294,8 @@ void admin_language_eng(void){
     write_dgus_vp(0x5249, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x524A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4250, (u8*)&BOT_FAN_ENG, 7);
-    len = 14;
+    write_dgus_vp(0x4250, (u8*)&BOT_FAN_ENG, 5);
+    len = 10;
     write_dgus_vp(0x5258, (u8*)&len, 1);
     write_dgus_vp(0x5259, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x525A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1263,14 +1354,14 @@ void admin_language_eng(void){
     write_dgus_vp(0x5359, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x535A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4370, (u8*)&ACTIVE_LOG_ENG, 10);
-    len = 20;
+    write_dgus_vp(0x4370, (u8*)&ACTIVE_LOG_ENG, 6);
+    len = 12;
     write_dgus_vp(0x5378, (u8*)&len, 1);
     write_dgus_vp(0x5379, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x537A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4380, (u8*)&ERROR_LOG_ENG, 9);
-    len = 18;
+    write_dgus_vp(0x4380, (u8*)&ERROR_LOG_ENG, 5);
+    len = 10;
     write_dgus_vp(0x5388, (u8*)&len, 1);
     write_dgus_vp(0x5389, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x538A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -1767,7 +1858,12 @@ void EngineermodWork(u16 state){
                 write_dgus_vp(0x4620, (u8*)&EngineerPw4 , 1);
                 write_dgus_vp(0x4630, (u8*)&EngineerPw5 , 1);
                 write_dgus_vp(0x4640, (u8*)&EngineerPw6 , 1);
-                page_number = 38;
+                if(language == 0){
+                    page_number = 38;
+                }else{
+                    page_number = 68;
+                }
+                
                 Page_Change_Handler(page_number);
                 SetTextColorYellow(0x5693);
                 write_dgus_vp(0x4700, (u8*)&sensor_result, 1); 

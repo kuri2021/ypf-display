@@ -57,15 +57,6 @@ static void ChangeImage(u16 vp_addr, u16 index);
 #define VP_SET_NTC_BASE_T 0x810C  // 상 프레임 기준 온도 설정
 #define VP_SET_NTC_BASE_B 0x8110  // 하 프레임 기준 온도 설정
 
-#define VP_SET_LIMT_TOP_MIN          0x4100  // 상판 온도 최저값
-#define VP_SET_LIMT_TOP_MAX          0x4110  // 상판 온도 최대값
-#define VP_SET_LIMT_BOT_MIN          0x4130  // 하판 온도 최저값
-#define VP_SET_LIMT_BOT_MAX          0x4140  // 하판 온도 최대값
-#define VP_SET_LIMT_PRESS_MIN          0x4160  // 압력 최저값
-#define VP_SET_LIMT_PRESS_MAX          0x4170  // 압력 최대값
-#define VP_SET_LIMT_DELAY_MIN          0x4190  // 지연시간 최저값
-#define VP_SET_LIMT_DELAY_MAX          0x4200  // 지연시간 최대값
-
 
 #define VP_ELAPSED_TIME 0x8114 // 유지 경과 시간
 
@@ -78,12 +69,6 @@ static void ChangeImage(u16 vp_addr, u16 index);
 #define VP_USERSETTING_PRES_MIN 0x4130 // 유저세팅 8개
 #define VP_USERSETTING_DELAY_MAX 0x4170 // 유저세팅 8개
 #define VP_USERSETTING_DELAY_MIN 0x4160 // 유저세팅 8개
-#define VP_IO_1 0x8300 // IO 6개
-#define VP_IO_2 0x8302 // IO 6개
-#define VP_IO_3 0x8304 // IO 6개
-#define VP_IO_4 0x8306 // IO 6개
-#define VP_IO_5 0x8308 // IO 6개
-#define VP_IO_6 0x830A // IO 6개
 #define VP_ENGINEERMODE_SENSER 0X4700 // 엔지니어모드 센서 보정
 #define VP_ENGINEERMODE_PRES 0X4720 // 엔지니어모드 최대 압력
 
@@ -106,7 +91,7 @@ u8 xdata page_set[4] = {0};
 u8 xdata txt_off[6] = {0};
 
 u16 Page[] = {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68
 };
 
 static u16 start_flag = 0;
@@ -162,18 +147,18 @@ static u8 pressureS[2] = {23, 56};
 static u8 workPageN = 24;
 static u8 workPageH = 25;
 static u8 workPageC = 26;
-static u8 adminList = 27;
-static u8 adminUserSetting = 28;
-static u8 adminIOTest = 29;
-static u8 adminFactoryResetNotice = 30;
-static u8 adminLogError = 31;
-static u8 adminActiveLog = 32;
-static u8 adminErrorLog = 33;
-static u8 adminMaintenance = 34;
-static u8 adminLanguage = 35;
-static u8 adminCompany = 36;
-static u8 adminEngineermod = 37;
-static u8 adminEngineermodS = 38;
+static u8 adminList[2] = {27,57};
+static u8 adminUserSetting[2] = {28,58};
+static u8 adminIOTest[2] = {29,59};
+static u8 adminFactoryResetNotice[2] = {30,60};
+static u8 adminLogError[2] = {31,61};
+static u8 adminActiveLog[2] = {32,62};
+static u8 adminErrorLog[2] = {33,63};
+static u8 adminMaintenance[2] = {34,64};
+static u8 adminLanguage[2] = {35,65};
+static u8 adminCompany[2] = {36,66};
+static u8 adminEngineermod[2] = {37,67};
+static u8 adminEngineermodS[2] = {38,68};
 
 static u16 inputpw = 0;
 
@@ -604,10 +589,16 @@ void admin_page_change(){
     switch(adminSP){
         case 0:{
             SetTextColorYellow(0x5063);
+            SetTextColorWhite(0x5073);
+            SetTextColorWhite(0x5083);
             SetTextColorWhite(0x5093);
+            SetTextColorWhite(0x5103);
+            SetTextColorWhite(0x5113);
             SetTextColorWhite(0x5123);
+            SetTextColorWhite(0x5133);
+            SetTextColorWhite(0x5143);
             SetTextColorWhite(0x5153);
-            Page_Change_UI(adminUserSetting);
+            Page_Change_UI(adminUserSetting[language]);
             write_dgus_vp(0x4070, (u8*)&toptempmin, 1); 
             write_dgus_vp(0x4080, (u8*)&toptempmax, 1); 
             write_dgus_vp(0x4100, (u8*)&bottempmin, 1); 
@@ -624,17 +615,17 @@ void admin_page_change(){
             SetTextColorWhite(0x5253);
             SetTextColorWhite(0x5273);
             SetTextColorWhite(0x5293);
-            Page_Change_UI(adminIOTest);
+            Page_Change_UI(adminIOTest[language]);
         }break;
         case 2:{
             SetTextColorYellow(0x5343);
             SetTextColorWhite(0x5353);
-            Page_Change_UI(adminFactoryResetNotice);
+            Page_Change_UI(adminFactoryResetNotice[language]);
         }break;
         case 3:{
             SetTextColorYellow(0x5373);
             SetTextColorWhite(0x5383);
-            Page_Change_UI(adminLogError);
+            Page_Change_UI(adminLogError[language]);
         }break;
         case 4:{
             write_dgus_vp(0x4430, (u8*)&temp_H ,1);
@@ -648,16 +639,16 @@ void admin_page_change(){
             write_dgus_vp(0x4510, (u8*)&fan_H ,1);
             write_dgus_vp(0x4520, (u8*)&fan_M ,1);
             write_dgus_vp(0x4530, (u8*)&fan_S ,1);
-            Page_Change_UI(adminMaintenance);
+            Page_Change_UI(adminMaintenance[language]);
         }break;
         case 5:{
             SetTextColorYellow(0x5553);
             SetTextColorWhite(0x5563);
             SetTextColorWhite(0x5573);
-            Page_Change_UI(adminLanguage);
+            Page_Change_UI(adminLanguage[language]);
         }break;
         case 6:{
-            Page_Change_UI(adminCompany);
+            Page_Change_UI(adminCompany[language]);
         }break;
         case 7:{
             SetTextColorYellow(0x5593);
@@ -672,7 +663,7 @@ void admin_page_change(){
             write_dgus_vp(0x4620, (u8*)&EngineerPw4, 1);
             write_dgus_vp(0x4630, (u8*)&EngineerPw5, 1);
             write_dgus_vp(0x4640, (u8*)&EngineerPw6, 1);
-            Page_Change_UI(adminEngineermod);
+            Page_Change_UI(adminEngineermod[language]);
         }break;
 
         case 8:{
@@ -1436,21 +1427,21 @@ void encoder_page_change(u16 state)
                         page_number--;
                         Page_Change_UI(page_number);
                     }
-                }else if(page_number == adminList){
+                }else if(page_number == adminList[language]){
                     admin_List(1);
-                }if(page_number == adminUserSetting){
+                }if(page_number == adminUserSetting[language]){
                    admin_User_Setting_Function(state);
-                }else if(page_number == adminIOTest){
+                }else if(page_number == adminIOTest[language]){
                     adminIoTestText(state);
-                }else if(page_number == adminFactoryResetNotice){
+                }else if(page_number == adminFactoryResetNotice[language]){
                     adminfactoryResetText(state);
-                }else if(page_number == adminLogError){
+                }else if(page_number == adminLogError[language]){
                     adminLogErrorText(state);
-                }else if(page_number == adminLanguage){
+                }else if(page_number == adminLanguage[language]){
                     adminLanguageText(state);
-                }else if(page_number == adminEngineermod){
+                }else if(page_number == adminEngineermod[language]){
                     EngineermodWork(state);
-                }else if(page_number == adminEngineermodS){
+                }else if(page_number == adminEngineermodS[language]){
                     EngineermodSWork(state);
                 }
             }
@@ -1919,23 +1910,23 @@ void encoder_page_change(u16 state)
                         page_number++;
                         Page_Change_UI(page_number);
                     }
-                } else if(page_number == adminList){
+                } else if(page_number == adminList[language]){
                     admin_List(2);
-                }else if(page_number == adminUserSetting){
+                }else if(page_number == adminUserSetting[language]){
                     admin_User_Setting_Function(state);
-                }else if(page_number == adminIOTest){
+                }else if(page_number == adminIOTest[language]){
                     adminIoTestText(state);
-                }else if(page_number == adminFactoryResetNotice){
+                }else if(page_number == adminFactoryResetNotice[language]){
                     adminfactoryResetText(state);
-                }else if(page_number == adminLogError){
+                }else if(page_number == adminLogError[language]){
                     adminLogErrorText(state);
-                }else if(page_number == adminMaintenance){
+                }else if(page_number == adminMaintenance[language]){
                     //저장된 값만 보여줌
-                }else if(page_number == adminLanguage){
+                }else if(page_number == adminLanguage[language]){
                     adminLanguageText(state);
-                }else if(page_number == adminEngineermod){
+                }else if(page_number == adminEngineermod[language]){
                     EngineermodWork(state);
-                }else if(page_number == adminEngineermodS){
+                }else if(page_number == adminEngineermodS[language]){
                     EngineermodSWork(state);
                 }
             }
@@ -2116,7 +2107,7 @@ void encoder_page_change(u16 state)
                             write_dgus_vp(0x2130, (u8*)&second, 1);
                         } 
                 }else if(page_number == main7[language]){
-                    page_number = adminList;
+                    page_number = adminList[language];
                     Page_Change_Handler(page_number);
                     admin_List_text_change();
                 }else if(page_number == topHeating[language]){
@@ -2166,30 +2157,30 @@ void encoder_page_change(u16 state)
                 }else if(page_number == quickSetting){
                     settingflag = 1;
                     QuickSettingTextSet(quickSettingS, 0);
-                }else if(page_number == adminList){
+                }else if(page_number == adminList[language]){
                     admin_page_change();
-                }else if(page_number == adminUserSetting){
+                }else if(page_number == adminUserSetting[language]){
                     admin_User_Setting_Function(state);
-                }else if(page_number == adminIOTest){
+                }else if(page_number == adminIOTest[language]){
                     adminIoTestWork();
-                }else if(page_number == adminFactoryResetNotice){
+                }else if(page_number == adminFactoryResetNotice[language]){
                     adminfactoryResetText(state);
-                }else if(page_number == adminLogError){
+                }else if(page_number == adminLogError[language]){
                     adminLogErrorText(state);
-                }else if(page_number == adminMaintenance){
-                    Page_Change_UI(adminList);
-                }else if(page_number == adminLanguage){
+                }else if(page_number == adminMaintenance[language]){
+                    Page_Change_UI(adminList[language]);
+                }else if(page_number == adminLanguage[language]){
                     adminLanguageText(state);
-                }else if(page_number == adminCompany){
-                    Page_Change_UI(adminList);
-                }else if(page_number == adminEngineermod){
+                }else if(page_number == adminCompany[language]){
+                    Page_Change_UI(adminList[language]);
+                }else if(page_number == adminEngineermod[language]){
                     EngineermodWork(state);
-                }else if(page_number == adminEngineermodS){
+                }else if(page_number == adminEngineermodS[language]){
                     EngineermodSWork(state);
-                }else if(page_number == adminActiveLog){
-                    Page_Change_UI(adminLogError);
-                }else if(page_number == adminErrorLog){
-                    Page_Change_UI(adminLogError);
+                }else if(page_number == adminActiveLog[language]){
+                    Page_Change_UI(adminLogError[language]);
+                }else if(page_number == adminErrorLog[language]){
+                    Page_Change_UI(adminLogError[language]);
                 }
             }
         } break;
@@ -2200,47 +2191,106 @@ void encoder_page_change(u16 state)
                 usersettingSP=0;
                 usersettingSelect_plag=0;
                 usersettingEditSP=0;
-                Page_Change_UI(adminList);
+                Page_Change_UI(adminList[language]);
+            }break;
+
+            case 58 : {
+                usersettingSP=0;
+                usersettingSelect_plag=0;
+                usersettingEditSP=0;
+                Page_Change_UI(adminList[language]);
             }break;
             case 29:{
                 IOtestSP = 0;
                 IOtestSelect_plag = 0;
-                Page_Change_UI(adminList);
+                Page_Change_UI(adminList[language]);
             }break;
+
+            case 59:{
+                IOtestSP = 0;
+                IOtestSelect_plag = 0;
+                Page_Change_UI(adminList[language]);
+            }break;
+
             case 30:{
                 factoryReset_plag = 0;
                 factoryResetSP = 0;
-                Page_Change_UI(adminList);
-            }break;;
+                Page_Change_UI(adminList[language]);
+            }break;
+
+             case 60:{
+                factoryReset_plag = 0;
+                factoryResetSP = 0;
+                Page_Change_UI(adminList[language]);
+            }break;
 
             case 31:{
                 LogErrorSP = 0;
-                Page_Change_UI(adminList);
+                Page_Change_UI(adminList[language]);
             }break;
+
+            case 61:{
+                LogErrorSP = 0;
+                Page_Change_UI(adminList[language]);
+            }break;
+            
             case 34:{
-                Page_Change_UI(adminList);
+                Page_Change_UI(adminList[language]);
             }break;
+
+            case 64:{
+                Page_Change_UI(adminList[language]);
+            }break;
+
             case 35:{
                 LanguageSP = 0;
-                Page_Change_UI(adminList);
+                Page_Change_UI(adminList[language]);
             }break;
+
+            case 65:{
+                LanguageSP = 0;
+                Page_Change_UI(adminList[language]);
+            }break;
+
             case 36:{
-                Page_Change_UI(adminList);
+                Page_Change_UI(adminList[language]);
             }break;
+
+             case 66:{
+                LanguageSP = 0;
+                Page_Change_UI(adminList[language]);
+            }break;
+
+
             case 37:{
                 EngineerSP = 0;
-                Page_Change_UI(adminList);
+                Page_Change_UI(adminList[language]);
+            }break;
+            case 67:{
+                EngineerSP = 0;
+                Page_Change_UI(adminList[language]);
             }break;
             case 38:{
                 EngineermodS_flag = 0;
                 EngineermodS_Select_flag =0;
-                Page_Change_UI(adminEngineermod);
+                Page_Change_UI(adminEngineermod[language]);
+            }break;
+            case 68:{
+                EngineermodS_flag = 0;
+                EngineermodS_Select_flag =0;
+                Page_Change_UI(adminEngineermod[language]);
             }break;
             case 32:{
-                Page_Change_UI(adminLogError);
+                Page_Change_UI(adminLogError[language]);
+            }break;
+            case 62:{
+                Page_Change_UI(adminLogError[language]);
             }break;
             case 33:{
-                Page_Change_UI(adminLogError);
+                Page_Change_UI(adminLogError[language]);
+            }break;
+             case 63:{
+                Page_Change_UI(adminLogError[language]);
             }break;
             case 27:{
                 // Page_Change_UI(main7[language]);

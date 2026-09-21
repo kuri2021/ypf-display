@@ -895,12 +895,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-            // write_dgus_vp(VP_IO_1, (u8*)&on, 1);
-            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_1, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 1:{
@@ -927,12 +927,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_2, (u8*)&on, 1);
-            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 2:{
@@ -959,12 +959,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_3, (u8*)&on, 1);
-            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 3:{
@@ -991,12 +991,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_4, (u8*)&on, 1);
-            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 4:{
@@ -1023,12 +1023,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_5, (u8*)&on, 1);
-            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 5:{
@@ -1055,12 +1055,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&ON_TEXT, 2);
             len = 4;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-            // write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_6, (u8*)&on, 1);
+            write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&on, 1);
         }break;
         
         default:{
@@ -1088,12 +1088,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }
             break;
         }
@@ -1122,12 +1122,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
     }
 }
 

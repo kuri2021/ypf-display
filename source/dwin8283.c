@@ -28,7 +28,7 @@ void Pro8283Init(void)
     // UartInit(DWIN_UART, 115200); // use 8283 protocol on UART2
     // UartInit(UART4,     115200); // use 8283 protocol on UART4
     UartInit(DWIN_UART, 38400); // use 8283 protocol on UART2
-    UartInit(UART4,     38400); // use 8283 protocol on UART4
+   UartInit(UART4,     38400); // use 8283 protocol on UART4
     // CanBusInit(CanReg);
 
     DwinFrame[0].pQuene     = Uart_Struct[DWIN_UART].rx_buf;

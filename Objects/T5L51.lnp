@@ -10,6 +10,7 @@
 ".\Objects\color.obj",
 ".\Objects\language.obj",
 ".\Objects\dwin8283.obj",
+".\Objects\dwin8283.obj",
 ".\Objects\canbus.obj",
 ".\Objects\norflash.obj",
 ".\Objects\rtc.obj",

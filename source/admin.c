@@ -12,15 +12,12 @@
 #define VP_SET_CHTB       0x810A  // 하 냉각온도 설정
 #define VP_SET_NTC_BASE_T 0x810C  // 상 프레임 기준 온도 설정
 #define VP_SET_NTC_BASE_B 0x8110  // 하 프레임 기준 온도 설정
-
-#define VP_IO_TEST 0x8210  // io테스트 주소
-
 #define VP_IO_1 0x8300 // IO 6개
-#define VP_IO_2 0x8302 // IO 6개
-#define VP_IO_3 0x8304 // IO 6개
-#define VP_IO_4 0x8306 // IO 6개
-#define VP_IO_5 0x8308 // IO 6개
-#define VP_IO_6 0x830A // IO 6개
+#define VP_IO_2 0x8310 // IO 6개
+#define VP_IO_3 0x8320 // IO 6개
+#define VP_IO_4 0x8330 // IO 6개
+#define VP_IO_5 0x8340 // IO 6개
+#define VP_IO_6 0x8350 // IO 6개
 
 const u16 SP_ENG_FONTID = 0x000F;
 const u16 SP_ENG_FONTSIZE = 0x1A19;
@@ -898,12 +895,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-            write_dgus_vp(VP_IO_1, (u8*)&on, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_1, (u8*)&on, 1);
+            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 1:{
@@ -930,12 +927,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&on, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_2, (u8*)&on, 1);
+            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 2:{
@@ -962,12 +959,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&on, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_3, (u8*)&on, 1);
+            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 3:{
@@ -994,12 +991,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&on, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_4, (u8*)&on, 1);
+            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 4:{
@@ -1026,12 +1023,12 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&on, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_5, (u8*)&on, 1);
+            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 5:{
@@ -1058,20 +1055,16 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&ON_TEXT, 2);
             len = 4;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&on, 1);
+            // write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_6, (u8*)&on, 1);
         }break;
         
-        default:
-            break;
-        }
-    }else{
-        IOtestSelect_plag = 0;
-        write_dgus_vp(VP_IO_TEST, (u8*)&default_result, 1);
+        default:{
+            IOtestSelect_plag = 0;
         write_dgus_vp(0x4200, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5208, (u8*)&len, 1);
@@ -1095,13 +1088,46 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
+            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+        }
+            break;
+        }
+    }else{
+        IOtestSelect_plag = 0;
+        write_dgus_vp(0x4200, (u8*)&OFF_TEXT, 3);
+            len = 6;
+            write_dgus_vp(0x5208, (u8*)&len, 1);
+
+            write_dgus_vp(0x4220, (u8*)&OFF_TEXT, 3);
+            len = 6;
+            write_dgus_vp(0x5228, (u8*)&len, 1);
+
+            write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
+            len = 6;
+            write_dgus_vp(0x5248, (u8*)&len, 1);
+
+            write_dgus_vp(0x4260, (u8*)&OFF_TEXT, 3);
+            len = 6;
+            write_dgus_vp(0x5268, (u8*)&len, 1);
+
+            write_dgus_vp(0x4280, (u8*)&OFF_TEXT, 3);
+            len = 6;
+            write_dgus_vp(0x5288, (u8*)&len, 1);
+
+            write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
+            len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            //  write_dgus_vp(VP_IO_1, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
     }
 }
 

@@ -12,12 +12,12 @@
 #define VP_SET_CHTB       0x810A  // 하 냉각온도 설정
 #define VP_SET_NTC_BASE_T 0x810C  // 상 프레임 기준 온도 설정
 #define VP_SET_NTC_BASE_B 0x8110  // 하 프레임 기준 온도 설정
-#define VP_IO_1 0x8300 // IO 6개
-#define VP_IO_2 0x8310 // IO 6개
-#define VP_IO_3 0x8320 // IO 6개
-#define VP_IO_4 0x8330 // IO 6개
-#define VP_IO_5 0x8340 // IO 6개
-#define VP_IO_6 0x8350 // IO 6개
+#define VP_IO_1 0x8020 // IO 6개
+#define VP_IO_2 0x8022 // IO 6개
+#define VP_IO_3 0x8024 // IO 6개
+#define VP_IO_4 0x8026 // IO 6개
+#define VP_IO_5 0x8028 // IO 6개
+#define VP_IO_6 0x802A // IO 6개
 
 const u16 SP_ENG_FONTID = 0x000F;
 const u16 SP_ENG_FONTSIZE = 0x1A19;

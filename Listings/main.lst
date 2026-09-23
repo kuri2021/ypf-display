@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MAIN                                                              09/23/2026 10:07:23 PAGE 1   
+C51 COMPILER V9.56.0.0   MAIN                                                              09/23/2026 13:28:10 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
@@ -35,58 +35,65 @@ line level    source
   25          static u16 system_ready = 0;
   26          
   27          #define VP_DATA_PUSH          0x8200  // 유지시간 설정
-  28          
+  28          #define VP_LANGUAGE_FLAG 0x8146 // 언어변경
   29          
   30          
-  31          void main()
-  32          {
-  33   1          u16 state;
-  34   1          u8 did_first_page = 0;  
-  35   1          u16 test1 = 10;
-  36   1          u16 test2 = 3567;
-  37   1          T0_Init();
-  38   1          T1_Init();
-  39   1          init_rtc();
-  40   1          SetPinIn(2, 0);
-  41   1          StartTimer(0, 60000);
-  42   1          StartTimer(1, 500);                                                     
-  43   1          Pro8283Init();
-  44   1          DEBUGINIT();
-  45   1          EA = 1;
-  46   1          Page_Change_Handler(page_number); // �ϵ���ʾ����
-  47   1          data_set_Init();               // �ϵ�12ҳ��13ҳͼ����ʾ
-  48   1          LOG("start\r\n");
-  49   1          StartTimer(TMR_7, CHECK_TIME);
-  50   1          write_dgus_vp(VP_DATA_PUSH, (u8*)&test1, 1);
-  51   1          admin_language_eng();
-  52   1          
-  53   1          while (1)
-  54   1          {
-C51 COMPILER V9.56.0.0   MAIN                                                              09/23/2026 10:07:23 PAGE 2   
+  31          
+  32          void main()
+  33          {
+  34   1          u16 state;
+  35   1          u8 did_first_page = 0;  
+  36   1          u16 test1 = 10;
+  37   1          u16 test2 = 3567;
+  38   1          T0_Init();
+  39   1          T1_Init();
+  40   1          init_rtc();
+  41   1          SetPinIn(2, 0);
+  42   1          StartTimer(0, 60000);
+  43   1          StartTimer(1, 500);                                                     
+  44   1          Pro8283Init();
+  45   1          DEBUGINIT();
+  46   1          EA = 1;
+  47   1          Page_Change_Handler(page_number); // �ϵ���ʾ����
+  48   1          data_set_Init();               // �ϵ�12ҳ��13ҳͼ����ʾ
+  49   1          LOG("start\r\n");
+  50   1          StartTimer(TMR_7, CHECK_TIME);
+  51   1          write_dgus_vp(VP_DATA_PUSH, (u8*)&test1, 1);
+  52   1          read_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&language, 1);
+  53   1          if(language == 0){
+  54   2              admin_language_eng();
+C51 COMPILER V9.56.0.0   MAIN                                                              09/23/2026 13:28:10 PAGE 2   
 
-  55   2              Pro8283Deal();
-  56   2            if (!system_ready && GetTimeOutFlag(TMR_7)) {
-  57   3              system_ready = 1;
-  58   3               page_number = 1;
-  59   3              Page_Change_Handler(page_number); // �ϵ���ʾ����
-  60   3          }
-  61   2           if (!system_ready) continue;  // 준비될 때까지 아래 실행 안함
-  62   2              SecCnt_TickTask();
-  63   2              write_dgus_vp_check();
-  64   2              state = Encoder_recevie();
-  65   2              encoder_page_change(state);
-  66   2      //            if (g_need_upgrade)
-  67   2      //         {
-  68   2      //             g_need_upgrade = 0;
-  69   2      //    //         EnterCCodeUpgrade();
-  70   2      //         }
-  71   2          }
-  72   1      
-  73   1      }
+  55   2          }else{
+  56   2              admin_language_kor();
+  57   2          }
+  58   1          
+  59   1          
+  60   1          while (1)
+  61   1          {
+  62   2              Pro8283Deal();
+  63   2            if (!system_ready && GetTimeOutFlag(TMR_7)) {
+  64   3              system_ready = 1;
+  65   3               page_number = 1;
+  66   3              Page_Change_Handler(page_number); // �ϵ���ʾ����
+  67   3          }
+  68   2           if (!system_ready) continue;  // 준비될 때까지 아래 실행 안함
+  69   2              SecCnt_TickTask();
+  70   2              write_dgus_vp_check();
+  71   2              state = Encoder_recevie();
+  72   2              encoder_page_change(state);
+  73   2      //            if (g_need_upgrade)
+  74   2      //         {
+  75   2      //             g_need_upgrade = 0;
+  76   2      //    //         EnterCCodeUpgrade();
+  77   2      //         }
+  78   2          }
+  79   1      
+  80   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    171    ----
+   CODE SIZE        =    207    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      2       7
    PDATA SIZE       =   ----    ----

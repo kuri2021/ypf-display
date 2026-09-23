@@ -2200,7 +2200,7 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(adminList[language]);
                 }else if(page_number == adminLanguage[language]){
                     adminLanguageText(state);
-                    write_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&language,1)
+                    write_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&language,1);
                 }else if(page_number == adminCompany[language]){
                     Page_Change_UI(adminList[language]);
                 }else if(page_number == adminEngineermod[language]){

@@ -12,12 +12,29 @@
 #define VP_SET_CHTB       0x810A  // 하 냉각온도 설정
 #define VP_SET_NTC_BASE_T 0x810C  // 상 프레임 기준 온도 설정
 #define VP_SET_NTC_BASE_B 0x8110  // 하 프레임 기준 온도 설정
-#define VP_IO_1 0x8020 // IO 6개
-#define VP_IO_2 0x8022 // IO 6개
-#define VP_IO_3 0x8024 // IO 6개
-#define VP_IO_4 0x8026 // IO 6개
-#define VP_IO_5 0x8028 // IO 6개
-#define VP_IO_6 0x802A // IO 6개
+
+#define VP_USERSETTING_TOP_TEMP_MAX 0x8130 // 유저세팅 8개
+#define VP_USERSETTING_TOP_TEMP_MIN 0x8132 // 유저세팅 8개
+#define VP_USERSETTING_BOT_TEMP_MAX 0x8134 // 유저세팅 8개
+#define VP_USERSETTING_BOT_TEMP_MIN 0x8136 // 유저세팅 8개
+#define VP_USERSETTING_PRES_MAX 0x8138 // 유저세팅 8개
+#define VP_USERSETTING_PRES_MIN 0x813A // 유저세팅 8개
+#define VP_USERSETTING_DELAY_MAX 0x813C // 유저세팅 8개
+#define VP_USERSETTING_DELAY_MIN 0x8140 // 유저세팅 8개
+#define VP_ENGINEERMODE_SENSER 0x8142 // 엔지니어모드 센서 보정
+#define VP_ENGINEERMODE_PRES 0x8144 // 엔지니어모드 최대 압력
+
+
+#define ACT_BIT(n)       (1u << (n))
+
+#define ACT_TOP           (1 << 0)   // Bit 0
+#define ACT_BOTTOM        (1 << 1)   // Bit 1
+#define ACT_TOP_FAN       (1 << 2)   // Bit 2
+#define ACT_BOTTOM_FAN    (1 << 3)   // Bit 3
+#define ACT_PUMP          (1 << 4)   // Bit 4
+#define ACT_SOLENOID      (1 << 5)   // Bit 5
+
+u16 act_flag = 0;
 
 const u16 SP_ENG_FONTID = 0x000F;
 const u16 SP_ENG_FONTSIZE = 0x1A19;
@@ -65,9 +82,9 @@ u16 fan_H = 0;
 u16 fan_M = 0;
 u16 fan_S = 0;
 
-u8 usersettingSP = 0;
-u8 usersettingSelect_plag = 0;
-u8 usersettingEditSP = 0;
+u8 usersettingSP = 0;// 유저 리스트 선택 포인트 4개
+u8 usersettingSelect_plag = 0; //유저 리스트 선택 플래그
+u8 usersettingEditSP = 0; // 유저세팅 선택 포인트 min max
 
 u8 factoryReset_plag = 0;
 u8 factoryResetSP = 0;
@@ -545,30 +562,26 @@ void admin_User_Setting_Function(u16 i){
                 usersettingSP--;
             }
         }else{
-            if(usersettingEditSP==0){
+            if(usersettingEditSP==0){ 
                 if(usersettingSP == 0){
-                    // u16 result;
                     read_dgus_vp(VP_SET_TT, (u8*)&result,1);
                     if(toptempmin>1 && toptempmax > toptempmin && result>toptempmin){
                         toptempmin--;
                     }
                     write_dgus_vp(0x4070, (u8*)&toptempmin, 1);
                 }else if(usersettingSP == 1){
-                    // u16 result;
                     read_dgus_vp(VP_SET_TB, (u8*)&result,1);
                     if(bottempmin>1 && bottempmax > bottempmin && VP_SET_TB>bottempmin){
                         bottempmin--;
                     }
                     write_dgus_vp(0x4100, (u8*)&bottempmin, 1);
                 }else if(usersettingSP == 2){
-                    // u16 result;
                     read_dgus_vp(VP_SET_P, (u8*)&result,1);
                     if(pressmin>0 && pressmax > pressmin &&VP_SET_P>pressmin){
                         pressmin--;
                     }
                     write_dgus_vp(0x4130, (u8*)&pressmin, 1);
                 }else if(usersettingSP == 3){
-                    // u16 result;
                     read_dgus_vp(VP_SET_H, (u8*)&result,1);
                     if(delaymin>1 && delaymax > delaymin&&result>delaymin){
                         delaymin--;
@@ -577,7 +590,6 @@ void admin_User_Setting_Function(u16 i){
                 }
             }else if(usersettingEditSP == 1){
                 if(usersettingSP == 0){
-                    // u16 result;
                     read_dgus_vp(VP_SET_TT, (u8*)&result,1);
                     if(toptempmax > toptempmin&& result<toptempmax){
                         toptempmax--;
@@ -674,9 +686,27 @@ void admin_User_Setting_Function(u16 i){
         }else {
             if(usersettingEditSP == 0){
                 usersettingEditSP = 1;
+                if(usersettingSP == 0){
+                    write_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&toptempmin, 1);
+                }else if(usersettingSP == 1){
+                    write_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN, (u8*)&bottempmin, 1);
+                }else if(usersettingSP == 2){
+                    write_dgus_vp(VP_USERSETTING_PRES_MIN, (u8*)&pressmin, 1);
+                }else if(usersettingSP == 3){
+                    write_dgus_vp(VP_USERSETTING_DELAY_MIN, (u8*)&delaymin, 1);
+                }
             }else if(usersettingEditSP == 1){
                 usersettingSelect_plag = 0;
                 usersettingEditSP = 0;
+                if(usersettingSP == 0){
+                    write_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&toptempmax, 1);
+                }else if(usersettingSP == 1){
+                    write_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX, (u8*)&bottempmax, 1);
+                }else if(usersettingSP == 2){
+                    write_dgus_vp(VP_USERSETTING_PRES_MAX, (u8*)&pressmax, 1);
+                }else if(usersettingSP == 3){
+                    write_dgus_vp(VP_USERSETTING_DELAY_MAX, (u8*)&delaymax, 1);
+                }
             }
         }
         admin_User_Setting_text_color();

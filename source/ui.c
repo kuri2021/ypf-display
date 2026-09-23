@@ -2168,21 +2168,21 @@ void encoder_page_change(u16 state)
                         }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
                             write_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&toptempmax, 1);
                         }
-                    }else if(usersettingSP == 0){
+                    }else if(usersettingSP == 1){
                         if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
                             write_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN, (u8*)&bottempmin, 1);
                         }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
                             write_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX, (u8*)&bottempmax, 1);
                         }
                         
-                    }else if(usersettingSP == 0){
+                    }else if(usersettingSP == 2){
                         if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
                             write_dgus_vp(VP_USERSETTING_PRES_MIN, (u8*)&pressmin, 1);
                         }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
                             write_dgus_vp(VP_USERSETTING_PRES_MAX, (u8*)&pressmax, 1);
                         }
                         
-                    }else if(usersettingSP == 0){
+                    }else if(usersettingSP == 3){
                         if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
                             write_dgus_vp(VP_USERSETTING_DELAY_MIN, (u8*)&delaymin, 1);
                         }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){

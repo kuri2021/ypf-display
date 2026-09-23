@@ -24,6 +24,7 @@
 #define VP_ENGINEERMODE_SENSER 0x8142 // 엔지니어모드 센서 보정
 #define VP_ENGINEERMODE_PRES 0x8144 // 엔지니어모드 최대 압력
 
+#define VP_IO_TEST     0x8300
 
 #define ACT_BIT(n)       (1u << (n))
 
@@ -925,12 +926,14 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-            write_dgus_vp(VP_IO_1, (u8*)&on, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            act_flag = ACT_TOP;
+            write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
+            // write_dgus_vp(VP_IO_1, (u8*)&on, 1);
+            // write_dgus_vp(VP_IO_2, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_3, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_4, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_5, (u8*)&off, 1);
+            // write_dgus_vp(VP_IO_6, (u8*)&off, 1);
         }break;
 
         case 1:{
@@ -957,12 +960,8 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&on, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            act_flag = ACT_BOTTOM;
+            write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
         }break;
 
         case 2:{
@@ -989,12 +988,8 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&on, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            act_flag = ACT_TOP_FAN;
+            write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
         }break;
 
         case 3:{
@@ -1021,12 +1016,8 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&on, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            act_flag = ACT_BOTTOM_FAN;
+            write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
         }break;
 
         case 4:{
@@ -1053,12 +1044,8 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&on, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            act_flag = ACT_PUMP;
+            write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
         }break;
 
         case 5:{
@@ -1084,13 +1071,8 @@ void adminIoTestWork(void){
 
             write_dgus_vp(0x4300, (u8*)&ON_TEXT, 2);
             len = 4;
-            write_dgus_vp(0x5308, (u8*)&len, 1);
-            write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&on, 1);
+            act_flag = ACT_SOLENOID;
+            write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
         }break;
         
         default:{
@@ -1118,12 +1100,8 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            act_flag = 0;
+            write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
         }
             break;
         }
@@ -1152,12 +1130,8 @@ void adminIoTestWork(void){
             write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
             len = 6;
             write_dgus_vp(0x5308, (u8*)&len, 1);
-             write_dgus_vp(VP_IO_1, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_2, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_3, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_4, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_5, (u8*)&off, 1);
-            write_dgus_vp(VP_IO_6, (u8*)&off, 1);
+            act_flag = 0;
+            write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
     }
 }
 

@@ -23,6 +23,7 @@
 #define VP_USERSETTING_DELAY_MIN 0x8140 // 유저세팅 8개
 #define VP_ENGINEERMODE_SENSER 0x8142 // 엔지니어모드 센서 보정
 #define VP_ENGINEERMODE_PRES 0x8144 // 엔지니어모드 최대 압력
+#define VP_LANGUAGE_FLAG 0x8146 // 언어변경
 
 #define VP_IO_TEST     0x8300
 
@@ -493,7 +494,7 @@ void admin_User_Setting_text_color(){
                 SetTextColorYellow(0x5083);
             }
         }else{
-            write_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&toptempmax, 1);
+            
             SetTextColorWhite(0x5073);
             SetTextColorWhite(0x5083);
         }
@@ -511,7 +512,7 @@ void admin_User_Setting_text_color(){
                 SetTextColorYellow(0x5113);
             }
         }else{
-            write_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX, (u8*)&bottempmax, 1);
+            
             SetTextColorWhite(0x5103);
             SetTextColorWhite(0x5113);
         }
@@ -529,7 +530,7 @@ void admin_User_Setting_text_color(){
                 SetTextColorYellow(0x5143);
             }
         }else{
-            write_dgus_vp(VP_USERSETTING_PRES_MAX, (u8*)&pressmax, 1);
+            
             SetTextColorWhite(0x5133);
             SetTextColorWhite(0x5143);
         }
@@ -547,7 +548,7 @@ void admin_User_Setting_text_color(){
                 SetTextColorYellow(0x5173);
             }
         }else{
-            write_dgus_vp(VP_USERSETTING_DELAY_MAX, (u8*)&delaymax, 1);
+            
             SetTextColorWhite(0x5163);
             SetTextColorWhite(0x5173);
         }
@@ -691,27 +692,9 @@ void admin_User_Setting_Function(u16 i){
         }else {
             if(usersettingEditSP == 0){
                 usersettingEditSP = 1;
-                if(usersettingSP == 0){
-                    write_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&toptempmin, 1);
-                }else if(usersettingSP == 1){
-                    write_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN, (u8*)&bottempmin, 1);
-                }else if(usersettingSP == 2){
-                    write_dgus_vp(VP_USERSETTING_PRES_MIN, (u8*)&pressmin, 1);
-                }else if(usersettingSP == 3){
-                    write_dgus_vp(VP_USERSETTING_DELAY_MIN, (u8*)&delaymin, 1);
-                }
             }else if(usersettingEditSP == 1){
                 usersettingSelect_plag = 0;
                 usersettingEditSP = 0;
-                // if(usersettingSP == 0){
-                //     write_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&toptempmax, 1);
-                // }else if(usersettingSP == 1){
-                //     write_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX, (u8*)&bottempmax, 1);
-                // }else if(usersettingSP == 2){
-                //     write_dgus_vp(VP_USERSETTING_PRES_MAX, (u8*)&pressmax, 1);
-                // }else if(usersettingSP == 3){
-                //     write_dgus_vp(VP_USERSETTING_DELAY_MAX, (u8*)&delaymax, 1);
-                // }
             }
         }
         admin_User_Setting_text_color();

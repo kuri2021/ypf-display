@@ -25,6 +25,7 @@
 static u16 system_ready = 0;
 
 #define VP_DATA_PUSH          0x8200  // 유지시간 설정
+#define VP_LANGUAGE_FLAG 0x8146 // 언어변경
 
 
 
@@ -48,7 +49,13 @@ void main()
     LOG("start\r\n");
     StartTimer(TMR_7, CHECK_TIME);
     write_dgus_vp(VP_DATA_PUSH, (u8*)&test1, 1);
-    admin_language_eng();
+    read_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&language, 1)
+    if(language == 0){
+        admin_language_eng();
+    }else{
+        admin_language_kor();
+    }
+    
     
     while (1)
     {

@@ -6,6 +6,7 @@
 #include "color.h"
 #include "language.h"
 #include "admin.h"
+#include "log.h"
 
 // ===== add prototypes (put these after includes) =====
 static void DGUS_WriteWord(u16 vp, u16 val);
@@ -35,7 +36,14 @@ static void ChangeImage(u16 vp_addr, u16 index);
 #define FLAG_OUTPUMP        BIT(11)    
 #define FLAG_COOLING         BIT(12)    
 #define FLAG_SENSOR_ERR       BIT(13)   
-#define FLAG_TIME         BIT(14)    
+#define FLAG_TIME         BIT(14)   
+
+#define LOG_TOP_TEMP       1
+#define LOG_TOP_COOL       2
+#define LOG_BOTTOM_TEMP    3
+#define LOG_BOTTOM_COOL    4
+#define LOG_DELAY          5
+#define LOG_PRESSURE       6
 
 
 #define VP_TT        0x8000  // 상 히터 온도 (℃)
@@ -182,22 +190,22 @@ void check_Start(u16 addr, u16 velue){
     StartTimer(TMR_6, CHECK_TIME); 
     switch(addr){
         case VP_SET_TT:{
-            addLog(1, velue);
+            addLog(LOG_TOP_TEMP, velue);
         }break;
         case VP_SET_CHTT:{
-            addLog(2, velue);
+            addLog(LOG_TOP_COOL, velue);
         }break;
         case VP_SET_TB:{
-            addLog(3, velue);
+            addLog(LOG_BOTTOM_TEMP, velue);
         }break;
         case VP_SET_CHTB:{
-            addLog(4, velue);
+            addLog(LOG_BOTTOM_COOL, velue);
         }break;
         case VP_SET_H:{
-            addLog(5, velue);
+            addLog(LOG_DELAY, velue);
         }break;
         case VP_SET_P:{
-            addLog(6, velue);
+            addLog(LOG_PRESSURE, velue);
         }break;
     }
 }

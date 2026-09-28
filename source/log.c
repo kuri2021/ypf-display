@@ -70,7 +70,7 @@ void updateLogsToDGUS()
                 switch(logs[i].type){
                 case 1:{
                     if(i == 0){
-                        write_dgus_vp(0x4740, (u8*)&TOP_TEMP_ENG, 10);
+                        write_dgus_vp(0x4740, (u8*)&T_TEMP_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
@@ -78,7 +78,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4770, (u8*)&TOP_TEMP_ENG, 10);
+                        write_dgus_vp(0x4770, (u8*)&T_TEMP_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5778, (u8*)&len, 1);
                         write_dgus_vp(0x5779, (u8*)&SP_ENG_FONTID, 1);
@@ -86,7 +86,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4800, (u8*)&TOP_TEMP_ENG, 10);
+                        write_dgus_vp(0x4800, (u8*)&T_TEMP_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5808, (u8*)&len, 1);
                         write_dgus_vp(0x5809, (u8*)&SP_ENG_FONTID, 1);
@@ -97,7 +97,7 @@ void updateLogsToDGUS()
                 }break;
                 case 2:{
                     if(i == 0){
-                        write_dgus_vp(0x4740, (u8*)&TOP_COOL_ENG, 10);
+                        write_dgus_vp(0x4740, (u8*)&T_COOL_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
@@ -105,7 +105,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4770, (u8*)&TOP_COOL_ENG, 10);
+                        write_dgus_vp(0x4770, (u8*)&T_COOL_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5778, (u8*)&len, 1);
                         write_dgus_vp(0x5779, (u8*)&SP_ENG_FONTID, 1);
@@ -113,7 +113,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4800, (u8*)&TOP_COOL_ENG, 10);
+                        write_dgus_vp(0x4800, (u8*)&T_COOL_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5808, (u8*)&len, 1);
                         write_dgus_vp(0x5809, (u8*)&SP_ENG_FONTID, 1);
@@ -124,7 +124,7 @@ void updateLogsToDGUS()
                 }break;
                 case 3:{
                      if(i == 0){
-                        write_dgus_vp(0x4740, (u8*)&BOT_TEMP_ENG, 10);
+                        write_dgus_vp(0x4740, (u8*)&B_TEMP_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
@@ -132,7 +132,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4770, (u8*)&BOT_TEMP_ENG, 10);
+                        write_dgus_vp(0x4770, (u8*)&B_TEMP_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5778, (u8*)&len, 1);
                         write_dgus_vp(0x5779, (u8*)&SP_ENG_FONTID, 1);
@@ -140,7 +140,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4800, (u8*)&BOT_TEMP_ENG, 10);
+                        write_dgus_vp(0x4800, (u8*)&B_TEMP_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5808, (u8*)&len, 1);
                         write_dgus_vp(0x5809, (u8*)&SP_ENG_FONTID, 1);
@@ -151,7 +151,7 @@ void updateLogsToDGUS()
                 }break;
                 case 4:{
                     if(i == 0){
-                        write_dgus_vp(0x4740, (u8*)&BOT_COOL_ENG, 10);
+                        write_dgus_vp(0x4740, (u8*)&B_COOL_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
@@ -159,7 +159,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4770, (u8*)&BOT_COOL_ENG, 10);
+                        write_dgus_vp(0x4770, (u8*)&B_COOL_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5778, (u8*)&len, 1);
                         write_dgus_vp(0x5779, (u8*)&SP_ENG_FONTID, 1);
@@ -167,7 +167,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4800, (u8*)&BOT_COOL_ENG, 10);
+                        write_dgus_vp(0x4800, (u8*)&B_COOL_ENG, 10);
                         len = 20;
                         write_dgus_vp(0x5808, (u8*)&len, 1);
                         write_dgus_vp(0x5809, (u8*)&SP_ENG_FONTID, 1);
@@ -235,7 +235,7 @@ void updateLogsToDGUS()
                 switch(logs[i].type){
                 case 1:{
                       if(i == 0){
-                        write_dgus_vp(0x4740, (u8*)&TOP_TEMP_KOR, 8);
+                        write_dgus_vp(0x4740, (u8*)&T_TEMP_KOR, 8);
                         len = 16;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -243,7 +243,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4740, (u8*)&TOP_TEMP_KOR, 8);
+                        write_dgus_vp(0x4740, (u8*)&T_TEMP_KOR, 8);
                         len = 16;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -251,7 +251,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4740, (u8*)&TOP_TEMP_KOR, 8);
+                        write_dgus_vp(0x4740, (u8*)&T_TEMP_KOR, 8);
                         len = 16;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -262,7 +262,7 @@ void updateLogsToDGUS()
                 }break;
                 case 2:{
                      if(i == 0){
-                        write_dgus_vp(0x4740, (u8*)&TOP_COOL_KOR, 7);
+                        write_dgus_vp(0x4740, (u8*)&T_COOL_KOR, 7);
                         len = 14;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -270,7 +270,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4740, (u8*)&TOP_COOL_KOR, 7);
+                        write_dgus_vp(0x4740, (u8*)&T_COOL_KOR, 7);
                         len = 14;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -278,7 +278,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4740, (u8*)&TOP_COOL_KOR, 7);
+                        write_dgus_vp(0x4740, (u8*)&T_COOL_KOR, 7);
                         len = 14;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -289,7 +289,7 @@ void updateLogsToDGUS()
                 }break;
                 case 3:{
                      if(i == 0){
-                        write_dgus_vp(0x4740, (u8*)&BOT_TEMP_KOR, 8);
+                        write_dgus_vp(0x4740, (u8*)&B_TEMP_KOR, 8);
                         len = 16;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -297,7 +297,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4740, (u8*)&BOT_TEMP_KOR, 8);
+                        write_dgus_vp(0x4740, (u8*)&B_TEMP_KOR, 8);
                         len = 16;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -305,7 +305,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4740, (u8*)&BOT_TEMP_KOR, 8);
+                        write_dgus_vp(0x4740, (u8*)&B_TEMP_KOR, 8);
                         len = 16;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -316,7 +316,7 @@ void updateLogsToDGUS()
                 }break;
                 case 4:{
                      if(i == 0){
-                        write_dgus_vp(0x4740, (u8*)&BOT_COOL_KOR, 7);
+                        write_dgus_vp(0x4740, (u8*)&B_COOL_KOR, 7);
                         len = 14;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -324,7 +324,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4740, (u8*)&BOT_COOL_KOR, );
+                        write_dgus_vp(0x4740, (u8*)&B_COOL_KOR, );
                         len = 14;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
@@ -332,7 +332,7 @@ void updateLogsToDGUS()
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4740, (u8*)&BOT_COOL_KOR, 7);
+                        write_dgus_vp(0x4740, (u8*)&B_COOL_KOR, 7);
                         len = 14;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);

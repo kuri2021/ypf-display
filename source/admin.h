@@ -68,7 +68,7 @@ extern u8 IOtestSelect_plag;
 extern u16 EngineermodS_flag;
 extern u16 EngineermodS_Select_flag;
 
-extern u16 language;
+extern u16 admin_language;
 
 extern u16 userSet[];
 extern u16 IO[];

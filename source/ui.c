@@ -174,13 +174,32 @@ static u8 adminEngineermodS[2] = {38,68};
 
 static u16 inputpw = 0;
 
-// 0 - 영어, 1 - 중국어, 2 - 한국어
 void check_Start(u16 addr, u16 velue){
     check_addr = addr;
     legacy_value = velue;
     check_active = 1;
     write_dgus_vp(check_addr, (u8*)&legacy_value, 1);
     StartTimer(TMR_6, CHECK_TIME); 
+    switch(addr){
+        case VP_SET_TT:{
+            addLog(1, velue);
+        }break;
+        case VP_SET_CHTT:{
+            addLog(2, velue);
+        }break;
+        case VP_SET_TB:{
+            addLog(3, velue);
+        }break;
+        case VP_SET_CHTB:{
+            addLog(4, velue);
+        }break;
+        case VP_SET_H:{
+            addLog(5, velue);
+        }break;
+        case VP_SET_P:{
+            addLog(6, velue);
+        }break;
+    }
 }
 
 void check_End(){
@@ -610,7 +629,7 @@ void admin_page_change(){
             SetTextColorWhite(0x5133);
             SetTextColorWhite(0x5143);
             SetTextColorWhite(0x5153);
-            Page_Change_UI(adminUserSetting[language]);
+            Page_Change_UI(adminUserSetting[admin_language]);
             write_dgus_vp(0x4070, (u8*)&toptempmin, 1); 
             write_dgus_vp(0x4080, (u8*)&toptempmax, 1); 
             write_dgus_vp(0x4100, (u8*)&bottempmin, 1); 
@@ -627,17 +646,17 @@ void admin_page_change(){
             SetTextColorWhite(0x5253);
             SetTextColorWhite(0x5273);
             SetTextColorWhite(0x5293);
-            Page_Change_UI(adminIOTest[language]);
+            Page_Change_UI(adminIOTest[admin_language]);
         }break;
         case 2:{
             SetTextColorYellow(0x5343);
             SetTextColorWhite(0x5353);
-            Page_Change_UI(adminFactoryResetNotice[language]);
+            Page_Change_UI(adminFactoryResetNotice[admin_language]);
         }break;
         case 3:{
             SetTextColorYellow(0x5373);
             SetTextColorWhite(0x5383);
-            Page_Change_UI(adminLogError[language]);
+            Page_Change_UI(adminLogError[admin_language]);
         }break;
         case 4:{
             write_dgus_vp(0x4430, (u8*)&temp_H ,1);
@@ -651,16 +670,16 @@ void admin_page_change(){
             write_dgus_vp(0x4510, (u8*)&fan_H ,1);
             write_dgus_vp(0x4520, (u8*)&fan_M ,1);
             write_dgus_vp(0x4530, (u8*)&fan_S ,1);
-            Page_Change_UI(adminMaintenance[language]);
+            Page_Change_UI(adminMaintenance[admin_language]);
         }break;
         case 5:{
             SetTextColorYellow(0x5553);
             SetTextColorWhite(0x5563);
             SetTextColorWhite(0x5573);
-            Page_Change_UI(adminLanguage[language]);
+            Page_Change_UI(adminLanguage[admin_language]);
         }break;
         case 6:{
-            Page_Change_UI(adminCompany[language]);
+            Page_Change_UI(adminCompany[admin_language]);
         }break;
         case 7:{
             SetTextColorYellow(0x5593);
@@ -675,12 +694,12 @@ void admin_page_change(){
             write_dgus_vp(0x4620, (u8*)&EngineerPw4, 1);
             write_dgus_vp(0x4630, (u8*)&EngineerPw5, 1);
             write_dgus_vp(0x4640, (u8*)&EngineerPw6, 1);
-            Page_Change_UI(adminEngineermod[language]);
+            Page_Change_UI(adminEngineermod[admin_language]);
         }break;
 
         case 8:{
             admininit();
-            Page_Change_UI(main7[language]);
+            Page_Change_UI(main7[admin_language]);
         }break;
     }
 
@@ -976,7 +995,7 @@ void encoder_page_change(u16 state)
         case 1: {
             // 데이터 설정 모드
             if (settingflag == 1) {
-                if(page_number == topHeatingS[language]){
+                if(page_number == topHeatingS[admin_language]){
                          if (select_position == 0) {
                                 keep = TT1;
                                 if (TT1 == 0) {
@@ -1021,7 +1040,7 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2150, (u8*)&TT100, 1);
                                 }
                         }
-                }else if(page_number == topCoolingS[language]){
+                }else if(page_number == topCoolingS[admin_language]){
                         if (select_position == 0) {
                                 keep = TC1;
                                 if (TC1 == 0) {
@@ -1100,7 +1119,7 @@ void encoder_page_change(u16 state)
                                 }
                             
                         }
-                }else if(page_number == botHeatingS[language]){
+                }else if(page_number == botHeatingS[admin_language]){
                     if (select_position == 0) {
                                 keep = BT1;
                                 if (BT1 == 0) {
@@ -1144,7 +1163,7 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2260, (u8*)&BT100, 1);
                                 }
                         }
-                }else if(page_number == botCoolingS[language]){
+                }else if(page_number == botCoolingS[admin_language]){
                     if (select_position == 0) {
                                 keep = BC1;
                                 if (BC1 == 0) {
@@ -1223,7 +1242,7 @@ void encoder_page_change(u16 state)
                                 }
                             
                         }
-                }else if(page_number == delayS[language]){
+                }else if(page_number == delayS[admin_language]){
                        if (select_position == 0) {
                                  keep = min;
                                 if (min == 0) {
@@ -1257,7 +1276,7 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2380, (u8*)&second, 1);
                                 }
                             }
-                }else if(page_number == pressureS[language]){
+                }else if(page_number == pressureS[admin_language]){
                     if (select_position == 0 && press > pressmin) {
                         press--;
                         write_dgus_vp(0x2400, (u8*)&press, 1);
@@ -1405,45 +1424,45 @@ void encoder_page_change(u16 state)
                     Page21Functioning(quickSettingS);
                 }
             } else {  // 페이지 전환(역방향)
-                if(page_number > main1[language] && page_number <=main7[language]){
+                if(page_number > main1[admin_language] && page_number <=main7[admin_language]){
                     page_number--;
                     Page_Change_Handler(page_number);
-                }else if (page_number == main1[language]) {
-                    page_number = main7[language];
+                }else if (page_number == main1[admin_language]) {
+                    page_number = main7[admin_language];
                     Page_Change_Handler(page_number);
                 } else if (topSelectflag == 1) {
                     if (page_number == exit) {
-                        Page_Change_UI(topCooling[language]);
-                    }else if(page_number == topHeating[language]){
+                        Page_Change_UI(topCooling[admin_language]);
+                    }else if(page_number == topHeating[admin_language]){
                         Page_Change_UI(exit);
                     }else {
                         page_number--;
                         Page_Change_Handler(page_number);
                     }
                 } else if (botSelectflag == 1) {
-                    if (page_number == botHeating[language]) {
+                    if (page_number == botHeating[admin_language]) {
                         Page_Change_UI(exit);
                     }else if(page_number == exit){
-                        Page_Change_UI(botCooling[language]);
+                        Page_Change_UI(botCooling[admin_language]);
                     }else {
                         page_number--;
                         Page_Change_UI(page_number);
                     }
-                }else if(page_number == adminList[language]){
+                }else if(page_number == adminList[admin_language]){
                     admin_List(1);
-                }if(page_number == adminUserSetting[language]){
+                }if(page_number == adminUserSetting[admin_language]){
                    admin_User_Setting_Function(state);
-                }else if(page_number == adminIOTest[language]){
+                }else if(page_number == adminIOTest[admin_language]){
                     adminIoTestText(state);
-                }else if(page_number == adminFactoryResetNotice[language]){
+                }else if(page_number == adminFactoryResetNotice[admin_language]){
                     adminfactoryResetText(state);
-                }else if(page_number == adminLogError[language]){
+                }else if(page_number == adminLogError[admin_language]){
                     adminLogErrorText(state);
-                }else if(page_number == adminLanguage[language]){
+                }else if(page_number == adminLanguage[admin_language]){
                     adminLanguageText(state);
-                }else if(page_number == adminEngineermod[language]){
+                }else if(page_number == adminEngineermod[admin_language]){
                     EngineermodWork(state);
-                }else if(page_number == adminEngineermodS[language]){
+                }else if(page_number == adminEngineermodS[admin_language]){
                     EngineermodSWork(state);
                 }
             }
@@ -1454,7 +1473,7 @@ void encoder_page_change(u16 state)
         case 2: {
             // 데이터 설정 모드
             if (settingflag == 1) {
-                if(page_number == topHeatingS[language]){
+                if(page_number == topHeatingS[admin_language]){
                     if (select_position == 0) {
                                   keep = TT1;
                                 if (TT1 != 9) {
@@ -1499,7 +1518,7 @@ void encoder_page_change(u16 state)
                                 }
                             
                         }
-                }else if(page_number == topCoolingS[language]){
+                }else if(page_number == topCoolingS[admin_language]){
                       if (select_position == 0) {
                            keep = TC1;
                                 if (TC1 != 9) {
@@ -1577,7 +1596,7 @@ void encoder_page_change(u16 state)
                                 }
                             
                         }
-                }else if(page_number == botHeatingS[language]){
+                }else if(page_number == botHeatingS[admin_language]){
                       if (select_position == 0) {
                              keep = BT1;
                                 if (BT1 != 9) {
@@ -1623,7 +1642,7 @@ void encoder_page_change(u16 state)
                                
                             
                         }
-                }else if(page_number == botCoolingS[language]){
+                }else if(page_number == botCoolingS[admin_language]){
                     if (select_position == 0) {
                               keep = BC1;
                                 if (BC1 == 9) {
@@ -1703,7 +1722,7 @@ void encoder_page_change(u16 state)
                                 }
                             
                         }
-                }else if(page_number == delayS[language]){
+                }else if(page_number == delayS[admin_language]){
                     if (select_position == 0) {
                                 keep = min;
                                 if (min == 59) {
@@ -1740,7 +1759,7 @@ void encoder_page_change(u16 state)
                                     write_dgus_vp(0x2380, (u8*)&second, 1);
                                 }
                         }
-                }else if(page_number == pressureS[language]){
+                }else if(page_number == pressureS[admin_language]){
                     if (select_position == 0 && press < pressmax) {
                                 press++;
                                 write_dgus_vp(0x2400, (u8*)&press, 1);
@@ -1888,47 +1907,47 @@ void encoder_page_change(u16 state)
                     Page21Functioning(quickSettingS);
                 }
             } else { // 페이지 전환(정방향)
-                if(page_number < main7[language] && page_number >= main1[language]){
+                if(page_number < main7[admin_language] && page_number >= main1[admin_language]){
                     page_number++;
                     Page_Change_Handler(page_number);
-                }else if (page_number == main7[language]) {
-                    page_number = main1[language];
+                }else if (page_number == main7[admin_language]) {
+                    page_number = main1[admin_language];
                     Page_Change_Handler(page_number);
                 } else if (topSelectflag == 1) {
-                    if (page_number == topCooling[language]) {
+                    if (page_number == topCooling[admin_language]) {
                          Page_Change_UI(exit);
                     }else if(page_number == exit){
-                        Page_Change_UI(topHeating[language]);
+                        Page_Change_UI(topHeating[admin_language]);
                     }else {
                         page_number++;
                         Page_Change_UI(page_number);
                     }
                 } else if (botSelectflag == 1) {
-                    if (page_number == botCooling[language]) {
+                    if (page_number == botCooling[admin_language]) {
                         Page_Change_UI(exit);
                     }else if(page_number == exit){
-                         Page_Change_UI(botHeating[language]);
+                         Page_Change_UI(botHeating[admin_language]);
                     } else {
                         page_number++;
                         Page_Change_UI(page_number);
                     }
-                } else if(page_number == adminList[language]){
+                } else if(page_number == adminList[admin_language]){
                     admin_List(2);
-                }else if(page_number == adminUserSetting[language]){
+                }else if(page_number == adminUserSetting[admin_language]){
                     admin_User_Setting_Function(state);
-                }else if(page_number == adminIOTest[language]){
+                }else if(page_number == adminIOTest[admin_language]){
                     adminIoTestText(state);
-                }else if(page_number == adminFactoryResetNotice[language]){
+                }else if(page_number == adminFactoryResetNotice[admin_language]){
                     adminfactoryResetText(state);
-                }else if(page_number == adminLogError[language]){
+                }else if(page_number == adminLogError[admin_language]){
                     adminLogErrorText(state);
-                }else if(page_number == adminMaintenance[language]){
+                }else if(page_number == adminMaintenance[admin_language]){
                     //저장된 값만 보여줌
-                }else if(page_number == adminLanguage[language]){
+                }else if(page_number == adminLanguage[admin_language]){
                     adminLanguageText(state);
-                }else if(page_number == adminEngineermod[language]){
+                }else if(page_number == adminEngineermod[admin_language]){
                     EngineermodWork(state);
-                }else if(page_number == adminEngineermodS[language]){
+                }else if(page_number == adminEngineermodS[admin_language]){
                     EngineermodSWork(state);
                 }
             }
@@ -1984,53 +2003,53 @@ void encoder_page_change(u16 state)
                 }else{
                     select_position++;
                     select_num(page_number, select_position);
-                    if(page_number == topHeatingS[language] && select_position == 4){
+                    if(page_number == topHeatingS[admin_language] && select_position == 4){
                         settingflag     = 0;
                         select_position = 0;
                         result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
                         check_Start(VP_SET_TT,result);
-                        Page_Change_UI(topHeating[language]);
-                    }else if(page_number == topCoolingS[language] && select_position == 3){
+                        Page_Change_UI(topHeating[admin_language]);
+                    }else if(page_number == topCoolingS[admin_language] && select_position == 3){
                         settingflag     = 0;
                         select_position = 0;
                         result = (u16)(TC10 * 10 + TC1);
                         check_Start(VP_SET_CHTT,result);
-                        Page_Change_UI(topCooling[language]);
+                        Page_Change_UI(topCooling[admin_language]);
                     }else if(page_number == topFrameS && select_position == 4){
                         settingflag     = 0;
                         select_position = 0;
                         Page_Change_UI(topFrame);
-                    }else if(page_number == botHeatingS[language] && select_position == 4){
+                    }else if(page_number == botHeatingS[admin_language] && select_position == 4){
                         settingflag     = 0;
                         select_position = 0;
                         result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
                         check_Start(VP_SET_TB,result);
-                        Page_Change_UI(botHeating[language]);
-                    }else if(page_number == botCoolingS[language] && select_position == 3){
+                        Page_Change_UI(botHeating[admin_language]);
+                    }else if(page_number == botCoolingS[admin_language] && select_position == 3){
                         settingflag     = 0;
                         select_position = 0;
                         result = (u16)(BC10 * 10 + BC1);
                         check_Start(VP_SET_CHTB,result);
-                        Page_Change_UI(botCooling[language]);
+                        Page_Change_UI(botCooling[admin_language]);
                     }else if(page_number == botFrameS && select_position == 2){
                         settingflag     = 0;
                         select_position = 0;
                         Page_Change_UI(botFrame);
-                    }else if(page_number == delayS[language] && select_position == 3){
+                    }else if(page_number == delayS[admin_language] && select_position == 3){
                         settingflag     = 0;
                         select_position = 0;
                         result = (u16)(min * 60 + second);
                         check_Start(VP_SET_H,result);
-                        Page_Change_UI(main4[language]);
-                    }else if(page_number == pressureS[language] && select_position == 2){
+                        Page_Change_UI(main4[admin_language]);
+                    }else if(page_number == pressureS[admin_language] && select_position == 2){
                         settingflag     = 0;
                         select_position = 0;
                         check_Start(VP_SET_P,press);
-                        Page_Change_UI(main5[language]);
+                        Page_Change_UI(main5[admin_language]);
                     }
                 }
             }else{
-                 if(page_number == main1[language]){
+                 if(page_number == main1[admin_language]){
                         read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
                         TT100 = result / 100;
                         TT10   = (result / 10) % 10;
@@ -2066,14 +2085,14 @@ void encoder_page_change(u16 state)
                         page_number = quickSetting;
                         Page_Change_Handler(page_number);
                         quickSettingflag = 1;
-                }else if(page_number == main2[language]){
+                }else if(page_number == main2[admin_language]){
                     topSelectflag   = 1;
-                    page_number = topHeating[language];
+                    page_number = topHeating[admin_language];
                     Page_Change_Handler(page_number);
-                }else if(page_number == main3[language]){
+                }else if(page_number == main3[admin_language]){
                     botSelectflag = 1;
-                    Page_Change_UI(botHeating[language]);
-                }else if(page_number == main4[language]){
+                    Page_Change_UI(botHeating[admin_language]);
+                }else if(page_number == main4[admin_language]){
                     settingflag = 1;
                     SetTextColorBlue(0x1373);
                     SetTextColorBlack(0x1383);
@@ -2083,15 +2102,15 @@ void encoder_page_change(u16 state)
                     write_dgus_vp(0x2370, (u8*)&min,    2);
                     write_dgus_vp(0x2380, (u8*)&second,    2);
                     ChangeImage(0x2390, 0);
-                    Page_Change_UI(delayS[language]);
-                }else if(page_number == main5[language]){
+                    Page_Change_UI(delayS[admin_language]);
+                }else if(page_number == main5[admin_language]){
                     settingflag = 1;
                     read_dgus_vp(VP_SET_P, (u8*)&press, 1);
                     write_dgus_vp(0x2400, (u8*)&press, 1);
                     SetTextColorBlue(0x1403);
                     ChangeImage(0x2410, 0);
-                    Page_Change_UI(pressureS[language]);
-                }else if(page_number == main6[language]){
+                    Page_Change_UI(pressureS[admin_language]);
+                }else if(page_number == main6[admin_language]){
                      if(f_ready==1){
                         Page_Change_UI(workPageN);
                         }else if(f_start == 1){
@@ -2108,60 +2127,60 @@ void encoder_page_change(u16 state)
                             write_dgus_vp(0x2110, (u8*)&min,    1);
                             write_dgus_vp(0x2130, (u8*)&second, 1);
                         } 
-                }else if(page_number == main7[language]){
-                    page_number = adminList[language];
+                }else if(page_number == main7[admin_language]){
+                    page_number = adminList[admin_language];
                     Page_Change_Handler(page_number);
                     admin_List_text_change();
-                }else if(page_number == topHeating[language]){
+                }else if(page_number == topHeating[admin_language]){
                     settingflag  = 1;
                     write_dgus_vp(0X2150, (u8*)&TT100, 1);
                     write_dgus_vp(0x2160, (u8*)&TT10,     1);
                     write_dgus_vp(0x2170, (u8*)&TT1,     1);
                     ChangeImage(0x2180, 0);
-                    Page_Change_UI(topHeatingS[language]);
+                    Page_Change_UI(topHeatingS[admin_language]);
                     select_num(page_number, 0);
-                }else if(page_number == topCooling[language]){
+                }else if(page_number == topCooling[admin_language]){
                     settingflag  = 1;
                     write_dgus_vp(0x2190, (u8*)&TC10, 1);
                     write_dgus_vp(0x2200, (u8*)&TC1,     1);
                     ChangeImage(0x2210, 0);
-                    Page_Change_UI(topCoolingS[language]);
+                    Page_Change_UI(topCoolingS[admin_language]);
                     select_num(page_number, 0);
                 }else if(page_number == topFrame){
                     Page_Change_UI(topFrameS);
-                }else if(page_number == botHeating[language]){
+                }else if(page_number == botHeating[admin_language]){
                     settingflag  = 1;
                     write_dgus_vp(0x2260, (u8*)&BT100, 1);
                     write_dgus_vp(0x2270, (u8*)&BT10,     1);
                     write_dgus_vp(0x2280, (u8*)&BT1,     1);
                     ChangeImage(0x2290, 0);
-                    Page_Change_UI(botHeatingS[language]);
+                    Page_Change_UI(botHeatingS[admin_language]);
                     select_num(page_number, 0);
-                }else if(page_number == botCooling[language]){
+                }else if(page_number == botCooling[admin_language]){
                     settingflag  = 1;
                     write_dgus_vp(0x2300, (u8*)&BC10,     1);
                     write_dgus_vp(0x2310, (u8*)&BC1,     1);
                     ChangeImage(0x2320, 0);
-                    Page_Change_UI(botCoolingS[language]);
+                    Page_Change_UI(botCoolingS[admin_language]);
                     select_num(page_number, 0);
                 }else if(page_number == botFrame){
                     Page_Change_UI(botFrameS);
                 }else if(page_number == exit){
                     if (topSelectflag == 1) {
                         topSelectflag = 0;
-                        Page_Change_UI(main2[language]);
+                        Page_Change_UI(main2[admin_language]);
                     } else {
                         botSelectflag  = 0;
-                        Page_Change_UI(main3[language]);
+                        Page_Change_UI(main3[admin_language]);
                     }
                 }else if(page_number == workPageN){
-                    Page_Change_UI(main6[language]);
+                    Page_Change_UI(main6[admin_language]);
                 }else if(page_number == quickSetting){
                     settingflag = 1;
                     QuickSettingTextSet(quickSettingS, 0);
-                }else if(page_number == adminList[language]){
+                }else if(page_number == adminList[admin_language]){
                     admin_page_change();
-                }else if(page_number == adminUserSetting[language]){
+                }else if(page_number == adminUserSetting[admin_language]){
                     if(usersettingSP == 0){
                         if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
                             write_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&toptempmin, 1);
@@ -2190,27 +2209,27 @@ void encoder_page_change(u16 state)
                         }
                     }
                     admin_User_Setting_Function(state);
-                }else if(page_number == adminIOTest[language]){
+                }else if(page_number == adminIOTest[admin_language]){
                     adminIoTestWork();
-                }else if(page_number == adminFactoryResetNotice[language]){
+                }else if(page_number == adminFactoryResetNotice[admin_language]){
                     adminfactoryResetText(state);
-                }else if(page_number == adminLogError[language]){
+                }else if(page_number == adminLogError[admin_language]){
                     adminLogErrorText(state);
-                }else if(page_number == adminMaintenance[language]){
-                    Page_Change_UI(adminList[language]);
-                }else if(page_number == adminLanguage[language]){
+                }else if(page_number == adminMaintenance[admin_language]){
+                    Page_Change_UI(adminList[admin_language]);
+                }else if(page_number == adminLanguage[admin_language]){
                     adminLanguageText(state);
-                    write_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&language,1);
-                }else if(page_number == adminCompany[language]){
-                    Page_Change_UI(adminList[language]);
-                }else if(page_number == adminEngineermod[language]){
+                    write_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&admin_language,1);
+                }else if(page_number == adminCompany[admin_language]){
+                    Page_Change_UI(adminList[admin_language]);
+                }else if(page_number == adminEngineermod[admin_language]){
                     EngineermodWork(state);
-                }else if(page_number == adminEngineermodS[language]){
+                }else if(page_number == adminEngineermodS[admin_language]){
                     EngineermodSWork(state);
-                }else if(page_number == adminActiveLog[language]){
-                    Page_Change_UI(adminLogError[language]);
-                }else if(page_number == adminErrorLog[language]){
-                    Page_Change_UI(adminLogError[language]);
+                }else if(page_number == adminActiveLog[admin_language]){
+                    Page_Change_UI(adminLogError[admin_language]);
+                }else if(page_number == adminErrorLog[admin_language]){
+                    Page_Change_UI(adminLogError[admin_language]);
                 }
             }
         } break;
@@ -2221,116 +2240,116 @@ void encoder_page_change(u16 state)
                 usersettingSP=0;
                 usersettingSelect_plag=0;
                 usersettingEditSP=0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
             case 58 : {
                 usersettingSP=0;
                 usersettingSelect_plag=0;
                 usersettingEditSP=0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
             case 29:{
                 IOtestSP = 0;
                 IOtestSelect_plag = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
             case 59:{
                 IOtestSP = 0;
                 IOtestSelect_plag = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
             case 30:{
                 factoryReset_plag = 0;
                 factoryResetSP = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
              case 60:{
                 factoryReset_plag = 0;
                 factoryResetSP = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
             case 31:{
                 LogErrorSP = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
             case 61:{
                 LogErrorSP = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
             
             case 34:{
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
             case 64:{
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
             case 35:{
                 LanguageSP = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
             case 65:{
                 LanguageSP = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
             case 36:{
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
              case 66:{
                 LanguageSP = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
 
 
             case 37:{
                 EngineerSP = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
             case 67:{
                 EngineerSP = 0;
-                Page_Change_UI(adminList[language]);
+                Page_Change_UI(adminList[admin_language]);
             }break;
             case 38:{
                 EngineermodS_flag = 0;
                 EngineermodS_Select_flag =0;
-                Page_Change_UI(adminEngineermod[language]);
+                Page_Change_UI(adminEngineermod[admin_language]);
             }break;
             case 68:{
                 EngineermodS_flag = 0;
                 EngineermodS_Select_flag =0;
-                Page_Change_UI(adminEngineermod[language]);
+                Page_Change_UI(adminEngineermod[admin_language]);
             }break;
             case 32:{
-                Page_Change_UI(adminLogError[language]);
+                Page_Change_UI(adminLogError[admin_language]);
             }break;
             case 62:{
-                Page_Change_UI(adminLogError[language]);
+                Page_Change_UI(adminLogError[admin_language]);
             }break;
             case 33:{
-                Page_Change_UI(adminLogError[language]);
+                Page_Change_UI(adminLogError[admin_language]);
             }break;
              case 63:{
-                Page_Change_UI(adminLogError[language]);
+                Page_Change_UI(adminLogError[admin_language]);
             }break;
             case 27:{
-                // Page_Change_UI(main7[language]);
+                // Page_Change_UI(main7[admin_language]);
             }break;
             case 8:{
                 if(settingflag == 0){
                 quickSettingflag = 0; 
                 settingflag = 0; 
                 quickSettingS = 0; 
-                Page_Change_UI(main1[language]);
+                Page_Change_UI(main1[admin_language]);
                 quickSettingInIt();
                 }
             }break;

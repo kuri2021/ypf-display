@@ -16,7 +16,7 @@
 #define VP_USERSETTING_TOP_TEMP_MAX 0x8130 // 유저세팅 8개
 #define VP_USERSETTING_TOP_TEMP_MIN 0x8132 // 유저세팅 8개
 #define VP_USERSETTING_BOT_TEMP_MAX 0x8134 // 유저세팅 8개
-#define VP_USERSETTING_BOT_TEMP_MIN 0x8136 // 유저세팅 8개
+#define VP_USERSETTING_BOT_TEMP_MIN 0x8136 // 유저세팅 8개f
 #define VP_USERSETTING_PRES_MAX 0x8138 // 유저세팅 8개
 #define VP_USERSETTING_PRES_MIN 0x813A // 유저세팅 8개
 #define VP_USERSETTING_DELAY_MAX 0x813C // 유저세팅 8개
@@ -43,7 +43,7 @@ const u16 SP_ENG_FONTSIZE = 0x1A19;
 const u16 SP_KOR_FONTID = 0x0010;
 const u16 SP_KOR_FONTSIZE = 0x1F1F;
 
-u16 language = 0;
+u16 admin_language = 0;
 
 u8 adminSP = 0;
 
@@ -107,7 +107,7 @@ void admin_List_text_change(){
     u16 len = 0;
      switch(adminSP){
         case 0:{
-            if(language == 0){
+            if(admin_language == 0){
                 write_dgus_vp(0x4020, (u8*)&EXIT_ENG, 4);
                 len = 8;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -125,7 +125,7 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
-            }else if(language == 1){
+            }else if(admin_language == 1){
                 write_dgus_vp(0x4020, (u8*)&EXIT_KOR, 2);
                 len = 4;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -146,7 +146,7 @@ void admin_List_text_change(){
             }
         }break;
         case 1:{
-            if(language == 0){
+            if(admin_language == 0){
                 write_dgus_vp(0x4020, (u8*)&USER_SETTING_ENG, 8);
                 len = 16;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -164,7 +164,7 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
-            }else if(language == 1){
+            }else if(admin_language == 1){
                 write_dgus_vp(0x4020, (u8*)&USER_SETTING_KOR, 5);
                 len = 10;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -185,7 +185,7 @@ void admin_List_text_change(){
             }
         }break;
         case 2:{
-            if(language == 0){
+            if(admin_language == 0){
                write_dgus_vp(0x4020, (u8*)&IO_TEST_ENG, 7);
                 len = 14;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -203,7 +203,7 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
-            }else if(language == 1){
+            }else if(admin_language == 1){
                 write_dgus_vp(0x4020, (u8*)&INPUT_OUTPUT_TEST_KOR, 7);
                 len = 14;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -224,7 +224,7 @@ void admin_List_text_change(){
             }
         }break;
         case 3:{
-            if(language == 0){
+            if(admin_language == 0){
                write_dgus_vp(0x4020, (u8*)&DATA_INIT_ENG, 9);
                 len = 18;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -242,7 +242,7 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
-            }else if(language == 1){
+            }else if(admin_language == 1){
                    write_dgus_vp(0x4020, (u8*)&FACTORY_RESET_KOR, 6);
                 len = 12;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -263,7 +263,7 @@ void admin_List_text_change(){
             }
         }break;
         case 4:{
-            if(language == 0){
+            if(admin_language == 0){
                write_dgus_vp(0x4020, (u8*)&LOG_ERROR_ENG, 11);
                 len = 22;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -281,7 +281,7 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
-            }else if(language == 1){
+            }else if(admin_language == 1){
                 write_dgus_vp(0x4020, (u8*)&LOG_ERROR_KOR, 7);
                 len = 14;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -302,7 +302,7 @@ void admin_List_text_change(){
             }
         }break;
         case 5:{
-          if(language == 0){
+          if(admin_language == 0){
                write_dgus_vp(0x4020, (u8*)&RUN_TIME_ENG, 8);
                 len = 16;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -320,7 +320,7 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
-            }else if(language == 1){
+            }else if(admin_language == 1){
                  write_dgus_vp(0x4020, (u8*)&WORK_TIME_KOR, 5);
                 len = 10;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -341,7 +341,7 @@ void admin_List_text_change(){
             }
         }break;
         case 6:{
-            if(language == 0){
+            if(admin_language == 0){
                write_dgus_vp(0x4020, (u8*)&LANGUAGE_ENG, 8);
                 len = 16;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -359,7 +359,7 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
-            }else if(language == 1){
+            }else if(admin_language == 1){
                 write_dgus_vp(0x4020, (u8*)&LANGUAGE_KOR, 2);
                 len = 4;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -380,7 +380,7 @@ void admin_List_text_change(){
             }
         }break;
         case 7:{
-            if(language == 0){
+            if(admin_language == 0){
                write_dgus_vp(0x4020, (u8*)&COMPANY_INFO_ENG, 9);
                 len = 18;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -398,7 +398,7 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
-            }else if(language == 1){
+            }else if(admin_language == 1){
                 write_dgus_vp(0x4020, (u8*)&COMPANY_KOR, 4);
                 len = 8;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -420,7 +420,7 @@ void admin_List_text_change(){
         }break;
 
          case 8:{
-            if(language == 0){
+            if(admin_language == 0){
                write_dgus_vp(0x4020, (u8*)&ENGINEER_MODE_ENG, 8);
                 len = 16;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -438,7 +438,7 @@ void admin_List_text_change(){
                 write_dgus_vp(0x5048, (u8*)&len, 1);
                 write_dgus_vp(0x5049, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x504A, (u8*)&SP_ENG_FONTSIZE, 1);
-            }else if(language == 1){
+            }else if(admin_language == 1){
                 write_dgus_vp(0x4020, (u8*)&ENGINEER_MODE_KOR, 7);
                 len = 14;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
@@ -1139,7 +1139,7 @@ void adminfactoryResetText(u16 state){
         }
     }else if(state == 3){
         if(factoryResetSP == 0){
-            if(language == 0){
+            if(admin_language == 0){
                 page_number = 27;
             }else{
                 page_number = 57;
@@ -1153,7 +1153,7 @@ void adminfactoryResetText(u16 state){
             write_dgus_vp(VP_SET_CHTB, (u8*)&botCoolingDefault, 1);
             write_dgus_vp(VP_SET_H, (u8*)&delayDefault, 1);
             data_set_Init();
-            if(language == 0){
+            if(admin_language == 0){
                 page_number = 27;
             }else{
                 page_number = 57;
@@ -1181,14 +1181,14 @@ void adminLogErrorText(u16 state){
         }
     }else if(state == 3){
         if(LogErrorSP  == 0){
-            if (language == 0){
+            if (admin_language == 0){
                 page_number = 32;
             }else{
                 page_number = 62;
             }
             Page_Change_Handler(page_number);
         }else{
-            if (language == 0){
+            if (admin_language == 0){
                 page_number = 33;
             }else{
                 page_number = 63;
@@ -1208,11 +1208,11 @@ void adminLanguageText(u16 state){
     }
     }else if(state == 3){
         if(LanguageSP == 0){
-            language = 0;
+            admin_language = 0;
             admin_language_eng();
             Page_Change_UI(35);
         }else if(LanguageSP == 1){
-            language = 1;
+            admin_language = 1;
             admin_language_kor();
             Page_Change_UI(65);
         }
@@ -1875,7 +1875,7 @@ void EngineermodWork(u16 state){
                 write_dgus_vp(0x4620, (u8*)&EngineerPw4 , 1);
                 write_dgus_vp(0x4630, (u8*)&EngineerPw5 , 1);
                 write_dgus_vp(0x4640, (u8*)&EngineerPw6 , 1);
-                if(language == 0){
+                if(admin_language == 0){
                     page_number = 38;
                 }else{
                     page_number = 68;

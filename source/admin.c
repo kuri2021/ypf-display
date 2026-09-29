@@ -23,7 +23,6 @@
 #define VP_USERSETTING_DELAY_MIN 0x8140 // 유저세팅 8개
 #define VP_ENGINEERMODE_SENSER 0x8142 // 엔지니어모드 센서 보정
 #define VP_ENGINEERMODE_PRES 0x8144 // 엔지니어모드 최대 압력
-#define VP_LANGUAGE_FLAG 0x8146 // 언어변경
 
 #define VP_IO_TEST     0x8300
 
@@ -38,10 +37,10 @@
 
 u16 act_flag = 0;
 
-const u16 SP_ENG_FONTID = 0x000F;
-const u16 SP_ENG_FONTSIZE = 0x1A19;
-const u16 SP_KOR_FONTID = 0x0010;
-const u16 SP_KOR_FONTSIZE = 0x1F1F;
+u16 SP_ENG_FONTID = 0x000F;
+u16 SP_ENG_FONTSIZE = 0x1A19;
+u16 SP_KOR_FONTID = 0x0010;
+u16 SP_KOR_FONTSIZE = 0x1F1F;
 
 u16 admin_language = 0;
 

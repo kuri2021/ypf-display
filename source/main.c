@@ -49,8 +49,8 @@ void main()
     LOG("start\r\n");
     StartTimer(TMR_7, CHECK_TIME);
     write_dgus_vp(VP_DATA_PUSH, (u8*)&test1, 1);
-    read_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&language, 1);
-    if(language == 0){
+    read_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&admin_language, 1);
+    if(admin_language == 0){
         admin_language_eng();
     }else{
         admin_language_kor();

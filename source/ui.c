@@ -6,7 +6,6 @@
 #include "color.h"
 #include "language.h"
 #include "admin.h"
-#include "log.h"
 
 // ===== add prototypes (put these after includes) =====
 static void DGUS_WriteWord(u16 vp, u16 val);
@@ -181,6 +180,448 @@ static u8 adminEngineermod[2] = {37,67};
 static u8 adminEngineermodS[2] = {38,68};
 
 static u16 inputpw = 0;
+#define LOG_MAX 3
+
+#define VP_LOG 0x8500
+
+#define LOG_TOP_TEMP       1
+#define LOG_TOP_COOL       2
+#define LOG_BOTTOM_TEMP    3
+#define LOG_BOTTOM_COOL    4
+#define LOG_DELAY          5
+#define LOG_PRESSURE       6
+
+
+
+u8 logCount = 0;
+void addLogtest(u16 type, u16 value);
+
+typedef struct
+{
+    u16 type;
+    u16 value;
+} LogData;
+
+LogData logs[LOG_MAX];
+
+// void addLog(u16 type, u16 value)
+// {
+//     int i;
+
+//     if(logCount < LOG_MAX)
+//     {
+//         logs[logCount].type = type;
+//         logs[logCount].value = value;
+
+//         logCount++;
+//     }
+//     else
+//     {
+//         for(i = 0; i < LOG_MAX - 1; i++)
+//         {
+//             logs[i] = logs[i + 1];
+//         }
+
+//         logs[LOG_MAX - 1].type = type;
+//         logs[LOG_MAX - 1].value = value;
+//     }
+
+//     updateLogs();
+// }
+
+void updateLogs(){
+    u16 len = 0;
+    u16 vpType;
+    u16 vpValue;
+    u8 i;
+    for(i = 0; i < LOG_MAX; i++){
+        u16 vpType  = VP_LOG + (i * 4);
+        u16 vpValue = VP_LOG + (i * 4) + 2;
+
+        if(i < logCount)
+        {
+            write_dgus_vp(vpType,(u8*)&logs[i].type,1);
+            write_dgus_vp(vpValue,(u8*)&logs[i].value,1);
+            if(admin_language == 0){
+                switch(logs[i].type){
+                case 1:{
+                    if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&T_TEMP_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4770, (u8*)&T_TEMP_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4800, (u8*)&T_TEMP_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+                case 2:{
+                    if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&T_COOL_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4770, (u8*)&T_COOL_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4800, (u8*)&T_COOL_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+                case 3:{
+                     if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&B_TEMP_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4770, (u8*)&B_TEMP_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4800, (u8*)&B_TEMP_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+                case 4:{
+                    if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&B_COOL_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4770, (u8*)&B_COOL_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4800, (u8*)&B_COOL_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+                case 5:{
+                    if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&DELAY_ENG, 9);
+                        len = 18;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4770, (u8*)&DELAY_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4800, (u8*)&DELAY_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+                case 6 : {
+                     if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&PRESS_ENG, 9);
+                        len = 18;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4770, (u8*)&PRESS_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4800, (u8*)&PRESS_ENG, 10);
+                        len = 20;
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_ENG_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+            }
+            }else{
+                switch(logs[i].type){
+                case 1:{
+                      if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&T_TEMP_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4740, (u8*)&T_TEMP_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4740, (u8*)&T_TEMP_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+                case 2:{
+                     if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&T_COOL_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4740, (u8*)&T_COOL_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4740, (u8*)&T_COOL_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+                case 3:{
+                     if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&B_TEMP_KOR, 8);
+                        len = 16;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4740, (u8*)&B_TEMP_KOR, 8);
+                        len = 16;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4740, (u8*)&B_TEMP_KOR, 8);
+                        len = 16;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+                case 4:{
+                     if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&B_COOL_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4740, (u8*)&B_COOL_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4740, (u8*)&B_COOL_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+                case 5:{
+                     if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&DELAY_KOR, 5);
+                        len = 10;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4740, (u8*)&DELAY_KOR, 5);
+                        len = 10;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4740, (u8*)&DELAY_KOR, 5);
+                        len = 10;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+                case 6 : {
+                     if(i == 0){
+                        write_dgus_vp(0x4740, (u8*)&PRESS_KOR, 5);
+                        len = 10;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 1){
+                        write_dgus_vp(0x4740, (u8*)&PRESS_KOR, 5);
+                        len = 10;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }else if(i == 2){
+                        write_dgus_vp(0x4740, (u8*)&PRESS_KOR, 5);
+                        len = 10;
+                        write_dgus_vp(0x5748, (u8*)&len, 1);
+                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                    }
+                }break;
+            }
+            }
+            
+        }else{
+            u16 zero = 0;
+            write_dgus_vp(vpType,(u8*)&zero,1);
+            write_dgus_vp(vpValue,(u8*)&zero,1);
+        }
+    }
+
+}
+
+void addLogtest(u16 type, u16 value)
+{
+    int i;
+
+    if(logCount < LOG_MAX)
+    {
+        logs[logCount].type = type;
+        logs[logCount].value = value;
+
+        logCount++;
+    }
+    else
+    {
+        for(i = 0; i < LOG_MAX - 1; i++)
+        {
+            logs[i] = logs[i + 1];
+        }
+
+        logs[LOG_MAX - 1].type = type;
+        logs[LOG_MAX - 1].value = value;
+    }
+
+    updateLogs();
+}
+
+void clearLogs()
+{
+	  u8 i;
+    logCount = 0;
+
+    for(i = 0; i < LOG_MAX; i++)
+    {
+        logs[i].type = 0;
+        logs[i].value = 0;
+    }
+
+    updateLogs();
+}
+
 
 void check_Start(u16 addr, u16 velue){
     check_addr = addr;
@@ -190,22 +631,22 @@ void check_Start(u16 addr, u16 velue){
     StartTimer(TMR_6, CHECK_TIME); 
     switch(addr){
         case VP_SET_TT:{
-            addLog(LOG_TOP_TEMP, velue);
+            addLogtest(LOG_TOP_TEMP, velue);
         }break;
         case VP_SET_CHTT:{
-            addLog(LOG_TOP_COOL, velue);
+            addLogtest(LOG_TOP_COOL, velue);
         }break;
         case VP_SET_TB:{
-            addLog(LOG_BOTTOM_TEMP, velue);
+            addLogtest(LOG_BOTTOM_TEMP, velue);
         }break;
         case VP_SET_CHTB:{
-            addLog(LOG_BOTTOM_COOL, velue);
+            addLogtest(LOG_BOTTOM_COOL, velue);
         }break;
         case VP_SET_H:{
-            addLog(LOG_DELAY, velue);
+            addLogtest(LOG_DELAY, velue);
         }break;
         case VP_SET_P:{
-            addLog(LOG_PRESSURE, velue);
+            addLogtest(LOG_PRESSURE, velue);
         }break;
     }
 }

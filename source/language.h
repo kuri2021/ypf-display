@@ -161,4 +161,23 @@ extern const u16 PRESSURE_CAL_CHN[];
 extern const u16 EXIT_ENG[];
 extern const u16 EXIT_KOR[];
 
+extern const u16 T_TEMP_ENG[];
+extern const u16 T_COOL_ENG[]; // T COOL CHG
+extern const u16 B_TEMP_ENG[]; // B TEMP CHG
+extern const u16 B_COOL_ENG[]; // B COOL CHG
+extern const u16 DELAY_ENG[]; // DELAY CHG
+extern const u16 PRESS_ENG[]; // PRESS CHG
+
+extern const u16 T_TEMP_KOR[]; // 상 온도 변경
+extern const u16 T_COOL_KOR[]; // 상 냉각 변경
+extern const u16 B_TEMP_KOR[]; // 하 온도 변경
+extern const u16 B_COOL_KOR[]; // 하 냉각 변경
+extern const u16 DELAY_KOR[]; // 지연 변경
+extern const u16 PRESS_KOR[]; // 압력 변경
+
+extern const u16 FOUND_KOR[];
+extern const u16 NO_ERROR_KOR[];
+extern const u16 FOUND_ENG[];
+extern const u16 NO_ERROR_ENG[];
+
 #endif

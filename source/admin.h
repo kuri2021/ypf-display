@@ -72,4 +72,8 @@ extern u16 admin_language;
 
 extern u16 userSet[];
 extern u16 IO[];
+extern u16 SP_ENG_FONTID;
+extern u16 SP_ENG_FONTSIZE;
+extern u16 SP_KOR_FONTID;
+extern u16 SP_KOR_FONTSIZE;
 #endif

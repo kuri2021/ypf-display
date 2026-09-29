@@ -80,16 +80,9 @@ static void ChangeImage(u16 vp_addr, u16 index);
 #define VP_ENGINEERMODE_PRES 0x8144 // 엔지니어모드 최대 압력
 #define VP_LANGUAGE_FLAG 0x8146 // 언어변경
 
-#define VP_UI_US_T_TEMP_MAX 0x4080 // 유저세팅 8개
-#define VP_UI_US_T_TEMP_MIN 0x4070 // 유저세팅 8개
-#define VP_UI_US_B_TEMP_MAX 0x4110 // 유저세팅 8개
-#define VP_UI_US_B_TEMP_MIN 0x4100 // 유저세팅 8개
-#define VP_UI_US_P_MAX 0x4140 // 유저세팅 8개
-#define VP_UI_US_P_MIN 0x4130 // 유저세팅 8개
-#define VP_UI_US_D_MAX 0x4170 // 유저세팅 8개
-#define VP_UI_US_D_MIN 0x4160 // 유저세팅 8개
-#define VP_UI_EN_SENSER 0X4700 // 엔지니어모드 센서 보정
-#define VP_UI_EN_PRES 0X4720 // 엔지니어모드 최대 압력
+#define VP_WORK_HEATING 0x8150 // 가열시간
+#define VP_WORK_HOLDING 0x8152 // 지연시간
+#define VP_WORK_COOLING 0x8154 // 냉각시간
 
 
 #define SP_TXT_TT 0x5000
@@ -130,6 +123,8 @@ static u16 BT100 = 0, BT10 = 0,BT1 = 0;
 static u16 BC10 = 0, BC1 = 0;
 static u16 min = 0, second = 0;
 static u16 press            = 0;  // 0.1 단위 표현용 (ex. 25 -> 2.5 bar)
+
+static u16 t_rampMs = 0, t_holdMs = 0, t_coolMs = 0;
 
 static u8 check_active = 0;
 #define TMR_6 6
@@ -1305,6 +1300,38 @@ void data_set_Init(void) {
     write_dgus_vp(0x2310, (u8*)&TC1 ,     2);
 
     SetTextColorWhite(0x9273);
+
+    u16 h = 0, m = 0, s = 0;
+
+    read_dgus_vp(VP_WORK_HEATING, (u8*)&t_rampMs, 1);
+    read_dgus_vp(VP_WORK_HOLDING, (u8*)&t_holdMs, 1);
+    read_dgus_vp(VP_WORK_COOLING, (u8*)&t_coolMs, 1);
+
+    h = t_rampMs / 3600;
+    m  = (t_rampMs % 3600) / 60;
+    s  = t_rampMs % 60;
+
+    write_dgus_vp(0x4430, (u8*)&h ,     1);
+    write_dgus_vp(0x4440, (u8*)&m ,     1);
+    write_dgus_vp(0x4450, (u8*)&s ,     1);
+
+    h = t_holdMs / 3600;
+    m  = (t_holdMs % 3600) / 60;
+    s  = t_holdMs % 60;
+
+    write_dgus_vp(0x4470, (u8*)&h ,     1);
+    write_dgus_vp(0x4480, (u8*)&m ,     1);
+    write_dgus_vp(0x4490, (u8*)&s ,     1);
+
+    h = t_coolMs / 3600;
+    m  = (t_coolMs % 3600) / 60;
+    s  = t_coolMs % 60;
+
+    write_dgus_vp(0x4510, (u8*)&h ,     1);
+    write_dgus_vp(0x4520, (u8*)&m ,     1);
+    write_dgus_vp(0x4530, (u8*)&s ,     1);
+
+
     
 }
 

@@ -26,6 +26,9 @@ static u16 system_ready = 0;
 
 #define VP_DATA_PUSH          0x8200  // 유지시간 설정
 #define VP_LANGUAGE_FLAG 0x8146 // 언어변경
+#define VP_WORK_HEATING 0x8150 // 가열시간
+#define VP_WORK_HOLDING 0x8152 // 지연시간
+#define VP_WORK_COOLING 0x8154 // 냉각시간
 
 
 

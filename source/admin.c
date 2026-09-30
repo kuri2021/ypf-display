@@ -35,6 +35,8 @@
 #define ACT_PUMP          (1 << 4)   // Bit 4
 #define ACT_SOLENOID      (1 << 5)   // Bit 5
 
+
+
 u16 act_flag = 0;
 
 u16 SP_ENG_FONTID = 0x000F;
@@ -1467,6 +1469,25 @@ void admin_language_eng(void){
     write_dgus_vp(0x5718, (u8*)&len, 1);
     write_dgus_vp(0x5719, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x571A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+    write_dgus_vp(0x4820, (u8*)&FOUND_ENG, 5);
+    len = 10;
+    write_dgus_vp(0x5828, (u8*)&len, 1);
+    write_dgus_vp(0x5829, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x582A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+    write_dgus_vp(0x4830, (u8*)&NO_ERROR_ENG, 9);
+    len = 18;
+    write_dgus_vp(0x5838, (u8*)&len, 1);
+    write_dgus_vp(0x5839, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x583A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+    write_dgus_vp(0x4840, (u8*)&CLOSE_ENG, 5);
+    len = 10;
+    write_dgus_vp(0x5848, (u8*)&len, 1);
+    write_dgus_vp(0x5849, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x584A, (u8*)&SP_ENG_FONTSIZE, 1);
+
 }
 
 void admin_language_kor(void){
@@ -1684,6 +1705,24 @@ void admin_language_kor(void){
     write_dgus_vp(0x5718, (u8*)&len, 1);
     write_dgus_vp(0x5719, (u8*)&SP_KOR_FONTID, 1);
     write_dgus_vp(0x571A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+    write_dgus_vp(0x4820, (u8*)&FOUND_KOR, 3);
+    len = 6;
+    write_dgus_vp(0x5828, (u8*)&len, 1);
+    write_dgus_vp(0x5829, (u8*)&SP_KOR_FONTID, 1);
+    write_dgus_vp(0x582A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+    write_dgus_vp(0x4830, (u8*)&NO_ERROR_KOR, 9);
+    len = 18;
+    write_dgus_vp(0x5838, (u8*)&len, 1);
+    write_dgus_vp(0x5839, (u8*)&SP_KOR_FONTID, 1);
+    write_dgus_vp(0x583A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+    write_dgus_vp(0x4840, (u8*)&CLOSE_KOR, 2);
+    len = 4;
+    write_dgus_vp(0x5848, (u8*)&len, 1);
+    write_dgus_vp(0x5849, (u8*)&SP_KOR_FONTID, 1);
+    write_dgus_vp(0x584A, (u8*)&SP_KOR_FONTSIZE, 1);
 }
 
 //어드민 엔지니어 모드

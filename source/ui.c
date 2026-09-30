@@ -44,6 +44,14 @@ static void ChangeImage(u16 vp_addr, u16 index);
 #define LOG_DELAY          5
 #define LOG_PRESSURE       6
 
+#define VP_PAGE_BIT        0x8400 
+#define PAGE_BIT(n)       (1u << (n))
+
+#define MAIN_PAGE         (1 << 0)   // Bit 0
+#define ADMIN_PAGE        (1 << 1)   // Bit 1
+
+static u8 page_bit = 0;
+
 
 #define VP_TT        0x8000  // 상 히터 온도 (℃)
 //#define VP_TB        0x8002  // 하 히터 온도 (℃)
@@ -414,21 +422,21 @@ void updateLogs(){
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4740, (u8*)&T_TEMP_KOR, 7);
+                        write_dgus_vp(0x4770, (u8*)&T_TEMP_KOR, 7);
                         len = 14;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4740, (u8*)&T_TEMP_KOR, 7);
+                        write_dgus_vp(0x4800, (u8*)&T_TEMP_KOR, 7);
                         len = 14;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
                     }
                 }break;
                 case 2:{
@@ -441,48 +449,48 @@ void updateLogs(){
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4740, (u8*)&T_COOL_KOR, 7);
+                        write_dgus_vp(0x4770, (u8*)&T_COOL_KOR, 7);
                         len = 14;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4740, (u8*)&T_COOL_KOR, 7);
+                        write_dgus_vp(0x4800, (u8*)&T_COOL_KOR, 7);
                         len = 14;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x5780A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
                     }
                 }break;
                 case 3:{
                      if(i == 0){
-                        write_dgus_vp(0x4740, (u8*)&B_TEMP_KOR, 8);
-                        len = 16;
+                        write_dgus_vp(0x4740, (u8*)&B_TEMP_KOR, 7);
+                        len = 14;
                         write_dgus_vp(0x5748, (u8*)&len, 1);
                         write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
                         write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4740, (u8*)&B_TEMP_KOR, 8);
-                        len = 16;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x4770, (u8*)&B_TEMP_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4740, (u8*)&B_TEMP_KOR, 8);
-                        len = 16;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x4800, (u8*)&B_TEMP_KOR, 7);
+                        len = 14;
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
                     }
                 }break;
                 case 4:{
@@ -495,21 +503,21 @@ void updateLogs(){
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4740, (u8*)&B_COOL_KOR, 7);
+                        write_dgus_vp(0x4770, (u8*)&B_COOL_KOR, 7);
                         len = 14;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4740, (u8*)&B_COOL_KOR, 7);
+                        write_dgus_vp(0x4800, (u8*)&B_COOL_KOR, 7);
                         len = 14;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
                     }
                 }break;
                 case 5:{
@@ -522,21 +530,21 @@ void updateLogs(){
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4740, (u8*)&DELAY_KOR, 5);
+                        write_dgus_vp(0x4770, (u8*)&DELAY_KOR, 5);
                         len = 10;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4740, (u8*)&DELAY_KOR, 5);
+                        write_dgus_vp(0x4800, (u8*)&DELAY_KOR, 5);
                         len = 10;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
                     }
                 }break;
                 case 6 : {
@@ -549,21 +557,21 @@ void updateLogs(){
 
                         write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
                     }else if(i == 1){
-                        write_dgus_vp(0x4740, (u8*)&PRESS_KOR, 5);
+                        write_dgus_vp(0x4770, (u8*)&PRESS_KOR, 5);
                         len = 10;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x5778, (u8*)&len, 1);
+                        write_dgus_vp(0x5779, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x577A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4780, (u8*)&logs[i].value, 1);
                     }else if(i == 2){
-                        write_dgus_vp(0x4740, (u8*)&PRESS_KOR, 5);
+                        write_dgus_vp(0x4800, (u8*)&PRESS_KOR, 5);
                         len = 10;
-                        write_dgus_vp(0x5748, (u8*)&len, 1);
-                        write_dgus_vp(0x5749, (u8*)&SP_KOR_FONTID, 1);
-                        write_dgus_vp(0x574A, (u8*)&SP_KOR_FONTSIZE, 1);
+                        write_dgus_vp(0x5808, (u8*)&len, 1);
+                        write_dgus_vp(0x5809, (u8*)&SP_KOR_FONTID, 1);
+                        write_dgus_vp(0x580A, (u8*)&SP_KOR_FONTSIZE, 1);
 
-                        write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
+                        write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
                     }
                 }break;
             }
@@ -1249,6 +1257,15 @@ void SecCnt_TickTask(void) {
 
 void data_set_Init(void) {
     u16 result = 0;
+	
+	u16 h;
+    u16 m;
+    u16 s;
+
+    h = 0;
+    m = 0;
+    s = 0;
+
 
     read_dgus_vp(VP_SET_P, (u8*)&press, 1);
 
@@ -1301,7 +1318,36 @@ void data_set_Init(void) {
 
     SetTextColorWhite(0x9273);
 
-    u16 h = 0, m = 0, s = 0;
+    read_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&result, 1);
+    write_dgus_vp(0x4080, (u8*)&result,    2);
+
+    read_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&result, 1);
+    write_dgus_vp(0x4070, (u8*)&result,    2);
+
+    read_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX , (u8*)&result, 1);
+    write_dgus_vp(0x4110, (u8*)&result,    2);
+
+    read_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN , (u8*)&result, 1);
+    write_dgus_vp(0x4100, (u8*)&result,    2);
+
+    read_dgus_vp(VP_USERSETTING_PRES_MAX , (u8*)&result, 1);
+    write_dgus_vp(0x4140, (u8*)&result,    2);
+
+    read_dgus_vp(VP_USERSETTING_PRES_MIN , (u8*)&result, 1);
+    write_dgus_vp(0x4130, (u8*)&result,    2);
+
+     read_dgus_vp(VP_USERSETTING_DELAY_MAX  , (u8*)&result, 1);
+    write_dgus_vp(0x4170, (u8*)&result,    2);
+
+     read_dgus_vp(VP_USERSETTING_DELAY_MIN  , (u8*)&result, 1);
+    write_dgus_vp(0x4160, (u8*)&result,    2);
+
+     read_dgus_vp(VP_ENGINEERMODE_SENSER  , (u8*)&result, 1);
+    write_dgus_vp(0x4700, (u8*)&result,    2);
+
+     read_dgus_vp(VP_ENGINEERMODE_PRES  , (u8*)&result, 1);
+    write_dgus_vp(0x4720, (u8*)&result,    2);
+
 
     read_dgus_vp(VP_WORK_HEATING, (u8*)&t_rampMs, 1);
     read_dgus_vp(VP_WORK_HOLDING, (u8*)&t_holdMs, 1);
@@ -2526,6 +2572,10 @@ void encoder_page_change(u16 state)
                 }
             }else{
                  if(page_number == main1[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+
+                    
                         read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
                         TT100 = result / 100;
                         TT10   = (result / 10) % 10;
@@ -2562,13 +2612,19 @@ void encoder_page_change(u16 state)
                         Page_Change_Handler(page_number);
                         quickSettingflag = 1;
                 }else if(page_number == main2[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     topSelectflag   = 1;
                     page_number = topHeating[admin_language];
                     Page_Change_Handler(page_number);
                 }else if(page_number == main3[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     botSelectflag = 1;
                     Page_Change_UI(botHeating[admin_language]);
                 }else if(page_number == main4[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     settingflag = 1;
                     SetTextColorBlue(0x1373);
                     SetTextColorBlack(0x1383);
@@ -2580,6 +2636,8 @@ void encoder_page_change(u16 state)
                     ChangeImage(0x2390, 0);
                     Page_Change_UI(delayS[admin_language]);
                 }else if(page_number == main5[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     settingflag = 1;
                     read_dgus_vp(VP_SET_P, (u8*)&press, 1);
                     write_dgus_vp(0x2400, (u8*)&press, 1);
@@ -2587,6 +2645,8 @@ void encoder_page_change(u16 state)
                     ChangeImage(0x2410, 0);
                     Page_Change_UI(pressureS[admin_language]);
                 }else if(page_number == main6[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                      if(f_ready==1){
                         Page_Change_UI(workPageN);
                         }else if(f_start == 1){
@@ -2604,10 +2664,14 @@ void encoder_page_change(u16 state)
                             write_dgus_vp(0x2130, (u8*)&second, 1);
                         } 
                 }else if(page_number == main7[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     page_number = adminList[admin_language];
                     Page_Change_Handler(page_number);
                     admin_List_text_change();
                 }else if(page_number == topHeating[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     settingflag  = 1;
                     write_dgus_vp(0X2150, (u8*)&TT100, 1);
                     write_dgus_vp(0x2160, (u8*)&TT10,     1);
@@ -2616,6 +2680,8 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(topHeatingS[admin_language]);
                     select_num(page_number, 0);
                 }else if(page_number == topCooling[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     settingflag  = 1;
                     write_dgus_vp(0x2190, (u8*)&TC10, 1);
                     write_dgus_vp(0x2200, (u8*)&TC1,     1);
@@ -2623,8 +2689,12 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(topCoolingS[admin_language]);
                     select_num(page_number, 0);
                 }else if(page_number == topFrame){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(topFrameS);
                 }else if(page_number == botHeating[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     settingflag  = 1;
                     write_dgus_vp(0x2260, (u8*)&BT100, 1);
                     write_dgus_vp(0x2270, (u8*)&BT10,     1);
@@ -2633,6 +2703,8 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(botHeatingS[admin_language]);
                     select_num(page_number, 0);
                 }else if(page_number == botCooling[admin_language]){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     settingflag  = 1;
                     write_dgus_vp(0x2300, (u8*)&BC10,     1);
                     write_dgus_vp(0x2310, (u8*)&BC1,     1);
@@ -2640,8 +2712,12 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(botCoolingS[admin_language]);
                     select_num(page_number, 0);
                 }else if(page_number == botFrame){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(botFrameS);
                 }else if(page_number == exit){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     if (topSelectflag == 1) {
                         topSelectflag = 0;
                         Page_Change_UI(main2[admin_language]);
@@ -2650,13 +2726,21 @@ void encoder_page_change(u16 state)
                         Page_Change_UI(main3[admin_language]);
                     }
                 }else if(page_number == workPageN){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(main6[admin_language]);
                 }else if(page_number == quickSetting){
+                    page_bit = 2;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     settingflag = 1;
                     QuickSettingTextSet(quickSettingS, 0);
                 }else if(page_number == adminList[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     admin_page_change();
                 }else if(page_number == adminUserSetting[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     if(usersettingSP == 0){
                         if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
                             write_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&toptempmin, 1);
@@ -2686,25 +2770,45 @@ void encoder_page_change(u16 state)
                     }
                     admin_User_Setting_Function(state);
                 }else if(page_number == adminIOTest[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     adminIoTestWork();
                 }else if(page_number == adminFactoryResetNotice[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     adminfactoryResetText(state);
                 }else if(page_number == adminLogError[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     adminLogErrorText(state);
                 }else if(page_number == adminMaintenance[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(adminList[admin_language]);
                 }else if(page_number == adminLanguage[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     adminLanguageText(state);
                     write_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&admin_language,1);
                 }else if(page_number == adminCompany[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(adminList[admin_language]);
                 }else if(page_number == adminEngineermod[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     EngineermodWork(state);
                 }else if(page_number == adminEngineermodS[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     EngineermodSWork(state);
                 }else if(page_number == adminActiveLog[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(adminLogError[admin_language]);
                 }else if(page_number == adminErrorLog[admin_language]){
+                    page_bit = 1;
+                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(adminLogError[admin_language]);
                 }
             }

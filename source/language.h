@@ -177,7 +177,9 @@ extern const u16 PRESS_KOR[]; // 압력 변경
 
 extern const u16 FOUND_KOR[];
 extern const u16 NO_ERROR_KOR[];
+extern const u16 CLOSE_KOR[];
 extern const u16 FOUND_ENG[];
 extern const u16 NO_ERROR_ENG[];
+extern const u16 CLOSE_ENG[];
 
 #endif

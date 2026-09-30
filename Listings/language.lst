@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/29/2026 09:51:28 PAGE 1   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/30/2026 19:37:47 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE LANGUAGE
@@ -62,7 +62,7 @@ line level    source
   50          // const u16 PAJU_JORI_EUP_KOR[] = {0xD30C,0xC8FC,0xC2DC,0x0020,0xC870,0xB9AC,0xC74D}; // 파주시 조리
              -읍
   51          // const u16 DANGJAEBONG_RO_29_KOR[] = {0xB2F9,0xC7AC,0xBD09,0xB85C,0x0020,0x0032,0x0039}; // 당재봉로
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/29/2026 09:51:28 PAGE 2   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/30/2026 19:37:47 PAGE 2   
 
              - 29
   52          // const u16 TEL_KOR[] = {0x0030,0x0033,0x0031,0x002D,0x0039,0x0035,0x0033,0x002D,0x0034,0x0030,0x0036,0x0
@@ -126,7 +126,7 @@ line level    source
   99          // 작동 시간
  100          const u16 HEATING_TIME_KOR[] = {0x2B88, 0x2530}; // 가열시간
  101          const u16 FAN_KOR[] = {0x272C}; // 팬
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/29/2026 09:51:28 PAGE 3   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/30/2026 19:37:47 PAGE 3   
 
  102          const u16 PUMP_KOR[] = {0x278C, 0x2904}; // 펌프
  103          
@@ -156,7 +156,7 @@ line level    source
  126              0x00BD
  127          };
  128          const u16 T_COOL_KOR[] = {
- 129                  0x14C1,  // 상
+ 129              0x14C1,  // 상
  130              0x0020,  // 공백
  131              0x04C9,  // 냉
  132              0x0001,  // 각
@@ -190,7 +190,7 @@ line level    source
  160              0x00BD   // 경
  161          }; // 지연 변경
  162          const u16 PRESS_KOR[] = {
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/29/2026 09:51:28 PAGE 4   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/30/2026 19:37:47 PAGE 4   
 
  163              0x1955,  // 압
  164              0x0C25,  // 력
@@ -254,7 +254,7 @@ line level    source
  216          // English / Chinese / Korean
  217          const u16 ENGLISH_ENG[] = {0x0045,0x004E,0x0047,0x004C,0x0049,0x0053,0x0048};
  218          const u16 CHINESE_ENG[] = {0x0043,0x0048,0x0049,0x004E,0x0045,0x0053,0x0045};
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/29/2026 09:51:28 PAGE 5   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/30/2026 19:37:47 PAGE 5   
 
  219          const u16 KOREAN_ENG[] = {0x004B,0x004F,0x0052,0x0045,0x0041,0x004E};
  220          
@@ -318,7 +318,7 @@ line level    source
              -6,0x0033}; // 031-953-4063
  272          
  273          const u16 ON_TEXT[] = {0x004F,0x004E};
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/29/2026 09:51:28 PAGE 6   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/30/2026 19:37:47 PAGE 6   
 
  274          const u16 OFF_TEXT[] = {0x004F, 0x0046, 0x0046};
  275          
@@ -366,39 +366,48 @@ line level    source
  317              0x101C, 0x00AC, 0x081C
  318          };
  319          
- 320          const u16 NO_ERROR_KOR[] = {
- 321              0x19D0, 0x0BEC, 0x0000, 0x0020,
- 322              0x19C6, 0x16B5, 0x06C8, 0x06E4, 0x002E
- 323          };
- 324          
- 325          const u16 FOUND_ENG[] = {
- 326              0x0046,  // F
- 327              0x006F,  // o
- 328              0x0075,  // u
- 329              0x006E,  // n
- 330              0x0064   // d
- 331          };
- 332          
- 333          const u16 NO_ERROR_ENG[] = {
- 334              0x004E,  // N
- 335              0x006F,  // o
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/29/2026 09:51:28 PAGE 7   
+ 320          const u16 NO_ERROR_KOR[] = {0x19D0, 0x0BEC, 0x0000, 0x0020,0x19C6, 0x16B5, 0x06C8, 0x06E4, 0x002E};
+ 321          
+ 322          const u16 CLOSE_KOR[] = {
+ 323              0x06EB,  // 닫
+ 324              0x0230   // 기
+ 325          };
+ 326          
+ 327          const u16 FOUND_ENG[] = {
+ 328              0x0046,  // F
+ 329              0x006F,  // o
+ 330              0x0075,  // u
+ 331              0x006E,  // n
+ 332              0x0064   // d
+ 333          };
+ 334          
+ 335          const u16 NO_ERROR_ENG[] = {
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          09/30/2026 19:37:47 PAGE 7   
 
- 336              0x0020,  // 공백
- 337              0x0065,  // e
- 338              0x0072,  // r
- 339              0x0072,  // r
- 340              0x006F,  // o
+ 336              0x004E,  // N
+ 337              0x006F,  // o
+ 338              0x0020,  // 공백
+ 339              0x0065,  // e
+ 340              0x0072,  // r
  341              0x0072,  // r
- 342              0x0073,  // s
- 343              0x002E   // .
- 344          };
+ 342              0x006F,  // o
+ 343              0x0072,  // r
+ 344              0x0073,  // s
+ 345          };
+ 346          
+ 347          const u16 CLOSE_ENG[] = {
+ 348              0x0043,  // C
+ 349              0x006C,  // l
+ 350              0x006F,  // o
+ 351              0x0073,  // s
+ 352              0x0065   // e
+ 353          };
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   ----    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   1452    ----
+   XDATA SIZE       =   1464    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

@@ -126,7 +126,7 @@ const u16 T_TEMP_KOR[] = {
     0x00BD
 };
 const u16 T_COOL_KOR[] = {
-        0x14C1,  // 상
+    0x14C1,  // 상
     0x0020,  // 공백
     0x04C9,  // 냉
     0x0001,  // 각
@@ -317,9 +317,11 @@ const u16 FOUND_KOR[] = {
     0x101C, 0x00AC, 0x081C
 };
 
-const u16 NO_ERROR_KOR[] = {
-    0x19D0, 0x0BEC, 0x0000, 0x0020,
-    0x19C6, 0x16B5, 0x06C8, 0x06E4, 0x002E
+const u16 NO_ERROR_KOR[] = {0x19D0, 0x0BEC, 0x0000, 0x0020,0x19C6, 0x16B5, 0x06C8, 0x06E4, 0x002E};
+
+const u16 CLOSE_KOR[] = {
+    0x06EB,  // 닫
+    0x0230   // 기
 };
 
 const u16 FOUND_ENG[] = {
@@ -340,5 +342,12 @@ const u16 NO_ERROR_ENG[] = {
     0x006F,  // o
     0x0072,  // r
     0x0073,  // s
-    0x002E   // .
+};
+
+const u16 CLOSE_ENG[] = {
+    0x0043,  // C
+    0x006C,  // l
+    0x006F,  // o
+    0x0073,  // s
+    0x0065   // e
 };

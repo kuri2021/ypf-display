@@ -207,31 +207,6 @@ typedef struct
 
 LogData logs[LOG_MAX];
 
-// void addLog(u16 type, u16 value)
-// {
-//     int i;
-
-//     if(logCount < LOG_MAX)
-//     {
-//         logs[logCount].type = type;
-//         logs[logCount].value = value;
-
-//         logCount++;
-//     }
-//     else
-//     {
-//         for(i = 0; i < LOG_MAX - 1; i++)
-//         {
-//             logs[i] = logs[i + 1];
-//         }
-
-//         logs[LOG_MAX - 1].type = type;
-//         logs[LOG_MAX - 1].value = value;
-//     }
-
-//     updateLogs();
-// }
-
 void updateLogs(){
     u16 len = 0;
     u16 vpType;
@@ -624,7 +599,6 @@ void clearLogs()
 
     updateLogs();
 }
-
 
 void check_Start(u16 addr, u16 velue){
     check_addr = addr;
@@ -1071,6 +1045,8 @@ void Page_Change_UI(u8 i){
 void admin_page_change(){
     switch(adminSP){
         case 0:{
+
+            u16 result = 0;
             SetTextColorYellow(0x5063);
             SetTextColorWhite(0x5073);
             SetTextColorWhite(0x5083);
@@ -1082,14 +1058,46 @@ void admin_page_change(){
             SetTextColorWhite(0x5143);
             SetTextColorWhite(0x5153);
             Page_Change_UI(adminUserSetting[admin_language]);
-            write_dgus_vp(0x4070, (u8*)&toptempmin, 1); 
-            write_dgus_vp(0x4080, (u8*)&toptempmax, 1); 
-            write_dgus_vp(0x4100, (u8*)&bottempmin, 1); 
-            write_dgus_vp(0x4110, (u8*)&bottempmax, 1); 
-            write_dgus_vp(0x4130, (u8*)&pressmin, 1); 
-            write_dgus_vp(0x4140, (u8*)&pressmax, 1); 
-            write_dgus_vp(0x4160, (u8*)&delaymin, 1); 
-            write_dgus_vp(0x4170, (u8*)&delaymax, 1); 
+
+            read_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&result, 1);
+    toptempmax = result;
+    write_dgus_vp(0x4080, (u8*)&result,    2);
+    
+    read_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&result, 1);
+    toptempmin = result;
+    write_dgus_vp(0x4070, (u8*)&result,    2);
+
+    read_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX , (u8*)&result, 1);
+    bottempmax = result;
+    write_dgus_vp(0x4110, (u8*)&result,    2);
+
+    read_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN , (u8*)&result, 1);
+    bottempmin = result;
+    write_dgus_vp(0x4100, (u8*)&result,    2);
+
+    read_dgus_vp(VP_USERSETTING_PRES_MAX , (u8*)&result, 1);
+    pressmax = result;
+    write_dgus_vp(0x4140, (u8*)&result,    2);
+
+    read_dgus_vp(VP_USERSETTING_PRES_MIN , (u8*)&result, 1);
+    pressmin = result;
+    write_dgus_vp(0x4130, (u8*)&result,    2);
+
+     read_dgus_vp(VP_USERSETTING_DELAY_MAX  , (u8*)&result, 1);
+     delaymax = result;
+    write_dgus_vp(0x4170, (u8*)&result,    2);
+
+     read_dgus_vp(VP_USERSETTING_DELAY_MIN  , (u8*)&result, 1);
+     delaymin = result;
+    write_dgus_vp(0x4160, (u8*)&result,    2);
+            // write_dgus_vp(0x4070, (u8*)&toptempmin, 1); 
+            // write_dgus_vp(0x4080, (u8*)&toptempmax, 1); 
+            // write_dgus_vp(0x4100, (u8*)&bottempmin, 1); 
+            // write_dgus_vp(0x4110, (u8*)&bottempmax, 1); 
+            // write_dgus_vp(0x4130, (u8*)&pressmin, 1); 
+            // write_dgus_vp(0x4140, (u8*)&pressmax, 1); 
+            // write_dgus_vp(0x4160, (u8*)&delaymin, 1); 
+            // write_dgus_vp(0x4170, (u8*)&delaymax, 1); 
         }break;
         case 1:{
             SetTextColorYellow(0x5193);
@@ -1319,27 +1327,35 @@ void data_set_Init(void) {
     SetTextColorWhite(0x9273);
 
     read_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&result, 1);
+    toptempmax = result;
     write_dgus_vp(0x4080, (u8*)&result,    2);
-
+    
     read_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&result, 1);
+    toptempmin = result;
     write_dgus_vp(0x4070, (u8*)&result,    2);
 
     read_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX , (u8*)&result, 1);
+    bottempmax = result;
     write_dgus_vp(0x4110, (u8*)&result,    2);
 
     read_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN , (u8*)&result, 1);
+    bottempmin = result;
     write_dgus_vp(0x4100, (u8*)&result,    2);
 
     read_dgus_vp(VP_USERSETTING_PRES_MAX , (u8*)&result, 1);
+    pressmax = result;
     write_dgus_vp(0x4140, (u8*)&result,    2);
 
     read_dgus_vp(VP_USERSETTING_PRES_MIN , (u8*)&result, 1);
+    pressmin = result;
     write_dgus_vp(0x4130, (u8*)&result,    2);
 
      read_dgus_vp(VP_USERSETTING_DELAY_MAX  , (u8*)&result, 1);
+     delaymax = result;
     write_dgus_vp(0x4170, (u8*)&result,    2);
 
      read_dgus_vp(VP_USERSETTING_DELAY_MIN  , (u8*)&result, 1);
+     delaymin = result;
     write_dgus_vp(0x4160, (u8*)&result,    2);
 
      read_dgus_vp(VP_ENGINEERMODE_SENSER  , (u8*)&result, 1);

@@ -23,9 +23,13 @@ void Pro8283Init(void)
 
     // UartInit(DWIN_UART,115200);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
     //  UartInit(UART4,115200);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
-      UartInit(DWIN_UART,38400);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
-    UartInit(UART4,38400);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
+    //   UartInit(DWIN_UART,38400);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
+    // UartInit(UART4,38400);	//ʹ��8283Э�飬��ʼ����ش��ڲ�����
    // CanBusInit(CanReg);
+
+   
+     UartInit(DWIN_UART, 9600); // use 8283 protocol on UART2
+   UartInit(UART4,     9600); // use 8283 protocol on UART4
 
     DwinFrame[0].pQuene = Uart_Struct[DWIN_UART].rx_buf;
     DwinFrame[0].QueneHead = &Uart_Struct[DWIN_UART].rx_head;

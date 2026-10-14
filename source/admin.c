@@ -63,7 +63,7 @@ u16 botCoolingDefault = 60;
 u16 delayDefault = 90;
 
 u16 toptempmin = 1;
-u16 toptempmax = 200;
+u16 toptempmax = 0;
 u16 bottempmin = 1;
 u16 bottempmax = 200;
 u16 pressmin = 0;
@@ -661,25 +661,25 @@ void admin_User_Setting_Function(u16 i){
             }else if(usersettingEditSP == 1){
                 if(usersettingSP == 0){
                     read_dgus_vp(VP_SET_TT, (u8*)&result,1);
-                    if(toptempmax < 220 && toptempmax > toptempmin && result<toptempmax){
+                    if(toptempmax < 220 && toptempmax > toptempmin){
                         toptempmax++;
                     }
                     write_dgus_vp(0x4080, (u8*)&toptempmax, 1);
                 }else if(usersettingSP == 1){
                     read_dgus_vp(VP_SET_TB, (u8*)&result,1);
-                    if(bottempmax < 220 && bottempmax > bottempmin && result<bottempmax){
+                    if(bottempmax < 220 && bottempmax > bottempmin){
                         bottempmax++;
                     }
                     write_dgus_vp(0x4110, (u8*)&bottempmax, 1);
                 }else if(usersettingSP == 2){
                     read_dgus_vp(VP_SET_P, (u8*)&result,1);
-                    if(pressmax < 20 && pressmax > pressmin&& result<pressmax){
+                    if(pressmax < 20 && pressmax > pressmin){
                         pressmax++;
                     }
                     write_dgus_vp(0x4140, (u8*)&pressmax, 1);
                 }else if(usersettingSP == 3){
                     read_dgus_vp(VP_SET_H, (u8*)&result,1);
-                    if(delaymax < 180 &&delaymax > delaymin && result<delaymax){
+                    if(delaymax < 180 &&delaymax > delaymin){
                         delaymax++;
                     }
                     write_dgus_vp(0x4170, (u8*)&delaymax, 1);

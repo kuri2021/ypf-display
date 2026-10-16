@@ -47,7 +47,7 @@
 #define ENG_SET_PAGE         PAGE_BIT(14)  // 0x4000
 
 
-#define VP_USER_SET_BIT        0x8600 
+#define VP_USER_SET_BIT        0x8700 
 #define USER_SET_BIT(n)       (1u << (n))
 
 #define USER_SET_TOP_TEMP       USER_SET_BIT(0)   // 0x0001

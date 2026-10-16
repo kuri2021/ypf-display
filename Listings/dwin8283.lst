@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 10:38:44 PAGE 1   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 11:09:14 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DWIN8283
@@ -62,7 +62,7 @@ line level    source
               {
                   u16 Reg_CRC=0xffff;
                   u16 i;
-C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 10:38:44 PAGE 2   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 11:09:14 PAGE 2   
 
                   u8 j;
                   u16 crctmp;
@@ -126,7 +126,7 @@ line level    source
               #endif
  115          u8  Pro8283RxTreat(QUENE *pBuf)
  116          {
-C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 10:38:44 PAGE 3   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 11:09:14 PAGE 3   
 
  117   1        u16 len,len1,i;
  118   1        // u8 tmp[MAX_BYTE_LEN];
@@ -190,7 +190,7 @@ line level    source
                               #endif
  177   5                              write_dgus_vp(*(u16*)&SendTmp[4],&SendTmp[6],(SendTmp[2]-3)>>1);
  178   5                              SendTmp[2] = 3;
-C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 10:38:44 PAGE 4   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 11:09:14 PAGE 4   
 
  179   5                              *(u16*)&SendTmp[4] = 0x4f4b;
  180   5                          #ifdef ENABLE_CRC
@@ -254,7 +254,7 @@ line level    source
  238   2          {
  239   3            *pBuf->QueneTail += 1;
  240   3                  if (*pBuf->QueneTail >=  pBuf->QueneSize)
-C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 10:38:44 PAGE 5   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 11:09:14 PAGE 5   
 
  241   3                  {
  242   4                      *pBuf->QueneTail = 0;
@@ -318,7 +318,7 @@ line level    source
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   1554    ----
-C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 10:38:44 PAGE 6   
+C51 COMPILER V9.56.0.0   DWIN8283                                                          10/16/2026 11:09:14 PAGE 6   
 
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =    534      15

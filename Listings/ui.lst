@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 1   
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE UI
@@ -62,7 +62,7 @@ line level    source
   52          #define QUICK_SET_PAGE       PAGE_BIT(0)   // 0x0001
   53          #define TOP_TMP_SET_PAGE     PAGE_BIT(1)   // 0x0002
   54          #define TOP_COOL_SET_PAGE    PAGE_BIT(2)   // 0x0004
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 2   
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 2   
 
   55          #define BOT_TMP_SET_PAGE     PAGE_BIT(3)   // 0x0008
   56          #define BOT_COOL_SET_PAGE    PAGE_BIT(4)   // 0x0010
@@ -126,7 +126,7 @@ line level    source
  114          #define SP_TXT_TB 0x5002
  115          
  116          #define TMR_UI_POLL 1       // 새 타이머 채널
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 3   
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 3   
 
  117          #define UI_POLL_MS  200     // 200ms마다 화면 값 갱신
  118          
@@ -190,7 +190,7 @@ line level    source
  174          static u8 botHeating[2] = {12, 49};
  175          static u8 botCooling[2] = {13, 50};
  176          static u8 botFrame = 14;
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 4   
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 4   
 
  177          static u8 exit = 15;
  178          static u8 topHeatingS[2] = {16, 51};
@@ -254,7 +254,7 @@ line level    source
  236   1          u8 i;
  237   1          for(i = 0; i < LOG_MAX; i++){
  238   2              u16 vpType  = VP_LOG + (i * 4);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 5   
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 5   
 
  239   2              u16 vpValue = VP_LOG + (i * 4) + 2;
  240   2      
@@ -318,7 +318,7 @@ line level    source
  298   7                              write_dgus_vp(0x4810, (u8*)&logs[i].value, 1);
  299   7                          }
  300   6                      }break;
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 6   
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 6   
 
  301   5                      case 3:{
  302   6                           if(i == 0){
@@ -382,7 +382,7 @@ line level    source
  360   7                              write_dgus_vp(0x5749, (u8*)&SP_ENG_FONTID, 1);
  361   7                              write_dgus_vp(0x574A, (u8*)&SP_ENG_FONTSIZE, 1);
  362   7      
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 7   
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 7   
 
  363   7                              write_dgus_vp(0x4750, (u8*)&logs[i].value, 1);
  364   7                          }else if(i == 1){
@@ -446,7 +446,7 @@ line level    source
  422   7                              write_dgus_vp(0x4770, (u8*)&T_TEMP_KOR, 7);
  423   7                              len = 14;
  424   7                              write_dgus_vp(0x5778, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 8   
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 8   
 
  425   7                              write_dgus_vp(0x5779, (u8*)&SP_KOR_FONTID, 1);
  426   7                              write_dgus_vp(0x577A, (u8*)&SP_KOR_FONTSIZE, 1);
@@ -510,7 +510,7 @@ line level    source
  484   7                              write_dgus_vp(0x4800, (u8*)&B_TEMP_KOR, 7);
  485   7                              len = 14;
  486   7                              write_dgus_vp(0x5808, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 9   
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 9   
 
  487   7                              write_dgus_vp(0x5809, (u8*)&SP_KOR_FONTID, 1);
  488   7                              write_dgus_vp(0x580A, (u8*)&SP_KOR_FONTSIZE, 1);
@@ -574,7 +574,7 @@ line level    source
  546   6                      }break;
  547   5                      case 6 : {
  548   6                           if(i == 0){
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 10  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 10  
 
  549   7                              write_dgus_vp(0x4740, (u8*)&PRESS_KOR, 5);
  550   7                              len = 10;
@@ -638,7 +638,7 @@ line level    source
  608   1          updateLogs();
  609   1      }
  610          
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 11  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 11  
 
  611          void clearLogs()
  612          {
@@ -702,7 +702,7 @@ line level    source
  670          void UI_Read500ms_Stop(void){
  671   1        read500_enable = 0;
  672   1      }
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 12  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 12  
 
  673          
  674          static u8 ui_poll_enable = 0;
@@ -766,7 +766,7 @@ line level    source
  732   4                  }
  733   3              }break;
  734   2               case 4:{
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 13  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 13  
 
  735   3                    switch(select_position){
  736   4                      case 0:{
@@ -830,7 +830,7 @@ line level    source
  794   4                      SetTextColorBlack(0x1153);
  795   4                      SetTextColorBlack(0x1163);
  796   4                      SetTextColorBlack(0x1173);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 14  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 14  
 
  797   4                  }
  798   3                  if (count == 3) {
@@ -894,7 +894,7 @@ line level    source
  856   4                      SetTextColorBlue(0x1223);
  857   4                      SetTextColorBlack(0x9083);
  858   4                      SetTextColorBlack(0x9093);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 15  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 15  
 
  859   4                  } else {
  860   4                      SetTextColorBlack(0x1223);
@@ -958,7 +958,7 @@ line level    source
  918   4                      ChangeImage(0x2290, 1);
  919   4                  } else {
  920   4                      ChangeImage(0x2290, 0);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 16  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 16  
 
  921   4                  }
  922   3              } break;
@@ -1022,7 +1022,7 @@ line level    source
  980   4                      ChangeImage(0x2360, 1);
  981   4                  } else {
  982   4                      ChangeImage(0x2360, 0);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 17  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 17  
 
  983   4                  }
  984   3              } break;
@@ -1086,7 +1086,7 @@ line level    source
 1042   4                  }
 1043   3              } break;
 1044   2          }
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 18  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 18  
 
 1045   1      }
 1046          
@@ -1150,7 +1150,7 @@ line level    source
 1104   3          read_dgus_vp(VP_USERSETTING_PRES_MIN , (u8*)&result, 1);
 1105   3          pressmin = result;
 1106   3          write_dgus_vp(0x4130, (u8*)&pressmin,    1);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 19  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 19  
 
 1107   3      
 1108   3           read_dgus_vp(VP_USERSETTING_DELAY_MAX  , (u8*)&result, 1);
@@ -1214,7 +1214,7 @@ line level    source
 1166   3                  SetTextColorWhite(0x5613);
 1167   3                  SetTextColorWhite(0x5623);
 1168   3                  SetTextColorWhite(0x5633);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 20  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 20  
 
 1169   3                  SetTextColorWhite(0x5643);
 1170   3                  write_dgus_vp(0x4590, (u8*)&EngineerPw1, 1);
@@ -1278,7 +1278,7 @@ line level    source
 1228          #define TMR_1S 5 // 여유 채널 번호로 바꿔도 됨
 1229          #define ONE_SEC 1000 // 1초(ms)
 1230          #define TMR_S2 8 // 여유 채널 번호로 바꿔도 됨
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 21  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 21  
 
 1231          #define SEC2 500 // 1초(ms)
 1232          static u8 sec_active = 0; 
@@ -1342,7 +1342,7 @@ line level    source
 1290   1      
 1291   1          h = 0;
 1292   1          m = 0;
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 22  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 22  
 
 1293   1          s = 0;
 1294   1      
@@ -1406,7 +1406,7 @@ line level    source
 1352   1          toptempmin = result;
 1353   1          write_dgus_vp(0x4070, (u8*)&toptempmin,    1);
 1354   1      
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 23  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 23  
 
 1355   1          read_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX , (u8*)&result, 1);
 1356   1          bottempmax = result;
@@ -1470,7 +1470,7 @@ line level    source
 1414   1      
 1415   1          
 1416   1      }
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 24  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 24  
 
 1417          
 1418          void encoder_page_change(u16 state){
@@ -1534,7 +1534,7 @@ line level    source
 1475   1      
 1476   1          if(f_bottemp == 1){
 1477   2               u16 color = 0xC044;
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 25  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 25  
 
 1478   2               write_dgus_vp(0x1433, (u8*)&color, 1);  
 1479   2          }else if(f_botcool == 1){
@@ -1598,7 +1598,7 @@ line level    source
 1537   2                  SecCnt_Stop();
 1538   2                  if(timer == 1){
 1539   3                      timer = 0;
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 26  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 26  
 
 1540   3                      ShowMMSS2(timer);
 1541   3                  }
@@ -1662,7 +1662,7 @@ line level    source
 1599   6                                      keep = TC1;
 1600   6                                      if (TC1 == 0) {
 1601   7                                          TC1 = 9;
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 27  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 27  
 
 1602   7                                      } else {
 1603   7                                          TC1--;
@@ -1726,7 +1726,7 @@ line level    source
 1661   6                                      if (one_velue == 0) {
 1662   7                                          one_velue = 9;
 1663   7                                      } else {
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 28  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 28  
 
 1664   7                                          one_velue--;
 1665   7                                      }
@@ -1790,7 +1790,7 @@ line level    source
 1723   6                                      if (BC1 == 0) {
 1724   7                                          BC1 = 9;
 1725   7                                      } else {
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 29  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 29  
 
 1726   7                                          BC1--;
 1727   7                                      }
@@ -1854,7 +1854,7 @@ line level    source
 1785   7                                          one_velue = 9;
 1786   7                                      } else {
 1787   7                                          one_velue--;
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 30  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 30  
 
 1788   7                                      }
 1789   6                                      result = (u16)(hundred_velue * 100 + ten_velue * 10 + one_velue);
@@ -1918,7 +1918,7 @@ line level    source
 1847   7                                      result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
 1848   7                                      if (result <= 200 && result >= 1) {
 1849   8                                          write_dgus_vp(0x2030, (u8*)&TT1, 1);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 31  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 31  
 
 1850   8                                      } else {
 1851   8                                          TT1 = keep;
@@ -1982,7 +1982,7 @@ line level    source
 1909   8                                      }
 1910   7                                      result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
 1911   7                                      if (result <= 200 && result >= 1) {
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 32  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 32  
 
 1912   8                                          write_dgus_vp(0x2070, (u8*)&BT10, 1);
 1913   8                                      } else {
@@ -2046,7 +2046,7 @@ line level    source
              -��
 1971   4                      if (settingflag == 0) {
 1972   5                          quickSettingInIt();
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 33  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 33  
 
 1973   5                          if (quickSettingS == 1) {  // 21페이지 카운팅 증가
 1974   6                              quickSettingS = 4;
@@ -2110,7 +2110,7 @@ line level    source
 2032   6                                        keep = TT1;
 2033   6                                      if (TT1 != 9) {
 2034   7                                          TT1++;
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 34  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 34  
 
 2035   7                                      } else {
 2036   7                                          TT1 = 0;
@@ -2174,7 +2174,7 @@ line level    source
 2094   7                                      } else {
 2095   7                                          TC10++;
 2096   7                                      }
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 35  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 35  
 
 2097   6                                      result = (u16)(TC10 * 10 + TC1);
 2098   6                                      if (result <= 80 && result > 0) {
@@ -2238,7 +2238,7 @@ line level    source
 2156   6                                      if (BT1 != 9) {
 2157   7                                          BT1++;
 2158   7                                      } else {
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 36  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 36  
 
 2159   7                                          BT1 = 0;
 2160   7                                      }
@@ -2302,7 +2302,7 @@ line level    source
 2218   7                                      } else {
 2219   7                                          BC10++;
 2220   7                                      }
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 37  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 37  
 
 2221   6                                      result = (u16)(BC10 * 10 + BC1);
 2222   6                                      if (result <= 80 && result > 0) {
@@ -2366,7 +2366,7 @@ line level    source
 2280   5                          if (select_position == 0) {
 2281   6                                      keep = min;
 2282   6                                      if (min == 59) {
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 38  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 38  
 
 2283   7                                          if(second != 0){
 2284   8                                              min = 0;
@@ -2430,7 +2430,7 @@ line level    source
 2342   8                                          TT10 = 0;
 2343   8                                      }
 2344   7                                      result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 39  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 39  
 
 2345   7                                      if (result <= 200 && result >= 1) {
 2346   8                                          write_dgus_vp(0x2010, (u8*)&TT10, 1);
@@ -2494,7 +2494,7 @@ line level    source
 2404   8                                      } else {
 2405   8                                          BT100 = 0;
 2406   8                                      }
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 40  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 40  
 
 2407   7                                      result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
 2408   7                                      if (result <= 200 && result >= 1) {
@@ -2558,7 +2558,7 @@ line level    source
 2466   5                          Page_Change_Handler(page_number);
 2467   5                      }else if (page_number == main7[admin_language]) {
 2468   5                          page_number = main1[admin_language];
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 41  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 41  
 
 2469   5                          Page_Change_Handler(page_number);
 2470   5                      } else if (topSelectflag == 1) {
@@ -2622,7 +2622,7 @@ line level    source
 2528   6                              select_position = 0;
 2529   6                              check_Start(VP_SET_P,press);
 2530   6                              SetTextColorYellow(0x1053);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 42  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 42  
 
 2531   6                          }else if(quickSettingS == 3){
 2532   6                              select_position++;
@@ -2686,7 +2686,7 @@ line level    source
 2590   6                              select_position = 0;
 2591   6                              Page_Change_UI(botFrame);
 2592   6                          }else if(page_number == delayS[admin_language] && select_position == 3){
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 43  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 43  
 
 2593   6                              settingflag     = 0;
 2594   6                              select_position = 0;
@@ -2750,7 +2750,7 @@ line level    source
 2652   5                          Page_Bit_Send(DELAY_PAGE);
 2653   5                          settingflag = 1;
 2654   5                          SetTextColorBlue(0x1373);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 44  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 44  
 
 2655   5                          SetTextColorBlack(0x1383);
 2656   5                          read_dgus_vp(VP_SET_H, (u8*)&result, 2);
@@ -2814,7 +2814,7 @@ line level    source
 2714   5                          write_dgus_vp(0x2260, (u8*)&BT100, 1);
 2715   5                          write_dgus_vp(0x2270, (u8*)&BT10,     1);
 2716   5                          write_dgus_vp(0x2280, (u8*)&BT1,     1);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 45  
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 45  
 
 2717   5                          ChangeImage(0x2290, 0);
 2718   5                          Page_Change_UI(botHeatingS[admin_language]);
@@ -2848,196 +2848,201 @@ line level    source
 2746   5                      }else if(page_number == adminUserSetting[admin_language]){
 2747   5                          if(usersettingSP == 0){
 2748   6                              if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
-2749   7                                  write_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&toptempmin, 1);
-2750   7                              }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
-2751   7                                  write_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&toptempmax, 1);
-2752   7                              }
-2753   6                          }else if(usersettingSP == 1){
-2754   6                              if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
-2755   7                                  write_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN, (u8*)&bottempmin, 1);
-2756   7                              }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
-2757   7                                  write_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX, (u8*)&bottempmax, 1);
-2758   7                              }
-2759   6                              
-2760   6                          }else if(usersettingSP == 2){
-2761   6                              if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
-2762   7                                  write_dgus_vp(VP_USERSETTING_PRES_MIN, (u8*)&pressmin, 1);
-2763   7                              }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
-2764   7                                  write_dgus_vp(VP_USERSETTING_PRES_MAX, (u8*)&pressmax, 1);
-2765   7                              }
-2766   6                              
-2767   6                          }else if(usersettingSP == 3){
-2768   6                              if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
-2769   7                                  write_dgus_vp(VP_USERSETTING_DELAY_MIN, (u8*)&delaymin, 1);
-2770   7                              }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
-2771   7                                  write_dgus_vp(VP_USERSETTING_DELAY_MAX, (u8*)&delaymax, 1);
-2772   7                              }
-2773   6                          }
-2774   5                          admin_User_Setting_Function(state);
-2775   5                      }else if(page_number == adminIOTest[admin_language]){
-2776   5                          adminIoTestWork();
-2777   5                      }else if(page_number == adminFactoryResetNotice[admin_language]){
-2778   5                          adminfactoryResetText(state);
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 46  
+2749   7                                  check_Start(VP_USERSETTING_TOP_TEMP_MIN,toptempmin);
+2750   7                                  // write_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&toptempmin, 1);
+2751   7                              }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
+2752   7                                  write_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&toptempmax, 1);
+2753   7                              }
+2754   6                          }else if(usersettingSP == 1){
+2755   6                              if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
+2756   7                                  write_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN, (u8*)&bottempmin, 1);
+2757   7                              }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
+2758   7                                  write_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX, (u8*)&bottempmax, 1);
+2759   7                              }
+2760   6                              
+2761   6                          }else if(usersettingSP == 2){
+2762   6                              if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
+2763   7                                  check_Start(VP_USERSETTING_PRES_MIN,pressmin);
+2764   7                                  // write_dgus_vp(VP_USERSETTING_PRES_MIN, (u8*)&pressmin, 1);
+2765   7                              }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
+2766   7                                  check_Start(VP_USERSETTING_PRES_MAX,pressmax);
+2767   7                                  // write_dgus_vp(VP_USERSETTING_PRES_MAX, (u8*)&pressmax, 1);
+2768   7                              }
+2769   6                              
+2770   6                          }else if(usersettingSP == 3){
+2771   6                              if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
+2772   7                                  check_Start(VP_USERSETTING_DELAY_MIN,delaymin);
+2773   7                                  // write_dgus_vp(VP_USERSETTING_DELAY_MIN, (u8*)&delaymin, 1);
+2774   7                              }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
+2775   7                                  check_Start(VP_USERSETTING_DELAY_MAX,delaymax);
+2776   7                                  // write_dgus_vp(VP_USERSETTING_DELAY_MAX, (u8*)&delaymax, 1);
+2777   7                              }
+2778   6                          }
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 46  
 
-2779   5                      }else if(page_number == adminLogError[admin_language]){
-2780   5                          adminLogErrorText(state);
-2781   5                      }else if(page_number == adminMaintenance[admin_language]){
-2782   5                          Page_Change_UI(adminList[admin_language]);
-2783   5                      }else if(page_number == adminLanguage[admin_language]){
-2784   5                          adminLanguageText(state);
-2785   5                          write_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&admin_language,1);
-2786   5                      }else if(page_number == adminCompany[admin_language]){
+2779   5                          admin_User_Setting_Function(state);
+2780   5                      }else if(page_number == adminIOTest[admin_language]){
+2781   5                          adminIoTestWork();
+2782   5                      }else if(page_number == adminFactoryResetNotice[admin_language]){
+2783   5                          adminfactoryResetText(state);
+2784   5                      }else if(page_number == adminLogError[admin_language]){
+2785   5                          adminLogErrorText(state);
+2786   5                      }else if(page_number == adminMaintenance[admin_language]){
 2787   5                          Page_Change_UI(adminList[admin_language]);
-2788   5                      }else if(page_number == adminEngineermod[admin_language]){
-2789   5                          EngineermodWork(state);
-2790   5                      }else if(page_number == adminEngineermodS[admin_language]){
-2791   5                          EngineermodSWork(state);
-2792   5                      }else if(page_number == adminActiveLog[admin_language]){
-2793   5                          Page_Bit_Send(ACT_LOG_PAGE);
-2794   5                          Page_Change_UI(adminLogError[admin_language]);
-2795   5                      }else if(page_number == adminErrorLog[admin_language]){
-2796   5                          Page_Bit_Send(ERR_LOG_PAGE);
-2797   5                          Page_Change_UI(adminLogError[admin_language]);
-2798   5                      }
-2799   4                  }
-2800   3              } break;
-2801   2      
-2802   2              case 4: {
-2803   3                  switch (page_number){
-2804   4                  case 28:{
-2805   5                      usersettingSP=0;
-2806   5                      usersettingSelect_plag=0;
-2807   5                      usersettingEditSP=0;
-2808   5                      Page_Change_UI(adminList[admin_language]);
-2809   5                  }break;
-2810   4      
-2811   4                  case 58 : {
-2812   5                      usersettingSP=0;
-2813   5                      usersettingSelect_plag=0;
-2814   5                      usersettingEditSP=0;
-2815   5                      Page_Change_UI(adminList[admin_language]);
-2816   5                  }break;
-2817   4                  case 29:{
-2818   5                      IOtestSP = 0;
-2819   5                      IOtestSelect_plag = 0;
+2788   5                      }else if(page_number == adminLanguage[admin_language]){
+2789   5                          adminLanguageText(state);
+2790   5                          write_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&admin_language,1);
+2791   5                      }else if(page_number == adminCompany[admin_language]){
+2792   5                          Page_Change_UI(adminList[admin_language]);
+2793   5                      }else if(page_number == adminEngineermod[admin_language]){
+2794   5                          EngineermodWork(state);
+2795   5                      }else if(page_number == adminEngineermodS[admin_language]){
+2796   5                          EngineermodSWork(state);
+2797   5                      }else if(page_number == adminActiveLog[admin_language]){
+2798   5                          Page_Bit_Send(ACT_LOG_PAGE);
+2799   5                          Page_Change_UI(adminLogError[admin_language]);
+2800   5                      }else if(page_number == adminErrorLog[admin_language]){
+2801   5                          Page_Bit_Send(ERR_LOG_PAGE);
+2802   5                          Page_Change_UI(adminLogError[admin_language]);
+2803   5                      }
+2804   4                  }
+2805   3              } break;
+2806   2      
+2807   2              case 4: {
+2808   3                  switch (page_number){
+2809   4                  case 28:{
+2810   5                      usersettingSP=0;
+2811   5                      usersettingSelect_plag=0;
+2812   5                      usersettingEditSP=0;
+2813   5                      Page_Change_UI(adminList[admin_language]);
+2814   5                  }break;
+2815   4      
+2816   4                  case 58 : {
+2817   5                      usersettingSP=0;
+2818   5                      usersettingSelect_plag=0;
+2819   5                      usersettingEditSP=0;
 2820   5                      Page_Change_UI(adminList[admin_language]);
 2821   5                  }break;
-2822   4      
-2823   4                  case 59:{
-2824   5                      IOtestSP = 0;
-2825   5                      IOtestSelect_plag = 0;
-2826   5                      Page_Change_UI(adminList[admin_language]);
-2827   5                  }break;
-2828   4      
-2829   4                  case 30:{
-2830   5                      factoryReset_plag = 0;
-2831   5                      factoryResetSP = 0;
-2832   5                      Page_Change_UI(adminList[admin_language]);
-2833   5                  }break;
-2834   4      
-2835   4                   case 60:{
-2836   5                      factoryReset_plag = 0;
-2837   5                      factoryResetSP = 0;
-2838   5                      Page_Change_UI(adminList[admin_language]);
-2839   5                  }break;
-2840   4      
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 47  
+2822   4                  case 29:{
+2823   5                      IOtestSP = 0;
+2824   5                      IOtestSelect_plag = 0;
+2825   5                      Page_Change_UI(adminList[admin_language]);
+2826   5                  }break;
+2827   4      
+2828   4                  case 59:{
+2829   5                      IOtestSP = 0;
+2830   5                      IOtestSelect_plag = 0;
+2831   5                      Page_Change_UI(adminList[admin_language]);
+2832   5                  }break;
+2833   4      
+2834   4                  case 30:{
+2835   5                      factoryReset_plag = 0;
+2836   5                      factoryResetSP = 0;
+2837   5                      Page_Change_UI(adminList[admin_language]);
+2838   5                  }break;
+2839   4      
+2840   4                   case 60:{
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 47  
 
-2841   4                  case 31:{
-2842   5                      LogErrorSP = 0;
+2841   5                      factoryReset_plag = 0;
+2842   5                      factoryResetSP = 0;
 2843   5                      Page_Change_UI(adminList[admin_language]);
 2844   5                  }break;
 2845   4      
-2846   4                  case 61:{
+2846   4                  case 31:{
 2847   5                      LogErrorSP = 0;
 2848   5                      Page_Change_UI(adminList[admin_language]);
 2849   5                  }break;
-2850   4                  
-2851   4                  case 34:{
-2852   5                      Page_Change_UI(adminList[admin_language]);
-2853   5                  }break;
-2854   4      
-2855   4                  case 64:{
-2856   5                      Page_Change_UI(adminList[admin_language]);
-2857   5                  }break;
-2858   4      
-2859   4                  case 35:{
-2860   5                      LanguageSP = 0;
+2850   4      
+2851   4                  case 61:{
+2852   5                      LogErrorSP = 0;
+2853   5                      Page_Change_UI(adminList[admin_language]);
+2854   5                  }break;
+2855   4                  
+2856   4                  case 34:{
+2857   5                      Page_Change_UI(adminList[admin_language]);
+2858   5                  }break;
+2859   4      
+2860   4                  case 64:{
 2861   5                      Page_Change_UI(adminList[admin_language]);
 2862   5                  }break;
 2863   4      
-2864   4                  case 65:{
+2864   4                  case 35:{
 2865   5                      LanguageSP = 0;
 2866   5                      Page_Change_UI(adminList[admin_language]);
 2867   5                  }break;
 2868   4      
-2869   4                  case 36:{
-2870   5                      Page_Change_UI(adminList[admin_language]);
-2871   5                  }break;
-2872   4      
-2873   4                   case 66:{
-2874   5                      LanguageSP = 0;
+2869   4                  case 65:{
+2870   5                      LanguageSP = 0;
+2871   5                      Page_Change_UI(adminList[admin_language]);
+2872   5                  }break;
+2873   4      
+2874   4                  case 36:{
 2875   5                      Page_Change_UI(adminList[admin_language]);
 2876   5                  }break;
 2877   4      
-2878   4      
-2879   4                  case 37:{
-2880   5                      EngineerSP = 0;
-2881   5                      Page_Change_UI(adminList[admin_language]);
-2882   5                  }break;
-2883   4                  case 67:{
-2884   5                      EngineerSP = 0;
-2885   5                      Page_Change_UI(adminList[admin_language]);
-2886   5                  }break;
-2887   4                  case 38:{
-2888   5                      EngineermodS_flag = 0;
-2889   5                      EngineermodS_Select_flag =0;
-2890   5                      Page_Change_UI(adminEngineermod[admin_language]);
+2878   4                   case 66:{
+2879   5                      LanguageSP = 0;
+2880   5                      Page_Change_UI(adminList[admin_language]);
+2881   5                  }break;
+2882   4      
+2883   4      
+2884   4                  case 37:{
+2885   5                      EngineerSP = 0;
+2886   5                      Page_Change_UI(adminList[admin_language]);
+2887   5                  }break;
+2888   4                  case 67:{
+2889   5                      EngineerSP = 0;
+2890   5                      Page_Change_UI(adminList[admin_language]);
 2891   5                  }break;
-2892   4                  case 68:{
+2892   4                  case 38:{
 2893   5                      EngineermodS_flag = 0;
 2894   5                      EngineermodS_Select_flag =0;
 2895   5                      Page_Change_UI(adminEngineermod[admin_language]);
 2896   5                  }break;
-2897   4                  case 32:{
-2898   5                      Page_Change_UI(adminLogError[admin_language]);
-2899   5                  }break;
-2900   4                  case 62:{
-2901   5                      Page_Change_UI(adminLogError[admin_language]);
-2902   5                  }break;
-C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 10:38:41 PAGE 48  
+2897   4                  case 68:{
+2898   5                      EngineermodS_flag = 0;
+2899   5                      EngineermodS_Select_flag =0;
+2900   5                      Page_Change_UI(adminEngineermod[admin_language]);
+2901   5                  }break;
+2902   4                  case 32:{
+C51 COMPILER V9.56.0.0   UI                                                                10/16/2026 11:09:12 PAGE 48  
 
-2903   4                  case 33:{
-2904   5                      Page_Change_UI(adminLogError[admin_language]);
-2905   5                  }break;
-2906   4                   case 63:{
-2907   5                      Page_Change_UI(adminLogError[admin_language]);
-2908   5                  }break;
-2909   4                  case 27:{
-2910   5                      // Page_Change_UI(main7[admin_language]);
-2911   5                  }break;
-2912   4                  case 8:{
-2913   5                      if(settingflag == 0){
-2914   6                      quickSettingflag = 0; 
-2915   6                      settingflag = 0; 
-2916   6                      quickSettingS = 0; 
-2917   6                      Page_Change_UI(main1[admin_language]);
-2918   6                      quickSettingInIt();
-2919   6                      }
-2920   5                  }break;
-2921   4                  default:
-2922   4                      break;
-2923   4                  }
-2924   3                  ui_poll_enable = 0;
-2925   3              } break;
-2926   2          }
-2927   1      }
-2928          
+2903   5                      Page_Change_UI(adminLogError[admin_language]);
+2904   5                  }break;
+2905   4                  case 62:{
+2906   5                      Page_Change_UI(adminLogError[admin_language]);
+2907   5                  }break;
+2908   4                  case 33:{
+2909   5                      Page_Change_UI(adminLogError[admin_language]);
+2910   5                  }break;
+2911   4                   case 63:{
+2912   5                      Page_Change_UI(adminLogError[admin_language]);
+2913   5                  }break;
+2914   4                  case 27:{
+2915   5                      // Page_Change_UI(main7[admin_language]);
+2916   5                  }break;
+2917   4                  case 8:{
+2918   5                      if(settingflag == 0){
+2919   6                      quickSettingflag = 0; 
+2920   6                      settingflag = 0; 
+2921   6                      quickSettingS = 0; 
+2922   6                      Page_Change_UI(main1[admin_language]);
+2923   6                      quickSettingInIt();
+2924   6                      }
+2925   5                  }break;
+2926   4                  default:
+2927   4                      break;
+2928   4                  }
+2929   3                  ui_poll_enable = 0;
+2930   3              } break;
+2931   2          }
+2932   1      }
+2933          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =  25629    ----
+   CODE SIZE        =  25602    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =    372      83
    PDATA SIZE       =   ----    ----

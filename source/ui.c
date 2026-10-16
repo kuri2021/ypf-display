@@ -2746,29 +2746,37 @@ void encoder_page_change(u16 state){
                 }else if(page_number == adminUserSetting[admin_language]){
                     if(usersettingSP == 0){
                         if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
-                            write_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&toptempmin, 1);
+                            check_Start(VP_USERSETTING_TOP_TEMP_MIN,toptempmin);
+                            // write_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&toptempmin, 1);
                         }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
-                            write_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&toptempmax, 1);
+                            check_Start(VP_USERSETTING_TOP_TEMP_MAX,toptempmax);
+                            // write_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&toptempmax, 1);
                         }
                     }else if(usersettingSP == 1){
                         if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
-                            write_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN, (u8*)&bottempmin, 1);
+                            check_Start(VP_USERSETTING_BOT_TEMP_MIN,bottempmin);
+                            // write_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN, (u8*)&bottempmin, 1);
                         }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
+                            check_Start(VP_USERSETTING_BOT_TEMP_MAX,bottempmax);
                             write_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX, (u8*)&bottempmax, 1);
                         }
                         
                     }else if(usersettingSP == 2){
                         if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
-                            write_dgus_vp(VP_USERSETTING_PRES_MIN, (u8*)&pressmin, 1);
+                            check_Start(VP_USERSETTING_PRES_MIN,pressmin);
+                            // write_dgus_vp(VP_USERSETTING_PRES_MIN, (u8*)&pressmin, 1);
                         }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
-                            write_dgus_vp(VP_USERSETTING_PRES_MAX, (u8*)&pressmax, 1);
+                            check_Start(VP_USERSETTING_PRES_MAX,pressmax);
+                            // write_dgus_vp(VP_USERSETTING_PRES_MAX, (u8*)&pressmax, 1);
                         }
                         
                     }else if(usersettingSP == 3){
                         if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
-                            write_dgus_vp(VP_USERSETTING_DELAY_MIN, (u8*)&delaymin, 1);
+                            check_Start(VP_USERSETTING_DELAY_MIN,delaymin);
+                            // write_dgus_vp(VP_USERSETTING_DELAY_MIN, (u8*)&delaymin, 1);
                         }else if(usersettingEditSP == 1 && usersettingSelect_plag == 1){
-                            write_dgus_vp(VP_USERSETTING_DELAY_MAX, (u8*)&delaymax, 1);
+                            check_Start(VP_USERSETTING_DELAY_MAX,delaymax);
+                            // write_dgus_vp(VP_USERSETTING_DELAY_MAX, (u8*)&delaymax, 1);
                         }
                     }
                     admin_User_Setting_Function(state);

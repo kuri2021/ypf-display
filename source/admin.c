@@ -13,17 +13,6 @@
 #define VP_SET_NTC_BASE_T 0x810C  // 상 프레임 기준 온도 설정
 #define VP_SET_NTC_BASE_B 0x8110  // 하 프레임 기준 온도 설정
 
-#define VP_USERSETTING_TOP_TEMP_MAX 0x8130 // 유저세팅 8개
-#define VP_USERSETTING_TOP_TEMP_MIN 0x8132 // 유저세팅 8개
-#define VP_USERSETTING_BOT_TEMP_MAX 0x8134 // 유저세팅 8개
-#define VP_USERSETTING_BOT_TEMP_MIN 0x8136 // 유저세팅 8개f
-#define VP_USERSETTING_PRES_MAX 0x8138 // 유저세팅 8개
-#define VP_USERSETTING_PRES_MIN 0x813A // 유저세팅 8개
-#define VP_USERSETTING_DELAY_MAX 0x813C // 유저세팅 8개
-#define VP_USERSETTING_DELAY_MIN 0x8140 // 유저세팅 8개
-#define VP_ENGINEERMODE_SENSER 0x8142 // 엔지니어모드 센서 보정
-#define VP_ENGINEERMODE_PRES 0x8144 // 엔지니어모드 최대 압력
-
 #define VP_IO_TEST     0x8300
 
 #define ACT_BIT(n)       (1u << (n))
@@ -34,6 +23,37 @@
 #define ACT_BOTTOM_FAN    (1 << 3)   // Bit 3
 #define ACT_PUMP          (1 << 4)   // Bit 4
 #define ACT_SOLENOID      (1 << 5)   // Bit 5
+
+
+#define VP_PAGE_BIT        0x8400 
+#define PAGE_BIT(n)       (1u << (n))
+
+// #define MAIN_PAGE         (1 << 0)   // Bit 0
+// #define ADMIN_PAGE        (1 << 1)   // Bit 1
+#define QUICK_SET_PAGE       PAGE_BIT(0)   // 0x0001
+#define TOP_TMP_SET_PAGE     PAGE_BIT(1)   // 0x0002
+#define TOP_COOL_SET_PAGE    PAGE_BIT(2)   // 0x0004
+#define BOT_TMP_SET_PAGE     PAGE_BIT(3)   // 0x0008
+#define BOT_COOL_SET_PAGE    PAGE_BIT(4)   // 0x0010
+#define PRESS_PAGE           PAGE_BIT(5)   // 0x0020
+#define DELAY_PAGE           PAGE_BIT(6)   // 0x0040
+#define USER_SET_PAGE        PAGE_BIT(7)   // 0x0080
+#define IO_TEST_PAGE         PAGE_BIT(8)   // 0x0100
+#define FAC_RESET_PAGE       PAGE_BIT(9)   // 0x0200
+#define ACT_LOG_PAGE         PAGE_BIT(10)  // 0x0400
+#define ERR_LOG_PAGE         PAGE_BIT(11)  // 0x0800
+#define RUN_TIME_PAGE        PAGE_BIT(12)  // 0x1000
+#define LAG_PAGE             PAGE_BIT(13)  // 0x2000
+#define ENG_SET_PAGE         PAGE_BIT(14)  // 0x4000
+
+
+#define VP_USER_SET_BIT        0x8600 
+#define USER_SET_BIT(n)       (1u << (n))
+
+#define USER_SET_TOP_TEMP       USER_SET_BIT(0)   // 0x0001
+#define USER_SET_BOT_TEMP     USER_SET_BIT(1)   // 0x0002
+#define USER_SET_PRESS    USER_SET_BIT(2)   // 0x0004
+#define USER_SET_DELAY     USER_SET_BIT(3)   // 0x0008
 
 
 
@@ -63,7 +83,7 @@ u16 botCoolingDefault = 60;
 u16 delayDefault = 90;
 
 u16 toptempmin = 1;
-u16 toptempmax = 0;
+u16 toptempmax = 200;
 u16 bottempmin = 1;
 u16 bottempmax = 200;
 u16 pressmin = 0;
@@ -102,6 +122,13 @@ u16 EngineermodS_Select_flag = 0;
 
 u16 userSet[] = {0,0,0,0,0,0,0,0};
 u16 IO[] = {0,0,0,0,0,0};
+
+void User_Set_Bit_Send(unsigned int count)
+{
+    unsigned int count_flag = count;
+
+    write_dgus_vp(VP_USER_SET_BIT, (u8 *)&count_flag, 1);
+}
 
 //어드민 리스트
 void admin_List_text_change(){
@@ -482,6 +509,7 @@ void admin_List(u16 i){
 //어드민 유저 세팅
 void admin_User_Setting_text_color(){
     if(usersettingSP == 0){
+        User_Set_Bit_Send(USER_SET_TOP_TEMP);
         SetTextColorYellow(0x5063);
         SetTextColorWhite(0x5093);
         SetTextColorWhite(0x5123);
@@ -500,6 +528,7 @@ void admin_User_Setting_text_color(){
             SetTextColorWhite(0x5083);
         }
     }else if(usersettingSP == 1){
+        User_Set_Bit_Send(USER_SET_BOT_TEMP);
         SetTextColorWhite(0x5063);
         SetTextColorYellow(0x5093);
         SetTextColorWhite(0x5123);
@@ -518,6 +547,7 @@ void admin_User_Setting_text_color(){
             SetTextColorWhite(0x5113);
         }
     }else if(usersettingSP == 2){
+        User_Set_Bit_Send(USER_SET_PRESS);
         SetTextColorWhite(0x5063);
         SetTextColorWhite(0x5093);
         SetTextColorYellow(0x5123);
@@ -531,11 +561,11 @@ void admin_User_Setting_text_color(){
                 SetTextColorYellow(0x5143);
             }
         }else{
-            
             SetTextColorWhite(0x5133);
             SetTextColorWhite(0x5143);
         }
     }else if(usersettingSP == 3){
+        User_Set_Bit_Send(USER_SET_DELAY);
         SetTextColorWhite(0x5063);
         SetTextColorWhite(0x5093);
         SetTextColorWhite(0x5123);
@@ -1918,7 +1948,7 @@ void EngineermodWork(u16 state){
                 }else{
                     page_number = 68;
                 }
-                
+                // Page_Bit_Send(ENG_SET_PAGE);
                 Page_Change_Handler(page_number);
                 SetTextColorYellow(0x5693);
                 write_dgus_vp(0x4700, (u8*)&sensor_result, 1); 

@@ -47,8 +47,25 @@ static void ChangeImage(u16 vp_addr, u16 index);
 #define VP_PAGE_BIT        0x8400 
 #define PAGE_BIT(n)       (1u << (n))
 
-#define MAIN_PAGE         (1 << 0)   // Bit 0
-#define ADMIN_PAGE        (1 << 1)   // Bit 1
+// #define MAIN_PAGE         (1 << 0)   // Bit 0
+// #define ADMIN_PAGE        (1 << 1)   // Bit 1
+#define QUICK_SET_PAGE       PAGE_BIT(0)   // 0x0001
+#define TOP_TMP_SET_PAGE     PAGE_BIT(1)   // 0x0002
+#define TOP_COOL_SET_PAGE    PAGE_BIT(2)   // 0x0004
+#define BOT_TMP_SET_PAGE     PAGE_BIT(3)   // 0x0008
+#define BOT_COOL_SET_PAGE    PAGE_BIT(4)   // 0x0010
+#define PRESS_PAGE           PAGE_BIT(5)   // 0x0020
+#define DELAY_PAGE           PAGE_BIT(6)   // 0x0040
+#define USER_SET_PAGE        PAGE_BIT(7)   // 0x0080
+#define IO_TEST_PAGE         PAGE_BIT(8)   // 0x0100
+#define FAC_RESET_PAGE       PAGE_BIT(9)   // 0x0200
+#define ACT_LOG_PAGE         PAGE_BIT(10)  // 0x0400
+#define ERR_LOG_PAGE         PAGE_BIT(11)  // 0x0800
+#define RUN_TIME_PAGE        PAGE_BIT(12)  // 0x1000
+#define LAG_PAGE             PAGE_BIT(13)  // 0x2000
+#define ENG_SET_PAGE         PAGE_BIT(14)  // 0x4000
+
+
 
 static u8 page_bit = 0;
 
@@ -81,7 +98,7 @@ static u8 page_bit = 0;
 #define VP_USERSETTING_BOT_TEMP_MAX 0x8134 // 유저세팅 8개
 #define VP_USERSETTING_BOT_TEMP_MIN 0x8136 // 유저세팅 8개
 #define VP_USERSETTING_PRES_MAX 0x8138 // 유저세팅 8개
-#define VP_USERSETTING_PRES_MIN 0x813A // 유저세팅 8개
+#define VP_USERSETTING_PRES_MIN 0x8148 // 유저세팅 8개
 #define VP_USERSETTING_DELAY_MAX 0x813C // 유저세팅 8개
 #define VP_USERSETTING_DELAY_MIN 0x8140 // 유저세팅 8개
 #define VP_ENGINEERMODE_SENSER 0x8142 // 엔지니어모드 센서 보정
@@ -196,6 +213,13 @@ static u16 inputpw = 0;
 
 
 
+
+void Page_Bit_Send(unsigned int page)
+{
+    unsigned int page_flag = page;
+
+    write_dgus_vp(VP_PAGE_BIT, (u8 *)&page_flag, 1);
+}
 u8 logCount = 0;
 void addLogtest(u16 type, u16 value);
 
@@ -209,8 +233,6 @@ LogData logs[LOG_MAX];
 
 void updateLogs(){
     u16 len = 0;
-    u16 vpType;
-    u16 vpValue;
     u8 i;
     for(i = 0; i < LOG_MAX; i++){
         u16 vpType  = VP_LOG + (i * 4);
@@ -1043,10 +1065,10 @@ void Page_Change_UI(u8 i){
 }
 
 void admin_page_change(){
+	 u16 result = 0;
     switch(adminSP){
         case 0:{
-
-            u16 result = 0;
+            Page_Bit_Send(USER_SET_PAGE);
             SetTextColorYellow(0x5063);
             SetTextColorWhite(0x5073);
             SetTextColorWhite(0x5083);
@@ -1059,47 +1081,41 @@ void admin_page_change(){
             SetTextColorWhite(0x5153);
             Page_Change_UI(adminUserSetting[admin_language]);
 
-            read_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&result, 1);
+    read_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&result, 1);
     toptempmax = result;
-    write_dgus_vp(0x4080, (u8*)&result,    2);
+    write_dgus_vp(0x4080, (u8*)&toptempmax,    1);
     
     read_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&result, 1);
     toptempmin = result;
-    write_dgus_vp(0x4070, (u8*)&result,    2);
+    write_dgus_vp(0x4070, (u8*)&toptempmin,    1);
 
     read_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX , (u8*)&result, 1);
     bottempmax = result;
-    write_dgus_vp(0x4110, (u8*)&result,    2);
+    write_dgus_vp(0x4110, (u8*)&bottempmax,    1);
 
     read_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN , (u8*)&result, 1);
     bottempmin = result;
-    write_dgus_vp(0x4100, (u8*)&result,    2);
+    write_dgus_vp(0x4100, (u8*)&bottempmin,    1);
 
     read_dgus_vp(VP_USERSETTING_PRES_MAX , (u8*)&result, 1);
     pressmax = result;
-    write_dgus_vp(0x4140, (u8*)&result,    2);
+    write_dgus_vp(0x4140, (u8*)&pressmax,    1);
 
     read_dgus_vp(VP_USERSETTING_PRES_MIN , (u8*)&result, 1);
     pressmin = result;
-    write_dgus_vp(0x4130, (u8*)&result,    2);
+    write_dgus_vp(0x4130, (u8*)&pressmin,    1);
 
      read_dgus_vp(VP_USERSETTING_DELAY_MAX  , (u8*)&result, 1);
      delaymax = result;
-    write_dgus_vp(0x4170, (u8*)&result,    2);
+    write_dgus_vp(0x4170, (u8*)&delaymax,    1);
 
      read_dgus_vp(VP_USERSETTING_DELAY_MIN  , (u8*)&result, 1);
      delaymin = result;
-    write_dgus_vp(0x4160, (u8*)&result,    2);
-            // write_dgus_vp(0x4070, (u8*)&toptempmin, 1); 
-            // write_dgus_vp(0x4080, (u8*)&toptempmax, 1); 
-            // write_dgus_vp(0x4100, (u8*)&bottempmin, 1); 
-            // write_dgus_vp(0x4110, (u8*)&bottempmax, 1); 
-            // write_dgus_vp(0x4130, (u8*)&pressmin, 1); 
-            // write_dgus_vp(0x4140, (u8*)&pressmax, 1); 
-            // write_dgus_vp(0x4160, (u8*)&delaymin, 1); 
-            // write_dgus_vp(0x4170, (u8*)&delaymax, 1); 
+    write_dgus_vp(0x4160, (u8*)&delaymin,    2);
+
         }break;
         case 1:{
+            Page_Bit_Send(IO_TEST_PAGE);
             SetTextColorYellow(0x5193);
             SetTextColorWhite(0x5213);
             SetTextColorWhite(0x5233);
@@ -1109,6 +1125,7 @@ void admin_page_change(){
             Page_Change_UI(adminIOTest[admin_language]);
         }break;
         case 2:{
+            Page_Bit_Send(FAC_RESET_PAGE);
             SetTextColorYellow(0x5343);
             SetTextColorWhite(0x5353);
             Page_Change_UI(adminFactoryResetNotice[admin_language]);
@@ -1119,6 +1136,7 @@ void admin_page_change(){
             Page_Change_UI(adminLogError[admin_language]);
         }break;
         case 4:{
+            Page_Bit_Send(RUN_TIME_PAGE);
             write_dgus_vp(0x4430, (u8*)&temp_H ,1);
             write_dgus_vp(0x4440, (u8*)&temp_M ,1);
             write_dgus_vp(0x4450, (u8*)&temp_S ,1);
@@ -1133,6 +1151,7 @@ void admin_page_change(){
             Page_Change_UI(adminMaintenance[admin_language]);
         }break;
         case 5:{
+            Page_Bit_Send(LAG_PAGE);
             SetTextColorYellow(0x5553);
             SetTextColorWhite(0x5563);
             SetTextColorWhite(0x5573);
@@ -1155,6 +1174,7 @@ void admin_page_change(){
             write_dgus_vp(0x4630, (u8*)&EngineerPw5, 1);
             write_dgus_vp(0x4640, (u8*)&EngineerPw6, 1);
             Page_Change_UI(adminEngineermod[admin_language]);
+            Page_Bit_Send(ENG_SET_PAGE);
         }break;
 
         case 8:{
@@ -1227,7 +1247,6 @@ static void ShowMMSS2(u16 t) {
     write_dgus_vp(0x3100, (u8*)&m, 1); 
     write_dgus_vp(0x3200, (u8*)&s, 1); 
 }
-
 void SecCnt_Start() {
     sec_active = 1; 
     SetTextColorYellow(0x1103);
@@ -1245,7 +1264,6 @@ void SecCnt_Stop(void) {
     SetTextColorWhite(0x1123);
     SetTextColorWhite(0x1133);
 }
-
 
 void SecCnt_TickTask(void) {
      if (!sec_active){
@@ -1328,41 +1346,41 @@ void data_set_Init(void) {
 
     read_dgus_vp(VP_USERSETTING_TOP_TEMP_MAX, (u8*)&result, 1);
     toptempmax = result;
-    write_dgus_vp(0x4080, (u8*)&result,    2);
+    write_dgus_vp(0x4080, (u8*)&toptempmax,    1);
     
     read_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&result, 1);
     toptempmin = result;
-    write_dgus_vp(0x4070, (u8*)&result,    2);
+    write_dgus_vp(0x4070, (u8*)&toptempmin,    1);
 
     read_dgus_vp(VP_USERSETTING_BOT_TEMP_MAX , (u8*)&result, 1);
     bottempmax = result;
-    write_dgus_vp(0x4110, (u8*)&result,    2);
+    write_dgus_vp(0x4110, (u8*)&bottempmax,    1);
 
     read_dgus_vp(VP_USERSETTING_BOT_TEMP_MIN , (u8*)&result, 1);
     bottempmin = result;
-    write_dgus_vp(0x4100, (u8*)&result,    2);
+    write_dgus_vp(0x4100, (u8*)&bottempmin,    1);
 
     read_dgus_vp(VP_USERSETTING_PRES_MAX , (u8*)&result, 1);
     pressmax = result;
-    write_dgus_vp(0x4140, (u8*)&result,    2);
+    write_dgus_vp(0x4140, (u8*)&pressmax,    1);
 
     read_dgus_vp(VP_USERSETTING_PRES_MIN , (u8*)&result, 1);
     pressmin = result;
-    write_dgus_vp(0x4130, (u8*)&result,    2);
+    write_dgus_vp(0x4130, (u8*)&pressmin,    1);
 
-     read_dgus_vp(VP_USERSETTING_DELAY_MAX  , (u8*)&result, 1);
-     delaymax = result;
-    write_dgus_vp(0x4170, (u8*)&result,    2);
+    read_dgus_vp(VP_USERSETTING_DELAY_MAX  , (u8*)&result, 1);
+    delaymax = result;
+    write_dgus_vp(0x4170, (u8*)&delaymax,    1);
 
-     read_dgus_vp(VP_USERSETTING_DELAY_MIN  , (u8*)&result, 1);
-     delaymin = result;
-    write_dgus_vp(0x4160, (u8*)&result,    2);
+    read_dgus_vp(VP_USERSETTING_DELAY_MIN  , (u8*)&result, 1);
+    delaymin = result;
+    write_dgus_vp(0x4160, (u8*)&delaymin,    1);
 
-     read_dgus_vp(VP_ENGINEERMODE_SENSER  , (u8*)&result, 1);
-    write_dgus_vp(0x4700, (u8*)&result,    2);
+    read_dgus_vp(VP_ENGINEERMODE_SENSER  , (u8*)&result, 1);
+    write_dgus_vp(0x4700, (u8*)&result,    1);
 
      read_dgus_vp(VP_ENGINEERMODE_PRES  , (u8*)&result, 1);
-    write_dgus_vp(0x4720, (u8*)&result,    2);
+    write_dgus_vp(0x4720, (u8*)&result,    1);
 
 
     read_dgus_vp(VP_WORK_HEATING, (u8*)&t_rampMs, 1);
@@ -1397,8 +1415,7 @@ void data_set_Init(void) {
     
 }
 
-void encoder_page_change(u16 state)
-{
+void encoder_page_change(u16 state){
     u16 keep = 0;
     u16 result = 0;
 
@@ -1542,13 +1559,12 @@ void encoder_page_change(u16 state)
                                     TT1--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2170, (u8*)&TT1, 1);
                                 } else {
                                     TT1 = keep;
                                     write_dgus_vp(0x2170, (u8*)&TT1, 1);
                                 }
-                              
                             } else if (select_position == 1) {
                                 keep = TT10;
                                 if (TT10 == 0) {
@@ -1557,7 +1573,7 @@ void encoder_page_change(u16 state)
                                     TT10--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2160, (u8*)&TT10, 1);
                                 } else {
                                     TT10 = keep;
@@ -1571,7 +1587,7 @@ void encoder_page_change(u16 state)
                                     TT100--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2150, (u8*)&TT100, 1);
                                 } else {
                                     TT100 = keep;
@@ -1666,7 +1682,7 @@ void encoder_page_change(u16 state)
                                     BT1--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2280, (u8*)&BT1, 1);
                                 } else {
                                     BT1 = keep;
@@ -1680,7 +1696,7 @@ void encoder_page_change(u16 state)
                                     BT10--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin ) {
+                                if (result <= 200 && result >= 1 ) {
                                     write_dgus_vp(0x2270, (u8*)&BT10, 1);
                                 } else {
                                     BT10 = keep;
@@ -1694,7 +1710,7 @@ void encoder_page_change(u16 state)
                                     BT100--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2260, (u8*)&BT100, 1);
                                 } else {
                                     BT100 = keep;
@@ -1793,7 +1809,7 @@ void encoder_page_change(u16 state)
                                     min--;
                                 }
                                   result = (u16)(min * 60 + second);
-                                 if(result<= delaymax && result > delaymin){
+                                 if(result<= 3600 && result > 0){
                                     write_dgus_vp(0x2370, (u8*)&min, 1);
                                 }else{
                                     min = keep;
@@ -1807,7 +1823,7 @@ void encoder_page_change(u16 state)
                                     second--;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= delaymax && result > delaymin){
+                                 if(result<= 3600 && result > 0){
                                     write_dgus_vp(0x2380, (u8*)&second, 1);
                                 }else{
                                     second = keep;
@@ -1815,7 +1831,7 @@ void encoder_page_change(u16 state)
                                 }
                             }
                 }else if(page_number == pressureS[admin_language]){
-                    if (select_position == 0 && press > pressmin) {
+                    if (select_position == 0 && press > 0) {
                         press--;
                         write_dgus_vp(0x2400, (u8*)&press, 1);
                     }
@@ -1829,7 +1845,7 @@ void encoder_page_change(u16 state)
                                     TT1--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2030, (u8*)&TT1, 1);
                                 } else {
                                     TT1 = keep;
@@ -1843,7 +1859,7 @@ void encoder_page_change(u16 state)
                                     TT10--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2010, (u8*)&TT10, 1);
                                 } else {
                                     TT10 = keep;
@@ -1857,7 +1873,7 @@ void encoder_page_change(u16 state)
                                     TT100--;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2000, (u8*)&TT100, 1);
                                 } else {
                                     TT100 = keep;
@@ -1865,7 +1881,7 @@ void encoder_page_change(u16 state)
                                 }
                             }
                         }else if(quickSettingS == 2){
-                            if(press > pressmin){
+                            if(press > 0){
                                 press --;
                                 write_dgus_vp(0x2050, (u8*)&press, 1);
                             }
@@ -1878,7 +1894,7 @@ void encoder_page_change(u16 state)
                                     BT1--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2080, (u8*)&BT1, 1);
                                 } else {
                                     BT1 = keep;
@@ -1892,7 +1908,7 @@ void encoder_page_change(u16 state)
                                     BT10--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2070, (u8*)&BT10, 1);
                                 } else {
                                     BT10 = keep;
@@ -1906,7 +1922,7 @@ void encoder_page_change(u16 state)
                                     BT100--;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2060, (u8*)&BT100, 1);
                                 } else {
                                     BT100 = keep;
@@ -1926,7 +1942,7 @@ void encoder_page_change(u16 state)
                                     min--;
                                 }
                                 result = (u16)(min * 60 + second);
-                                if(result<= delaymax && result > delaymin){
+                                if(result<= 3600 && result > 0){
                                     write_dgus_vp(0x2110, (u8*)&min, 1);
                                 }else{
                                     min = keep;
@@ -1941,7 +1957,7 @@ void encoder_page_change(u16 state)
                                     second--;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= delaymax && result > delaymin){
+                                 if(result<= 3600 && result > 0){
                                     write_dgus_vp(0x2130, (u8*)&second, 1);
                                 }else{
                                     second = keep;
@@ -2020,7 +2036,7 @@ void encoder_page_change(u16 state)
                                     TT1 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2170, (u8*)&TT1, 1);
                                 } else {
                                     TT1 = keep;
@@ -2034,7 +2050,7 @@ void encoder_page_change(u16 state)
                                     TT10 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2160, (u8*)&TT10, 1);
                                 } else {
                                     TT10 = keep;
@@ -2048,7 +2064,7 @@ void encoder_page_change(u16 state)
                                     TT100 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2150, (u8*)&TT100, 1);
                                 } else {
                                     TT100 = keep;
@@ -2143,7 +2159,7 @@ void encoder_page_change(u16 state)
                                     BT1 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2280, (u8*)&BT1, 1);
                                 } else {
                                     BT1 = keep;
@@ -2157,7 +2173,7 @@ void encoder_page_change(u16 state)
                                     BT10 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2270, (u8*)&BT10, 1);
                                 } else {
                                     BT10 = keep;
@@ -2171,7 +2187,7 @@ void encoder_page_change(u16 state)
                                     BT100 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2260, (u8*)&BT100, 1);
                                 } else {
                                     BT100 = keep;
@@ -2275,7 +2291,7 @@ void encoder_page_change(u16 state)
                                     min++;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= delaymax && result > delaymin){
+                                 if(result<= 3600 && result > 0){
                                     write_dgus_vp(0x2370, (u8*)&min, 1);
                                 }else{
                                     min = keep;
@@ -2290,7 +2306,7 @@ void encoder_page_change(u16 state)
                                     second++;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= delaymax && result > delaymin){
+                                 if(result<= 3600 && result > 0){
                                     write_dgus_vp(0x2380, (u8*)&second, 1);
                                 }else{
                                     second = keep;
@@ -2298,7 +2314,7 @@ void encoder_page_change(u16 state)
                                 }
                         }
                 }else if(page_number == pressureS[admin_language]){
-                    if (select_position == 0 && press < pressmax) {
+                    if (select_position == 0 && press < 20) {
                                 press++;
                                 write_dgus_vp(0x2400, (u8*)&press, 1);
                             }
@@ -2312,7 +2328,7 @@ void encoder_page_change(u16 state)
                                     TT1 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >=toptempmin) {
+                                if (result <= 200 && result >=1) {
                                     write_dgus_vp(0x2030, (u8*)&TT1, 1);
                                 } else {
                                     TT1 = keep;
@@ -2326,7 +2342,7 @@ void encoder_page_change(u16 state)
                                     TT10 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2010, (u8*)&TT10, 1);
                                 } else {
                                     TT10 = keep;
@@ -2340,7 +2356,7 @@ void encoder_page_change(u16 state)
                                     TT100 = 0;
                                 }
                                 result = (u16)(TT100 * 100 + TT10 * 10 + TT1);
-                                if (result <= toptempmax && result >= toptempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2000, (u8*)&TT100, 1);
                                 } else {
                                     TT100 = keep;
@@ -2348,7 +2364,7 @@ void encoder_page_change(u16 state)
                                 }
                             }
                         }else if(quickSettingS == 2){
-                            if(press != pressmax){
+                            if(press != 20){
                                 press ++;
                                write_dgus_vp(0x2050, (u8*)&press, 1);
                             }
@@ -2361,7 +2377,7 @@ void encoder_page_change(u16 state)
                                     BT1 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2080, (u8*)&BT1, 1);
                                 } else {
                                     BT1 = keep;
@@ -2375,7 +2391,7 @@ void encoder_page_change(u16 state)
                                     BT10 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2070, (u8*)&BT10, 1);
                                 } else {
                                     BT10 = keep;
@@ -2389,7 +2405,7 @@ void encoder_page_change(u16 state)
                                     BT100 = 0;
                                 }
                                 result = (u16)(BT100 * 100 + BT10 * 10 + BT1);
-                                if (result <= bottempmax && result >= bottempmin) {
+                                if (result <= 200 && result >= 1) {
                                     write_dgus_vp(0x2060, (u8*)&BT100, 1);
                                 } else {
                                     BT100 = keep;
@@ -2411,7 +2427,7 @@ void encoder_page_change(u16 state)
                                     min++;
                                 }
                                 result = (u16)(min * 60 + second);
-                                 if(result<= delaymax && result >= delaymin){
+                                 if(result<= 3600 && result >= 0){
                                     write_dgus_vp(0x2110, (u8*)&min, 1);
                                 }else{
                                     min = keep;
@@ -2425,7 +2441,7 @@ void encoder_page_change(u16 state)
                                     second++;
                                 }
                                 result = (u16)(min * 60 + second);
-                                if(result<= delaymax && result >= delaymin){
+                                if(result<= 3600 && result >= 0){
                                     write_dgus_vp(0x2130, (u8*)&second, 1);
                                 }else{
                                     second = keep;
@@ -2588,10 +2604,8 @@ void encoder_page_change(u16 state)
                 }
             }else{
                  if(page_number == main1[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+                    Page_Bit_Send(QUICK_SET_PAGE);
 
-                    
                         read_dgus_vp(VP_SET_TT, (u8*)&result, 1);
                         TT100 = result / 100;
                         TT10   = (result / 10) % 10;
@@ -2628,19 +2642,14 @@ void encoder_page_change(u16 state)
                         Page_Change_Handler(page_number);
                         quickSettingflag = 1;
                 }else if(page_number == main2[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     topSelectflag   = 1;
                     page_number = topHeating[admin_language];
                     Page_Change_Handler(page_number);
                 }else if(page_number == main3[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     botSelectflag = 1;
                     Page_Change_UI(botHeating[admin_language]);
                 }else if(page_number == main4[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+                    Page_Bit_Send(DELAY_PAGE);
                     settingflag = 1;
                     SetTextColorBlue(0x1373);
                     SetTextColorBlack(0x1383);
@@ -2652,8 +2661,7 @@ void encoder_page_change(u16 state)
                     ChangeImage(0x2390, 0);
                     Page_Change_UI(delayS[admin_language]);
                 }else if(page_number == main5[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+                    Page_Bit_Send(PRESS_PAGE);
                     settingflag = 1;
                     read_dgus_vp(VP_SET_P, (u8*)&press, 1);
                     write_dgus_vp(0x2400, (u8*)&press, 1);
@@ -2661,8 +2669,6 @@ void encoder_page_change(u16 state)
                     ChangeImage(0x2410, 0);
                     Page_Change_UI(pressureS[admin_language]);
                 }else if(page_number == main6[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                      if(f_ready==1){
                         Page_Change_UI(workPageN);
                         }else if(f_start == 1){
@@ -2680,14 +2686,11 @@ void encoder_page_change(u16 state)
                             write_dgus_vp(0x2130, (u8*)&second, 1);
                         } 
                 }else if(page_number == main7[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     page_number = adminList[admin_language];
                     Page_Change_Handler(page_number);
                     admin_List_text_change();
                 }else if(page_number == topHeating[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+                    Page_Bit_Send(TOP_TMP_SET_PAGE);
                     settingflag  = 1;
                     write_dgus_vp(0X2150, (u8*)&TT100, 1);
                     write_dgus_vp(0x2160, (u8*)&TT10,     1);
@@ -2696,8 +2699,7 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(topHeatingS[admin_language]);
                     select_num(page_number, 0);
                 }else if(page_number == topCooling[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+                    Page_Bit_Send(TOP_COOL_SET_PAGE);
                     settingflag  = 1;
                     write_dgus_vp(0x2190, (u8*)&TC10, 1);
                     write_dgus_vp(0x2200, (u8*)&TC1,     1);
@@ -2705,12 +2707,9 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(topCoolingS[admin_language]);
                     select_num(page_number, 0);
                 }else if(page_number == topFrame){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(topFrameS);
                 }else if(page_number == botHeating[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+                    Page_Bit_Send(BOT_TMP_SET_PAGE);
                     settingflag  = 1;
                     write_dgus_vp(0x2260, (u8*)&BT100, 1);
                     write_dgus_vp(0x2270, (u8*)&BT10,     1);
@@ -2719,8 +2718,7 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(botHeatingS[admin_language]);
                     select_num(page_number, 0);
                 }else if(page_number == botCooling[admin_language]){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+                    Page_Bit_Send(BOT_COOL_SET_PAGE);
                     settingflag  = 1;
                     write_dgus_vp(0x2300, (u8*)&BC10,     1);
                     write_dgus_vp(0x2310, (u8*)&BC1,     1);
@@ -2728,12 +2726,8 @@ void encoder_page_change(u16 state)
                     Page_Change_UI(botCoolingS[admin_language]);
                     select_num(page_number, 0);
                 }else if(page_number == botFrame){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(botFrameS);
                 }else if(page_number == exit){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     if (topSelectflag == 1) {
                         topSelectflag = 0;
                         Page_Change_UI(main2[admin_language]);
@@ -2742,21 +2736,14 @@ void encoder_page_change(u16 state)
                         Page_Change_UI(main3[admin_language]);
                     }
                 }else if(page_number == workPageN){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(main6[admin_language]);
                 }else if(page_number == quickSetting){
-                    page_bit = 2;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+                    Page_Bit_Send(QUICK_SET_PAGE);
                     settingflag = 1;
                     QuickSettingTextSet(quickSettingS, 0);
                 }else if(page_number == adminList[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     admin_page_change();
                 }else if(page_number == adminUserSetting[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     if(usersettingSP == 0){
                         if(usersettingEditSP == 0 && usersettingSelect_plag == 1){
                             write_dgus_vp(VP_USERSETTING_TOP_TEMP_MIN, (u8*)&toptempmin, 1);
@@ -2786,45 +2773,27 @@ void encoder_page_change(u16 state)
                     }
                     admin_User_Setting_Function(state);
                 }else if(page_number == adminIOTest[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     adminIoTestWork();
                 }else if(page_number == adminFactoryResetNotice[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     adminfactoryResetText(state);
                 }else if(page_number == adminLogError[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     adminLogErrorText(state);
                 }else if(page_number == adminMaintenance[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(adminList[admin_language]);
                 }else if(page_number == adminLanguage[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     adminLanguageText(state);
                     write_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&admin_language,1);
                 }else if(page_number == adminCompany[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     Page_Change_UI(adminList[admin_language]);
                 }else if(page_number == adminEngineermod[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     EngineermodWork(state);
                 }else if(page_number == adminEngineermodS[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
                     EngineermodSWork(state);
                 }else if(page_number == adminActiveLog[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+                    Page_Bit_Send(ACT_LOG_PAGE);
                     Page_Change_UI(adminLogError[admin_language]);
                 }else if(page_number == adminErrorLog[admin_language]){
-                    page_bit = 1;
-                    write_dgus_vp(VP_PAGE_BIT,(u8*)page_bit, 1);
+                    Page_Bit_Send(ERR_LOG_PAGE);
                     Page_Change_UI(adminLogError[admin_language]);
                 }
             }

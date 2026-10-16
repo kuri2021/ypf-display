@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/14/2026 13:04:25 PAGE 1   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/16/2026 10:38:44 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE LANGUAGE
@@ -62,7 +62,7 @@ line level    source
   50          // const u16 PAJU_JORI_EUP_KOR[] = {0xD30C,0xC8FC,0xC2DC,0x0020,0xC870,0xB9AC,0xC74D}; // 파주시 조리
              -읍
   51          // const u16 DANGJAEBONG_RO_29_KOR[] = {0xB2F9,0xC7AC,0xBD09,0xB85C,0x0020,0x0032,0x0039}; // 당재봉로
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/14/2026 13:04:25 PAGE 2   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/16/2026 10:38:44 PAGE 2   
 
              - 29
   52          // const u16 TEL_KOR[] = {0x0030,0x0033,0x0031,0x002D,0x0039,0x0035,0x0033,0x002D,0x0034,0x0030,0x0036,0x0
@@ -126,7 +126,7 @@ line level    source
   99          // 작동 시간
  100          const u16 HEATING_TIME_KOR[] = {0x2B88, 0x2530}; // 가열시간
  101          const u16 FAN_KOR[] = {0x272C}; // 팬
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/14/2026 13:04:25 PAGE 3   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/16/2026 10:38:44 PAGE 3   
 
  102          const u16 PUMP_KOR[] = {0x278C, 0x2904}; // 펌프
  103          
@@ -190,7 +190,7 @@ line level    source
  160              0x00BD   // 경
  161          }; // 지연 변경
  162          const u16 PRESS_KOR[] = {
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/14/2026 13:04:25 PAGE 4   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/16/2026 10:38:44 PAGE 4   
 
  163              0x1955,  // 압
  164              0x0C25,  // 력
@@ -254,7 +254,7 @@ line level    source
  216          // English / Chinese / Korean
  217          const u16 ENGLISH_ENG[] = {0x0045,0x004E,0x0047,0x004C,0x0049,0x0053,0x0048};
  218          const u16 CHINESE_ENG[] = {0x0043,0x0048,0x0049,0x004E,0x0045,0x0053,0x0045};
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/14/2026 13:04:25 PAGE 5   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/16/2026 10:38:44 PAGE 5   
 
  219          const u16 KOREAN_ENG[] = {0x004B,0x004F,0x0052,0x0045,0x0041,0x004E};
  220          
@@ -318,7 +318,7 @@ line level    source
              -6,0x0033}; // 031-953-4063
  272          
  273          const u16 ON_TEXT[] = {0x004F,0x004E};
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/14/2026 13:04:25 PAGE 6   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/16/2026 10:38:44 PAGE 6   
 
  274          const u16 OFF_TEXT[] = {0x004F, 0x0046, 0x0046};
  275          
@@ -382,7 +382,7 @@ line level    source
  333          };
  334          
  335          const u16 NO_ERROR_ENG[] = {
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/14/2026 13:04:25 PAGE 7   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/16/2026 10:38:44 PAGE 7   
 
  336              0x004E,  // N
  337              0x006F,  // o

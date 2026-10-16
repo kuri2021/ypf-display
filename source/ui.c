@@ -94,20 +94,20 @@ static u8 page_bit = 0;
 
 
 #define VP_USERSETTING_TOP_TEMP_MAX 0x8130 // 유저세팅 8개
-#define VP_USERSETTING_TOP_TEMP_MIN 0x8132 // 유저세팅 8개
-#define VP_USERSETTING_BOT_TEMP_MAX 0x8134 // 유저세팅 8개
-#define VP_USERSETTING_BOT_TEMP_MIN 0x8136 // 유저세팅 8개
-#define VP_USERSETTING_PRES_MAX 0x8138 // 유저세팅 8개
-#define VP_USERSETTING_PRES_MIN 0x8148 // 유저세팅 8개
-#define VP_USERSETTING_DELAY_MAX 0x813C // 유저세팅 8개
-#define VP_USERSETTING_DELAY_MIN 0x8140 // 유저세팅 8개
-#define VP_ENGINEERMODE_SENSER 0x8142 // 엔지니어모드 센서 보정
-#define VP_ENGINEERMODE_PRES 0x8144 // 엔지니어모드 최대 압력
-#define VP_LANGUAGE_FLAG 0x8146 // 언어변경
+#define VP_USERSETTING_TOP_TEMP_MIN 0x8140 // 유저세팅 8개
+#define VP_USERSETTING_BOT_TEMP_MAX 0x8150 // 유저세팅 8개
+#define VP_USERSETTING_BOT_TEMP_MIN 0x8160 // 유저세팅 8개
+#define VP_USERSETTING_PRES_MAX 0x8170 // 유저세팅 8개
+#define VP_USERSETTING_PRES_MIN 0x8180 // 유저세팅 8개
+#define VP_USERSETTING_DELAY_MAX 0x8190 // 유저세팅 8개
+#define VP_USERSETTING_DELAY_MIN 0x8210 // 유저세팅 8개
+#define VP_ENGINEERMODE_SENSER 0x8220 // 엔지니어모드 센서 보정
+#define VP_ENGINEERMODE_PRES 0x8230 // 엔지니어모드 최대 압력
+#define VP_LANGUAGE_FLAG 0x8240 // 언어변경
 
-#define VP_WORK_HEATING 0x8150 // 가열시간
-#define VP_WORK_HOLDING 0x8152 // 지연시간
-#define VP_WORK_COOLING 0x8154 // 냉각시간
+#define VP_WORK_HEATING 0x8250 // 가열시간
+#define VP_WORK_HOLDING 0x8260 // 지연시간
+#define VP_WORK_COOLING 0x8270 // 냉각시간
 
 
 #define SP_TXT_TT 0x5000

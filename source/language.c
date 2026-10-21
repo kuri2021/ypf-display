@@ -167,6 +167,9 @@ const u16 PRESS_KOR[] = {
     0x00BD   // 경
 }; // 압력 변경
 
+const u16 START_KOR[] = {0x14C9, 0x16D9};
+const u16 STOP_KOR[] = {0x1504, 0x15C0};
+
 //영어
 const u16 ADMIN[] = {0x0041,0x0044,0x004D,0x0049,0x004E,0x0000};
 

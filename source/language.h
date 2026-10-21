@@ -182,4 +182,7 @@ extern const u16 FOUND_ENG[];
 extern const u16 NO_ERROR_ENG[];
 extern const u16 CLOSE_ENG[];
 
+extern const u16 START_KOR[];
+extern const u16 STOP_KOR[];
+
 #endif

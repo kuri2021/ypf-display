@@ -25,8 +25,7 @@
 static u16 system_ready = 0;
 
 #define VP_DATA_PUSH     0x8200  // 유지시간 설정
-#define VP_DATA_PUSH     0x8200  // 유지시간 설정
-#define VP_LANGUAGE_FLAG 0x8146 // 언어변경
+#define VP_LANGUAGE_FLAG 0x8240 // 언어변경
 #define VP_WORK_HEATING 0x8150 // 가열시간
 #define VP_WORK_HOLDING 0x8152 // 지연시간
 #define VP_WORK_COOLING 0x8154 // 냉각시간
@@ -50,25 +49,26 @@ void main()
     DEBUGINIT();
     EA = 1;
     Page_Change_Handler(page_number); // �ϵ���ʾ����
-    data_set_Init();               // �ϵ�12ҳ��13ҳͼ����ʾ
+    // data_set_Init();               // �ϵ�12ҳ��13ҳͼ����ʾ
     LOG("start\r\n");
     StartTimer(TMR_7, CHECK_TIME);
     write_dgus_vp(VP_DATA_PUSH, (u8*)&test1, 1);
     write_dgus_vp(VP_ACTIVE, (u8*)&test1, 1);
-    read_dgus_vp(VP_LANGUAGE_FLAG,(u8*)&admin_language, 1);
-    if(admin_language == 0){
-        admin_language_eng();
-    }else{
-        admin_language_kor();
-    }
-    
     
     while (1)
     {
         Pro8283Deal();
       if (!system_ready && GetTimeOutFlag(TMR_7)) {
         system_ready = 1;
-         page_number = 1;
+        data_set_Init();
+        if(admin_language == 0){
+        admin_language_eng();
+        page_number = 1;
+    }
+    if(admin_language == 1){
+        admin_language_kor();
+        page_number = 40;
+    }
         Page_Change_Handler(page_number); // �ϵ���ʾ����
     }
      if (!system_ready) continue;  // 준비될 때까지 아래 실행 안함

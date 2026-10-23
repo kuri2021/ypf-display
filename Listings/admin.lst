@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 1   
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE ADMIN
@@ -62,7 +62,7 @@ line level    source
   52          
   53          #define USER_SET_TOP_TEMP       USER_SET_BIT(0)   // 0x0001
   54          #define USER_SET_BOT_TEMP     USER_SET_BIT(1)   // 0x0002
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 2   
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 2   
 
   55          #define USER_SET_PRESS    USER_SET_BIT(2)   // 0x0004
   56          #define USER_SET_DELAY     USER_SET_BIT(3)   // 0x0008
@@ -126,7 +126,7 @@ line level    source
  114          
  115          u8 factoryReset_plag = 0;
  116          u8 factoryResetSP = 0;
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 3   
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 3   
 
  117          
  118          u8 LanguageSP = 0;
@@ -190,7 +190,7 @@ line level    source
  176   4                      write_dgus_vp(0x504A, (u8*)&SP_KOR_FONTSIZE, 1);
  177   4                  }
  178   3              }break;
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 4   
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 4   
 
  179   2              case 1:{
  180   3                  if(admin_language == 0){
@@ -254,7 +254,7 @@ line level    source
  238   4                      write_dgus_vp(0x4020, (u8*)&INPUT_OUTPUT_TEST_KOR, 7);
  239   4                      len = 14;
  240   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 5   
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 5   
 
  241   4                      write_dgus_vp(0x5029, (u8*)&SP_KOR_FONTID, 1);
  242   4                      write_dgus_vp(0x502A, (u8*)&SP_KOR_FONTSIZE, 1);
@@ -318,7 +318,7 @@ line level    source
  300   4                      write_dgus_vp(0x5028, (u8*)&len, 1);
  301   4                      write_dgus_vp(0x5029, (u8*)&SP_ENG_FONTID, 1);
  302   4                      write_dgus_vp(0x502A, (u8*)&SP_ENG_FONTSIZE, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 6   
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 6   
 
  303   4      
  304   4                      write_dgus_vp(0x4030, (u8*)&RUN_TIME_ENG, 8);
@@ -382,7 +382,7 @@ line level    source
  362   4                      len = 4;
  363   4                      write_dgus_vp(0x5038, (u8*)&len, 1);
  364   4                      write_dgus_vp(0x5039, (u8*)&SP_KOR_FONTID, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 7   
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 7   
 
  365   4                      write_dgus_vp(0x503A, (u8*)&SP_KOR_FONTSIZE, 1);
  366   4      
@@ -446,7 +446,7 @@ line level    source
  424   4                      write_dgus_vp(0x5039, (u8*)&SP_ENG_FONTID, 1);
  425   4                      write_dgus_vp(0x503A, (u8*)&SP_ENG_FONTSIZE, 1);
  426   4      
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 8   
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 8   
 
  427   4                      write_dgus_vp(0x4040, (u8*)&EXIT_ENG, 4);
  428   4                      len = 8;
@@ -510,7 +510,7 @@ line level    source
  486   4                      len = 10;
  487   4                      write_dgus_vp(0x5048, (u8*)&len, 1);
  488   4                      write_dgus_vp(0x5049, (u8*)&SP_KOR_FONTID, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 9   
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 9   
 
  489   4                      write_dgus_vp(0x504A, (u8*)&SP_KOR_FONTSIZE, 1);
  490   4                  }
@@ -574,7 +574,7 @@ line level    source
  548   3                  
  549   3                  SetTextColorWhite(0x5103);
  550   3                  SetTextColorWhite(0x5113);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 10  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 10  
 
  551   3              }
  552   2          }else if(usersettingSP == 2){
@@ -638,7 +638,7 @@ line level    source
  610   6                          }
  611   5                          write_dgus_vp(0x4070, (u8*)&toptempmin, 1);
  612   5                      }else if(usersettingSP == 1){
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 11  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 11  
 
  613   5                          read_dgus_vp(VP_SET_TB, (u8*)&result,1);
  614   5                          if(bottempmin>1 && bottempmax > bottempmin && VP_SET_TB>bottempmin){
@@ -702,7 +702,7 @@ line level    source
  672   6                              toptempmin++;
  673   6                          }
  674   5                          write_dgus_vp(0x4070, (u8*)&toptempmin, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 12  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 12  
 
  675   5                      }else if(usersettingSP == 1){
  676   5                          read_dgus_vp(VP_SET_TB, (u8*)&result,1);
@@ -766,7 +766,7 @@ line level    source
  734   2              admin_User_Setting_text_color();
  735   2          }           
  736   1      }
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 13  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 13  
 
  737          
  738          void adminUserSettingEdit(){
@@ -830,7 +830,7 @@ line level    source
  796   2          }
  797   1      }
  798          
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 14  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 14  
 
  799          void adminUserSettingText(u16 state){
  800   1          switch(state){
@@ -894,7 +894,7 @@ line level    source
  858   5                  }else{
  859   5                      IOtestSP++;
  860   5                  }
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 15  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 15  
 
  861   4              }break;
  862   3          }
@@ -958,7 +958,7 @@ line level    source
  920   1          u16 len = 0;
  921   1          u16 on = 1;
  922   1          u16 off = 0;
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 16  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 16  
 
  923   1          //  if(admin_language == 0){
  924   1          //       if(IOtestSelect_plag == 0){
@@ -1022,7 +1022,7 @@ line level    source
  982   1          //         write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
  983   1          //         len = 6;
  984   1          //         write_dgus_vp(0x5248, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 17  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 17  
 
  985   1          //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
  986   1          //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
@@ -1086,7 +1086,7 @@ line level    source
 1044   1          //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
 1045   1          //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
 1046   1      
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 18  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 18  
 
 1047   1          //         act_flag = ACT_TOP_FAN;
 1048   1          //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
@@ -1150,7 +1150,7 @@ line level    source
 1106   1          //         len = 6;
 1107   1          //         write_dgus_vp(0x5248, (u8*)&len, 1);
 1108   1          //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 19  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 19  
 
 1109   1          //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
 1110   1      
@@ -1214,7 +1214,7 @@ line level    source
 1168   1          //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
 1169   1      
 1170   1          //         act_flag = ACT_SOLENOID;
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 20  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 20  
 
 1171   1          //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
 1172   1          //     }break;
@@ -1278,7 +1278,7 @@ line level    source
 1230   1          //         write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
 1231   1          //         len = 6;
 1232   1          //         write_dgus_vp(0x5248, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 21  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 21  
 
 1233   1          //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
 1234   1          //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
@@ -1342,7 +1342,7 @@ line level    source
 1292   1          //         len = 4;
 1293   1          //         write_dgus_vp(0x5308, (u8*)&len, 1);
 1294   1          //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 22  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 22  
 
 1295   1          //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
 1296   1      
@@ -1406,7 +1406,7 @@ line level    source
 1354   1      
 1355   1          //         write_dgus_vp(0x4240, (u8*)&START_KOR, 2);
 1356   1          //         len = 4;
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 23  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 23  
 
 1357   1          //         write_dgus_vp(0x5248, (u8*)&len, 1);
 1358   1          //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
@@ -1470,7 +1470,7 @@ line level    source
 1416   1          //         write_dgus_vp(0x5308, (u8*)&len, 1);
 1417   1          //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
 1418   1          //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 24  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 24  
 
 1419   1      
 1420   1          //         act_flag = ACT_BOTTOM_FAN;
@@ -1534,7 +1534,7 @@ line level    source
 1478   1          //         len = 4;
 1479   1          //         write_dgus_vp(0x5248, (u8*)&len, 1);
 1480   1          //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 25  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 25  
 
 1481   1          //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
 1482   1      
@@ -1598,7 +1598,7 @@ line level    source
 1540   1          //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
 1541   1          //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
 1542   1      
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 26  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 26  
 
 1543   1          //         act_flag = 0;
 1544   1          //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
@@ -1662,7 +1662,7 @@ line level    source
 1602   4                  write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
 1603   4                  len = 6;
 1604   4                  write_dgus_vp(0x5248, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 27  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 27  
 
 1605   4      
 1606   4                  write_dgus_vp(0x4260, (u8*)&OFF_TEXT, 3);
@@ -1726,7 +1726,7 @@ line level    source
 1664   4                  len = 6;
 1665   4                  write_dgus_vp(0x5268, (u8*)&len, 1);
 1666   4      
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 28  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 28  
 
 1667   4                  write_dgus_vp(0x4280, (u8*)&OFF_TEXT, 3);
 1668   4                  len = 6;
@@ -1790,7 +1790,7 @@ line level    source
 1726   4      
 1727   4                  write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
 1728   4                  len = 6;
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 29  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 29  
 
 1729   4                  write_dgus_vp(0x5308, (u8*)&len, 1);
 1730   4                  act_flag = ACT_PUMP;
@@ -1854,7 +1854,7 @@ line level    source
 1788   4              }
 1789   3                  break;
 1790   3              }
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 30  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 30  
 
 1791   2          }else{
 1792   2              IOtestSelect_plag = 0;
@@ -1918,7 +1918,7 @@ line level    source
 1850   3                  write_dgus_vp(VP_SET_H, (u8*)&delayDefault, 1);
 1851   3                  data_set_Init();
 1852   3                  if(admin_language == 0){
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 31  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 31  
 
 1853   4                      page_number = 27;
 1854   4                  }else{
@@ -1982,7 +1982,7 @@ line level    source
 1912   3                  admin_language = 1;
 1913   3                  admin_language_kor();
 1914   3                  updateLogs();
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 32  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 32  
 
 1915   3                  Page_Change_UI(65);
 1916   3              }
@@ -2046,7 +2046,7 @@ line level    source
 1974   1          write_dgus_vp(0x515A, (u8*)&SP_ENG_FONTSIZE, 1);
 1975   1      
 1976   1          write_dgus_vp(0x4190, (u8*)&TOP_HEATER_ENG, 5);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 33  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 33  
 
 1977   1          len = 10;
 1978   1          write_dgus_vp(0x5198, (u8*)&len, 1);
@@ -2110,7 +2110,7 @@ line level    source
 2036   1          write_dgus_vp(0x4290, (u8*)&SOLENOID_ENG, 3);
 2037   1          len = 6;
 2038   1          write_dgus_vp(0x5298, (u8*)&len, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 34  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 34  
 
 2039   1          write_dgus_vp(0x5299, (u8*)&SP_ENG_FONTID, 1);
 2040   1          write_dgus_vp(0x529A, (u8*)&SP_ENG_FONTSIZE, 1);
@@ -2174,7 +2174,7 @@ line level    source
 2098   1          len = 8;
 2099   1          write_dgus_vp(0x5468, (u8*)&len, 1);
 2100   1          write_dgus_vp(0x5469, (u8*)&SP_ENG_FONTID, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 35  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 35  
 
 2101   1          write_dgus_vp(0x546A, (u8*)&SP_ENG_FONTSIZE, 1);
 2102   1      
@@ -2238,7 +2238,7 @@ line level    source
 2160   1          write_dgus_vp(0x5698, (u8*)&len, 1);
 2161   1          write_dgus_vp(0x5699, (u8*)&SP_ENG_FONTID, 1);
 2162   1          write_dgus_vp(0x569A, (u8*)&SP_ENG_FONTSIZE, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 36  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 36  
 
 2163   1      
 2164   1          write_dgus_vp(0x4710, (u8*)&PRESSURE_CAL_ENG, 9);
@@ -2302,7 +2302,7 @@ line level    source
 2222   1          write_dgus_vp(0x5099, (u8*)&SP_KOR_FONTID, 1);
 2223   1          write_dgus_vp(0x509A, (u8*)&SP_KOR_FONTSIZE, 1);
 2224   1      
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 37  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 37  
 
 2225   1          write_dgus_vp(0x4120, (u8*)&PRESSURE_KOR, 2);
 2226   1          len = 4;
@@ -2366,7 +2366,7 @@ line level    source
 2284   1          write_dgus_vp(0x5339, (u8*)&SP_KOR_FONTID, 1);
 2285   1          write_dgus_vp(0x533A, (u8*)&SP_KOR_FONTSIZE, 1);
 2286   1      
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 38  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 38  
 
 2287   1          write_dgus_vp(0x4340, (u8*)&CANCEL_KOR, 2);
 2288   1          len = 4;
@@ -2430,7 +2430,7 @@ line level    source
 2346   1          write_dgus_vp(0x5569, (u8*)&SP_KOR_FONTID, 1);
 2347   1          write_dgus_vp(0x556A, (u8*)&SP_KOR_FONTSIZE, 1);
 2348   1      
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 39  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 39  
 
 2349   1           //회사 소개
 2350   1          write_dgus_vp(0x4650, (u8*)&YONGLI_KOREA_KOR, 5);
@@ -2494,7 +2494,7 @@ line level    source
 2408   1          write_dgus_vp(0x5828, (u8*)&len, 1);
 2409   1          write_dgus_vp(0x5829, (u8*)&SP_KOR_FONTID, 1);
 2410   1          write_dgus_vp(0x582A, (u8*)&SP_KOR_FONTSIZE, 1);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 40  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 40  
 
 2411   1      
 2412   1          write_dgus_vp(0x4830, (u8*)&NO_ERROR_KOR, 9);
@@ -2558,7 +2558,7 @@ line level    source
 2470   1      }
 2471          
 2472          void EngineermodWork(u16 state){
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 41  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 41  
 
 2473   1          switch (state)
 2474   1          {
@@ -2622,7 +2622,7 @@ line level    source
 2532   5                              if(EngineerPw1==9){
 2533   6                                  EngineerPw1 = 0;
 2534   6                              }else{
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 42  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 42  
 
 2535   6                                  EngineerPw1++;
 2536   6                              }
@@ -2686,7 +2686,7 @@ line level    source
 2594   4                  EngineerPw2 = EngineerPw2*10000;
 2595   4                  EngineerPw3 = EngineerPw3*1000;
 2596   4                  EngineerPw4 = EngineerPw4*100;
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 43  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 43  
 
 2597   4                  EngineerPw5 = EngineerPw5*10;
 2598   4                  EngineerPw6 = EngineerPw6*1;
@@ -2750,7 +2750,7 @@ line level    source
 2656   3                  SetTextColorWhite(0x5703);
 2657   3                  SetTextColorWhite(0x5713);
 2658   3                  SetTextColorWhite(0x5723);
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 44  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 44  
 
 2659   3              }else{
 2660   3                  SetTextColorYellow(0x5693);
@@ -2814,7 +2814,7 @@ line level    source
 2718   4              }
 2719   3          }break;
 2720   2      
-C51 COMPILER V9.56.0.0   ADMIN                                                             10/16/2026 17:24:19 PAGE 45  
+C51 COMPILER V9.56.0.0   ADMIN                                                             10/22/2026 11:25:04 PAGE 45  
 
 2721   2          case 3:{
 2722   3              if(EngineermodS_Select_flag == 0){

@@ -71,7 +71,7 @@ static u8 page_bit = 0;
 
 
 #define VP_TT        0x8000  // 상 히터 온도 (℃)
-//#define VP_TB        0x8002  // 하 히터 온도 (℃)
+// #define VP_TB        0x8002  // 하 히터 온도 (℃)
 #define VP_P         0x8004  // 현재 압력 (0.1bar)
 #define VP_NTT       0x8006  // 상 프레임 NTC
 #define VP_NTB       0x8008  // 하 프레임 NTC
@@ -1426,6 +1426,7 @@ void data_set_Init(void) {
 void encoder_page_change(u16 state){
     u16 keep = 0;
     u16 result = 0;
+    u16 p_result = 0;
 
    
     u16 f_ready, f_start, f_tempon, f_cooling, f_deleay, f_toptemp, f_bottemp,f_topcool,f_botcool, f_stop,f_run,f_pump,f_outpump,f_sensor_err;   
@@ -1502,6 +1503,19 @@ void encoder_page_change(u16 state){
         ShowMMSS2(timer);
         page24_flag = 1;
     }
+
+    if(adminIOTest[admin_language]){
+        u16 t_temp = 0;
+        u16 b_temp = 0;
+        read_dgus_vp(0x8000, (u8*)&t_temp, 1);
+        read_dgus_vp(0x8002, (u8*)&b_temp, 1);
+
+        write_dgus_vp(0x4850, (u8*)&t_temp, 1);
+        write_dgus_vp(0x4860, (u8*)&b_temp, 1);
+    }
+
+    read_dgus_vp(0x8004, (u8*)&p_result, 1);
+    write_dgus_vp(0x2040, (u8*)&p_result, 1);
 
     if(f_ready==1&& start_flag == 1){
             Page_Change_UI(workPageN);

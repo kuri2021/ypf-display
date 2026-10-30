@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/22/2026 11:25:04 PAGE 1   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/30/2026 14:39:38 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE LANGUAGE
@@ -62,7 +62,7 @@ line level    source
   50          // const u16 PAJU_JORI_EUP_KOR[] = {0xD30C,0xC8FC,0xC2DC,0x0020,0xC870,0xB9AC,0xC74D}; // 파주시 조리
              -읍
   51          // const u16 DANGJAEBONG_RO_29_KOR[] = {0xB2F9,0xC7AC,0xBD09,0xB85C,0x0020,0x0032,0x0039}; // 당재봉로
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/22/2026 11:25:04 PAGE 2   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/30/2026 14:39:38 PAGE 2   
 
              - 29
   52          // const u16 TEL_KOR[] = {0x0030,0x0033,0x0031,0x002D,0x0039,0x0035,0x0033,0x002D,0x0034,0x0030,0x0036,0x0
@@ -126,7 +126,7 @@ line level    source
   99          // 작동 시간
  100          const u16 HEATING_TIME_KOR[] = {0x2B88, 0x2530}; // 가열시간
  101          const u16 FAN_KOR[] = {0x272C}; // 팬
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/22/2026 11:25:04 PAGE 3   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/30/2026 14:39:38 PAGE 3   
 
  102          const u16 PUMP_KOR[] = {0x278C, 0x2904}; // 펌프
  103          
@@ -190,7 +190,7 @@ line level    source
  160              0x00BD   // 경
  161          }; // 지연 변경
  162          const u16 PRESS_KOR[] = {
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/22/2026 11:25:04 PAGE 4   
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/30/2026 14:39:38 PAGE 4   
 
  163              0x1955,  // 압
  164              0x0C25,  // 력
@@ -236,181 +236,189 @@ line level    source
  201          const u16 SOLENOID_ENG[] = {0x0053,0x004F,0x004C};// Solenoid
  202          
  203          //공장 초기화
- 204          const u16 DATA_ENG[] = {0x0044,0x0041,0x0054,0x0041};// Data
- 205          const u16 INIT_QUESTION_ENG[] = {0x0049,0x004E,0x0049,0x0054,0x0049,0x0041,0x004C,0x0049,0x005A,0x0045,0x0
-             -03F};// Initialize?
- 206          const u16 YES_ENG[] = {0x0059,0x0045,0x0053}; // YES
- 207          const u16 NO_ENG[] = {0x004E,0x004F}; // NO
- 208          
- 209          //로그 & 에러
- 210          // const u16 ACTIVE_LOG_ENG[] = {0x0041,0x0043,0x0054,0x0049,0x0056,0x0045,0x0020,0x004C,0x004F,0x0047};//
+ 204          const u16 DATA_ENG[] = {
+ 205              0x0052, 0x0065, 0x0073, 0x0065, 0x0074
+ 206          };
+ 207          
+ 208          const u16 INIT_QUESTION_ENG[] = {
+ 209              0x0041, 0x004C, 0x004C, 0x0020,
+ 210              0x0044, 0x0041, 0x0054, 0x0041
+ 211          };
+ 212          // const u16 DATA_ENG[] = {0x0044,0x0041,0x0054,0x0041};// Data
+ 213          // const u16 INIT_QUESTION_ENG[] = {0x0049,0x004E,0x0049,0x0054,0x0049,0x0041,0x004C,0x0049,0x005A,0x0045,
+             -0x003F};// Initialize?
+ 214          const u16 YES_ENG[] = {0x0059,0x0045,0x0053}; // YES
+ 215          const u16 NO_ENG[] = {0x004E,0x004F}; // NO
+ 216          
+ 217          //로그 & 에러
+ 218          // const u16 ACTIVE_LOG_ENG[] = {0x0041,0x0043,0x0054,0x0049,0x0056,0x0045,0x0020,0x004C,0x004F,0x0047};//
              - Active Log
- 211          // const u16 ERROR_LOG_ENG[] = {0x0045,0x0052,0x0052,0x004F,0x0052,0x0020,0x004C,0x004F,0x0047};// Error L
+ 219          // const u16 ERROR_LOG_ENG[] = {0x0045,0x0052,0x0052,0x004F,0x0052,0x0020,0x004C,0x004F,0x0047};// Error L
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/30/2026 14:39:38 PAGE 5   
+
              -og
- 212          const u16 ACTIVE_LOG_ENG[] = {0x0041,0x0043,0x0054,0x0049,0x0056,0x0045};// Active Log
- 213          const u16 ERROR_LOG_ENG[] = {0x0045,0x0052,0x0052,0x004F,0x0052};// Error Log
- 214          //작업 시간
- 215          const u16 HEATING_ENG[] = {0x0048,0x0045,0x0041,0x0054};
- 216          const u16 PUMP_ENG[] = {0x0050, 0x0055, 0x004D, 0x0050};
- 217          const u16 FAN_ENG[] = {0x0046, 0x0041, 0x004E};
- 218          
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/22/2026 11:25:04 PAGE 5   
-
- 219          // English / Chinese / Korean
- 220          const u16 ENGLISH_ENG[] = {0x0045,0x004E,0x0047,0x004C,0x0049,0x0053,0x0048};
- 221          const u16 CHINESE_ENG[] = {0x0043,0x0048,0x0049,0x004E,0x0045,0x0053,0x0045};
- 222          const u16 KOREAN_ENG[] = {0x004B,0x004F,0x0052,0x0045,0x0041,0x004E};
- 223          
- 224          //회사 소개
- 225          const u16 YONGLI_KOREA_ENG[] = {0x0059,0x004F,0x004E,0x0047,0x004C,0x0049,0x0020,0x004B,0x004F,0x0052,0x00
+ 220          const u16 ACTIVE_LOG_ENG[] = {0x0041,0x0043,0x0054,0x0049,0x0056,0x0045};// Active Log
+ 221          const u16 ERROR_LOG_ENG[] = {0x0045,0x0052,0x0052,0x004F,0x0052};// Error Log
+ 222          //작업 시간
+ 223          const u16 HEATING_ENG[] = {0x0048,0x0045,0x0041,0x0054};
+ 224          const u16 PUMP_ENG[] = {0x0050, 0x0055, 0x004D, 0x0050};
+ 225          const u16 FAN_ENG[] = {0x0046, 0x0041, 0x004E};
+ 226          
+ 227          // English / Chinese / Korean
+ 228          const u16 ENGLISH_ENG[] = {0x0045,0x004E,0x0047,0x004C,0x0049,0x0053,0x0048};
+ 229          const u16 CHINESE_ENG[] = {0x0043,0x0048,0x0049,0x004E,0x0045,0x0053,0x0045};
+ 230          const u16 KOREAN_ENG[] = {0x004B,0x004F,0x0052,0x0045,0x0041,0x004E};
+ 231          
+ 232          //회사 소개
+ 233          const u16 YONGLI_KOREA_ENG[] = {0x0059,0x004F,0x004E,0x0047,0x004C,0x0049,0x0020,0x004B,0x004F,0x0052,0x00
              -45,0x0041}; // YONGLI KOREA
- 226          const u16 GYEONGGI_DO_ENG[] = {0x0047,0x0059,0x0045,0x004F,0x004E,0x0047,0x0047,0x0049,0x002D,0x0044,0x004
+ 234          const u16 GYEONGGI_DO_ENG[] = {0x0047,0x0059,0x0045,0x004F,0x004E,0x0047,0x0047,0x0049,0x002D,0x0044,0x004
              -F}; // GYEONGGI-DO
- 227          const u16 PAJU_JORI_ENG[] = {0x0050,0x0041,0x004A,0x0055,0x002D,0x0053,0x0049,0x002C,0x0020,0x004A,0x004F,
+ 235          const u16 PAJU_JORI_ENG[] = {0x0050,0x0041,0x004A,0x0055,0x002D,0x0053,0x0049,0x002C,0x0020,0x004A,0x004F,
              -0x0052,0x0049,0x002D,0x0045,0x0055,0x0050}; // PAJU-SI, JORI-EUP
- 228          const u16 DANGJAEBONG_RO_29_ENG[] = {0x0044, 0x0061, 0x006E, 0x0067,0x006A, 0x0061, 0x0065, 0x0062,0x006F,
+ 236          const u16 DANGJAEBONG_RO_29_ENG[] = {0x0044, 0x0061, 0x006E, 0x0067,0x006A, 0x0061, 0x0065, 0x0062,0x006F,
              - 0x006E, 0x0067, 0x002D,0x0072, 0x006F}; //Dangjaebong-ro29 
- 229          const u16 ADDRESS_ENG[] = {0x0044,0x0041,0x004E,0x0047,0x004A,0x0041,0x0045,0x0042,0x004F,0x004E,0x0047,0x
+ 237          const u16 ADDRESS_ENG[] = {0x0044,0x0041,0x004E,0x0047,0x004A,0x0041,0x0045,0x0042,0x004F,0x004E,0x0047,0x
              -002D,0x0052,0x004F,0x0020,0x0032,0x0039}; // DANGJAEBONG-RO 29
- 230          
- 231          const u16 SENSOR_CAL_ENG[] = {0x0053, 0x0065, 0x006E, 0x0073, 0x002E, 0x0043, 0x0061, 0x006C, 0x002E};
- 232          
- 233          const u16 PRESSURE_CAL_ENG[] = {0x0050,0x0052,0x0045,0x0053, 0x002E, 0x0043, 0x0061, 0x006C, 0x002E};
- 234          
- 235          //중국어
- 236          //어드민 리스트
- 237          const u16 USER_SETTING_CHN[]    = {0x7528,0x6237,0x8BBE,0x7F6E};                         // 用户设置
- 238          const u16 IO_TEST_CHN[]         = {0x0049,0x004F,0x6D4B,0x8BD5};                         // IO测试
- 239          const u16 FACTORY_RESET_CHN[]   = {0x5DE5,0x5382,0x521D,0x59CB,0x5316};                 // 工厂初始化
- 240          const u16 LOG_ERROR_CHN[]       = {0x65E5,0x5FD7,0x0020,0x0026,0x0020,0x9519,0x8BEF};   // 日志 & 错误
- 241          const u16 RUN_TIME_CHN[]        = {0x8FD0,0x884C,0x65F6,0x95F4};                         // 运行时间
- 242          const u16 LANGUAGE_CHN[]        = {0x8BED, 0x8A00};                                       // 语言
- 243          const u16 COMPANY_INFO_CHN[]    = {0x516C,0x53F8,0x7B80,0x4ECB};                         // 公司简介
- 244          const u16 ENGINEER_MODE_CHN[]   = {0x5DE5,0x7A0B,0x5E08,0x6A21,0x5F0F};                 // 工程师模式
- 245          
- 246          //IO테스트
- 247          const u16 TOP_HEATER_CHN[]      = {0x9876,0x677F,0x52A0,0x70ED,0x5668};                 // 顶板加热器
- 248          const u16 BOTTOM_HEATER_CHN[]   = {0x5E95,0x677F,0x52A0,0x70ED,0x5668};                 // 底板加热器
- 249          const u16 TOP_FAN_CHN[]         = {0x9876,0x677F,0x98CE,0x6247};                         // 顶板风扇
- 250          const u16 BOTTOM_FAN_CHN[]      = {0x5E95,0x677F,0x98CE,0x6247};                         // 底板风扇
- 251          const u16 COMPRESSOR_CHN[]      = {0x538B,0x7F29,0x673A};                               // 压缩机
- 252          const u16 SOLENOID_CHN[]        = {0x7535,0x78C1,0x9600};                               // 电磁阀
- 253          //유저 세팅
- 254          const u16 TOP_TEMP_CHN[]        = {0x9876,0x677F,0x6E29,0x5EA6};                         // 顶板温度
- 255          const u16 BOTTOM_TEMP_CHN[]     = {0x5E95,0x677F,0x6E29,0x5EA6};                         // 底板温度
- 256          const u16 PRESSURE_CHN[]        = {0x538B,0x529B};                                       // 压力
- 257          const u16 DELAY_TIME_CHN[]      = {0x5EF6,0x8FDF,0x65F6,0x95F4};                         // 延迟时间
- 258          //공장 초기화
- 259          const u16 DATA_CHN[]            = {0x6570,0x636E};                                       // 数据
- 260          const u16 INIT_QUESTION_CHN[]   = {0x521D,0x59CB,0x5316,0x5417,0x003F};                 // 初始化吗?
- 261          const u16 YES_CHN[] = {0x786E,0x8BA4};   // 确认
- 262          const u16 NO_CHN[]  = {0x53D6,0x6D88};   // 取消
- 263          //로그 & 에러
- 264          const u16 ACTIVE_LOG_CHN[]      = {0x8FD0,0x884C,0x65E5,0x5FD7};                         // 运行日志
- 265          const u16 ERROR_LOG_CHN[]       = {0x9519,0x8BEF,0x65E5,0x5FD7};                         // 错误日志
- 266          //언어 변경
- 267          const u16 ENGLISH_CHN[]         = {0x82F1,0x8BED};                                       // 英语
- 268          const u16 CHINESE_CHN[]         = {0x4E2D,0x6587};                                       // 中文
- 269          const u16 KOREAN_CHN[]          = {0x97E9,0x8BED};                                       // 韩语
- 270          //회사 소개
- 271          const u16 GYEONGGI_DO_CHN[]     = {0x4EAC,0x757F,0x9053};                               // 京畿道
- 272          const u16 PAJU_JORI_CHN[]       = {0x5761,0x5DDE,0x5E02,0x0020,0x6761,0x91CC,0x9091};   // 坡州市 条�
-             -�邑
- 273          const u16 ADDRESS_CHN[]         = {0x5802,0x624D,0x5CF0,0x8DEF,0x0020,0x0032,0x0039};   // 堂才峰路 29
- 274          const u16 TEL[]             = {0x0030,0x0033,0x0031,0x002D,0x0039,0x0035,0x0033,0x002D,0x0034,0x0030,0x003
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/22/2026 11:25:04 PAGE 6   
+ 238          
+ 239          const u16 SENSOR_CAL_ENG[] = {0x0053, 0x0065, 0x006E, 0x0073, 0x002E, 0x0043, 0x0061, 0x006C, 0x002E};
+ 240          
+ 241          const u16 PRESSURE_CAL_ENG[] = {0x0050,0x0052,0x0045,0x0053, 0x002E, 0x0043, 0x0061, 0x006C, 0x002E};
+ 242          
+ 243          //중국어
+ 244          //어드민 리스트
+ 245          const u16 USER_SETTING_CHN[]    = {0x7528,0x6237,0x8BBE,0x7F6E};                         // 用户设置
+ 246          const u16 IO_TEST_CHN[]         = {0x0049,0x004F,0x6D4B,0x8BD5};                         // IO测试
+ 247          const u16 FACTORY_RESET_CHN[]   = {0x5DE5,0x5382,0x521D,0x59CB,0x5316};                 // 工厂初始化
+ 248          const u16 LOG_ERROR_CHN[]       = {0x65E5,0x5FD7,0x0020,0x0026,0x0020,0x9519,0x8BEF};   // 日志 & 错误
+ 249          const u16 RUN_TIME_CHN[]        = {0x8FD0,0x884C,0x65F6,0x95F4};                         // 运行时间
+ 250          const u16 LANGUAGE_CHN[]        = {0x8BED, 0x8A00};                                       // 语言
+ 251          const u16 COMPANY_INFO_CHN[]    = {0x516C,0x53F8,0x7B80,0x4ECB};                         // 公司简介
+ 252          const u16 ENGINEER_MODE_CHN[]   = {0x5DE5,0x7A0B,0x5E08,0x6A21,0x5F0F};                 // 工程师模式
+ 253          
+ 254          //IO테스트
+ 255          const u16 TOP_HEATER_CHN[]      = {0x9876,0x677F,0x52A0,0x70ED,0x5668};                 // 顶板加热器
+ 256          const u16 BOTTOM_HEATER_CHN[]   = {0x5E95,0x677F,0x52A0,0x70ED,0x5668};                 // 底板加热器
+ 257          const u16 TOP_FAN_CHN[]         = {0x9876,0x677F,0x98CE,0x6247};                         // 顶板风扇
+ 258          const u16 BOTTOM_FAN_CHN[]      = {0x5E95,0x677F,0x98CE,0x6247};                         // 底板风扇
+ 259          const u16 COMPRESSOR_CHN[]      = {0x538B,0x7F29,0x673A};                               // 压缩机
+ 260          const u16 SOLENOID_CHN[]        = {0x7535,0x78C1,0x9600};                               // 电磁阀
+ 261          //유저 세팅
+ 262          const u16 TOP_TEMP_CHN[]        = {0x9876,0x677F,0x6E29,0x5EA6};                         // 顶板温度
+ 263          const u16 BOTTOM_TEMP_CHN[]     = {0x5E95,0x677F,0x6E29,0x5EA6};                         // 底板温度
+ 264          const u16 PRESSURE_CHN[]        = {0x538B,0x529B};                                       // 压力
+ 265          const u16 DELAY_TIME_CHN[]      = {0x5EF6,0x8FDF,0x65F6,0x95F4};                         // 延迟时间
+ 266          //공장 초기화
+ 267          const u16 DATA_CHN[]            = {0x6570,0x636E};                                       // 数据
+ 268          const u16 INIT_QUESTION_CHN[]   = {0x521D,0x59CB,0x5316,0x5417,0x003F};                 // 初始化吗?
+ 269          const u16 YES_CHN[] = {0x786E,0x8BA4};   // 确认
+ 270          const u16 NO_CHN[]  = {0x53D6,0x6D88};   // 取消
+ 271          //로그 & 에러
+ 272          const u16 ACTIVE_LOG_CHN[]      = {0x8FD0,0x884C,0x65E5,0x5FD7};                         // 运行日志
+ 273          const u16 ERROR_LOG_CHN[]       = {0x9519,0x8BEF,0x65E5,0x5FD7};                         // 错误日志
+ 274          //언어 변경
+ 275          const u16 ENGLISH_CHN[]         = {0x82F1,0x8BED};                                       // 英语
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/30/2026 14:39:38 PAGE 6   
 
+ 276          const u16 CHINESE_CHN[]         = {0x4E2D,0x6587};                                       // 中文
+ 277          const u16 KOREAN_CHN[]          = {0x97E9,0x8BED};                                       // 韩语
+ 278          //회사 소개
+ 279          const u16 GYEONGGI_DO_CHN[]     = {0x4EAC,0x757F,0x9053};                               // 京畿道
+ 280          const u16 PAJU_JORI_CHN[]       = {0x5761,0x5DDE,0x5E02,0x0020,0x6761,0x91CC,0x9091};   // 坡州市 条�
+             -�邑
+ 281          const u16 ADDRESS_CHN[]         = {0x5802,0x624D,0x5CF0,0x8DEF,0x0020,0x0032,0x0039};   // 堂才峰路 29
+ 282          const u16 TEL[]             = {0x0030,0x0033,0x0031,0x002D,0x0039,0x0035,0x0033,0x002D,0x0034,0x0030,0x003
              -6,0x0033}; // 031-953-4063
- 275          
- 276          const u16 ON_TEXT[] = {0x004F,0x004E};
- 277          const u16 OFF_TEXT[] = {0x004F, 0x0046, 0x0046};
- 278          
- 279          const u16 SENSOR_CAL_CHN[] = {
- 280          0x4F20,0x611F,0x5668,0x6821,0x51C6
- 281          };
- 282          
- 283          const u16 PRESSURE_CAL_CHN[] = {
- 284          0x538B,0x529B,0x6821,0x51C6
- 285          };
+ 283          
+ 284          const u16 ON_TEXT[] = {0x004F,0x004E};
+ 285          const u16 OFF_TEXT[] = {0x004F, 0x0046, 0x0046};
  286          
- 287          const u16 EXIT_ENG[] = {
- 288              0x0045, 0x0058, 0x0049, 0x0054
+ 287          const u16 SENSOR_CAL_CHN[] = {
+ 288          0x4F20,0x611F,0x5668,0x6821,0x51C6
  289          };
  290          
- 291          const u16 EXIT_KOR[] = {
- 292              0x1C85, 0x0CCC
+ 291          const u16 PRESSURE_CAL_CHN[] = {
+ 292          0x538B,0x529B,0x6821,0x51C6
  293          };
  294          
- 295          const u16 T_TEMP_ENG[] = {
- 296              0x0054, 0x0020, 0x0054, 0x0045, 0x004D, 0x0050, 0x0020, 0x0043, 0x0048, 0x0047
- 297          }; // T TEMP CHG
+ 295          const u16 EXIT_ENG[] = {
+ 296              0x0045, 0x0058, 0x0049, 0x0054
+ 297          };
  298          
- 299          const u16 T_COOL_ENG[] = {
- 300              0x0054, 0x0020, 0x0043, 0x004F, 0x004F, 0x004C, 0x0020, 0x0043, 0x0048, 0x0047
- 301          }; // T COOL CHG
+ 299          const u16 EXIT_KOR[] = {
+ 300              0x1C85, 0x0CCC
+ 301          };
  302          
- 303          const u16 B_TEMP_ENG[] = {
- 304              0x0042, 0x0020, 0x0054, 0x0045, 0x004D, 0x0050, 0x0020, 0x0043, 0x0048, 0x0047
- 305          }; // B TEMP CHG
+ 303          const u16 T_TEMP_ENG[] = {
+ 304              0x0054, 0x0020, 0x0054, 0x0045, 0x004D, 0x0050, 0x0020, 0x0043, 0x0048, 0x0047
+ 305          }; // T TEMP CHG
  306          
- 307          const u16 B_COOL_ENG[] = {
- 308              0x0042, 0x0020, 0x0043, 0x004F, 0x004F, 0x004C, 0x0020, 0x0043, 0x0048, 0x0047
- 309          }; // B COOL CHG
+ 307          const u16 T_COOL_ENG[] = {
+ 308              0x0054, 0x0020, 0x0043, 0x004F, 0x004F, 0x004C, 0x0020, 0x0043, 0x0048, 0x0047
+ 309          }; // T COOL CHG
  310          
- 311          const u16 DELAY_ENG[] = {
- 312              0x0044, 0x0045, 0x004C, 0x0041, 0x0059, 0x0020, 0x0043, 0x0048, 0x0047
- 313          }; // DELAY CHG
+ 311          const u16 B_TEMP_ENG[] = {
+ 312              0x0042, 0x0020, 0x0054, 0x0045, 0x004D, 0x0050, 0x0020, 0x0043, 0x0048, 0x0047
+ 313          }; // B TEMP CHG
  314          
- 315          const u16 PRESS_ENG[] = {
- 316              0x0050, 0x0052, 0x0045, 0x0053, 0x0053, 0x0020, 0x0043, 0x0048, 0x0047
- 317          }; // PRESS CHG
+ 315          const u16 B_COOL_ENG[] = {
+ 316              0x0042, 0x0020, 0x0043, 0x004F, 0x004F, 0x004C, 0x0020, 0x0043, 0x0048, 0x0047
+ 317          }; // B COOL CHG
  318          
- 319          const u16 FOUND_KOR[] = {
- 320              0x101C, 0x00AC, 0x081C
- 321          };
+ 319          const u16 DELAY_ENG[] = {
+ 320              0x0044, 0x0045, 0x004C, 0x0041, 0x0059, 0x0020, 0x0043, 0x0048, 0x0047
+ 321          }; // DELAY CHG
  322          
- 323          const u16 NO_ERROR_KOR[] = {0x19D0, 0x0BEC, 0x0000, 0x0020,0x19C6, 0x16B5, 0x06C8, 0x06E4, 0x002E};
- 324          
- 325          const u16 CLOSE_KOR[] = {
- 326              0x06EB,  // 닫
- 327              0x0230   // 기
- 328          };
- 329          
- 330          const u16 FOUND_ENG[] = {
- 331              0x0046,  // F
- 332              0x006F,  // o
- 333              0x0075,  // u
- 334              0x006E,  // n
- 335              0x0064   // d
-C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/22/2026 11:25:04 PAGE 7   
+ 323          const u16 PRESS_ENG[] = {
+ 324              0x0050, 0x0052, 0x0045, 0x0053, 0x0053, 0x0020, 0x0043, 0x0048, 0x0047
+ 325          }; // PRESS CHG
+ 326          
+ 327          const u16 FOUND_KOR[] = {
+ 328              0x101C, 0x00AC, 0x081C
+ 329          };
+ 330          
+ 331          const u16 NO_ERROR_KOR[] = {0x19D0, 0x0BEC, 0x0000, 0x0020,0x19C6, 0x16B5, 0x06C8, 0x06E4, 0x002E};
+ 332          
+ 333          const u16 CLOSE_KOR[] = {
+ 334              0x06EB,  // 닫
+ 335              0x0230   // 기
+C51 COMPILER V9.56.0.0   LANGUAGE                                                          10/30/2026 14:39:38 PAGE 7   
 
  336          };
  337          
- 338          const u16 NO_ERROR_ENG[] = {
- 339              0x004E,  // N
+ 338          const u16 FOUND_ENG[] = {
+ 339              0x0046,  // F
  340              0x006F,  // o
- 341              0x0020,  // 공백
- 342              0x0065,  // e
- 343              0x0072,  // r
- 344              0x0072,  // r
- 345              0x006F,  // o
- 346              0x0072,  // r
- 347              0x0073,  // s
- 348          };
- 349          
- 350          const u16 CLOSE_ENG[] = {
- 351              0x0043,  // C
- 352              0x006C,  // l
+ 341              0x0075,  // u
+ 342              0x006E,  // n
+ 343              0x0064   // d
+ 344          };
+ 345          
+ 346          const u16 NO_ERROR_ENG[] = {
+ 347              0x004E,  // N
+ 348              0x006F,  // o
+ 349              0x0020,  // 공백
+ 350              0x0065,  // e
+ 351              0x0072,  // r
+ 352              0x0072,  // r
  353              0x006F,  // o
- 354              0x0073,  // s
- 355              0x0065   // e
+ 354              0x0072,  // r
+ 355              0x0073,  // s
  356          };
+ 357          
+ 358          const u16 CLOSE_ENG[] = {
+ 359              0x0043,  // C
+ 360              0x006C,  // l
+ 361              0x006F,  // o
+ 362              0x0073,  // s
+ 363              0x0065   // e
+ 364          };
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   ----    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   1472    ----
+   XDATA SIZE       =   1468    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

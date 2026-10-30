@@ -212,12 +212,43 @@ static u16 inputpw = 0;
 #define LOG_PRESSURE       6
 
 
+void RuntimeSet(){
+    u16 h = 0;
+    u16 m = 0;
+    u16 s = 0;
 
+    read_dgus_vp(VP_WORK_HEATING, (u8*)&t_rampMs, 1);
+    read_dgus_vp(VP_WORK_HOLDING, (u8*)&t_holdMs, 1);
+    read_dgus_vp(VP_WORK_COOLING, (u8*)&t_coolMs, 1);
 
-void Page_Bit_Send(unsigned int page)
-{
+    h = t_rampMs / 3600;
+    m  = (t_rampMs % 3600) / 60;
+    s  = t_rampMs % 60;
+
+    write_dgus_vp(0x4430, (u8*)&h ,     1);
+    write_dgus_vp(0x4440, (u8*)&m ,     1);
+    write_dgus_vp(0x4450, (u8*)&s ,     1);
+
+    h = t_holdMs / 3600;
+    m  = (t_holdMs % 3600) / 60;
+    s  = t_holdMs % 60;
+
+    write_dgus_vp(0x4470, (u8*)&h ,     1);
+    write_dgus_vp(0x4480, (u8*)&m ,     1);
+    write_dgus_vp(0x4490, (u8*)&s ,     1);
+
+    h = t_coolMs / 3600;
+    m  = (t_coolMs % 3600) / 60;
+    s  = t_coolMs % 60;
+
+    write_dgus_vp(0x4510, (u8*)&h ,     1);
+    write_dgus_vp(0x4520, (u8*)&m ,     1);
+    write_dgus_vp(0x4530, (u8*)&s ,     1);
+    
+}
+
+void Page_Bit_Send(unsigned int page){
     unsigned int page_flag = page;
-
     write_dgus_vp(VP_PAGE_BIT, (u8 *)&page_flag, 1);
 }
 u8 logCount = 0;
@@ -583,8 +614,7 @@ void updateLogs(){
 
 }
 
-void addLogtest(u16 type, u16 value)
-{
+void addLogtest(u16 type, u16 value){
     int i;
 
     if(logCount < LOG_MAX)
@@ -1241,12 +1271,7 @@ static void ShowMMSS(u16 t) {
     write_dgus_vp(0x2110, (u8*)&m, 1); 
     write_dgus_vp(0x2130, (u8*)&s, 1); 
 }
-static void ShowMMSS2(u16 t) { 
-    u16 m = t / 60; 
-    u16 s = t % 60; 
-    write_dgus_vp(0x3100, (u8*)&m, 1); 
-    write_dgus_vp(0x3200, (u8*)&s, 1); 
-}
+
 void SecCnt_Start() {
     sec_active = 1; 
     SetTextColorYellow(0x1103);
@@ -1272,7 +1297,7 @@ void SecCnt_TickTask(void) {
      } 
      if (GetTimeOutFlag(TMR_1S)) {
        timer--;
-       ShowMMSS2(timer);
+       ShowMMSS(timer);
           if (timer <= 0) { 
             SecCnt_Stop();
          } else { 
@@ -1500,8 +1525,11 @@ void encoder_page_change(u16 state){
 
     if(page_number == 24 && page24_flag == 0){
         read_dgus_vp(VP_SET_H, (u8*)&timer, 1);
-        ShowMMSS2(timer);
+        ShowMMSS(timer);
         page24_flag = 1;
+    }
+    if(adminMaintenance[admin_language]){
+        RuntimeSet();
     }
 
     if(adminIOTest[admin_language]){
@@ -1559,7 +1587,7 @@ void encoder_page_change(u16 state){
             SecCnt_Stop();
             if(timer == 1){
                 timer = 0;
-                ShowMMSS2(timer);
+                ShowMMSS(timer);
             }
             quickSettingflag = 0;
             select_flag=0;

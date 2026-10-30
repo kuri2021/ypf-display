@@ -126,6 +126,22 @@ u16 EngineermodS_Select_flag = 0;
 u16 userSet[] = {0,0,0,0,0,0,0,0};
 u16 IO[] = {0,0,0,0,0,0};
 
+void text_set(u16 addr, const u16 *text, u16 value){
+    u16 len = 0;
+    write_dgus_vp(addr, (u8*)text, value);
+
+    if(admin_language == 0){
+        write_dgus_vp(addr + 0x1008, (u8*)&len, 1);
+        write_dgus_vp(addr + 0x1009, (u8*)&SP_ENG_FONTID, 1);
+        write_dgus_vp(addr + 0x100A, (u8*)&SP_ENG_FONTSIZE, 1);
+    }
+    else{
+        write_dgus_vp(addr + 0x1008, (u8*)&len, 1);
+        write_dgus_vp(addr + 0x1009, (u8*)&SP_KOR_FONTID, 1);
+        write_dgus_vp(addr + 0x100A, (u8*)&SP_KOR_FONTSIZE, 1);
+    }
+}
+
 void User_Set_Bit_Send(unsigned int count)
 {
     unsigned int count_flag = count;
@@ -139,18 +155,21 @@ void admin_List_text_change(){
      switch(adminSP){
         case 0:{
             if(admin_language == 0){
+                // text_set(0x4020, EXIT_ENG, 4);
                 write_dgus_vp(0x4020, (u8*)&EXIT_ENG, 4);
                 len = 8;
                 write_dgus_vp(0x5028, (u8*)&len, 1);
                 write_dgus_vp(0x5029, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x502A, (u8*)&SP_ENG_FONTSIZE, 1);
 
+                // text_set(0x4030, USER_SETTING_ENG, 8);
                 write_dgus_vp(0x4030, (u8*)&USER_SETTING_ENG, 8);
                 len = 16;
                 write_dgus_vp(0x5038, (u8*)&len, 1);
                 write_dgus_vp(0x5039, (u8*)&SP_ENG_FONTID, 1);
                 write_dgus_vp(0x503A, (u8*)&SP_ENG_FONTSIZE, 1);
 
+                // text_set(0x4040, IO_TEST_ENG, 12);
                 write_dgus_vp(0x4040, (u8*)&IO_TEST_ENG, 12);
                 len = 14;
                 write_dgus_vp(0x5048, (u8*)&len, 1);
@@ -920,673 +939,6 @@ void adminIoTestWork(void){
     u16 len = 0;
     u16 on = 1;
     u16 off = 0;
-    //  if(admin_language == 0){
-    //       if(IOtestSelect_plag == 0){
-    //     IOtestSelect_plag = 1;
-    //     switch (IOtestSP){
-    //     case 0:{
-    //         write_dgus_vp(0x4200, (u8*)&ON_TEXT, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = ACT_TOP;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-
-    //     }break;
-
-    //     case 1:{
-    //         write_dgus_vp(0x4200, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&ON_TEXT, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = ACT_BOTTOM;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }break;
-
-    //     case 2:{
-    //         write_dgus_vp(0x4200, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&ON_TEXT, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = ACT_TOP_FAN;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }break;
-
-    //     case 3:{
-    //        write_dgus_vp(0x4200, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&ON_TEXT, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = ACT_BOTTOM_FAN;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }break;
-
-    //     case 4:{
-    //         write_dgus_vp(0x4200, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&ON_TEXT, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = ACT_PUMP;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }break;
-
-    //     case 5:{
-    //         write_dgus_vp(0x4200, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&ON_TEXT, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = ACT_SOLENOID;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }break;
-        
-    //     default:{
-    //         IOtestSelect_plag = 0;
-    //     write_dgus_vp(0x4200, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-    //         act_flag = 0;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }
-    //         break;
-    //     }
-    // }else{
-    //     IOtestSelect_plag = 0;
-    //     write_dgus_vp(0x4200, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_ENG_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_ENG_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
-    //         len = 6;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-    //         act_flag = 0;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    // }
-    // }else{
-    //     if(IOtestSelect_plag == 0){
-    //     IOtestSelect_plag = 1;
-    //     switch (IOtestSP){
-    //     case 0:{
-    //         write_dgus_vp(0x4200, (u8*)&START_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = ACT_TOP;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-
-    //     }break;
-
-    //     case 1:{
-    //         write_dgus_vp(0x4200, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&START_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-    //         act_flag = ACT_BOTTOM;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }break;
-
-    //     case 2:{
-    //         write_dgus_vp(0x4200, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&START_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = ACT_TOP_FAN;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }break;
-
-    //     case 3:{
-    //         write_dgus_vp(0x4200, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&START_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = ACT_BOTTOM_FAN;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }break;
-
-    //     case 4:{
-    //        write_dgus_vp(0x4200, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&START_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-    //         act_flag = ACT_PUMP;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }break;
-
-    //     case 5:{
-    //         write_dgus_vp(0x4200, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&START_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = ACT_SOLENOID;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }break;
-        
-    //     default:{
-    //         IOtestSelect_plag = 0;
-    //     write_dgus_vp(0x4200, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         act_flag = 0;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    //     }
-    //         break;
-    //     }
-    // }else{
-    //     IOtestSelect_plag = 0;
-    //     write_dgus_vp(0x4200, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5208, (u8*)&len, 1);
-    //         write_dgus_vp(0x5209, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x520A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4220, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5228, (u8*)&len, 1);
-    //         write_dgus_vp(0x5229, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x522A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4240, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5248, (u8*)&len, 1);
-    //         write_dgus_vp(0x5249, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x524A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4260, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5268, (u8*)&len, 1);
-    //         write_dgus_vp(0x5269, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x526A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4280, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5288, (u8*)&len, 1);
-    //         write_dgus_vp(0x5289, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x528A, (u8*)&SP_KOR_FONTSIZE, 1);
-
-    //         write_dgus_vp(0x4300, (u8*)&STOP_KOR, 2);
-    //         len = 4;
-    //         write_dgus_vp(0x5308, (u8*)&len, 1);
-    //         write_dgus_vp(0x5309, (u8*)&SP_KOR_FONTID, 1);
-    //         write_dgus_vp(0x530A, (u8*)&SP_KOR_FONTSIZE, 1);
-            
-    //         act_flag = 0;
-    //         write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
-    // }
-    // }
     if(IOtestSelect_plag == 0){
         IOtestSelect_plag = 1;
         switch (IOtestSP){
@@ -1754,6 +1106,7 @@ void adminIoTestWork(void){
 
             write_dgus_vp(0x4300, (u8*)&ON_TEXT, 2);
             len = 4;
+            write_dgus_vp(0x5308, (u8*)&len, 1);
             act_flag = ACT_SOLENOID;
             write_dgus_vp(VP_IO_TEST, (u8*)&act_flag, 1);
         }break;
@@ -1925,6 +1278,15 @@ void adminLanguageText(u16 state){
     }
 }
 
+void text_position(u16 spAddr, u16 x, u16 y){
+    u16 pos[2];
+
+    pos[0] = x;
+    pos[1] = y;
+
+    write_dgus_vp(spAddr, (u8*)pos, 2);
+}
+
 void admin_language_eng(void){
     u16 len = 0;
     //어드민 메인리스트
@@ -2045,17 +1407,19 @@ void admin_language_eng(void){
     write_dgus_vp(0x5309, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x530A, (u8*)&SP_ENG_FONTSIZE, 1);
 
-    write_dgus_vp(0x4320, (u8*)&DATA_ENG, 4);
-    len = 8;
+    write_dgus_vp(0x4320, (u8*)&DATA_ENG, 5);
+    len = 10;
     write_dgus_vp(0x5328, (u8*)&len, 1);
     write_dgus_vp(0x5329, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x532A, (u8*)&SP_ENG_FONTSIZE, 1);
+    text_position(0x5321, 20, 130);
 
-    write_dgus_vp(0x4330, (u8*)&INIT_QUESTION_ENG, 11);
-    len = 22;
+    write_dgus_vp(0x4330, (u8*)&INIT_QUESTION_ENG, 8);
+    len = 16;
     write_dgus_vp(0x5338, (u8*)&len, 1);
     write_dgus_vp(0x5339, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x533A, (u8*)&SP_ENG_FONTSIZE, 1);
+    text_position(0x5331, 20, 130);
 
     write_dgus_vp(0x4340, (u8*)&NO_ENG, 2);
     len = 4;
@@ -2420,6 +1784,42 @@ void admin_language_kor(void){
     write_dgus_vp(0x5848, (u8*)&len, 1);
     write_dgus_vp(0x5849, (u8*)&SP_KOR_FONTID, 1);
     write_dgus_vp(0x584A, (u8*)&SP_KOR_FONTSIZE, 1);
+
+     write_dgus_vp(0x4200, (u8*)&OFF_TEXT, 3);
+    len = 6;
+    write_dgus_vp(0x5208, (u8*)&len, 1);
+    write_dgus_vp(0x5209, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x520A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+    write_dgus_vp(0x4220, (u8*)&OFF_TEXT, 3);
+    len = 6;
+    write_dgus_vp(0x5228, (u8*)&len, 1);
+    write_dgus_vp(0x5229, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x522A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+    write_dgus_vp(0x4240, (u8*)&OFF_TEXT, 3);
+    len = 6;
+    write_dgus_vp(0x5248, (u8*)&len, 1);
+    write_dgus_vp(0x5249, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x524A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+    write_dgus_vp(0x4260, (u8*)&OFF_TEXT, 3);
+    len = 6;
+    write_dgus_vp(0x5268, (u8*)&len, 1);
+    write_dgus_vp(0x5269, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x526A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+    write_dgus_vp(0x4280, (u8*)&OFF_TEXT, 3);
+    len = 6;
+    write_dgus_vp(0x5288, (u8*)&len, 1);
+    write_dgus_vp(0x5289, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x528A, (u8*)&SP_ENG_FONTSIZE, 1);
+
+    write_dgus_vp(0x4300, (u8*)&OFF_TEXT, 3);
+    len = 6;
+    write_dgus_vp(0x5308, (u8*)&len, 1);
+    write_dgus_vp(0x5309, (u8*)&SP_ENG_FONTID, 1);
+    write_dgus_vp(0x530A, (u8*)&SP_ENG_FONTSIZE, 1);
 }
 
 //어드민 엔지니어 모드
@@ -2470,8 +1870,7 @@ void EngineermodTextColor(){
 }
 
 void EngineermodWork(u16 state){
-    switch (state)
-    {
+    switch (state){
     case 1:{
         switch (EngineerSP){
                     case 0:{

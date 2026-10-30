@@ -126,22 +126,6 @@ u16 EngineermodS_Select_flag = 0;
 u16 userSet[] = {0,0,0,0,0,0,0,0};
 u16 IO[] = {0,0,0,0,0,0};
 
-void text_set(u16 addr, const u16 *text, u16 value){
-    u16 len = 0;
-    write_dgus_vp(addr, (u8*)text, value);
-
-    if(admin_language == 0){
-        write_dgus_vp(addr + 0x1008, (u8*)&len, 1);
-        write_dgus_vp(addr + 0x1009, (u8*)&SP_ENG_FONTID, 1);
-        write_dgus_vp(addr + 0x100A, (u8*)&SP_ENG_FONTSIZE, 1);
-    }
-    else{
-        write_dgus_vp(addr + 0x1008, (u8*)&len, 1);
-        write_dgus_vp(addr + 0x1009, (u8*)&SP_KOR_FONTID, 1);
-        write_dgus_vp(addr + 0x100A, (u8*)&SP_KOR_FONTSIZE, 1);
-    }
-}
-
 void User_Set_Bit_Send(unsigned int count)
 {
     unsigned int count_flag = count;
@@ -1278,15 +1262,6 @@ void adminLanguageText(u16 state){
     }
 }
 
-void text_position(u16 spAddr, u16 x, u16 y){
-    u16 pos[2];
-
-    pos[0] = x;
-    pos[1] = y;
-
-    write_dgus_vp(spAddr, (u8*)pos, 2);
-}
-
 void admin_language_eng(void){
     u16 len = 0;
     //어드민 메인리스트
@@ -1412,14 +1387,12 @@ void admin_language_eng(void){
     write_dgus_vp(0x5328, (u8*)&len, 1);
     write_dgus_vp(0x5329, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x532A, (u8*)&SP_ENG_FONTSIZE, 1);
-    text_position(0x5321, 20, 130);
 
     write_dgus_vp(0x4330, (u8*)&INIT_QUESTION_ENG, 8);
     len = 16;
     write_dgus_vp(0x5338, (u8*)&len, 1);
     write_dgus_vp(0x5339, (u8*)&SP_ENG_FONTID, 1);
     write_dgus_vp(0x533A, (u8*)&SP_ENG_FONTSIZE, 1);
-    text_position(0x5331, 20, 130);
 
     write_dgus_vp(0x4340, (u8*)&NO_ENG, 2);
     len = 4;
